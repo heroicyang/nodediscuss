@@ -26,6 +26,7 @@ var TopicSchema = new Schema({
   node: {
     id: {
       type: String,
+      index: true,
       require: true
     },
     name: {
@@ -34,12 +35,9 @@ var TopicSchema = new Schema({
     }
   },
   author: {
-    id: {
-      type: String,
-      required: true
-    },
     username: {
       type: String,
+      index: true,
       required: true
     },
     nickname: {
@@ -51,10 +49,6 @@ var TopicSchema = new Schema({
     }
   },
   lastCommentUser: {
-    id: {
-      type: String,
-      required: true
-    },
     username: {
       type: String,
       required: true

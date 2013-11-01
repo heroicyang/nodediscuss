@@ -14,9 +14,16 @@ var mongoose = require('mongoose'),
  * @type {Schema}
  */
 var CommentSchema = new Schema({
-  topicId: {
-    type: String,
-    required: true
+  topic: {
+    id: {
+      type: String,
+      index: true,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    }
   },
   commentId: String,
   content: {
@@ -24,12 +31,9 @@ var CommentSchema = new Schema({
     required: true
   },
   author: {
-    id: {
-      type: String,
-      required: true
-    },
     username: {
       type: String,
+      index: true,
       required: true
     },
     nickname: {

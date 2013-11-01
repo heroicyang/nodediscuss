@@ -16,6 +16,7 @@ var mongoose = require('mongoose'),
 var FavoriteTopicSchema = new Schema({
   userId: {
     type: String,
+    index: true,
     required: true
   },
   topicId: {

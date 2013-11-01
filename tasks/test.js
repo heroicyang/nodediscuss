@@ -1,10 +1,23 @@
 /**
- * 注册单元测试任务
+ * 单元测试任务
  * @author heroic
  */
 
 module.exports = exports = function(grunt) {
   grunt.registerTask('test', function() {
-    grunt.log.writeln('Running unit test task...');
+    var target = grunt.option('target');
+    switch(target) {
+      case 'model':
+        grunt.log.writeln('Running model tests...');
+        break;
+      case 'api':
+        grunt.log.writeln('Running api tests...');
+        break;
+      case 'controller':
+        grunt.log.writeln('Running controller tests...');
+        break;
+      default:
+        grunt.log.writeln('Running all tests...');
+    }
   });
 };

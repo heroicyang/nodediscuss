@@ -18,7 +18,7 @@
   "forin": false,
   "immed": true,
   "indent": 2,
-  "latedef": true,
+  "latedef": false,
   "newcap": true,
   "noarg": true,
   "noempty": true,
@@ -30,7 +30,7 @@
   "trailing": true,
   "globalstrict": true,
   "laxcomma": true,
-  "proto": false,
+  "proto": true,
   "browser": true,
   "node": true,
   "jquery": true

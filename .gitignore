@@ -16,3 +16,7 @@ node_modules
 
 *.sublime-project
 *.sublime-workspace
+
+config/*
+!config/default.js
+!config/index.js

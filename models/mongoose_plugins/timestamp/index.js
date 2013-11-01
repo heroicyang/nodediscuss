@@ -1,7 +1,7 @@
 /**
  * Exports timestamp plugin
  * @param  {Mongoose.Schema} schema
- * @param  {object} options 
+ * @param  {Object} options 
  */
 module.exports = function(schema, options) {
   options = options || {};

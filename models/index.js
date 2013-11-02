@@ -1,5 +1,5 @@
 /**
- * Attach some behavior for Schema. Such as validat, hooks, method, static method
+ * Attach some behavior for Schema. Such as validators, hooks, methods, statics
  * Then, register and export models
  * @author heroic
  */

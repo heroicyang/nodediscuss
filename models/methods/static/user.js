@@ -33,7 +33,7 @@ exports.findOneByEmail = function(email, callback) {
 
 /**
  * 检查用户名/E-mail和密码是否匹配
- * @param  {Object}   userData  合法的user json对象，必须包含下面属性
+ * @param  {Object}   userData  合法的user json对象，必须包含以下属性
  *  - username/email  用户名或者邮箱
  *  - password        密码
  * @param  {Function} callback 回调函数
@@ -45,9 +45,9 @@ exports.findOneByEmail = function(email, callback) {
 exports.check = function(userData, callback) {
   this.findOne()
     .or([{
-      username: userData.username || ''
+      username: userData.username
     }, {
-      email: userData.email || ''
+      email: userData.email
     }])
     .exec(function(err, user) {
       if (err) {
@@ -58,5 +58,34 @@ exports.check = function(userData, callback) {
       }
 
       callback(null, user, user.authenticate(userData.password));
+    });
+};
+
+/**
+ * 激活用户
+ * @param  {Object}   userData   合法的user json对象，必须包含以下属性
+ *  - username/email  用户名或者邮箱
+ * @param  {Function} callback   回调函数
+ *  - err       MongooseError
+ * @return {null}
+ */
+exports.activate = function(userData, callback) {
+  this.findOne()
+    .or([{
+      username: userData.username
+    }, {
+      email: userData.email
+    }])
+    .exec(function(err, user) {
+      if (err) {
+        return callback(err);
+      }
+      user.update({
+        state: {
+          activated: true
+        }
+      }, function(err) {
+        callback(err);
+      });
     });
 };

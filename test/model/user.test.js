@@ -305,5 +305,35 @@ describe('Model#User', function() {
         });
       });
     });
+
+    describe('User#activate(userData, callback)', function() {
+      it('activate the user', function(done) {
+        async.waterfall([
+          function createUser(next) {
+            User.create({
+              email: 'me@heroicyang.com',
+              username: 'heroic',
+              password: '111111'
+            }, function(err) {
+              next(err);
+            });
+          },
+          function activateUser(next) {
+            User.activate({
+              username: 'heroic'  // or { email: 'me@heroicyang.com' }
+            }, function(err) {
+              next(err);
+            });
+          },
+          function getUserState(next) {
+            User.findOneByUsername('heroic', function(err, user) {
+              should.exist(user);
+              user.state.activated.should.be.true;
+              next(null);
+            });
+          }
+        ], done);
+      });
+    });
   });
 });

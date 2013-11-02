@@ -8,7 +8,7 @@ module.exports = exports = function(grunt) {
     var target = grunt.option('target');
     switch(target) {
       case 'model':
-        grunt.log.writeln('Running model tests...');
+        grunt.task.run('simplemocha:model');
         break;
       case 'api':
         grunt.log.writeln('Running api tests...');
@@ -17,7 +17,7 @@ module.exports = exports = function(grunt) {
         grunt.log.writeln('Running controller tests...');
         break;
       default:
-        grunt.log.writeln('Running all tests...');
+        grunt.task.run('simplemocha');
     }
   });
 };

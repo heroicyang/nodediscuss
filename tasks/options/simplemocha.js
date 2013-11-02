@@ -5,7 +5,7 @@ module.exports = exports = {
     reporter: 'spec'
   },
   model: {
-    src: []
+    src: ['test/model/*.test.js']
   },
   api: {
     src: []

@@ -185,7 +185,7 @@ describe('Model#User', function() {
           password: '111111',
           tagline: '<script>alert(\'xss\');</script>'
         });
-        user.validate(function(err) {
+        user.validate(function() {
           user.nickname.should.eql(user.username);
           user.tagline.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
           done();
@@ -258,6 +258,49 @@ describe('Model#User', function() {
       it('should return null if the email does not match', function(done) {
         User.findOneByEmail('heroicyang@gmail.com', function (err, user) {
           should.not.exist(user);
+          done();
+        });
+      });
+    });
+
+    describe('User#check(userData, callback)', function() {
+      beforeEach(function(done) {
+        User.create({
+          email: 'me@heroicyang.com',
+          username: 'heroic',
+          password: '111111'
+        }, done);
+      });
+
+      it('should return null when the user does not exist', function(done) {
+        User.check({
+          username: 'heroicyang',
+          password: '111111'
+        }, function(err, user, status) {
+          should.not.exist(user);
+          (status === undefined).should.be.true;
+          done();
+        });
+      });
+
+      it('should return true when the user matches', function(done) {
+        User.check({
+          username: 'heroic',
+          password: '111111'
+        }, function(err, user, status) {
+          should.exist(user);
+          status.should.be.true;
+          done();
+        });
+      });
+
+      it('should return false when the user does not match', function(done) {
+        User.check({
+          username: 'heroic',
+          password: '123456'
+        }, function(err, user, status) {
+          should.exist(user);
+          status.should.be.false;
           done();
         });
       });

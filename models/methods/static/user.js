@@ -39,7 +39,7 @@ exports.findOneByEmail = function(email, callback) {
  * @param  {Function} callback 回调函数
  *  - err       MongooseError
  *  - user      用户不存在返回 null；存在则返回该用户信息
- *  - status    用户不存在时不会传入该参数。匹配通过则返回 true，否则返回 false
+ *  - matched   用户不存在时不会传入该参数。匹配通过则返回 true，否则返回 false
  * @return {null}
  */
 exports.check = function(userData, callback) {
@@ -86,6 +86,50 @@ exports.activate = function(userData, callback) {
         }
       }, function(err) {
         callback(err);
+      });
+    });
+};
+
+/**
+ * 修改用户密码
+ * @param  {Object}   userData   合法的user json对象，必须包含以下属性
+ *  - username/email   用户名或者邮箱
+ *  - oldPassword      当前密码
+ *  - newPassword      新密码
+ *  - newPassword2     再次确认的新密码
+ * @param  {Function} callback    回调函数
+ *  - err    MongooseError
+ *  - user   最新的 user 对象
+ * @return {null}
+ */
+exports.changePassword = function(userData, callback) {
+  var username = userData.username,
+    email = userData.email,
+    oldPassword = userData.oldPassword,
+    newPassword = userData.newPassword,
+    newPassword2 = userData.newPassword2;
+
+  if (newPassword !== newPassword2) {
+    return callback(new Error('Your new passwords do not match.'));
+  }
+
+  this.findOne()
+    .or([{
+      username: username
+    }, {
+      email: email
+    }])
+    .exec(function(err, user) {
+      if (err) {
+        return callback(err);
+      }
+      if (!user.authenticate(oldPassword)) {
+        return callback(new Error('Your password is incorrect.'));
+      }
+
+      user.password = newPassword;
+      user.save(function(err, user) {
+        callback(err, user);
       });
     });
 };

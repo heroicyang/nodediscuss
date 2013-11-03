@@ -28,6 +28,7 @@
   "unused": true,
   "strict": false,
   "trailing": true,
+  "expr": "true",
   "globalstrict": true,
   "laxcomma": true,
   "proto": true,

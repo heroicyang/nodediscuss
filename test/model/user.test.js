@@ -276,9 +276,9 @@ describe('Model#User', function() {
         User.check({
           username: 'heroicyang',
           password: '111111'
-        }, function(err, user, status) {
+        }, function(err, user, matched) {
           should.not.exist(user);
-          (status === undefined).should.be.true;
+          (matched === undefined).should.be.true;
           done();
         });
       });
@@ -287,9 +287,9 @@ describe('Model#User', function() {
         User.check({
           username: 'heroic',
           password: '111111'
-        }, function(err, user, status) {
+        }, function(err, user, matched) {
           should.exist(user);
-          status.should.be.true;
+          matched.should.be.true;
           done();
         });
       });
@@ -298,9 +298,9 @@ describe('Model#User', function() {
         User.check({
           username: 'heroic',
           password: '123456'
-        }, function(err, user, status) {
+        }, function(err, user, matched) {
           should.exist(user);
-          status.should.be.false;
+          matched.should.be.false;
           done();
         });
       });
@@ -333,6 +333,57 @@ describe('Model#User', function() {
             });
           }
         ], done);
+      });
+    });
+
+    describe('User#changePassword(userData, callback)', function() {
+      beforeEach(function(done) {
+        User.create({
+          email: 'me@heroicyang.com',
+          username: 'heroic',
+          password: '111111'
+        }, done);
+      });
+
+      it('new passwords should match', function(done) {
+        User.changePassword({
+          email: 'me@heroicyang.com',
+          oldPassword: '111111',
+          newPassword: '123456',
+          newPassword2: '234567'
+        }, function(err, user) {
+          should.exist(err);
+          should.not.exist(user);
+          done();
+        });
+      });
+
+      it('should give the correct old password', function(done) {
+        User.changePassword({
+          email: 'me@heroicyang.com',
+          oldPassword: 'asdasd',
+          newPassword: '123456',
+          newPassword2: '123456'
+        }, function(err, user) {
+          should.exist(err);
+          should.not.exist(user);
+          done();
+        });
+      });
+
+      it('password changed', function(done) {
+        User.changePassword({
+          email: 'me@heroicyang.com',
+          oldPassword: '111111',
+          newPassword: '123456',
+          newPassword2: '123456'
+        }, function(err, user) {
+          should.not.exist(err);
+          should.exist(user);
+          user.authenticate('111111').should.be.false;
+          user.authenticate('123456').should.be.true;
+          done();
+        });
       });
     });
   });

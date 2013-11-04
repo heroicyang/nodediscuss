@@ -8,7 +8,8 @@
 */
 var sanitize = require('validator').sanitize,
   _ = require('lodash'),
-  ObjectId = require('mongoose').Types.ObjectId;
+  ObjectId = require('mongoose').Types.ObjectId,
+  whenNewThen = require('../decorator').whenNewThen;
 
 /**
 * Bootstrap
@@ -19,8 +20,8 @@ module.exports = exports = function(schema) {
    .pre('validate', processTopicData)
    .pre('validate', true, validateAuthor)
    .pre('validate', true, validateNode)
-   .pre('save', true, increaseTopicCountOfUser)
-   .pre('save', true, increaseTopicCountOfNode);
+   .pre('save', true, whenNewThen(increaseTopicCountOfUser))
+   .pre('save', true, whenNewThen(increaseTopicCountOfNode));
 };
 
 /**
@@ -106,11 +107,6 @@ function validateNode(next, done) {
 function increaseTopicCountOfUser(next, done) {
   next();
 
-  // 只在 topic 创建时才递增数量，更新时则不用
-  if (!this.isNew) {
-    return done();
-  }
-
   var User = this.model('User');
   User.findByIdAndUpdate(this.author.id, {
     $inc: {
@@ -124,11 +120,6 @@ function increaseTopicCountOfUser(next, done) {
  */
 function increaseTopicCountOfNode(next, done) {
   next();
-
-  // 只在 topic 创建时才递增数量，更新时则不用
-  if (!this.isNew) {
-    return done();
-  }
 
   var Node = this.model('Node');
   Node.findByIdAndUpdate(this.node.id, {

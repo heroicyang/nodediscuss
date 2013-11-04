@@ -171,7 +171,7 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('should increase `topicCount` of author before save', function(done) {
+      it('should increase `topicCount` of author before create new topic', function(done) {
         Topic.create({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
@@ -192,7 +192,7 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('should increase `topicCount` of node before save', function(done) {
+      it('should increase `topicCount` of node before create new topic', function(done) {
         Topic.create({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',

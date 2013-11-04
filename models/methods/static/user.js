@@ -4,6 +4,11 @@
  */
 
 /**
+ * Module dependencies
+ */
+var _ = require('lodash');
+
+/**
  * 根据 username 查询用户，由于 username 不能重复，所以只返回单一记录
  * @param  {String}   username 
  * @param  {Function} callback  查询后的回调函数
@@ -98,7 +103,7 @@ exports.activate = function(userData, callback) {
  *  - newPassword      新密码
  *  - newPassword2     再次确认的新密码
  * @param  {Function} callback    回调函数
- *  - err    MongooseError
+ *  - err    Error/MongooseError
  *  - user   最新的 user 对象
  * @return {null}
  */
@@ -131,5 +136,38 @@ exports.changePassword = function(userData, callback) {
       user.save(function(err, user) {
         callback(err, user);
       });
+    });
+};
+
+/**
+ * 根据 username/email 查找用户，并修改用户信息
+ * @param  {Object}   userData   合法的user json对象，必须包含以下属性
+ *  - username/email   用户名或者邮箱
+ * @param  {Function} callback   回调函数
+ *  - err    MongooseError
+ *  - user   修改后的 user 对象
+ * @return {null}
+ */
+exports.edit = function(userData, callback) {
+  var username = userData.username,
+    email = userData.email;
+  userData = _.omit(userData, ['_id', 'id', 'username', 'email']);
+
+  this.findOne()
+    .or([{
+      username: username
+    }, {
+      email: email
+    }])
+    .exec(function(err, user) {
+      if (err) {
+        return callback(err);
+      }
+      if (_.isEmpty(userData)) {
+        return callback(null, user);
+      }
+
+      _.extend(user, userData);
+      user.save(callback);
     });
 };

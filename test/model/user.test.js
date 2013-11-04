@@ -386,5 +386,28 @@ describe('Model#User', function() {
         });
       });
     });
+
+    describe('User#edit(userData, callback)', function() {
+      it('edit user', function(done) {
+        User.create({
+          email: 'me@heroicyang.com',
+          username: 'heroic',
+          password: '111111'
+        }, function(err, user) {
+          should.exist(user);
+
+          User.edit({
+            email: 'me@heroicyang.com',
+            nickname: 'Heroic Yang',
+            website: 'heroicyang.com'
+          }, function(err, user) {
+            should.exist(user);
+            user.nickname.should.eql('Heroic Yang');
+            user.website.should.eql('http://heroicyang.com');
+            done();
+          });
+        });
+      });
+    });
   });
 });

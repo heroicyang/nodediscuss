@@ -29,38 +29,22 @@ var TopicSchema = new Schema({
       index: true,
       require: true
     },
-    name: {
-      type: String,
-      required: true
-    }
+    name: String
   },
   author: {
-    username: {
+    id: {
       type: String,
       index: true,
-      required: true
+      require: true
     },
-    nickname: {
-      type: String,
-      required: true
-    },
-    avatar: {
-      type: String
-    }
+    username: String,
+    nickname: String,
+    avatar: String
   },
   lastCommentUser: {
-    username: {
-      type: String,
-      required: true
-    },
-    nickname: {
-      type: String,
-      required: true
-    },
-    commentedAt: {
-      type: Date,
-      required: true
-    }
+    username: String,
+    nickname: String,
+    commentedAt: Date
   },
 
   viewsCount: {
@@ -78,6 +62,15 @@ var TopicSchema = new Schema({
   favoriteUserCount: {
     type: Number,
     default: 0
+  },
+
+  essence: {
+    type: Boolean,
+    default: false
+  },
+  top: {
+    type: Boolean,
+    default: false
   }
 }, {
   collection: 'topic'

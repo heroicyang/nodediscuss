@@ -37,7 +37,7 @@ exports.findOneByEmail = function(email, callback) {
 };
 
 /**
- * 检查用户名/E-mail和密码是否匹配
+ * 根据 username/email 查询用户，检查提供的密码是否匹配
  * @param  {Object}   userData  合法的user json对象，必须包含以下属性
  *  - username/email  用户名或者邮箱
  *  - password        密码
@@ -67,7 +67,7 @@ exports.check = function(userData, callback) {
 };
 
 /**
- * 激活用户
+ * 根据 username/email 查询用户，激活用户
  * @param  {Object}   userData   合法的user json对象，必须包含以下属性
  *  - username/email  用户名或者邮箱
  * @param  {Function} callback   回调函数
@@ -96,7 +96,7 @@ exports.activate = function(userData, callback) {
 };
 
 /**
- * 修改用户密码
+ * 根据 username/email 查询用户，修改用户密码
  * @param  {Object}   userData   合法的user json对象，必须包含以下属性
  *  - username/email   用户名或者邮箱
  *  - oldPassword      当前密码

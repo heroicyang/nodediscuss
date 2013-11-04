@@ -170,6 +170,48 @@ describe('Model#Topic', function() {
           done();
         });
       });
+
+      it('should increase `topicCount` of author before save', function(done) {
+        Topic.create({
+          title: '<script>alert(\'xss\');</script>',
+          content: '<p>asdsadsa</p><img src="asd.jpg">',
+          node: {
+            id: node.id
+          },
+          author: {
+            id: user.id
+          }
+        }, function(err, topic) {
+          should.exist(topic);
+          var topicCountBefore = user.topicCount;
+          User.findById(user.id, function(err, user) {
+            should.exist(user);
+            user.topicCount.should.eql(topicCountBefore + 1);
+            done();
+          });
+        });
+      });
+
+      it('should increase `topicCount` of node before save', function(done) {
+        Topic.create({
+          title: '<script>alert(\'xss\');</script>',
+          content: '<p>asdsadsa</p><img src="asd.jpg">',
+          node: {
+            id: node.id
+          },
+          author: {
+            id: user.id
+          }
+        }, function(err, topic) {
+          should.exist(topic);
+          var topicCountBefore = node.topicCount;
+          Node.findById(node.id, function(err, node) {
+            should.exist(node);
+            node.topicCount.should.eql(topicCountBefore + 1);
+            done();
+          });
+        });
+      });
     });
   });
 });

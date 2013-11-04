@@ -18,7 +18,9 @@ module.exports = exports = function(schema) {
   schema
    .pre('validate', processTopicData)
    .pre('validate', true, validateAuthor)
-   .pre('validate', true, validateNode);
+   .pre('validate', true, validateNode)
+   .pre('save', true, increaseTopicCountOfUser)
+   .pre('save', true, increaseTopicCountOfNode);
 };
 
 /**
@@ -96,4 +98,26 @@ function validateNode(next, done) {
     }
     done();
   });
+}
+
+function increaseTopicCountOfUser(next, done) {
+  next();
+
+  var User = this.model('User');
+  User.findByIdAndUpdate(this.author.id, {
+    $inc: {
+      topicCount: 1
+    }
+  }, done);
+}
+
+function increaseTopicCountOfNode(next, done) {
+  next();
+
+  var Node = this.model('Node');
+  Node.findByIdAndUpdate(this.node.id, {
+    $inc: {
+      topicCount: 1
+    }
+  }, done);
 }

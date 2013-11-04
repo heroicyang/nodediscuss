@@ -84,9 +84,21 @@ function addUsernameValidators(schema) {
 function addPasswordValidators(schema) {
   schema.path('passwordHashed')
     .validate(function() {
+      if (this.isNew) {
+        return !!this.password;
+      }
+      return true;
+    }, 'Password cannot be blank.')
+    .validate(function() {
+      if (!this.password) {
+        return true;
+      }
       return this.password.length >= 6;
     }, 'Password must be at least 6 characters.')
     .validate(function() {
+      if (!this.password) {
+        return true;
+      }
       return this.password.length <= 31;
     }, 'Password must be less than 31 characters.');
 }

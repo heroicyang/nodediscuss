@@ -284,7 +284,7 @@ describe('Model#User', function() {
         }, done);
       });
 
-      it('should return null when the user does not exist', function(done) {
+      it('should return null and `matched` is undefined when user doesn\'t exist', function(done) {
         User.check({
           username: 'heroicyang',
           password: '111111'
@@ -295,7 +295,7 @@ describe('Model#User', function() {
         });
       });
 
-      it('should return true when the user matches', function(done) {
+      it('should return the user and `matched` is true when matches', function(done) {
         User.check({
           username: 'heroic',
           password: '111111'
@@ -306,7 +306,7 @@ describe('Model#User', function() {
         });
       });
 
-      it('should return false when the user does not match', function(done) {
+      it('should return the user but `matched` is false when mismatches', function(done) {
         User.check({
           username: 'heroic',
           password: '123456'

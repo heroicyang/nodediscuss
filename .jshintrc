@@ -9,7 +9,8 @@
     "describe": false,
     "before": false,
     "beforeEach": false,
-    "after": false
+    "after": false,
+    "afterEach": false
   },
   "bitwise": true,
   "camelcase": true,

@@ -141,6 +141,18 @@ describe('Model#User', function() {
     });
 
     describe('user#password', function() {
+      it('when creating user password can not be blank', function(done) {
+        User.create({
+          email: 'me@heroicyang.com',
+          username: 'heroic',
+          password: ''
+        }, function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
       it('length is too short or too long should throw an error', function(done) {
         var passwords = ['hero', 'heroicyang1234567heroicyang1234567'],
           user;

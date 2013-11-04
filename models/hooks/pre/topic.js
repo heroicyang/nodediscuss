@@ -100,8 +100,16 @@ function validateNode(next, done) {
   });
 }
 
+/**
+ * 更新 user 的 topicCount 属性，每发布一条 topic 则递增
+ */
 function increaseTopicCountOfUser(next, done) {
   next();
+
+  // 只在 topic 创建时才递增数量，更新时则不用
+  if (!this.isNew) {
+    return done();
+  }
 
   var User = this.model('User');
   User.findByIdAndUpdate(this.author.id, {
@@ -111,8 +119,16 @@ function increaseTopicCountOfUser(next, done) {
   }, done);
 }
 
+/**
+ * 更新 node 的 topicCount 属性，每发布一条 topic 则递增
+ */
 function increaseTopicCountOfNode(next, done) {
   next();
+
+  // 只在 topic 创建时才递增数量，更新时则不用
+  if (!this.isNew) {
+    return done();
+  }
 
   var Node = this.model('Node');
   Node.findByIdAndUpdate(this.node.id, {

@@ -65,10 +65,6 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  commentCount: {
-    type: Number,
-    default: 0
-  },
   topicFavoriteCount: {
     type: Number,
     default: 0

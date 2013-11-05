@@ -82,6 +82,26 @@ describe('Model#Topic', function() {
 
   describe('Hooks', function() {
     describe('pre/topic.js', function() {
+      var topicId;
+      beforeEach(function(done) {
+        Topic.create({
+          title: '<script>alert(\'xss\');</script>',
+          content: '<p>asdsadsa</p><img src="asd.jpg">',
+          node: {
+            id: node.id
+          },
+          author: {
+            id: user.id
+          }
+        }, function(err, topic) {
+          if (err) {
+            throw err;
+          }
+          topicId = topic.id;
+          done();
+        });
+      });
+
       it('xss sanitize before validation', function(done) {
         var topic = new Topic({
           title: '<script>alert(\'xss\');</script>',
@@ -171,43 +191,94 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('should increase `topicCount` of author before create new topic', function(done) {
-        Topic.create({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
-            id: node.id
-          },
-          author: {
-            id: user.id
+      it('should increase `topicCount` of author when create new topic', function(done) {
+        var topicCountBefore = user.topicCount;
+        User.findById(user.id, function(err, user) {
+          should.exist(user);
+          user.topicCount.should.eql(topicCountBefore + 1);
+          done();
+        });
+      });
+
+      it('should increase `topicCount` of node when create new topic', function(done) {
+        var topicCountBefore = node.topicCount;
+        Node.findById(node.id, function(err, node) {
+          should.exist(node);
+          node.topicCount.should.eql(topicCountBefore + 1);
+          done();
+        });
+      });
+
+      it('should decrease `topicCount` of author when remove topic', function(done) {
+        Topic.destroy(topicId, function(err) {
+          if (err) {
+            return done(err);
           }
-        }, function(err, topic) {
-          should.exist(topic);
-          var topicCountBefore = user.topicCount;
           User.findById(user.id, function(err, user) {
             should.exist(user);
-            user.topicCount.should.eql(topicCountBefore + 1);
+            user.topicCount.should.eql(0);
             done();
           });
         });
       });
 
-      it('should increase `topicCount` of node before create new topic', function(done) {
-        Topic.create({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
-            id: node.id
-          },
-          author: {
-            id: user.id
+      it('should decrease `topicCount` of node when remove topic', function(done) {
+        Topic.destroy(topicId, function(err) {
+          if (err) {
+            return done(err);
           }
-        }, function(err, topic) {
-          should.exist(topic);
-          var topicCountBefore = node.topicCount;
           Node.findById(node.id, function(err, node) {
             should.exist(node);
-            node.topicCount.should.eql(topicCountBefore + 1);
+            node.topicCount.should.eql(0);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe('Methods', function() {
+    var topicId;
+    beforeEach(function(done) {
+      Topic.create({
+        title: 'this is a test topic...',
+        content: 'this is a test topic...',
+        node: {
+          id: node.id
+        },
+        author: {
+          id: user.id
+        }
+      }, function(err, topic) {
+        if (err) {
+          throw err;
+        }
+        topicId = topic.id;
+        done();
+      });
+    });
+    describe('Topic#edit(topicData, callback)', function() {
+      it('edit topic', function(done) {
+        Topic.edit({
+          id: topicId,
+          title: 'topic title has been modified...'
+        }, function(err, topic) {
+          should.exist(topic);
+          topic.title.should.eql('topic title has been modified...');
+          done();
+        });
+      });
+    });
+
+    describe('Topic#destroy(topicId, callback)', function() {
+      it('topic removed', function(done) {
+        Topic.destroy(topicId, function(err) {
+          if (err) {
+            return done(err);
+          }
+          
+          Topic.findById(topicId, function(err, topic) {
+            should.not.exist(topic);
             done();
           });
         });

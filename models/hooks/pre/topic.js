@@ -8,6 +8,7 @@
 */
 var sanitize = require('validator').sanitize,
   _ = require('lodash'),
+  async = require('async'),
   ObjectId = require('mongoose').Types.ObjectId,
   whenNewThen = require('../decorator').whenNewThen;
 
@@ -21,7 +22,11 @@ module.exports = exports = function(schema) {
    .pre('validate', true, validateAuthor)
    .pre('validate', true, validateNode)
    .pre('save', true, whenNewThen(increaseTopicCountOfUser))
-   .pre('save', true, whenNewThen(increaseTopicCountOfNode));
+   .pre('save', true, whenNewThen(increaseTopicCountOfNode))
+   .pre('remove', true, decreaseTopicCountOfUser)
+   .pre('remove', true, decreaseTopicCountOfNode)
+   .pre('remove', true, removeComments)
+   .pre('remove', true, removeFormFavorites);
 };
 
 /**
@@ -127,4 +132,63 @@ function increaseTopicCountOfNode(next, done) {
       topicCount: 1
     }
   }, done);
+}
+
+/**
+ * 删除 topic 时减少 user 的 topicCount 值
+ */
+function decreaseTopicCountOfUser(next, done) {
+  next();
+
+  var User = this.model('User');
+  User.findByIdAndUpdate(this.author.id, {
+    $inc: {
+      topicCount: -1
+    }
+  }, done);
+}
+
+/**
+ * 删除 topic 时减少 node 的 topicCount 值
+ */
+function decreaseTopicCountOfNode(next, done) {
+  next();
+
+  var Node = this.model('Node');
+  Node.findByIdAndUpdate(this.node.id, {
+    $inc: {
+      topicCount: -1
+    }
+  }, done);
+}
+
+/**
+ * 删除 topic 时删除其对应的 comments
+ */
+function removeComments(next, done) {
+  next();
+
+  var Comment = this.model('Comment');
+  Comment.remove({
+    topicId: this.id
+  }, done);
+}
+
+/**
+ * 删除 topic 时，把该 topic 从别人的收藏里面移除
+ */
+function removeFormFavorites(next, done) {
+  next();
+
+  var FavoriteTopic = this.model('FavoriteTopic');
+  FavoriteTopic.find({
+    topicId: this.id
+  }, function(err, favoriteTopics) {
+    if (err) {
+      return done(err);
+    }
+    async.each(favoriteTopics, function(favoriteTopic, next) {
+      favoriteTopic.remove(next);
+    }, done);
+  });
 }

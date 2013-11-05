@@ -123,6 +123,46 @@ describe('Model#Comment', function() {
           done();
         });
       });
+
+      it('should increase `commentCount` of topic when create new comment', function(done) {
+        var commentCountBefore = topic.commentCount;
+        Comment.create({
+          topicId: topic.id,
+          content: 'this is a comment...',
+          author: {
+            id: user.id
+          }
+        }, function(err) {
+          if (err) {
+            return done(err);
+          }
+          Topic.findById(topic.id, function(err, topic) {
+            should.exist(topic);
+            topic.commentCount.should.eql(commentCountBefore + 1);
+            done();
+          });
+        });
+      });
+
+      it('should update `lastCommentUser` of topic when create new comment', function(done) {
+        Comment.create({
+          topicId: topic.id,
+          content: 'this is a comment...',
+          author: {
+            id: user.id
+          }
+        }, function(err) {
+          if (err) {
+            return done(err);
+          }
+          Topic.findById(topic.id, function(err, topic) {
+            should.exist(topic);
+            should.exist(topic.lastCommentUser);
+            topic.lastCommentUser.username.should.eql(user.username);
+            done();
+          });
+        });
+      });
     });
   });
 });

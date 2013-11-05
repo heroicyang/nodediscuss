@@ -9,7 +9,7 @@ exports.whenNewThen = function(middleware) {
       noop = function() {};
 
     next = args[0] || noop,
-    done = typeof args[1] === 'Function' && args[1] || noop;
+    done = typeof args[1] === 'function' && args[1] || noop;
 
     if (this.isNew) {
       middleware.apply(this, args);

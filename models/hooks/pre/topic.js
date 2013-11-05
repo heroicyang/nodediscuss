@@ -187,6 +187,11 @@ function removeFormFavorites(next, done) {
     if (err) {
       return done(err);
     }
+    // Why do?
+    // 在删除 FavoriteTopic 时需要执行它的中间件(pre-hooks)，
+    // 用以减少对应 user 中的 topicFavoriteCount 值,
+    // 所以需要调用 Model 的实例对象的 remove 方法，而不是 Model.remove
+    // 不过数据量大的话或许这里会存在性能问题，导致长时间没有响应客户端
     async.each(favoriteTopics, function(favoriteTopic, next) {
       favoriteTopic.remove(next);
     }, done);

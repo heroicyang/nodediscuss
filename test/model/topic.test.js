@@ -9,67 +9,31 @@ var User = models.User,
   Node = models.Node,
   Topic = models.Topic,
   Comment = models.Comment;
+var shared = require('./shared');
 
 describe('Model#Topic', function() {
-  var user, node;
-  beforeEach(function(done) {
-    async.parallel([
-      function createUser(next) {
-        User.create({
-          email: 'heroicyang@gmail.com',
-          username: 'heroicyang',
-          password: '111111'
-        }, function(err, u) {
-          if (err) {
-            return next(err);
-          }
-          user = u;
-          next();
-        });
-      },
-      function createNode(next) {
-        Node.create({
-          name: 'Express',
-          category: 'Node.js'
-        }, function(err, n) {
-          if (err) {
-            return next(err);
-          }
-          node = n;
-          next();
-        });
-      }
-    ], done);
-  });
-
-  afterEach(function(done) {
-    async.parallel([
-      function removeUser(next) {
-        User.remove(next);
-      },
-      function removeNode(next) {
-        Node.remove(next);
-      },
-      function removeTopic(next) {
-        Topic.remove(next);
-      }
-    ], done);
-  });
+  beforeEach(shared.createUser);
+  beforeEach(shared.createNode);
+  beforeEach(shared.createTopic);
+  afterEach(shared.removeUsers);
+  afterEach(shared.removeNodes);
+  afterEach(shared.removeTopics);
 
   describe('Validators', function() {
     describe('topic#title', function() {
       it('length is too short or too long should throw an error', function(done) {
         var titles = ['test', (new Array(100)).join('test')],
+          self = this,
           topic;
         async.each(titles, function(title, next) {
           topic = new Topic({
             title: title,
             content: title,
             node: {
-              id: node.id
+              id: self.node.id
             },
             author: {
-              id: user.id
+              id: self.user.id
             }
           });
           topic.validate(function(err) {
@@ -83,35 +47,15 @@ describe('Model#Topic', function() {
 
   describe('Hooks', function() {
     describe('pre/topic.js', function() {
-      var topicId;
-      beforeEach(function(done) {
-        Topic.create({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
-            id: node.id
-          },
-          author: {
-            id: user.id
-          }
-        }, function(err, topic) {
-          if (err) {
-            throw err;
-          }
-          topicId = topic.id;
-          done();
-        });
-      });
-
       it('xss sanitize before validation', function(done) {
         var topic = new Topic({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
           node: {
-            id: node.id
+            id: this.node.id
           },
           author: {
-            id: user.id
+            id: this.user.id
           }
         });
         topic.validate(function() {
@@ -125,7 +69,7 @@ describe('Model#Topic', function() {
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
           node: {
-            id: node.id
+            id: this.node.id
           },
           author: {
             id: '1234'
@@ -143,7 +87,7 @@ describe('Model#Topic', function() {
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
           node: {
-            id: node.id
+            id: this.node.id
           },
           author: {
             id: '123456789012345678901234'
@@ -164,7 +108,7 @@ describe('Model#Topic', function() {
             id: '1234'
           },
           author: {
-            id: user.id
+            id: this.user.id
           }
         });
         topic.validate(function(err) {
@@ -182,7 +126,7 @@ describe('Model#Topic', function() {
             id: '123456789012345678901234'
           },
           author: {
-            id: user.id
+            id: this.user.id
           }
         });
         topic.validate(function(err) {
@@ -193,8 +137,8 @@ describe('Model#Topic', function() {
       });
 
       it('should increase `topicCount` of author when create new topic', function(done) {
-        var topicCountBefore = user.topicCount;
-        User.findById(user.id, function(err, user) {
+        var topicCountBefore = this.user.topicCount;
+        User.findById(this.user.id, function(err, user) {
           should.exist(user);
           user.topicCount.should.eql(topicCountBefore + 1);
           done();
@@ -202,8 +146,8 @@ describe('Model#Topic', function() {
       });
 
       it('should increase `topicCount` of node when create new topic', function(done) {
-        var topicCountBefore = node.topicCount;
-        Node.findById(node.id, function(err, node) {
+        var topicCountBefore = this.node.topicCount;
+        Node.findById(this.node.id, function(err, node) {
           should.exist(node);
           node.topicCount.should.eql(topicCountBefore + 1);
           done();
@@ -211,11 +155,12 @@ describe('Model#Topic', function() {
       });
 
       it('should decrease `topicCount` of author when remove topic', function(done) {
-        Topic.destroy(topicId, function(err) {
+        var self = this;
+        Topic.destroy(this.topic.id, function(err) {
           if (err) {
             return done(err);
           }
-          User.findById(user.id, function(err, user) {
+          User.findById(self.user.id, function(err, user) {
             should.exist(user);
             user.topicCount.should.eql(0);
             done();
@@ -224,11 +169,12 @@ describe('Model#Topic', function() {
       });
 
       it('should decrease `topicCount` of node when remove topic', function(done) {
-        Topic.destroy(topicId, function(err) {
+        var self = this;
+        Topic.destroy(this.topic.id, function(err) {
           if (err) {
             return done(err);
           }
-          Node.findById(node.id, function(err, node) {
+          Node.findById(self.node.id, function(err, node) {
             should.exist(node);
             node.topicCount.should.eql(0);
             done();
@@ -237,31 +183,32 @@ describe('Model#Topic', function() {
       });
 
       it('should remove all comments on this topic', function(done) {
+        var self = this;
         async.waterfall([
           function createComments(next) {
             Comment.create([{
-              topicId: topicId,
+              topicId: self.topic.id,
               content: 'comment here...',
               author: {
-                id: user.id
+                id: self.user.id
               }
             }, {
-              topicId: topicId,
+              topicId: self.topic.id,
               content: 'comment here...',
               author: {
-                id: user.id
+                id: self.user.id
               }
             }], function(err) {
               next(err);
             });
           },
           function removeTopic(next) {
-            Topic.destroy(topicId, function(err) {
+            Topic.destroy(self.topic.id, function(err) {
               if (err) {
                 return next(err);
               }
               Comment.find({
-                topicId: topicId
+                topicId: self.topic.id
               }, function(err, comments) {
                 if (err) {
                   return next(err);
@@ -278,29 +225,10 @@ describe('Model#Topic', function() {
   });
 
   describe('Methods', function() {
-    var topicId;
-    beforeEach(function(done) {
-      Topic.create({
-        title: 'this is a test topic...',
-        content: 'this is a test topic...',
-        node: {
-          id: node.id
-        },
-        author: {
-          id: user.id
-        }
-      }, function(err, topic) {
-        if (err) {
-          throw err;
-        }
-        topicId = topic.id;
-        done();
-      });
-    });
     describe('Topic#edit(topicData, callback)', function() {
       it('edit topic', function(done) {
         Topic.edit({
-          id: topicId,
+          id: this.topic.id,
           title: 'topic title has been modified...'
         }, function(err, topic) {
           should.exist(topic);
@@ -312,12 +240,13 @@ describe('Model#Topic', function() {
 
     describe('Topic#destroy(topicId, callback)', function() {
       it('topic removed', function(done) {
-        Topic.destroy(topicId, function(err) {
+        var self = this;
+        Topic.destroy(this.topic.id, function(err) {
           if (err) {
             return done(err);
           }
           
-          Topic.findById(topicId, function(err, topic) {
+          Topic.findById(self.topic.id, function(err, topic) {
             should.not.exist(topic);
             done();
           });

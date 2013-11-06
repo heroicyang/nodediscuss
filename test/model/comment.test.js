@@ -2,90 +2,29 @@
  * Module dependencies
  */
 var should = require('should'),
-  async = require('async'),
   db = require('../db'),
   models = db.models;
-var User = models.User,
-  Node = models.Node,
-  Topic = models.Topic,
+var Topic = models.Topic,
   Comment  = models.Comment;
+var shared = require('./shared');
 
 describe('Model#Comment', function() {
-  var user, node, topic;
-  beforeEach(function(done) {
-    async.parallel([
-      function createUser(next) {
-        User.create({
-          email: 'heroicyang@gmail.com',
-          username: 'heroicyang',
-          password: '111111'
-        }, function(err, u) {
-          if (err) {
-            return next(err);
-          }
-          user = u;
-          next();
-        });
-      },
-      function createNode(next) {
-        Node.create({
-          name: 'Express',
-          category: 'Node.js'
-        }, function(err, n) {
-          if (err) {
-            return next(err);
-          }
-          node = n;
-          next();
-        });
-      }
-    ], done);
-  });
-
-  beforeEach(function(done) {
-    Topic.create({
-      title: 'this is a test topic...',
-      content: 'this is a test topic...',
-      author: {
-        id: user.id
-      },
-      node: {
-        id: node.id
-      }
-    }, function(err, t) {
-      if (err) {
-        return done(err);
-      }
-      topic = t;
-      done();
-    });
-  });
-
-  afterEach(function(done) {
-    async.parallel([
-      function removeUser(next) {
-        User.remove(next);
-      },
-      function removeNode(next) {
-        Node.remove(next);
-      },
-      function removeTopic(next) {
-        Topic.remove(next);
-      },
-      function removeComment(next) {
-        Comment.remove(next);
-      }
-    ], done);
-  });
+  beforeEach(shared.createUser);
+  beforeEach(shared.createNode);
+  beforeEach(shared.createTopic);
+  afterEach(shared.removeUsers);
+  afterEach(shared.removeNodes);
+  afterEach(shared.removeTopics);
+  afterEach(shared.removeComments);
 
   describe('Hooks', function() {
     describe('pre/comment.js', function() {
       it('xss sanitize before validation', function(done) {
         var comment = new Comment({
-          topicId: topic.id,
+          topicId: this.topic.id,
           content: '<script>alert(\'xss\');</script>',
           author: {
-            id: user.id
+            id: this.user.id
           }
         });
         comment.validate(function() {
@@ -96,7 +35,7 @@ describe('Model#Comment', function() {
 
       it('validate author id, require a valid author id', function(done) {
         var comment = new Comment({
-          topicId: topic.id,
+          topicId: this.topic.id,
           content: '<script>alert(\'xss\');</script>',
           author: {
             id: '1234'
@@ -111,7 +50,7 @@ describe('Model#Comment', function() {
 
       it('validate author id, author must exist', function(done) {
         var comment = new Comment({
-          topicId: topic.id,
+          topicId: this.topic.id,
           content: '<script>alert(\'xss\');</script>',
           author: {
             id: '123456789012345678901234'
@@ -125,18 +64,19 @@ describe('Model#Comment', function() {
       });
 
       it('should increase `commentCount` of topic when create new comment', function(done) {
-        var commentCountBefore = topic.commentCount;
+        var commentCountBefore = this.topic.commentCount,
+          self = this;
         Comment.create({
-          topicId: topic.id,
+          topicId: this.topic.id,
           content: 'this is a comment...',
           author: {
-            id: user.id
+            id: this.user.id
           }
         }, function(err) {
           if (err) {
             return done(err);
           }
-          Topic.findById(topic.id, function(err, topic) {
+          Topic.findById(self.topic.id, function(err, topic) {
             should.exist(topic);
             topic.commentCount.should.eql(commentCountBefore + 1);
             done();
@@ -145,20 +85,21 @@ describe('Model#Comment', function() {
       });
 
       it('should update `lastCommentUser` of topic when create new comment', function(done) {
+        var self = this;
         Comment.create({
-          topicId: topic.id,
+          topicId: this.topic.id,
           content: 'this is a comment...',
           author: {
-            id: user.id
+            id: this.user.id
           }
         }, function(err) {
           if (err) {
             return done(err);
           }
-          Topic.findById(topic.id, function(err, topic) {
+          Topic.findById(self.topic.id, function(err, topic) {
             should.exist(topic);
             should.exist(topic.lastCommentUser);
-            topic.lastCommentUser.username.should.eql(user.username);
+            topic.lastCommentUser.username.should.eql(self.user.username);
             done();
           });
         });

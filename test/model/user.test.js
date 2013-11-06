@@ -6,11 +6,11 @@ var should = require('should'),
   db = require('../db'),
   models = db.models;
 var User = models.User;
+var shared = require('./shared');
 
 describe('Model#User', function() {
-  beforeEach(function(done) {
-    User.remove(done);
-  });
+  beforeEach(shared.createUser);
+  afterEach(shared.removeUsers);
 
   describe('Validators', function() {
     describe('user#email', function() {
@@ -41,37 +41,22 @@ describe('Model#User', function() {
       });
 
       it('email is unique', function(done) {
-        async.waterfall([
-          function createUser(next) {
-            var user = new User({
-              email: 'me@heroicyang.com',
-              username: 'heroic',
-              password: '111111'
-            });
-            user.save(function(err) {
-              next(err);
-            });
-          },
-          function createAnother(next) {
-            var user = new User({
-              email: 'me@heroicyang.com',
-              username: 'heroicyang',
-              password: '111111'
-            });
-            user.save(function(err) {
-              should.exist(err);
-              err.name.should.eql('ValidationError');
-              next(null);
-            });
-          }
-        ], done);
+        User.create({
+          email: 'me@heroicyang.com',
+          username: 'heroicyang',
+          password: '111111'
+        }, function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
       });
     });
 
     describe('user#username', function() {
       it('username required', function(done) {
         var user = new User({
-          email: 'me@heroicyang.com',
+          email: 'heroicyang@gmail.com',
           username: '',
           password: '111111'
         });
@@ -84,7 +69,7 @@ describe('Model#User', function() {
 
       it('non-alphanumeric username shoud throw an error', function(done) {
         var user = new User({
-          email: 'me@heroicyang.com',
+          email: 'heroicyang@gmail.com',
           username: 'heroic*=&^',
           password: '111111'
         });
@@ -100,7 +85,7 @@ describe('Model#User', function() {
           user;
         async.each(usernames, function(username, next) {
           user = new User({
-            email: 'me@heroicyang.com',
+            email: 'heroicyang@gmail.com',
             username: username,
             password: '111111'
           });
@@ -113,38 +98,23 @@ describe('Model#User', function() {
       });
 
       it('username is unique', function(done) {
-        async.waterfall([
-          function createUser(next) {
-            var user = new User({
-              email: 'me@heroicyang.com',
-              username: 'heroic',
-              password: '111111'
-            });
-            user.save(function(err) {
-              next(err);
-            });
-          },
-          function createAnother(next) {
-            var user = new User({
-              email: 'heroicyang@gmail.com',
-              username: 'heroic',
-              password: '111111'
-            });
-            user.save(function(err) {
-              should.exist(err);
-              err.name.should.eql('ValidationError');
-              next(null);
-            });
-          }
-        ], done);
+        User.create({
+          email: 'heroicyang@gmail.com',
+          username: 'heroic',
+          password: '111111'
+        }, function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
       });
     });
 
     describe('user#password', function() {
       it('when creating user password can not be blank', function(done) {
         User.create({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
+          email: 'heroicyang@gmail.com',
+          username: 'heroicyang',
           password: ''
         }, function(err) {
           should.exist(err);
@@ -158,8 +128,8 @@ describe('Model#User', function() {
           user;
         async.each(passwords, function(password, next) {
           user = new User({
-            email: 'me@heroicyang.com',
-            username: 'heroic',
+            email: 'heroicyang@gmail.com',
+            username: 'heroicyang',
             password: password
           });
           user.validate(function(err) {
@@ -174,8 +144,8 @@ describe('Model#User', function() {
     describe('user#website', function() {
       it('invalid website should throw an error', function(done) {
         var user = new User({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
+          email: 'heroicyang@gmail.com',
+          username: 'heroicyang',
           password: '111111',
           website: 'asdasdsadasdasd'
         });
@@ -192,8 +162,8 @@ describe('Model#User', function() {
     describe('pre/user.js', function() {
       it('processing user data before validation', function(done) {
         var user = new User({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
+          email: 'heroicyang@gmail.com',
+          username: 'heroicyang',
           password: '111111',
           tagline: '<script>alert(\'xss\');</script>'
         });
@@ -209,13 +179,8 @@ describe('Model#User', function() {
   describe('Methods', function() {
     describe('user#authenticate(plainText)', function() {
       it('correct password should return true', function(done) {
-        var user = new User({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
-          password: '111111'
-        });
-        var success = user.authenticate('111111'),
-          failure = user.authenticate('123');
+        var success = this.user.authenticate('111111'),
+          failure = this.user.authenticate('123');
         success.should.be.true;
         failure.should.be.false;
         done();
@@ -223,15 +188,6 @@ describe('Model#User', function() {
     });
 
     describe('User#findOneByUsername(username, callback)', function() {
-      beforeEach(function(done) {
-        var user = new User({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
-          password: '111111'
-        });
-        user.save(done);
-      });
-
       it('should return the user if the username matches', function(done) {
         User.findOneByUsername('heroic', function (err, user) {
           should.exist(user);
@@ -249,15 +205,6 @@ describe('Model#User', function() {
     });
 
     describe('User#findOneByEmail(email, callback)', function() {
-      beforeEach(function(done) {
-        var user = new User({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
-          password: '111111'
-        });
-        user.save(done);
-      });
-
       it('should return the user if the email matches', function(done) {
         User.findOneByEmail('me@heroicyang.com', function (err, user) {
           should.exist(user);
@@ -276,14 +223,6 @@ describe('Model#User', function() {
     });
 
     describe('User#check(userData, callback)', function() {
-      beforeEach(function(done) {
-        User.create({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
-          password: '111111'
-        }, done);
-      });
-
       it('should return null and `matched` is undefined when user doesn\'t exist', function(done) {
         User.check({
           username: 'heroicyang',
@@ -321,15 +260,6 @@ describe('Model#User', function() {
     describe('User#activate(userData, callback)', function() {
       it('activate the user', function(done) {
         async.waterfall([
-          function createUser(next) {
-            User.create({
-              email: 'me@heroicyang.com',
-              username: 'heroic',
-              password: '111111'
-            }, function(err) {
-              next(err);
-            });
-          },
           function activateUser(next) {
             User.activate({
               username: 'heroic'  // or { email: 'me@heroicyang.com' }
@@ -349,14 +279,6 @@ describe('Model#User', function() {
     });
 
     describe('User#changePassword(userData, callback)', function() {
-      beforeEach(function(done) {
-        User.create({
-          email: 'me@heroicyang.com',
-          username: 'heroic',
-          password: '111111'
-        }, done);
-      });
-
       it('new passwords should match', function(done) {
         User.changePassword({
           email: 'me@heroicyang.com',
@@ -401,23 +323,15 @@ describe('Model#User', function() {
 
     describe('User#edit(userData, callback)', function() {
       it('edit user', function(done) {
-        User.create({
+        User.edit({
           email: 'me@heroicyang.com',
-          username: 'heroic',
-          password: '111111'
+          nickname: 'Heroic Yang',
+          website: 'heroicyang.com'
         }, function(err, user) {
           should.exist(user);
-
-          User.edit({
-            email: 'me@heroicyang.com',
-            nickname: 'Heroic Yang',
-            website: 'heroicyang.com'
-          }, function(err, user) {
-            should.exist(user);
-            user.nickname.should.eql('Heroic Yang');
-            user.website.should.eql('http://heroicyang.com');
-            done();
-          });
+          user.nickname.should.eql('Heroic Yang');
+          user.website.should.eql('http://heroicyang.com');
+          done();
         });
       });
     });

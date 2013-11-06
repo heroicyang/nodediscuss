@@ -2,47 +2,14 @@
  * Module dependencies
  */
 var should = require('should'),
-  async = require('async'),
   db = require('../db'),
   models = db.models;
-var User = models.User,
-  Node = models.Node,
-  Topic = models.Topic;
+var Node = models.Node;
+var shared = require('./shared');
 
 describe('Model#Node', function() {
-  beforeEach(function(done) {
-    var nodes = [{
-      name: 'Express',
-      category: 'Node.js'
-    }, {
-      name: 'Connect',
-      category: 'Node.js'
-    }, {
-      name: 'Mongoose',
-      category: 'Node.js'
-    }, {
-      name: 'Mongodb',
-      category: 'Web开发'
-    }, {
-      name: 'Redis',
-      category: 'Web开发'
-    }];
-    Node.create(nodes, done);
-  });
-
-  afterEach(function(done) {
-    async.parallel([
-      function removeUser(next) {
-        User.remove(next);
-      },
-      function removeNode(next) {
-        Node.remove(next);
-      },
-      function removeTopic(next) {
-        Topic.remove(next);
-      }
-    ], done);
-  });
+  beforeEach(shared.createNodes);
+  afterEach(shared.removeNodes);
 
   describe('Methods', function() {
     describe('Node#findAllGroupedByCategory(callback)', function() {

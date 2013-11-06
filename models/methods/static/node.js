@@ -30,7 +30,7 @@ exports.findAllGroupedByCategory = function(callback) {
 
 /**
  * 获取最热门的节点
- * @param  {Object|Function}   limit    要取得的节点数量或者回调函数
+ * @param  {Number|Function}   limit    要取得的节点数量或者回调函数
  * @param  {Function} callback          回调函数
  *  - err    MongooseError
  *  - nodes  节点列表

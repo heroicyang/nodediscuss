@@ -7,7 +7,8 @@ var should = require('should'),
   models = db.models;
 var User = models.User,
   Node = models.Node,
-  Topic = models.Topic;
+  Topic = models.Topic,
+  Comment = models.Comment;
 
 describe('Model#Topic', function() {
   var user, node;
@@ -233,6 +234,45 @@ describe('Model#Topic', function() {
             done();
           });
         });
+      });
+
+      it('should remove all comments on this topic', function(done) {
+        async.waterfall([
+          function createComments(next) {
+            Comment.create([{
+              topicId: topicId,
+              content: 'comment here...',
+              author: {
+                id: user.id
+              }
+            }, {
+              topicId: topicId,
+              content: 'comment here...',
+              author: {
+                id: user.id
+              }
+            }], function(err) {
+              next(err);
+            });
+          },
+          function removeTopic(next) {
+            Topic.destroy(topicId, function(err) {
+              if (err) {
+                return next(err);
+              }
+              Comment.find({
+                topicId: topicId
+              }, function(err, comments) {
+                if (err) {
+                  return next(err);
+                }
+                comments.should.be.empty;
+                comments.should.have.length(0);
+                next();
+              });
+            });
+          }
+        ], done);
       });
     });
   });

@@ -115,6 +115,13 @@ exports.removeFavoriteNodes = function(callback) {
   FavoriteNode.remove(callback);
 };
 
+exports.createFavoriteTopic = function(callback) {
+  FavoriteTopic.create({
+    userId: this.user.id,
+    topicId: this.topic.id
+  }, callback);
+};
+
 exports.removeFavoriteTopics = function(callback) {
   FavoriteTopic.remove(callback);
 };

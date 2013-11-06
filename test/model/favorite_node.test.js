@@ -39,7 +39,7 @@ describe('Model#FavoriteNode', function() {
         });
       });
 
-      it('should decrease `favoriteNodeCount` of user when favorite a node', function(done) {
+      it('should decrease `favoriteNodeCount` of user when cancel a node favorite', function(done) {
         var self = this;
         FavoriteNode.destroy(this.user.id, this.node.id, function(err) {
           if (err) {
@@ -55,7 +55,7 @@ describe('Model#FavoriteNode', function() {
         });
       });
 
-      it('should decrease `favoriteUserCount` of node when favorite a node', function(done) {
+      it('should decrease `favoriteUserCount` of node when cancel a node favorite', function(done) {
         var self = this;
         FavoriteNode.destroy(this.user.id, this.node.id, function(err) {
           if (err) {

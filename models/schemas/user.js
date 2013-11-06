@@ -65,11 +65,11 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  topicFavoriteCount: {
+  favoriteTopicCount: {
     type: Number,
     default: 0
   },
-  nodeFavoriteCount: {
+  favoriteNodeCount: {
     type: Number,
     default: 0
   },

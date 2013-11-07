@@ -16,8 +16,13 @@ CNode Club 是 Node.js 中文技术社区系统 [Node Club] 的重写版本，�
 // install node npm mongodb grunt-cli
 // run mongod
 $ npm install
-$ grunt  // 即可根据相应的提示进行操作
-...
+$ grunt               // 查看详细的命令提示
+$ grunt createConfig  // 创建 `development` 环境的配置
+// 在 config 目录下找到刚刚创建的配置文件，修改相应配置
+// 此时你可以运行单元测试，或者构建前端然后直接运行网站
+$ grunt test          // or grunt test --target=model
+$ grunt build
+// 如果你运行了 grunt build，那就先 ctrl + c 或者单独打开一个 bash 窗口来启动服务吧
 $ node server/server.js  // 最后启动服务器
 ```
 

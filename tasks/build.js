@@ -19,6 +19,7 @@ module.exports = exports = function(grunt) {
       case 'development':
       default:
         grunt.config('dest', dest);
+        grunt.task.run('clean');
         grunt.task.run('stylus:development');
         grunt.task.run('concat:development');
         grunt.task.run('copy');
@@ -30,9 +31,12 @@ module.exports = exports = function(grunt) {
     // ...变动的文件来运行相应的任务
     grunt.event.on('watch', function(action, filepath) {
       if (filepath.indexOf('client/styl') !== -1) {
+        grunt.task.run('clean:stylus');
         grunt.task.run('stylus:development');
       }
       if (filepath.indexOf('client/js') !== -1) {
+        grunt.task.run('clean:js');
+        grunt.task.run('concat:development');
         grunt.task.run('copy:js');
       }
     });

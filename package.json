@@ -30,7 +30,8 @@
     "grunt-simple-mocha": "~0.4.0",
     "grunt-contrib-stylus": "~0.9.0",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-copy": "~0.4.1"
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0"
   },
   "keywords": [
     "cnodejs",

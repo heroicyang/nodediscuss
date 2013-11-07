@@ -20,8 +20,9 @@ module.exports = exports = function(grunt) {
       default:
         grunt.config('dest', dest);
         grunt.task.run('stylus:development');
+        grunt.task.run('concat:development');
         grunt.task.run('copy');
-        grunt.task.run('watch');
+        grunt.task.run('watch:build');
         break;
     }
 

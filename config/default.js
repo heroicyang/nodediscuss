@@ -13,9 +13,10 @@ module.exports = exports = {
       '127.0.0.1:27017'
     ]
   },
+  // 基于当前工作目录，即 `process.cwd()`
   static: {
     host: '',
-    rootDir: path.join(__dirname, '../public'),
-    uploadDir: path.join(__dirname, '../public/uploads/')
+    rootDir: '/assets',
+    uploadDir: '/assets/uploads'
   }
 };

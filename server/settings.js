@@ -6,7 +6,8 @@
 /**
  * Module dependencies
  */
-var express = require('express'),
+var path = require('path'),
+  express = require('express'),
   MongoStore = require('connect-mongo')(express),
   mongodb = require('./mongodb'),
   config = require('../config');
@@ -22,6 +23,9 @@ module.exports = exports = function(app) {
     app.use(express.cookieParser(config.session.secret));
     app.use(express.session({
       secret: config.session.secret,
+      cookie: {
+        maxAge: config.session.maxAge
+      },
       store: new MongoStore({
         url: mongodb.connectionString
       })
@@ -31,6 +35,7 @@ module.exports = exports = function(app) {
 
   app.configure('development', function() {
     app.use(express.logger('dev'));
+    app.use(express.static(path.join(process.cwd(), config.static.rootDir)));
   });
 
   app.configure('production', function() {

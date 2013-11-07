@@ -18,7 +18,7 @@ exports.connect = function() {
 };
 
 /**
- * Exporse connection string
+ * Expose connection string
  * @type {String}
  */
 exports.connectionString = loadConnectionString();

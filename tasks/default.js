@@ -9,36 +9,61 @@ module.exports = exports = function(grunt) {
 
     // create config
     grunt.log.writetableln(
-      [40, 60],
+      [36, 50],
       [
-        indent('grunt createConfig [options]', 4),
+        indent('grunt createConfig [options]', 2),
         'create config [development]'
       ]
     );
-    grunt.log.writeln(indent('Options:', 8));
+    grunt.log.writeln(indent('Options:', 4));
     grunt.log.writetableln(
-      [40, 60],
+      [36, 50],
       [
-        indent('--env=<env>', 12),
-        'create the given env config'
+        indent('--env=<env>', 6),
+        'create the given <env> config'
       ]
     );
     grunt.log.writeln();
 
     // run unit test
     grunt.log.writetableln(
-      [40, 60],
+      [36, 50],
       [
-        indent('grunt test [options]', 4),
+        indent('grunt test [options]', 2),
         'run unit tests [all]'
       ]
     );
-    grunt.log.writeln(indent('Options:', 8));
+    grunt.log.writeln(indent('Options:', 4));
     grunt.log.writetableln(
-      [40, 60],
+      [36, 50],
       [
-        indent('--target=<target>', 12),
+        indent('--target=<target>', 6),
         'only run tests matching <target> (model|api|controller)'
+      ]
+    );
+    grunt.log.writeln();
+
+    // build
+    grunt.log.writetableln(
+      [36, 50],
+      [
+        indent('grunt build [options]', 2),
+        'build front-end [development]'
+      ]
+    );
+    grunt.log.writeln(indent('Options:', 4));
+    grunt.log.writetableln(
+      [36, 50],
+      [
+        indent('--target=<target>', 6),
+        'build front-end for <target> (development|dev|production|pro)'
+      ]
+    );
+    grunt.log.writetableln(
+      [36, 50],
+      [
+        indent('--dest=<dest>', 6),
+        '<dest> directory for build. [assets]'
       ]
     );
   });

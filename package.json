@@ -2,7 +2,7 @@
   "name": "cnodeclub",
   "version": "0.0.1",
   "description": "基于 Node.js 的社区系统",
-  "main": "serve/server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "grunt test"
   },

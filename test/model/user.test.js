@@ -335,5 +335,49 @@ describe('Model#User', function() {
         });
       });
     });
+
+    describe('User#isUsernameExist(username, callback)', function() {
+      it('username is already exist', function(done) {
+        User.isUsernameExist('heroic', function(err, exist) {
+          if (err) {
+            return done(err);
+          }
+          exist.should.be.true;
+          done();
+        });
+      });
+
+      it('username does not exist', function(done) {
+        User.isUsernameExist('heroicyang', function(err, exist) {
+          if (err) {
+            return done(err);
+          }
+          exist.should.be.false;
+          done();
+        });
+      });
+    });
+
+    describe('User#isEmailExist(email, callback)', function() {
+      it('email is already exist', function(done) {
+        User.isEmailExist('me@heroicyang.com', function(err, exist) {
+          if (err) {
+            return done(err);
+          }
+          exist.should.be.true;
+          done();
+        });
+      });
+
+      it('email does not exist', function(done) {
+        User.isEmailExist('heroicyang@gmail.com', function(err, exist) {
+          if (err) {
+            return done(err);
+          }
+          exist.should.be.false;
+          done();
+        });
+      });
+    });
   });
 });

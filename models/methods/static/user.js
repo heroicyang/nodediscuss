@@ -171,3 +171,37 @@ exports.edit = function(userData, callback) {
       user.save(callback);
     });
 };
+
+/**
+ * 检查用户名是否存在
+ * @param  {String}   username  用户名
+ * @param  {Function} callback  回调函数
+ *  - err    MongooseError
+ *  - exist  true: 存在，false: 不存在
+ * @return {null}
+ */
+exports.isUsernameExist = function(username, callback) {
+  this.findOneByUsername(username, function(err, user) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, !!user);
+  });
+};
+
+/**
+ * 检查用户名是否存在
+ * @param  {String}   email     E-mail
+ * @param  {Function} callback  回调函数
+ *  - err    MongooseError
+ *  - exist  true: 存在，false: 不存在
+ * @return {null}
+ */
+exports.isEmailExist = function(email, callback) {
+  this.findOneByEmail(email, function(err, user) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, !!user);
+  });
+};

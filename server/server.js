@@ -2,7 +2,8 @@
  * Module dependencies
  */
 var http = require('http'),
-  express = require('express');
+  express = require('express'),
+  config = require('../config');
 
 // Connect to mongodb
 require('./mongodb').connect();
@@ -20,4 +21,4 @@ require('./routes')(app);
 
 // Start server
 http.createServer(app)
-  .listen(process.env.PORT || 8080);
+  .listen(process.env.PORT || config.port || 8080);

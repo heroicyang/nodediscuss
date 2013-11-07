@@ -10,7 +10,8 @@ var path = require('path'),
   express = require('express'),
   MongoStore = require('connect-mongo')(express),
   mongodb = require('./mongodb'),
-  config = require('../config');
+  config = require('../config'),
+  cwd = process.cwd();
 
 module.exports = exports = function(app) {
   app.configure(function() {
@@ -31,11 +32,17 @@ module.exports = exports = function(app) {
       })
     }));
     app.use(express.csrf());
+
+    if (!config.static.host) {
+      app.use(express.static(path.join(cwd, config.static.cwd)));
+    }
+    if (!config.media.host) {
+      app.use(express.static(path.join(cwd, config.media.cwd)));
+    }
   });
 
   app.configure('development', function() {
     app.use(express.logger('dev'));
-    app.use(express.static(path.join(process.cwd(), config.static.rootDir)));
   });
 
   app.configure('production', function() {

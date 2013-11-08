@@ -2,6 +2,7 @@
  * Module dependencies
  */
 var should = require('should'),
+  async = require('async'),
   db = require('../db'),
   models = db.models;
 var Topic = models.Topic,
@@ -31,6 +32,37 @@ describe('Model#Comment', function() {
           comment.content.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
           done();
         });
+      });
+
+      it('comment can not be repeated', function(done) {
+        var self = this;
+        async.waterfall([
+          function createComment(next) {
+            Comment.create({
+              topicId: self.topic.id,
+              content: 'this is a test comment',
+              author: {
+                id: self.user.id
+              }
+            }, function(err) {
+              next(err);
+            });
+          },
+          function anotherComment(next) {
+            var comment = new Comment({
+              topicId: self.topic.id,
+              content: 'this is a test comment',
+              author: {
+                id: self.user.id
+              }
+            });
+            comment.validate(function(err) {
+              should.exist(err);
+              err.name.should.eql('ValidationError');
+              next();
+            });
+          }
+        ], done);
       });
 
       it('validate author id, require a valid author id', function(done) {

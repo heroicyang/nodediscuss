@@ -18,8 +18,10 @@ var sanitize = require('validator').sanitize,
 module.exports = exports = function(schema) {
   schema
     .pre('validate', processCommentData)
+    .pre('validate', true, validateContent)
     .pre('validate', true, validateAuthor)
-    .pre('save', true, whenNewThen(updateTopic));
+    .pre('save', true, whenNewThen(updateTopic))
+    .pre('save', true, whenNewThen(increaseCommentCountOfPage));
 };
 
 /**
@@ -28,6 +30,39 @@ module.exports = exports = function(schema) {
 function processCommentData(next) {
   this.content = sanitize(this.content).xss();
   next();
+}
+
+/**
+ * 检查评论内容，禁止重复评论
+ */
+function validateContent(next, done) {
+  next();
+
+  var Comment = this.model(this.constructor.modelName),
+    self = this;
+  Comment.find({
+    topicId: this.topicId,
+    'author.id': this.author.id
+  }, function(err, comments) {
+    if (err) {
+      return done(err);
+    }
+
+    var repeated = false;
+    if (comments.length) {
+      _.each(comments, function(comment) {
+        if (comment.content === self.content) {
+          repeated = true;
+          return;
+        }
+      });
+    }
+
+    if (repeated) {
+      self.invalidate('content', 'Comment can not be repeated.', self.content);
+    }
+    done();
+  });
 }
 
 /**
@@ -83,6 +118,21 @@ function updateTopic(next, done) {
         nickname: this.author.nickname,
         commentedAt: this.createdAt
       }
+    }
+  }, done);
+}
+
+/**
+ * 如果评论是针对 Page 的，则更新对应 Page 的 commentCount 属性
+ * 这个和上面 Topic 不会冲突，因为都是使用的 findByIdAndUpdate， 没找到是不会更新的
+ */
+function increaseCommentCountOfPage(next, done) {
+  next();
+
+  var Page = this.model('Page');
+  Page.findByIdAndUpdate(this.topic, {
+    $inc: {
+      commentCount: 1
     }
   }, done);
 }

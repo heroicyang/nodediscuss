@@ -14,6 +14,7 @@ var mongoose = require('mongoose'),
  * @type {Schema}
  */
 var CommentSchema = new Schema({
+  // 也可存储为 PageSchema 的 id
   topicId: {
     type: String,
     index: true,
@@ -35,10 +36,14 @@ var CommentSchema = new Schema({
     nickname: String,
     avatar: String
   },
-
   likeCount: {
     type: Number,
     default: 0
+  },
+  // 评论只做软删除，以便应对回复楼层的上下文
+  deleted: {
+    type: Boolean,
+    default: false
   }
 }, {
   collection: 'comment'

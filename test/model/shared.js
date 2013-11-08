@@ -4,10 +4,10 @@
 var models = require('../db').models;
 
 var User = models.User,
-  Node = models.Node,
+  Catalogue = models.Catalogue,
   Topic = models.Topic,
   Comment = models.Comment,
-  FavoriteNode = models.FavoriteNode,
+  FavoriteCatalogue = models.FavoriteCatalogue,
   FavoriteTopic = models.FavoriteTopic;
 
 exports.createUser = function(callback) {
@@ -29,48 +29,48 @@ exports.removeUsers = function(callback) {
   User.remove(callback);
 };
 
-exports.createNode = function(callback) {
+exports.createCatalogue = function(callback) {
   var self = this;
-  Node.create({
+  Catalogue.create({
     name: 'Express',
-    category: 'Node.js'
-  }, function(err, node) {
+    section: 'Node.js'
+  }, function(err, catalogue) {
     if (err) {
       return callback(err);
     }
-    self.node = node;
+    self.catalogue = catalogue;
     callback();
   });
 };
 
-exports.createNodes = function(callback) {
+exports.createCatalogues = function(callback) {
   var self = this;
-  Node.create([{
+  Catalogue.create([{
     name: 'Connect',
-    category: 'Node.js'
+    section: 'Node.js'
   }, {
     name: 'Mongoose',
-    category: 'Node.js'
+    section: 'Node.js'
   }, {
     name: 'Mongodb',
-    category: 'Web开发'
+    section: 'Web开发'
   }, {
     name: 'Redis',
-    category: 'Web开发'
+    section: 'Web开发'
   }, {
     name: '京 JS',
-    category: '社区活动'
+    section: '社区活动'
   }], function(err) {
     if (err) {
       return callback(err);
     }
-    self.nodes = Array.prototype.slice.call(arguments, 1);
+    self.catalogues = Array.prototype.slice.call(arguments, 1);
     callback();
   });
 };
 
-exports.removeNodes = function(callback) {
-  Node.remove(callback);
+exports.removeCatalogues = function(callback) {
+  Catalogue.remove(callback);
 };
 
 exports.createTopic = function(callback) {
@@ -78,8 +78,8 @@ exports.createTopic = function(callback) {
   Topic.create({
     title: 'this is a test topic...',
     content: 'this is a test topic...',
-    node: {
-      id: this.node.id
+    catalogue: {
+      id: this.catalogue.id
     },
     author: {
       id: this.user.id
@@ -101,18 +101,18 @@ exports.removeComments = function(callback) {
   Comment.remove(callback);
 };
 
-exports.createFavoriteNode = function(callback) {
-  FavoriteNode.create({
+exports.createFavoriteCatalogue = function(callback) {
+  FavoriteCatalogue.create({
     userId: this.user.id,
-    node: {
-      id: this.node.id,
-      name: this.node.name
+    catalogue: {
+      id: this.catalogue.id,
+      name: this.catalogue.name
     }
   }, callback);
 };
 
-exports.removeFavoriteNodes = function(callback) {
-  FavoriteNode.remove(callback);
+exports.removeFavoriteCatalogues = function(callback) {
+  FavoriteCatalogue.remove(callback);
 };
 
 exports.createFavoriteTopic = function(callback) {

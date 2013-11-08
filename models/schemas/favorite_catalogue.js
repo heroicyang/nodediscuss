@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 /**
- * Collection name in the database is `favorite_node`
+ * Collection name in the database is `favorite_catalogue`
  * @type {Schema}
  */
 var FavoriteNodeSchema = new Schema({
@@ -19,7 +19,7 @@ var FavoriteNodeSchema = new Schema({
     index: true,
     required: true
   },
-  node: {
+  catalogue: {
     id: {
       type: String,
       require: true
@@ -30,7 +30,7 @@ var FavoriteNodeSchema = new Schema({
     }
   }
 }, {
-  collection: 'favorite_node'
+  collection: 'favorite_catalogue'
 });
 
 /**
@@ -45,5 +45,5 @@ FavoriteNodeSchema
  */
 module.exports = {
   schema: FavoriteNodeSchema,
-  modelName: 'FavoriteNode'
+  modelName: 'FavoriteCatalogue'
 };

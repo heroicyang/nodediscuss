@@ -20,11 +20,11 @@ module.exports = exports = function(schema) {
   schema
    .pre('validate', processTopicData)
    .pre('validate', true, validateAuthor)
-   .pre('validate', true, validateNode)
+   .pre('validate', true, validateCatalogue)
    .pre('save', true, whenNewThen(increaseTopicCountOfUser))
-   .pre('save', true, whenNewThen(increaseTopicCountOfNode))
+   .pre('save', true, whenNewThen(increaseTopicCountOfCatalogue))
    .pre('remove', true, decreaseTopicCountOfUser)
-   .pre('remove', true, decreaseTopicCountOfNode)
+   .pre('remove', true, decreaseTopicCountOfCatalogue)
    .pre('remove', true, removeComments)
    .pre('remove', true, removeFormFavorites);
 };
@@ -74,32 +74,32 @@ function validateAuthor(next, done) {
 }
 
 /**
- * 验证提供的节点是否存在于数据库的  node collection 中
- * 如果存在则将 topic 的 node 属性值覆写，保存成数据库中最新的副本信息
+ * 验证提供的节点是否存在于数据库的  catalogue collection 中
+ * 如果存在则将 topic 的 catalogue 属性值覆写，保存成数据库中最新的副本信息
  */
-function validateNode(next, done) {
+function validateCatalogue(next, done) {
   next();
 
-  var Node = this.model('Node'),
+  var Catalogue = this.model('Catalogue'),
     self = this,
-    nodeId;
+    catalogueId;
   try {
-    nodeId = new ObjectId(this.node.id);
+    catalogueId = new ObjectId(this.catalogue.id);
   } catch (e) {
-    self.invalidate('node.id', 'Invalid node id!', self.node.id);
+    self.invalidate('catalogue.id', 'Invalid catalogue id!', self.catalogue.id);
     return done();
   }
 
-  Node.findById(nodeId, function(err, node) {
+  Catalogue.findById(catalogueId, function(err, catalogue) {
     if (err) {
       return done(err);
     }
 
-    if (!node) {
-      self.invalidate('node.id', 'Node does not exist.', self.node.id);
+    if (!catalogue) {
+      self.invalidate('catalogue.id', 'Catalogue does not exist.', self.catalogue.id);
     } else {
-      _.extend(self.node, {
-        name: node.name
+      _.extend(self.catalogue, {
+        name: catalogue.name
       });
     }
     done();
@@ -121,13 +121,13 @@ function increaseTopicCountOfUser(next, done) {
 }
 
 /**
- * 更新 node 的 topicCount 属性，每发布一条 topic 则递增
+ * 更新 catalogue 的 topicCount 属性，每发布一条 topic 则递增
  */
-function increaseTopicCountOfNode(next, done) {
+function increaseTopicCountOfCatalogue(next, done) {
   next();
 
-  var Node = this.model('Node');
-  Node.findByIdAndUpdate(this.node.id, {
+  var Catalogue = this.model('Catalogue');
+  Catalogue.findByIdAndUpdate(this.catalogue.id, {
     $inc: {
       topicCount: 1
     }
@@ -149,13 +149,13 @@ function decreaseTopicCountOfUser(next, done) {
 }
 
 /**
- * 删除 topic 时减少 node 的 topicCount 值
+ * 删除 topic 时减少 catalogue 的 topicCount 值
  */
-function decreaseTopicCountOfNode(next, done) {
+function decreaseTopicCountOfCatalogue(next, done) {
   next();
 
-  var Node = this.model('Node');
-  Node.findByIdAndUpdate(this.node.id, {
+  var Catalogue = this.model('Catalogue');
+  Catalogue.findByIdAndUpdate(this.catalogue.id, {
     $inc: {
       topicCount: -1
     }

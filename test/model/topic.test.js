@@ -6,17 +6,17 @@ var should = require('should'),
   db = require('../db'),
   models = db.models;
 var User = models.User,
-  Node = models.Node,
+  Catalogue = models.Catalogue,
   Topic = models.Topic,
   Comment = models.Comment;
 var shared = require('./shared');
 
 describe('Model#Topic', function() {
   beforeEach(shared.createUser);
-  beforeEach(shared.createNode);
+  beforeEach(shared.createCatalogue);
   beforeEach(shared.createTopic);
   afterEach(shared.removeUsers);
-  afterEach(shared.removeNodes);
+  afterEach(shared.removeCatalogues);
   afterEach(shared.removeTopics);
 
   describe('Validators', function() {
@@ -29,8 +29,8 @@ describe('Model#Topic', function() {
           topic = new Topic({
             title: title,
             content: title,
-            node: {
-              id: self.node.id
+            catalogue: {
+              id: self.catalogue.id
             },
             author: {
               id: self.user.id
@@ -51,8 +51,8 @@ describe('Model#Topic', function() {
         var topic = new Topic({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
-            id: this.node.id
+          catalogue: {
+            id: this.catalogue.id
           },
           author: {
             id: this.user.id
@@ -68,8 +68,8 @@ describe('Model#Topic', function() {
         var topic = new Topic({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
-            id: this.node.id
+          catalogue: {
+            id: this.catalogue.id
           },
           author: {
             id: '1234'
@@ -86,8 +86,8 @@ describe('Model#Topic', function() {
         var topic = new Topic({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
-            id: this.node.id
+          catalogue: {
+            id: this.catalogue.id
           },
           author: {
             id: '123456789012345678901234'
@@ -100,11 +100,11 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('validate node id, require a valid node id', function(done) {
+      it('validate catalogue id, require a valid catalogue id', function(done) {
         var topic = new Topic({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
+          catalogue: {
             id: '1234'
           },
           author: {
@@ -118,11 +118,11 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('validate node id, node must exist', function(done) {
+      it('validate catalogue id, catalogue must exist', function(done) {
         var topic = new Topic({
           title: '<script>alert(\'xss\');</script>',
           content: '<p>asdsadsa</p><img src="asd.jpg">',
-          node: {
+          catalogue: {
             id: '123456789012345678901234'
           },
           author: {
@@ -145,11 +145,11 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('should increase `topicCount` of node when create new topic', function(done) {
-        var topicCountBefore = this.node.topicCount;
-        Node.findById(this.node.id, function(err, node) {
-          should.exist(node);
-          node.topicCount.should.eql(topicCountBefore + 1);
+      it('should increase `topicCount` of catalogue when create new topic', function(done) {
+        var topicCountBefore = this.catalogue.topicCount;
+        Catalogue.findById(this.catalogue.id, function(err, catalogue) {
+          should.exist(catalogue);
+          catalogue.topicCount.should.eql(topicCountBefore + 1);
           done();
         });
       });
@@ -168,15 +168,15 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('should decrease `topicCount` of node when remove topic', function(done) {
+      it('should decrease `topicCount` of catalogue when remove topic', function(done) {
         var self = this;
         Topic.destroy(this.topic.id, function(err) {
           if (err) {
             return done(err);
           }
-          Node.findById(self.node.id, function(err, node) {
-            should.exist(node);
-            node.topicCount.should.eql(0);
+          Catalogue.findById(self.catalogue.id, function(err, catalogue) {
+            should.exist(catalogue);
+            catalogue.topicCount.should.eql(0);
             done();
           });
         });

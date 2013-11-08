@@ -69,7 +69,7 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  favoriteNodeCount: {
+  favoriteCatalogueCount: {
     type: Number,
     default: 0
   },

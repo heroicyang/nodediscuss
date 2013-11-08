@@ -24,7 +24,7 @@ var TopicSchema = new Schema({
     required: true
   },
   htmlContent: String,
-  node: {
+  catalogue: {
     id: {
       type: String,
       index: true,

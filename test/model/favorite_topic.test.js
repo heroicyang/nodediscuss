@@ -11,11 +11,11 @@ var shared = require('./shared');
 
 describe('Model#FavoriteTopic', function() {
   beforeEach(shared.createUser);
-  beforeEach(shared.createNode);
+  beforeEach(shared.createCatalogue);
   beforeEach(shared.createTopic);
   beforeEach(shared.createFavoriteTopic);
   afterEach(shared.removeUsers);
-  afterEach(shared.removeNodes);
+  afterEach(shared.removeCatalogues);
   afterEach(shared.removeTopics);
   afterEach(shared.removeFavoriteTopics);
 

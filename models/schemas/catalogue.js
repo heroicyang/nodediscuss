@@ -1,5 +1,6 @@
 /**
- * NodeSchema definition
+ * CatalogueSchema definition
+ * 本来是叫节点的，但是一看到这文件名 `node.js` 就有点难受啊
  * @author heroic
  */
 
@@ -13,14 +14,14 @@ var mongoose = require('mongoose'),
  * Collection name in the database is `node`
  * @type {Schema}
  */
-var NodeSchema = new Schema({
+var CatalogueSchema = new Schema({
   name: {
     type: String,
     index: true,
     unique: true,
     required: true
   },
-  category: String,
+  section: String,
   describe: String,
   topicCount: {
     type: Number,
@@ -31,13 +32,13 @@ var NodeSchema = new Schema({
     default: 0
   }
 }, {
-  collection: 'node'
+  collection: 'catalogue'
 });
 
 /**
  * Plugins
  */
-NodeSchema
+CatalogueSchema
   .plugin(require('../mongoose_plugins/timestamp'));
 
 /**
@@ -45,6 +46,6 @@ NodeSchema
  * @type {object}
  */
 module.exports = {
-  schema: NodeSchema,
-  modelName: 'Node'
+  schema: CatalogueSchema,
+  modelName: 'Catalogue'
 };

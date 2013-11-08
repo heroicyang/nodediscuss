@@ -23,6 +23,7 @@ var TopicSchema = new Schema({
     type: String,
     required: true
   },
+  htmlContent: String,
   node: {
     id: {
       type: String,
@@ -64,7 +65,7 @@ var TopicSchema = new Schema({
     default: 0
   },
 
-  essence: {
+  excellent: {
     type: Boolean,
     default: false
   },

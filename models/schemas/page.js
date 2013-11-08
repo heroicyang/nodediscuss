@@ -1,6 +1,7 @@
 /**
- * CommentSchema definition
- * @author heroic
+ * PageSchema 定义
+ * 保存单一的文档页面，比如 wiki
+ * @author  heroic
  */
 
 /**
@@ -10,22 +11,26 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 /**
- * Collection name in the database is `comment`
+ * Collection name in the database is `page`
  * @type {Schema}
  */
-var CommentSchema = new Schema({
-  topicId: {
+var PageSchema = new Schema({
+  slug: {
     type: String,
-    index: true,
-    required: true
+    required: true,
+    index: true
   },
-  commentId: String,
+  title: {
+    type: String,
+    required: true,
+    index: true
+  },
   content: {
     type: String,
     required: true
   },
-  contentHtml: String,
-  author: {
+  htmlContent: String,
+  authors: [{
     id: {
       type: String,
       index: true,
@@ -34,20 +39,19 @@ var CommentSchema = new Schema({
     username: String,
     nickname: String,
     avatar: String
-  },
-
-  likeCount: {
+  }],
+  commentCount: {
     type: Number,
     default: 0
   }
 }, {
-  collection: 'comment'
+  collection: 'page'
 });
 
 /**
  * Plugins
  */
-CommentSchema
+PageSchema
   .plugin(require('../mongoose_plugins/timestamp'));
 
 /**
@@ -55,6 +59,6 @@ CommentSchema
  * @type {object}
  */
 module.exports = {
-  schema: CommentSchema,
-  modelName: 'Comment'
+  schema: PageSchema,
+  modelName: 'Page'
 };

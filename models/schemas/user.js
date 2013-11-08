@@ -82,6 +82,7 @@ var UserSchema = new Schema({
     default: 0
   },
   number: Number,
+  score: Number,
   level: String
 }, {
   collection: 'user'

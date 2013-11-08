@@ -25,7 +25,7 @@ var NotificationSchema = new Schema({
   type: {
     type: Number,
     required: true,
-    enum: _.values(constants.NITIFICATION_TYPE)
+    enum: _.values(constants.NOTIFICATION_TYPE)
   },
   topicId: String,
   commentId: String,

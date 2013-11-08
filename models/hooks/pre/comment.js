@@ -8,7 +8,9 @@
  */
 var sanitize = require('validator').sanitize,
   _ = require('lodash'),
+  async = require('async'),
   ObjectId = require('mongoose').Types.ObjectId,
+  constants = require('../../constants'),
   whenNewThen = require('../decorator').whenNewThen;
 
 /**
@@ -21,7 +23,9 @@ module.exports = exports = function(schema) {
     .pre('validate', true, validateContent)
     .pre('validate', true, validateAuthor)
     .pre('save', true, whenNewThen(updateTopic))
-    .pre('save', true, whenNewThen(increaseCommentCountOfPage));
+    .pre('save', true, whenNewThen(increaseCommentCountOfPage))
+    .pre('save', true, whenNewThen(notifyTopicAuthor))
+    .pre('save', true, whenNewThen(notifyCommentAuthor));
 };
 
 /**
@@ -107,6 +111,11 @@ function validateAuthor(next, done) {
 function updateTopic(next, done) {
   next();
 
+  // 当评论 Page 时则无需操作 Topic
+  if (this.onPage) {
+    return done();
+  }
+
   var Topic = this.model('Topic');
   Topic.findByIdAndUpdate(this.topicId, {
     $inc: {
@@ -124,10 +133,14 @@ function updateTopic(next, done) {
 
 /**
  * 如果评论是针对 Page 的，则更新对应 Page 的 commentCount 属性
- * 这个和上面 Topic 不会冲突，因为都是使用的 findByIdAndUpdate， 没找到是不会更新的
  */
 function increaseCommentCountOfPage(next, done) {
   next();
+
+  // 当评论 Topic 时则不用更新 Page
+  if (!this.onPage) {
+    return done();
+  }
 
   var Page = this.model('Page');
   Page.findByIdAndUpdate(this.topic, {
@@ -135,4 +148,80 @@ function increaseCommentCountOfPage(next, done) {
       commentCount: 1
     }
   }, done);
+}
+
+/**
+ * 给话题作者发送通知
+ */
+function notifyTopicAuthor(next, done) {
+  next();
+
+  // 当评论 Page 时则不必通知，因为 Page 的作者会有多人
+  if (this.onPage) {
+    return done();
+  }
+
+  // 有 commentId 则代表是回复某条评论，应该是通知那条评论的作者...
+  // ...有下一个中间件来负责
+  if (this.commentId) {
+    return done();
+  }
+
+  var self = this;
+  async.waterfall([
+    function findTopicAuthor(next) {
+      var Topic = self.model('Topic');
+      Topic.findById(self.topicId, function(err, topic) {
+        next(err, topic);
+      });
+    },
+    function createNotification(topic, next) {
+      var Notification = self.model('Notification'),
+        topicAuthorId = topic.author.id;
+      Notification.create({
+        masterId: topicAuthorId,
+        userId: self.author.id,
+        type: constants.NOTIFICATION_TYPE.COMMENT,
+        topicId: self.topicId
+      }, next);
+    }
+  ], done);
+}
+
+/**
+ * 给原评论作者发送通知
+ */
+function notifyCommentAuthor(next, done) {
+  next();
+
+  // 当评论 Page 时则不必通知，Page 中暂时不提供回复评论的功能
+  if (this.onPage) {
+    return done();
+  }
+
+  // 不是回复评论，则由上一个中间件处理即可
+  if (!this.commentId) {
+    return done();
+  }
+
+  var self = this;
+  async.waterfall([
+    function findCommentAuthor(next) {
+      var Comment = self.model('Comment');
+      Comment.findById(self.commentId, function(err, comment) {
+        next(err, comment);
+      });
+    },
+    function createNotification(comment, next) {
+      var Notification = self.model('Notification'),
+        commentAuthorId = comment.author.id;
+      Notification.create({
+        masterId: commentAuthorId,
+        userId: self.author.id,
+        type: constants.NOTIFICATION_TYPE.REPLY_COMMENT,
+        topicId: self.topicId,
+        commentId: self.commentId
+      }, next);
+    }
+  ], done);
 }

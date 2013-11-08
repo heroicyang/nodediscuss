@@ -20,6 +20,11 @@ var CommentSchema = new Schema({
     index: true,
     required: true
   },
+  // 当评论 Page 时设为 true
+  onPage: {
+    type: Boolean,
+    default: false
+  },
   commentId: String,
   content: {
     type: String,

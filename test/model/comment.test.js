@@ -6,7 +6,8 @@ var should = require('should'),
   db = require('../db'),
   models = db.models;
 var Topic = models.Topic,
-  Comment  = models.Comment;
+  Comment  = models.Comment,
+  Notification = models.Notification;
 var shared = require('./shared');
 
 describe('Model#Comment', function() {
@@ -95,7 +96,7 @@ describe('Model#Comment', function() {
         });
       });
 
-      it('should increase `commentCount` of topic when create new comment', function(done) {
+      it('should increase `commentCount` of topic when comment on topic', function(done) {
         var commentCountBefore = this.topic.commentCount,
           self = this;
         Comment.create({
@@ -116,7 +117,7 @@ describe('Model#Comment', function() {
         });
       });
 
-      it('should update `lastCommentUser` of topic when create new comment', function(done) {
+      it('should update `lastCommentUser` of topic when comment on topic', function(done) {
         var self = this;
         Comment.create({
           topicId: this.topic.id,
@@ -135,6 +136,81 @@ describe('Model#Comment', function() {
             done();
           });
         });
+      });
+
+      it('should increase `commentCount` of page when comment on page', function(done) {
+        // TODO
+        done();
+      });
+
+      it('should notify topic author when comment on topic', function(done) {
+        var self = this;
+        async.waterfall([
+          function createComment(next) {
+            Comment.create({
+              topicId: self.topic.id,
+              content: 'this is a comment...',
+              author: {
+                id: self.user.id
+              }
+            }, function(err) {
+              next(err);
+            });
+          },
+          function findNotification(next) {
+            Notification.findOne({
+              masterId: self.user.id,
+              topicId: self.topic.id
+            }, function(err, notification) {
+              if (err) {
+                return next(err);
+              }
+              should.exist(notification);
+              done();
+            });
+          }
+        ], done);
+      });
+
+      it('should notify comment author when reply comment', function(done) {
+        var self = this;
+        async.waterfall([
+          function createComment(next) {
+            Comment.create({
+              topicId: self.topic.id,
+              content: 'this is a comment...',
+              author: {
+                id: self.user.id
+              }
+            }, function(err, comment) {
+              next(err, comment);
+            });
+          },
+          function replyComment(comment, next) {
+            Comment.create({
+              topicId: self.topic.id,
+              commentId: comment.id,
+              content: 'this is a reply comment...',
+              author: {
+                id: self.user.id
+              }
+            }, function(err) {
+              next(err, comment);
+            });
+          },
+          function findNotification(comment, next) {
+            Notification.findOne({
+              masterId: self.user.id,
+              commentId: comment.id
+            }, function(err, notification) {
+              if (err) {
+                return next(err);
+              }
+              should.exist(notification);
+              done();
+            });
+          }
+        ], done);
       });
     });
   });

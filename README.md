@@ -15,6 +15,7 @@ CNode Club 是 Node.js 中文技术社区系统 [Node Club] 的重写版本，�
 ```bash
 # install node npm mongodb grunt-cli, and run mongod
 
+$ git clone https://github.com/heroicyang/cnodeclub.git
 $ cd cnodeclub
 $ npm install
 $ grunt                  # 查看详细的命令提示
@@ -23,15 +24,16 @@ $ grunt createConfig     # 创建 `development` 环境的配置
 $ grunt createConfig --env=test
 # 然后在 config 目录下找到刚刚创建的配置文件，修改相应配置
 
-# 此时你可以运行单元测试，可以运行指定的测试 (model|api|controller)
+# 然后你可以运行单元测试，或者可以运行指定的测试 (model|api|controller)
 $ grunt test             # or grunt test --target=model
-# 或者构建前端然后运行网站
+
+# 然后构建前端然后运行网站
 $ grunt build
-# 可以让前端构建到指定目录，不过默认就是 assets
+# 可以指定构建目录，不过默认就是 assets
 $ grunt build --dest=assets  # 如果自定义构建目录，同时请在配置文件中修改 static 配置
 
-# 如果你运行了 grunt build，那就先 ctrl + c 或者单独打开一个 bash 窗口来启动服务吧
-$ node server/server.js  # 最后启动服务器
+# 如果你运行了 grunt build，那就等 build 完之后 ctrl + c 或者单开一个 bash 来启动服务
+$ node server/server.js  # 启动服务器
 ```
 
 ##License

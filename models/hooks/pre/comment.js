@@ -11,7 +11,7 @@ var sanitize = require('validator').sanitize,
   async = require('async'),
   ObjectId = require('mongoose').Types.ObjectId,
   constants = require('../../constants'),
-  whenNewThen = require('../decorator').whenNewThen;
+  when = require('../when');
 
 /**
 * Bootstrap
@@ -22,10 +22,24 @@ module.exports = exports = function(schema) {
     .pre('validate', processCommentData)
     .pre('validate', true, validateContent)
     .pre('validate', true, validateAuthor)
-    .pre('save', true, whenNewThen(updateTopic))
-    .pre('save', true, whenNewThen(increaseCommentCountOfPage))
-    .pre('save', true, whenNewThen(notifyTopicAuthor))
-    .pre('save', true, whenNewThen(notifyCommentAuthor));
+    .pre('save', true,
+        when('isNew')
+          .not('onPage')  // 当评论 Page 时则无需操作 Topic
+          .then(updateTopic))
+    .pre('save', true,
+        when('isNew')
+          .and('onPage')  // 当评论 Topic 时则不用更新 Page
+          .then(increaseCommentCountOfPage))
+    .pre('save', true,
+        when('isNew')
+          .not('onPage')  // 当评论 Page 时则不必通知，因为 Page 的作者会有多人
+          .not('commentId')  // 有 commentId 则代表是回复某条评论，由下一个中间件来负责
+          .then(notifyTopicAuthor))
+    .pre('save', true,
+        when('isNew')
+          .not('onPage')  // 当评论 Page 时则不必通知，Page 中暂时不提供回复评论的功能
+          .and('commentId')  // 有 commentId 才代表是回复某条评论
+          .then(notifyCommentAuthor));
 };
 
 /**
@@ -111,11 +125,6 @@ function validateAuthor(next, done) {
 function updateTopic(next, done) {
   next();
 
-  // 当评论 Page 时则无需操作 Topic
-  if (this.onPage) {
-    return done();
-  }
-
   var Topic = this.model('Topic');
   Topic.findByIdAndUpdate(this.topicId, {
     $inc: {
@@ -137,11 +146,6 @@ function updateTopic(next, done) {
 function increaseCommentCountOfPage(next, done) {
   next();
 
-  // 当评论 Topic 时则不用更新 Page
-  if (!this.onPage) {
-    return done();
-  }
-
   var Page = this.model('Page');
   Page.findByIdAndUpdate(this.topic, {
     $inc: {
@@ -155,17 +159,6 @@ function increaseCommentCountOfPage(next, done) {
  */
 function notifyTopicAuthor(next, done) {
   next();
-
-  // 当评论 Page 时则不必通知，因为 Page 的作者会有多人
-  if (this.onPage) {
-    return done();
-  }
-
-  // 有 commentId 则代表是回复某条评论，应该是通知那条评论的作者...
-  // ...有下一个中间件来负责
-  if (this.commentId) {
-    return done();
-  }
 
   var self = this;
   async.waterfall([
@@ -193,16 +186,6 @@ function notifyTopicAuthor(next, done) {
  */
 function notifyCommentAuthor(next, done) {
   next();
-
-  // 当评论 Page 时则不必通知，Page 中暂时不提供回复评论的功能
-  if (this.onPage) {
-    return done();
-  }
-
-  // 不是回复评论，则由上一个中间件处理即可
-  if (!this.commentId) {
-    return done();
-  }
 
   var self = this;
   async.waterfall([

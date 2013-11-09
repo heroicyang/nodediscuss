@@ -10,7 +10,7 @@ var sanitize = require('validator').sanitize,
   _ = require('lodash'),
   async = require('async'),
   ObjectId = require('mongoose').Types.ObjectId,
-  whenNewThen = require('../decorator').whenNewThen;
+  when = require('../when');
 
 /**
 * Bootstrap
@@ -21,8 +21,8 @@ module.exports = exports = function(schema) {
    .pre('validate', processTopicData)
    .pre('validate', true, validateAuthor)
    .pre('validate', true, validateCatalogue)
-   .pre('save', true, whenNewThen(increaseTopicCountOfUser))
-   .pre('save', true, whenNewThen(increaseTopicCountOfCatalogue))
+   .pre('save', true, when('isNew').then(increaseTopicCountOfUser))
+   .pre('save', true, when('isNew').then(increaseTopicCountOfCatalogue))
    .pre('remove', true, decreaseTopicCountOfUser)
    .pre('remove', true, decreaseTopicCountOfCatalogue)
    .pre('remove', true, removeComments)

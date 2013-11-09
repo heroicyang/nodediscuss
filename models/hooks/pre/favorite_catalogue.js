@@ -6,7 +6,7 @@
 /**
 * Module dependencies
 */
-var whenNewThen = require('../decorator').whenNewThen;
+var when = require('../when');
 
 /**
 * Bootstrap
@@ -14,8 +14,8 @@ var whenNewThen = require('../decorator').whenNewThen;
 */
 module.exports = exports = function(schema) {
   schema
-   .pre('save', true, whenNewThen(incFavoriteCatalogueCountOfUser))
-   .pre('save', true, whenNewThen(incFavoriteUserCountOfCatalogue))
+   .pre('save', true, when('isNew').then(incFavoriteCatalogueCountOfUser))
+   .pre('save', true, when('isNew').then(incFavoriteUserCountOfCatalogue))
    .pre('remove', true, decFavoriteCatalogueCountOfUser)
    .pre('remove', true, decFavoriteUserCountOfCatalogue);
 };

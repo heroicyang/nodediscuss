@@ -169,4 +169,25 @@ describe('Model#Comment', function() {
       });
     });
   });
+
+  describe('Methods', function() {
+    describe('Comment#destroy(commentId, callback)', function() {
+      it('delete a comment, but only marked for deletion', function(done) {
+        var self = this;
+        Comment.destroy(this.comment.id, function(err) {
+          if (err) {
+            return done(err);
+          }
+          Comment.findById(self.comment.id, function(err, comment) {
+            if (err) {
+              return done(err);
+            }
+            should.exist(comment);
+            comment.deleted.should.be.true;
+            done();
+          });
+        });
+      });
+    });
+  });
 });

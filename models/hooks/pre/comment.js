@@ -21,7 +21,7 @@ module.exports = exports = function(schema) {
   schema
     .pre('validate', processCommentData)
     .pre('validate', true, when('isNew').then(validateContent))
-    .pre('validate', true, validateAuthor)
+    .pre('validate', true, when('isNew').then(validateAuthor))
     .pre('save', true,
         when('isNew')
           .not('onPage')  // 当评论 Page 时则无需操作 Topic

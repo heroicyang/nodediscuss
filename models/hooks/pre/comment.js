@@ -20,7 +20,7 @@ var sanitize = require('validator').sanitize,
 module.exports = exports = function(schema) {
   schema
     .pre('validate', processCommentData)
-    .pre('validate', true, validateContent)
+    .pre('validate', true, when('isNew').then(validateContent))
     .pre('validate', true, validateAuthor)
     .pre('save', true,
         when('isNew')

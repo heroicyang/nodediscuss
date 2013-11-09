@@ -97,6 +97,23 @@ exports.removeTopics = function(callback) {
   Topic.remove(callback);
 };
 
+exports.createComment = function(callback) {
+  var self = this;
+  Comment.create({
+    topicId: this.topic.id,
+    content: 'this is a test comment',
+    author: {
+      id: this.user.id
+    }
+  }, function(err, comment) {
+    if (err) {
+      return callback(err);
+    }
+    self.comment = comment;
+    callback();
+  });
+};
+
 exports.removeComments = function(callback) {
   Comment.remove(callback);
 };

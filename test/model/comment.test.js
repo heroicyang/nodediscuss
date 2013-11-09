@@ -14,6 +14,7 @@ describe('Model#Comment', function() {
   beforeEach(shared.createUser);
   beforeEach(shared.createCatalogue);
   beforeEach(shared.createTopic);
+  beforeEach(shared.createComment);
   afterEach(shared.removeUsers);
   afterEach(shared.removeCatalogues);
   afterEach(shared.removeTopics);
@@ -36,34 +37,18 @@ describe('Model#Comment', function() {
       });
 
       it('comment can not be repeated', function(done) {
-        var self = this;
-        async.waterfall([
-          function createComment(next) {
-            Comment.create({
-              topicId: self.topic.id,
-              content: 'this is a test comment',
-              author: {
-                id: self.user.id
-              }
-            }, function(err) {
-              next(err);
-            });
-          },
-          function anotherComment(next) {
-            var comment = new Comment({
-              topicId: self.topic.id,
-              content: 'this is a test comment',
-              author: {
-                id: self.user.id
-              }
-            });
-            comment.validate(function(err) {
-              should.exist(err);
-              err.name.should.eql('ValidationError');
-              next();
-            });
+        var comment = new Comment({
+          topicId: this.topic.id,
+          content: this.comment.content,
+          author: {
+            id: this.user.id
           }
-        ], done);
+        });
+        comment.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
       });
 
       it('validate author id, require a valid author id', function(done) {
@@ -97,44 +82,20 @@ describe('Model#Comment', function() {
       });
 
       it('should increase `commentCount` of topic when comment on topic', function(done) {
-        var commentCountBefore = this.topic.commentCount,
-          self = this;
-        Comment.create({
-          topicId: this.topic.id,
-          content: 'this is a comment...',
-          author: {
-            id: this.user.id
-          }
-        }, function(err) {
-          if (err) {
-            return done(err);
-          }
-          Topic.findById(self.topic.id, function(err, topic) {
-            should.exist(topic);
-            topic.commentCount.should.eql(commentCountBefore + 1);
-            done();
-          });
+        Topic.findById(this.topic.id, function(err, topic) {
+          should.exist(topic);
+          topic.commentCount.should.eql(1);
+          done();
         });
       });
 
       it('should update `lastCommentUser` of topic when comment on topic', function(done) {
         var self = this;
-        Comment.create({
-          topicId: this.topic.id,
-          content: 'this is a comment...',
-          author: {
-            id: this.user.id
-          }
-        }, function(err) {
-          if (err) {
-            return done(err);
-          }
-          Topic.findById(self.topic.id, function(err, topic) {
-            should.exist(topic);
-            should.exist(topic.lastCommentUser);
-            topic.lastCommentUser.username.should.eql(self.user.username);
-            done();
-          });
+        Topic.findById(this.topic.id, function(err, topic) {
+          should.exist(topic);
+          should.exist(topic.lastCommentUser);
+          topic.lastCommentUser.username.should.eql(self.user.username);
+          done();
         });
       });
 
@@ -144,12 +105,26 @@ describe('Model#Comment', function() {
       });
 
       it('should notify topic author when comment on topic', function(done) {
+        Notification.findOne({
+          masterId: this.user.id,
+          topicId: this.topic.id
+        }, function(err, notification) {
+          if (err) {
+            return done(err);
+          }
+          should.exist(notification);
+          done();
+        });
+      });
+
+      it('should notify comment author when reply comment', function(done) {
         var self = this;
         async.waterfall([
-          function createComment(next) {
+          function replyComment(next) {
             Comment.create({
               topicId: self.topic.id,
-              content: 'this is a comment...',
+              commentId: self.comment.id,
+              content: 'this is a reply comment...',
               author: {
                 id: self.user.id
               }
@@ -160,7 +135,7 @@ describe('Model#Comment', function() {
           function findNotification(next) {
             Notification.findOne({
               masterId: self.user.id,
-              topicId: self.topic.id
+              masterCommentId: self.comment.id
             }, function(err, notification) {
               if (err) {
                 return next(err);
@@ -171,46 +146,26 @@ describe('Model#Comment', function() {
           }
         ], done);
       });
-
-      it('should notify comment author when reply comment', function(done) {
+      
+      it('should decrease `commentCount` of topic when delete a topic comment', function(done) {
         var self = this;
-        async.waterfall([
-          function createComment(next) {
-            Comment.create({
-              topicId: self.topic.id,
-              content: 'this is a comment...',
-              author: {
-                id: self.user.id
-              }
-            }, function(err, comment) {
-              next(err, comment);
-            });
-          },
-          function replyComment(comment, next) {
-            Comment.create({
-              topicId: self.topic.id,
-              commentId: comment.id,
-              content: 'this is a reply comment...',
-              author: {
-                id: self.user.id
-              }
-            }, function(err) {
-              next(err, comment);
-            });
-          },
-          function findNotification(comment, next) {
-            Notification.findOne({
-              masterId: self.user.id,
-              masterCommentId: comment.id
-            }, function(err, notification) {
-              if (err) {
-                return next(err);
-              }
-              should.exist(notification);
-              done();
-            });
+        Comment.destroy(this.comment.id, function(err) {
+          if (err) {
+            return done(err);
           }
-        ], done);
+          Topic.findById(self.topic.id, function(err, topic) {
+            if (err) {
+              return done(err);
+            }
+            topic.commentCount.should.eql(0);
+            done();
+          });
+        });
+      });
+
+      it('should decrease `commentCount` of page when delete a page comment', function(done) {
+        // TODO
+        done();
       });
     });
   });

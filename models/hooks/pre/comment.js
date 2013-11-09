@@ -39,7 +39,17 @@ module.exports = exports = function(schema) {
         when('isNew')
           .not('onPage')  // 当评论 Page 时则不必通知，Page 中暂时不提供回复评论的功能
           .and('commentId')  // 有 commentId 才代表是回复某条评论
-          .then(notifyCommentAuthor));
+          .then(notifyCommentAuthor))
+    .pre('save', true,    // 由于是非物理删除评论，所以仍然是执行的保存操作
+        when('deleted')   // 该属性代表评论被删除
+          .not('onPage')
+          .not('isNew')
+          .then(decreaseCommentCountOfTopic))
+    .pre('save', true,
+        when('deleted')
+          .and('onPage')
+          .not('isNew')
+          .then(decreaseCommentCountOfPage));
 };
 
 /**
@@ -147,7 +157,7 @@ function increaseCommentCountOfPage(next, done) {
   next();
 
   var Page = this.model('Page');
-  Page.findByIdAndUpdate(this.topic, {
+  Page.findByIdAndUpdate(this.topicId, {
     $inc: {
       commentCount: 1
     }
@@ -175,7 +185,8 @@ function notifyTopicAuthor(next, done) {
         masterId: topicAuthorId,
         userId: self.author.id,
         type: constants.NOTIFICATION_TYPE.COMMENT,
-        topicId: self.topicId
+        topicId: self.topicId,
+        commentId: self.id
       }, next);
     }
   ], done);
@@ -203,8 +214,37 @@ function notifyCommentAuthor(next, done) {
         userId: self.author.id,
         type: constants.NOTIFICATION_TYPE.REPLY_COMMENT,
         topicId: self.topicId,
-        commentId: self.commentId
+        masterCommentId: self.commentId,
+        commentId: self.id
       }, next);
     }
   ], done);
+}
+
+/**
+ * 当删除评论时减掉对应话题的评论数
+ */
+function decreaseCommentCountOfTopic(next, done) {
+  next();
+
+  var Topic = this.model('Topic');
+  Topic.findByIdAndUpdate(this.topicId, {
+    $inc: {
+      commentCount: -1
+    }
+  }, done);
+}
+
+/**
+ * 当删除评论时减掉对应 Page 的评论数
+ */
+function decreaseCommentCountOfPage(next, done) {
+  next();
+
+  var Page = this.model('Page');
+  Page.findByIdAndUpdate(this.topicId, {
+    $inc: {
+      commentCount: -1
+    }
+  }, done);
 }

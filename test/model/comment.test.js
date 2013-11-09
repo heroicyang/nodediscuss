@@ -201,7 +201,7 @@ describe('Model#Comment', function() {
           function findNotification(comment, next) {
             Notification.findOne({
               masterId: self.user.id,
-              commentId: comment.id
+              masterCommentId: comment.id
             }, function(err, notification) {
               if (err) {
                 return next(err);

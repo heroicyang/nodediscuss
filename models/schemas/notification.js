@@ -28,6 +28,7 @@ var NotificationSchema = new Schema({
     enum: _.values(constants.NOTIFICATION_TYPE)
   },
   topicId: String,
+  masterCommentId: String,
   commentId: String,
   hasRead: {
     type: Boolean,

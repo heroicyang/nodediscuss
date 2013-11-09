@@ -22,6 +22,13 @@ html(lang="zh-CN")
             li: a(href="/wiki") Wiki
             li: a(href="/signup") 注册
             li: a(href="/signin") 登录
+          div.col-sm-4.col-md-4.col-lg-4.pull-left
+            form(role="search", method="GET", action="/search").navbar-form
+              div.input-group
+                input(type="text", name="q", placeholder="搜索").form-control
+                div.input-group-btn
+                  button(type="submit").btn.btn-default
+                    i.glyphicon.glyphicon-search
     div.container
       div#main.row
         div.col-md-9

@@ -4,7 +4,8 @@ block content
     div.panel.panel-default
       div.panel-heading
         ul.breadcrumb
-          li.active 主页
+          li: a(href="/") 主页
+          li.active 社区
       div.panel-body.list
         - var topics = new Array(20)
         for topic in topics 
@@ -13,4 +14,5 @@ block content
 block sidebar
   include ./sidebar/signin_box
   include ./sidebar/hot_catalogue_box
+  include ./sidebar/related_site_box
   include ./sidebar/ad_box

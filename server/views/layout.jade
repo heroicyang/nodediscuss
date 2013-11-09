@@ -6,7 +6,7 @@ html(lang="zh-CN")
     link(href="/css/style.css", rel="stylesheet")
     script(src="/js/lib.js")
   body
-    div.navbar.navbar-default.navbar-static-top
+    div(role="navigation").navbar.navbar-default.navbar-static-top
       div.container
         div.navbar-header
           button(type="button", data-toggle="collapse", data-target=".navbar-collapse").navbar-toggle
@@ -29,4 +29,14 @@ html(lang="zh-CN")
           block sidebar
   footer
     div.container
-      p Node.js 中文社区
+      nav
+        ul.list-inline
+          li: a(href="#") 关于
+          li &#32;&#8226;&#32;
+          li: a(href="#") FAQ
+          li &#32;&#8226;&#32;
+          li: a(href="#") RSS
+          li &#32;&#8226;&#32;
+          li: a(href="#") Github
+      p &copy; 2012 - 2013
+      p 本社区为开源系统，版本: 0.0.1 ，欢迎贡献代码

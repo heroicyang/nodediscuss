@@ -13,10 +13,10 @@ CNode Club 是 Node.js 中文技术社区系统 [Node Club] 的重写版本，�
 ##安装部署
 
 ```bash
-# install node npm mongodb grunt-cli
-# run mongod
-$ npm install
+# install node npm mongodb grunt-cli, and run mongod
 
+$ cd cnodeclub
+$ npm install
 $ grunt                  # 查看详细的命令提示
 $ grunt createConfig     # 创建 `development` 环境的配置
 # 或者创建指定环境的配置文件

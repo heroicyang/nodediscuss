@@ -6,5 +6,31 @@ block content
         li: a(href="/") 主页
         li.active 注册
     div.panel-body
-      p 表单
+      div.alert.alert-danger.alert-dismissable
+        button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
+        p 这里放置错误提示
+      form(role="form").form-horizontal
+        div.form-group
+          label(for="email").col-sm-3.control-label Email
+          div.col-sm-6
+            input(type="email", name="email")#email.form-control
+            span.help-block 请使用真实电子邮箱注册，注册后不可修改
+        div.form-group
+          label(for="username").col-sm-3.control-label 用户名
+          div.col-sm-6
+            input(type="text", name="username")#username.form-control
+            span.help-block 请使用半角的 a-z 或数字 0-9 ，注册后不可修改
+        div.form-group
+          label(for="password").col-sm-3.control-label 密码
+          div.col-sm-6
+            input(type="password", name="password")#password.form-control
+        div.form-group
+          label(for="password2").col-sm-3.control-label 确认密码
+          div.col-sm-6
+            input(type="password", name="password2")#password2.form-control
+        div.form-group
+          div.col-sm-offset-3.col-sm-6
+            button(type="submit").btn.btn-primary 注册
 block sidebar
+  include ./sidebar/signin_box
+  include ./sidebar/ad_box

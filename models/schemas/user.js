@@ -51,7 +51,7 @@ var UserSchema = new Schema({
       type: Boolean,
       default: false
     },
-    disabled: {
+    blocked: {
       type: Boolean,
       default: false
     }

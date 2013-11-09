@@ -1,0 +1,16 @@
+extends layout
+block content
+  div.topics
+    div.panel.panel-default
+      div.panel-heading
+        ul.breadcrumb
+          li.active 主页
+      div.panel-body.list
+        - var topics = new Array(20)
+        for topic in topics 
+          include topic_cell
+  include catalogue
+block sidebar
+  include ./sidebar/signin_box
+  include ./sidebar/hot_catalogue_box
+  include ./sidebar/ad_box

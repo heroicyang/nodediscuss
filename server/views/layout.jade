@@ -3,8 +3,8 @@ html(lang="zh-CN")
   head
     meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
     title= page.title
-    link(href="css/style.css", rel="stylesheet")
-    script(src="js/lib.js")
+    link(href="/css/style.css", rel="stylesheet")
+    script(src="/js/lib.js")
   body
     div.navbar.navbar-default.navbar-static-top
       div.container
@@ -13,12 +13,12 @@ html(lang="zh-CN")
             span.icon-bar
             span.icon-bar
             sapn.icon-bar
-          a(href="/").navbar-brand Node.js 中文社区
+          a(href="/").navbar-brand.logo
+            img(src="/img/logo.png", title="Node.js 中文社区")
         div.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
-            li: a(href="#") 社区
-            li: a(href="#") Wiki
-            li: a(href="#") 关于
+            li.active: a(href="/") 社区
+            li: a(href="/wiki") Wiki
             li: a(href="/signup") 注册
             li: a(href="/signin") 登录
     div.container

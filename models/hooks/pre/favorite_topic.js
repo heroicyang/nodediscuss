@@ -14,16 +14,16 @@ var when = require('../when');
 */
 module.exports = exports = function(schema) {
   schema
-    .pre('save', true, when('isNew').then(incFavoriteTopicCountOfUser))
-    .pre('save', true, when('isNew').then(incFavoriteUserCountOfTopic))
-    .pre('remove', true, decFavoriteTopicCountOfUser)
-    .pre('remove', true, decFavoriteUserCountOfTopic);
+    .pre('save', true, when('isNew').then(increaseFavoriteTopicCountOfUser))
+    .pre('save', true, when('isNew').then(increaseFavoriteCountOfTopic))
+    .pre('remove', true, decreaseFavoriteTopicCountOfUser)
+    .pre('remove', true, decreaseFavoriteCountOfTopic);
 };
 
 /**
  * 增加对应用户的 favoriteTopicCount 值
  */
-function incFavoriteTopicCountOfUser(next, done) {
+function increaseFavoriteTopicCountOfUser(next, done) {
   next();
 
   var User = this.model('User');
@@ -35,15 +35,15 @@ function incFavoriteTopicCountOfUser(next, done) {
 }
 
 /**
- * 增加对应话题的 favoriteUserCount 值
+ * 增加对应话题的 favoriteCount 值
  */
-function incFavoriteUserCountOfTopic(next, done) {
+function increaseFavoriteCountOfTopic(next, done) {
   next();
 
   var Topic = this.model('Topic');
   Topic.findByIdAndUpdate(this.topicId, {
     $inc: {
-      favoriteUserCount: 1
+      favoriteCount: 1
     }
   }, done);
 }
@@ -51,7 +51,7 @@ function incFavoriteUserCountOfTopic(next, done) {
 /**
  * 减少对应用户的 favoriteTopicCount 值
  */
-function decFavoriteTopicCountOfUser(next, done) {
+function decreaseFavoriteTopicCountOfUser(next, done) {
   next();
 
   var User = this.model('User');
@@ -63,15 +63,15 @@ function decFavoriteTopicCountOfUser(next, done) {
 }
 
 /**
- * 减少对应话题的 favoriteUserCount 值
+ * 减少对应话题的 favoriteCount 值
  */
-function decFavoriteUserCountOfTopic(next, done) {
+function decreaseFavoriteCountOfTopic(next, done) {
   next();
 
   var Topic = this.model('Topic');
   Topic.findByIdAndUpdate(this.topicId, {
     $inc: {
-      favoriteUserCount: -1
+      favoriteCount: -1
     }
   }, done);
 }

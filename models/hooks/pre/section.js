@@ -14,23 +14,23 @@ var async = require('async');
 */
 module.exports = exports = function(schema) {
   schema
-    .pre('remove', removeAllCatalogues);
+    .pre('remove', removeAllTags);
 };
 
 /**
  * 删除节点域下面的所有节点
  */
-function removeAllCatalogues(next) {
-  var Catalogue = this.model('Catalogue');
-  Catalogue.find({
+function removeAllTags(next) {
+  var Tag = this.model('Tag');
+  Tag.find({
     'section.id': this.id
-  }, function(err, catalogues) {
+  }, function(err, tags) {
     if (err) {
       return next(err);
     }
 
-    async.each(catalogues, function(catalogue, next) {
-      catalogue.remove(next);
+    async.each(tags, function(tag, next) {
+      tag.remove(next);
     }, next);
   });
 }

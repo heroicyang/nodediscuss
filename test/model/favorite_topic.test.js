@@ -12,12 +12,12 @@ var shared = require('./shared');
 describe('Model#FavoriteTopic', function() {
   beforeEach(shared.createUser);
   beforeEach(shared.createSections);
-  beforeEach(shared.createCatalogue);
+  beforeEach(shared.createTag);
   beforeEach(shared.createTopic);
   beforeEach(shared.createFavoriteTopic);
   afterEach(shared.removeUsers);
   afterEach(shared.removeSections);
-  afterEach(shared.removeCatalogues);
+  afterEach(shared.removeTags);
   afterEach(shared.removeTopics);
   afterEach(shared.removeFavoriteTopics);
 
@@ -33,12 +33,12 @@ describe('Model#FavoriteTopic', function() {
         });
       });
 
-      it('should increase `favoriteUserCount` of topic when favorite a topic', function(done) {
+      it('should increase `favoriteCount` of topic when favorite a topic', function(done) {
         Topic.findById(this.topic.id, function(err, topic) {
           if (err) {
             return done(err);
           }
-          topic.favoriteUserCount.should.eql(1);
+          topic.favoriteCount.should.eql(1);
           done();
         });
       });
@@ -59,7 +59,7 @@ describe('Model#FavoriteTopic', function() {
         });
       });
 
-      it('should decrease `favoriteUserCount` of topic when cancel a topic favorite', function(done) {
+      it('should decrease `favoriteCount` of topic when cancel a topic favorite', function(done) {
         var self = this;
         FavoriteTopic.destroy(this.user.id, this.topic.id, function(err) {
           if (err) {
@@ -69,7 +69,7 @@ describe('Model#FavoriteTopic', function() {
             if (err) {
               return done(err);
             }
-            topic.favoriteUserCount.should.eql(0);
+            topic.favoriteCount.should.eql(0);
             done();
           });
         });

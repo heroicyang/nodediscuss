@@ -8,11 +8,11 @@ block content
           li.active 社区
       div.panel-body.list
         - var topics = new Array(20)
-        for topic in topics 
+        for topic in topics
           include topic_cell
-  include catalogue
+  include tags
 block sidebar
   include ./sidebar/signin_box
-  include ./sidebar/hot_catalogue_box
+  include ./sidebar/hot_tags_box
   include ./sidebar/related_site_box
   include ./sidebar/ad_box

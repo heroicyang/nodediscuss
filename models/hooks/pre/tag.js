@@ -1,5 +1,5 @@
 /**
- * 定义 CatalogueSchema 的 pre-hooks
+ * 定义 TagSchema 的 pre-hooks
  * @author heroic
  */
 
@@ -23,7 +23,7 @@ module.exports = exports = function(schema) {
 function removeAllTopics(next) {
   var Topic = this.model('Topic');
   Topic.find({
-    'catalogue.id': this.id
+    'tag.id': this.id
   }, function(err, topics) {
     if (err) {
       return next(err);

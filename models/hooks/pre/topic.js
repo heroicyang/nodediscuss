@@ -20,11 +20,11 @@ module.exports = exports = function(schema) {
   schema
    .pre('validate', processTopicData)
    .pre('validate', true, validateAuthor)
-   .pre('validate', true, validateCatalogue)
+   .pre('validate', true, validateTag)
    .pre('save', true, when('isNew').then(increaseTopicCountOfUser))
-   .pre('save', true, when('isNew').then(increaseTopicCountOfCatalogue))
+   .pre('save', true, when('isNew').then(increaseTopicCountOfTag))
    .pre('remove', true, decreaseTopicCountOfUser)
-   .pre('remove', true, decreaseTopicCountOfCatalogue)
+   .pre('remove', true, decreaseTopicCountOfTag)
    .pre('remove', true, removeComments)
    .pre('remove', true, removeFormFavorites);
 };
@@ -74,32 +74,32 @@ function validateAuthor(next, done) {
 }
 
 /**
- * 验证提供的节点是否存在于数据库的  catalogue collection 中
- * 如果存在则将 topic 的 catalogue 属性值覆写，保存成数据库中最新的副本信息
+ * 验证提供的节点是否存在于数据库的  tag collection 中
+ * 如果存在则将 topic 的 tag 属性值覆写，保存成数据库中最新的副本信息
  */
-function validateCatalogue(next, done) {
+function validateTag(next, done) {
   next();
 
-  var Catalogue = this.model('Catalogue'),
+  var Tag = this.model('Tag'),
     self = this,
-    catalogueId;
+    tagId;
   try {
-    catalogueId = new ObjectId(this.catalogue.id);
+    tagId = new ObjectId(this.tag.id);
   } catch (e) {
-    self.invalidate('catalogue.id', 'Invalid catalogue id!', self.catalogue.id);
+    self.invalidate('tag.id', 'Invalid tag id!', self.tag.id);
     return done();
   }
 
-  Catalogue.findById(catalogueId, function(err, catalogue) {
+  Tag.findById(tagId, function(err, tag) {
     if (err) {
       return done(err);
     }
 
-    if (!catalogue) {
-      self.invalidate('catalogue.id', 'Catalogue does not exist.', self.catalogue.id);
+    if (!tag) {
+      self.invalidate('tag.id', 'Tag does not exist.', self.tag.id);
     } else {
-      _.extend(self.catalogue, {
-        name: catalogue.name
+      _.extend(self.tag, {
+        name: tag.name
       });
     }
     done();
@@ -121,13 +121,13 @@ function increaseTopicCountOfUser(next, done) {
 }
 
 /**
- * 更新 catalogue 的 topicCount 属性，每发布一条 topic 则递增
+ * 更新 tag 的 topicCount 属性，每发布一条 topic 则递增
  */
-function increaseTopicCountOfCatalogue(next, done) {
+function increaseTopicCountOfTag(next, done) {
   next();
 
-  var Catalogue = this.model('Catalogue');
-  Catalogue.findByIdAndUpdate(this.catalogue.id, {
+  var Tag = this.model('Tag');
+  Tag.findByIdAndUpdate(this.tag.id, {
     $inc: {
       topicCount: 1
     }
@@ -149,13 +149,13 @@ function decreaseTopicCountOfUser(next, done) {
 }
 
 /**
- * 删除 topic 时减少 catalogue 的 topicCount 值
+ * 删除 topic 时减少 tag 的 topicCount 值
  */
-function decreaseTopicCountOfCatalogue(next, done) {
+function decreaseTopicCountOfTag(next, done) {
   next();
 
-  var Catalogue = this.model('Catalogue');
-  Catalogue.findByIdAndUpdate(this.catalogue.id, {
+  var Tag = this.model('Tag');
+  Tag.findByIdAndUpdate(this.tag.id, {
     $inc: {
       topicCount: -1
     }

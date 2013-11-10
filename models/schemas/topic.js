@@ -24,7 +24,7 @@ var TopicSchema = new Schema({
     required: true
   },
   htmlContent: String,
-  catalogue: {
+  tag: {
     id: {
       type: String,
       index: true,
@@ -60,7 +60,7 @@ var TopicSchema = new Schema({
     type: Number,
     default: 0
   },
-  favoriteUserCount: {
+  favoriteCount: {
     type: Number,
     default: 0
   },

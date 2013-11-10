@@ -5,10 +5,10 @@ var models = require('../db').models;
 
 var User = models.User,
   Section = models.Section,
-  Catalogue = models.Catalogue,
+  Tag = models.Tag,
   Topic = models.Topic,
   Comment = models.Comment,
-  FavoriteCatalogue = models.FavoriteCatalogue,
+  FavoriteTag = models.FavoriteTag,
   FavoriteTopic = models.FavoriteTopic;
 
 exports.createUser = function(callback) {
@@ -51,26 +51,26 @@ exports.removeSections = function(callback) {
   Section.remove(callback);
 };
 
-exports.createCatalogue = function(callback) {
+exports.createTag = function(callback) {
   var self = this;
-  Catalogue.create({
+  Tag.create({
     name: 'Express',
     section: {
       id: this.sections[0].id,
       name: this.sections[0].name
     }
-  }, function(err, catalogue) {
+  }, function(err, tag) {
     if (err) {
       return callback(err);
     }
-    self.catalogue = catalogue;
+    self.tag = tag;
     callback();
   });
 };
 
-exports.createCatalogues = function(callback) {
+exports.createTags = function(callback) {
   var self = this;
-  Catalogue.create([{
+  Tag.create([{
     name: 'Connect',
     section: {
       id: this.sections[0].id,
@@ -104,13 +104,13 @@ exports.createCatalogues = function(callback) {
     if (err) {
       return callback(err);
     }
-    self.catalogues = Array.prototype.slice.call(arguments, 1);
+    self.tags = Array.prototype.slice.call(arguments, 1);
     callback();
   });
 };
 
-exports.removeCatalogues = function(callback) {
-  Catalogue.remove(callback);
+exports.removeTags = function(callback) {
+  Tag.remove(callback);
 };
 
 exports.createTopic = function(callback) {
@@ -118,8 +118,8 @@ exports.createTopic = function(callback) {
   Topic.create({
     title: 'this is a test topic...',
     content: 'this is a test topic...',
-    catalogue: {
-      id: this.catalogue.id
+    tag: {
+      id: this.tag.id
     },
     author: {
       id: this.user.id
@@ -158,18 +158,18 @@ exports.removeComments = function(callback) {
   Comment.remove(callback);
 };
 
-exports.createFavoriteCatalogue = function(callback) {
-  FavoriteCatalogue.create({
+exports.createFavoriteTag = function(callback) {
+  FavoriteTag.create({
     userId: this.user.id,
-    catalogue: {
-      id: this.catalogue.id,
-      name: this.catalogue.name
+    tag: {
+      id: this.tag.id,
+      name: this.tag.name
     }
   }, callback);
 };
 
-exports.removeFavoriteCatalogues = function(callback) {
-  FavoriteCatalogue.remove(callback);
+exports.removeFavoriteTags = function(callback) {
+  FavoriteTag.remove(callback);
 };
 
 exports.createFavoriteTopic = function(callback) {

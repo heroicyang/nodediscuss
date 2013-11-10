@@ -20,7 +20,7 @@ block content
         div.form-group
           label(for="username").col-sm-3.control-label 用户名
           div.col-sm-6
-            input(type="text", name="username", required)#username.form-control
+            input(type="text", name="username", maxlength="16", required)#username.form-control
             span.help-block 请使用长度为 6-16 的字母 a-z 或数字 0-9 ，注册后不可修改
         div.form-group
           label(for="password").col-sm-3.control-label 密码

@@ -44,11 +44,17 @@ html(lang="zh-CN")
           nav
             ul.list-inline
               li: a(href="#") 关于
-              li &#32;&#8226;&#32;
+              li.delimiter &#32;&#8226;&#32;
               li: a(href="#") FAQ
-              li &#32;&#8226;&#32;
+              li.delimiter &#32;&#8226;&#32;
               li: a(href="#") RSS
-              li &#32;&#8226;&#32;
-              li: a(href="#") Github
+              li.delimiter &#32;&#8226;&#32;
+              li: a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") Github
           p &copy; 2012 - 2013
-          p 本社区为开源系统，版本: 0.0.1 ，欢迎贡献代码
+          p 由开源社区系统
+            a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") CNodeClub
+            | 强力驱动，版本: 0.0.1，欢迎贡献代码。
+          p Powered by 
+            a(href="http://expressjs.com/", target="_blank") Express
+            | &amp;
+            a(href="mongoosejs.com/", target="_blank") Mongoose

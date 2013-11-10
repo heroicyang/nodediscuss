@@ -20,6 +20,7 @@ module.exports = exports = function(app) {
 
     app.use(express.json());
     app.use(express.urlencoded());
+    app.use(express.methodOverride());
 
     app.use(express.cookieParser(config.session.secret));
     app.use(express.session({

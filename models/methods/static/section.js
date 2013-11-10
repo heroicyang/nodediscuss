@@ -4,8 +4,8 @@
  */
 
 /**
- * 删除节点域
- * @param  {String}   id       
+ * 删除节点组
+ * @param  {String}   节点组 id       
  * @param  {Function} callback 回调函数
  *  - err    MongooseError
  * @return {null}

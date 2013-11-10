@@ -9,10 +9,10 @@
 var _ = require('lodash');
 
 /**
- * 查找所有的节点并按照 section 分组
+ * 查找所有的节点并按照节点组分组
  * @param  {Function} callback  回调函数
  *  - err    MongooseError
- *  - tags  按类别分组后的节点对象，对象的 key 为类别
+ *  - tags  按节点组分组后的节点对象，对象的 key 为节点组名称
  * @return {null}
  */
 exports.findAllGroupedBySection = function(callback) {

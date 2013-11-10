@@ -18,7 +18,7 @@ module.exports = exports = function(schema) {
 };
 
 /**
- * 删除节点域下面的所有节点
+ * 删除节点组下面的所有节点
  */
 function removeAllTags(next) {
   var Tag = this.model('Tag');

@@ -2,6 +2,7 @@ module.exports = exports = {
   debug: false,
   host: 'localhost',
   port: '8080',
+  title: 'CNode: Node.js 中文技术社区',
   session: {
     secret: '',  // 留空时则会以 config/index.js 中生成的随机字串为准 (建议留空)
     maxAge: 6.048e+8  // ms, 7 x 24 x 60 x 60 x 1000

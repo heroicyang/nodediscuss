@@ -39,6 +39,8 @@ module.exports = exports = function(app) {
     if (!config.media.host) {
       app.use(express.static(path.join(cwd, config.media.cwd)));
     }
+
+    app.use(require('./locals'));
   });
 
   app.configure('development', function() {

@@ -12,7 +12,7 @@ module.exports = exports = function(grunt) {
   var configPath = path.join(__dirname, '../config'),
     defaultConf = path.join(configPath, 'default.js');
 
-  grunt.registerTask('createConfig', 'According to the env option to create config.', function() {
+  grunt.registerTask('createConfig', function() {
     var env = grunt.option('env') || process.env.NODE_ENV || 'development';
     grunt.file.copy(defaultConf, path.join(configPath, env + '.js'));
     grunt.log.ok(env + ' config is successfully created.');

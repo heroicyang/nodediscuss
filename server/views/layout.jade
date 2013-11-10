@@ -7,34 +7,35 @@ html(lang="zh-CN")
     link(href="/css/style.css", rel="stylesheet")
     script(src="/js/lib.js")
   body
-    div(role="navigation").navbar.navbar-default.navbar-static-top
-      div.container
-        div.navbar-header
-          button(type="button", data-toggle="collapse", data-target=".navbar-collapse").navbar-toggle
-            span.icon-bar
-            span.icon-bar
-            sapn.icon-bar
-          a(href="/").navbar-brand.logo
-            img(src="/img/logo.png", title="Node.js 中文社区").img-responsive
-        div.navbar-collapse.collapse
-          ul.nav.navbar-nav.navbar-right
-            li.active: a(href="/") 社区
-            li: a(href="/wiki") Wiki
-            li: a(href="/signup") 注册
-            li: a(href="/signin") 登录
-          div.col-sm-4.col-md-4.col-lg-4.pull-left
-            form(role="search", method="GET", action="/search").navbar-form
-              div.input-group
-                input(type="text", name="q", placeholder="搜索").form-control
-                div.input-group-btn
-                  button(type="submit").btn.btn-default
-                    i.glyphicon.glyphicon-search
-    div.container
-      div#main.row
-        div.col-md-9
-          block content
-        div.col-md-3
-          block sidebar
+    div#wrap
+      div(role="navigation").navbar.navbar-default.navbar-static-top
+        div.container
+          div.navbar-header
+            button(type="button", data-toggle="collapse", data-target=".navbar-collapse").navbar-toggle
+              span.icon-bar
+              span.icon-bar
+              sapn.icon-bar
+            a(href="/").navbar-brand.logo
+              img(src="/img/logo.png", title="Node.js 中文社区").img-responsive
+          div.navbar-collapse.collapse
+            ul.nav.navbar-nav.navbar-right
+              li.active: a(href="/") 社区
+              li: a(href="/wiki") Wiki
+              li: a(href="/signup") 注册
+              li: a(href="/signin") 登录
+            div.col-sm-4.col-md-4.col-lg-4.pull-left
+              form(role="search", method="GET", action="/search").navbar-form
+                div.input-group
+                  input(type="text", name="q", placeholder="搜索").form-control
+                  div.input-group-btn
+                    button(type="submit").btn.btn-default
+                      i.glyphicon.glyphicon-search
+      div.container#container
+        div.row
+          div.col-md-9
+            block content
+          div.col-md-3
+            block sidebar
   footer
     div.container
       div.media

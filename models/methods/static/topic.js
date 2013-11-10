@@ -34,13 +34,13 @@ exports.edit = function(topicData, callback) {
 
 /**
  * 根据 id 删除话题
- * @param  {String}   topicId   话题 id
+ * @param  {String}   id   话题 id
  * @param  {Function} callback  回调函数
  *  - err   MongooseError
  * @return {null}
  */
-exports.destroy = function(topicId, callback) {
-  this.findById(topicId, function(err, topic) {
+exports.destroy = function(id, callback) {
+  this.findById(id, function(err, topic) {
     if (err) {
       return callback(err);
     }

@@ -173,7 +173,7 @@ describe('Model#Comment', function() {
   });
 
   describe('Methods', function() {
-    describe('Comment#destroy(commentId, callback)', function() {
+    describe('Comment#destroy(id, callback)', function() {
       it('delete a comment, but only marked for deletion', function(done) {
         var self = this;
         Comment.destroy(this.comment.id, function(err) {

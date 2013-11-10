@@ -240,7 +240,7 @@ describe('Model#Topic', function() {
       });
     });
 
-    describe('Topic#destroy(topicId, callback)', function() {
+    describe('Topic#destroy(id, callback)', function() {
       it('topic removed', function(done) {
         var self = this;
         Topic.destroy(this.topic.id, function(err) {

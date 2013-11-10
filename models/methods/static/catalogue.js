@@ -49,3 +49,19 @@ exports.findTops = function(limit, callback) {
     .limit(limit)
     .exec(callback);
 };
+
+/**
+ * 删除节点
+ * @param  {String}   id       节点 id
+ * @param  {Function} callback 回调函数
+ *  - err    MongooseError
+ * @return {null}
+ */
+exports.destroy = function(id, callback) {
+  this.findById(id, function(err, catalogue) {
+    if (err) {
+      return callback(err);
+    }
+    catalogue.remove(callback);
+  });
+};

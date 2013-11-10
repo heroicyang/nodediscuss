@@ -1,9 +1,22 @@
+/**
+ * 全站基础样式
+ * @author heroic
+ */
+
+// 覆盖 Bootstrap 默认的链接样式
 a
   color #444
-
   &:hover
     color #111
 
+// 调整 Bootstrap 中面包屑导航在面板中的样式
+.panel
+  .breadcrumb
+    margin 0
+    padding 0
+    border-radius 0
+
+// 网站顶部导航栏样式
 .navbar
   .logo
     padding 6px 20px
@@ -11,19 +24,25 @@ a
     img
       max-height 36px
 
+// 网站底部样式
 footer
-  background #f5f5f5
+  margin-top 20px
+  border-top 1px solid #dddddd
+
+  .container
+    padding-top 15px
+    padding-bottom 15px
 
   .logo
     width 24px
 
   .content
-    padding 15px 0 15px 15px
+    padding-left 15px
+    padding-top 10px
     
     nav
       a
         color #444
         font-weight bold
-
         &:hover
           color #111

@@ -51,6 +51,10 @@ module.exports = exports = function(grunt) {
         grunt.task.run('concat:development');
         grunt.task.run('copy:js');
       }
+      if (filepath.indexOf('client/img') !== -1) {
+        grunt.task.run('clean:img');
+        grunt.task.run('copy:img');
+      }
     });
   }
 };

@@ -13,7 +13,7 @@ module.exports = exports = {
       'include css': true
     },
     files: [{
-      src: ['client/styl/style.styl'],
+      src: ['client/styl/index.styl'],
       dest: '<%= dest %>/css/style.css'
     }]
   }

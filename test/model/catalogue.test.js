@@ -8,8 +8,10 @@ var Catalogue = models.Catalogue;
 var shared = require('./shared');
 
 describe('Model#Catalogue', function() {
+  beforeEach(shared.createSections);
   beforeEach(shared.createCatalogues);
   afterEach(shared.removeCatalogues);
+  afterEach(shared.removeSections);
 
   describe('Methods', function() {
     describe('Catalogue#findAllGroupedBySection(callback)', function() {
@@ -18,7 +20,7 @@ describe('Model#Catalogue', function() {
           should.exist(catalogues);
           catalogues.should.be.type('object');
           catalogues.should.have.property('Node.js');
-          catalogues.should.have.property('Web开发');
+          catalogues.should.have.property('Web 开发');
           done();
         });
       });

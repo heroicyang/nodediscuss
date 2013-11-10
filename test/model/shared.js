@@ -4,6 +4,7 @@
 var models = require('../db').models;
 
 var User = models.User,
+  Section = models.Section,
   Catalogue = models.Catalogue,
   Topic = models.Topic,
   Comment = models.Comment,
@@ -29,11 +30,35 @@ exports.removeUsers = function(callback) {
   User.remove(callback);
 };
 
+exports.createSections = function(callback) {
+  var self = this;
+  Section.create([{
+    name: 'Node.js'
+  }, {
+    name: 'Web 开发'
+  }, {
+    name: '社区活动'
+  }], function(err) {
+    if (err) {
+      return callback(err);
+    }
+    self.sections = Array.prototype.slice.call(arguments, 1);
+    callback();
+  });
+};
+
+exports.removeSections = function(callback) {
+  Section.remove(callback);
+};
+
 exports.createCatalogue = function(callback) {
   var self = this;
   Catalogue.create({
     name: 'Express',
-    section: 'Node.js'
+    section: {
+      id: this.sections[0].id,
+      name: this.sections[0].name
+    }
   }, function(err, catalogue) {
     if (err) {
       return callback(err);
@@ -47,19 +72,34 @@ exports.createCatalogues = function(callback) {
   var self = this;
   Catalogue.create([{
     name: 'Connect',
-    section: 'Node.js'
+    section: {
+      id: this.sections[0].id,
+      name: this.sections[0].name
+    }
   }, {
     name: 'Mongoose',
-    section: 'Node.js'
+    section: {
+      id: this.sections[0].id,
+      name: this.sections[0].name
+    }
   }, {
     name: 'Mongodb',
-    section: 'Web开发'
+    section: {
+      id: this.sections[1].id,
+      name: this.sections[1].name
+    }
   }, {
     name: 'Redis',
-    section: 'Web开发'
+    section: {
+      id: this.sections[1].id,
+      name: this.sections[1].name
+    }
   }, {
     name: '京 JS',
-    section: '社区活动'
+    section: {
+      id: this.sections[2].id,
+      name: this.sections[2].name
+    }
   }], function(err) {
     if (err) {
       return callback(err);

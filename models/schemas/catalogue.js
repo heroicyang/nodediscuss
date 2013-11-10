@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 /**
- * Collection name in the database is `node`
+ * Collection name in the database is `catalogue`
  * @type {Schema}
  */
 var CatalogueSchema = new Schema({
@@ -21,7 +21,14 @@ var CatalogueSchema = new Schema({
     unique: true,
     required: true
   },
-  section: String,
+  section: {
+    id: {
+      type: String,
+      required: true,
+      index: true
+    },
+    name: String
+  },
   describe: String,
   topicCount: {
     type: Number,

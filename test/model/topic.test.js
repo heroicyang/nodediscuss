@@ -13,9 +13,11 @@ var shared = require('./shared');
 
 describe('Model#Topic', function() {
   beforeEach(shared.createUser);
+  beforeEach(shared.createSections);
   beforeEach(shared.createCatalogue);
   beforeEach(shared.createTopic);
   afterEach(shared.removeUsers);
+  afterEach(shared.removeSections);
   afterEach(shared.removeCatalogues);
   afterEach(shared.removeTopics);
 

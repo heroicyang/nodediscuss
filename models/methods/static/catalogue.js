@@ -22,7 +22,7 @@ exports.findAllGroupedBySection = function(callback) {
         return callback(err);
       }
       catalogues = _.groupBy(catalogues, function(catalogue) {
-        return catalogue.section;
+        return catalogue.section.name;
       });
       callback(null, catalogues);
     });

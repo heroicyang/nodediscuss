@@ -12,10 +12,12 @@ var shared = require('./shared');
 
 describe('Model#Comment', function() {
   beforeEach(shared.createUser);
+  beforeEach(shared.createSections);
   beforeEach(shared.createCatalogue);
   beforeEach(shared.createTopic);
   beforeEach(shared.createComment);
   afterEach(shared.removeUsers);
+  afterEach(shared.removeSections);
   afterEach(shared.removeCatalogues);
   afterEach(shared.removeTopics);
   afterEach(shared.removeComments);

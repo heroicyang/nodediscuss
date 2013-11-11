@@ -7,7 +7,7 @@ html(lang="zh-CN")
     link(href="/css/style.css", rel="stylesheet")
     script(src="/js/lib.js")
   body
-    div#wrap
+    div#container-wrap
       div(role="navigation").navbar.navbar-default.navbar-static-top
         div.container
           div.navbar-header
@@ -30,7 +30,7 @@ html(lang="zh-CN")
                   div.input-group-btn
                     button(type="submit").btn.btn-default
                       i.glyphicon.glyphicon-search
-      div.container#container
+      div.container
         div.row
           div.col-md-9
             block content

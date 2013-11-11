@@ -11,6 +11,8 @@ var path = require('path'),
   MongoStore = require('connect-mongo')(express),
   mongodb = require('./mongodb'),
   config = require('../config'),
+  breadcrumb = require('./middlewares/breadcrumb'),
+  locals = require('./middlewares/locals'),
   cwd = process.cwd();
 
 module.exports = exports = function(app) {
@@ -41,7 +43,13 @@ module.exports = exports = function(app) {
       app.use(express.static(path.join(cwd, config.media.cwd)));
     }
 
-    app.use(require('./locals'));
+    // 初始化面包屑导航中间件
+    app.use(breadcrumb.init({
+      homeTitle: '主页'
+    }));
+
+    // 引入本地变量中间件
+    app.use(locals());
   });
 
   app.configure('development', function() {

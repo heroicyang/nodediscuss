@@ -3,9 +3,7 @@ block content
   div.topics
     div.panel.panel-default
       div.panel-heading
-        ul.breadcrumb
-          li: a(href="/") 主页
-          li.active 社区
+        include breadcrumb
       div.panel-body.list
         - var topics = new Array(20)
         for topic in topics

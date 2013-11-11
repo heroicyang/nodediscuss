@@ -2,9 +2,7 @@ extends layout
 block content
   div.panel.panel-default
     div.panel-heading
-      ul.breadcrumb
-        li: a(href="/") 主页
-        li.active 注册
+      include breadcrumb
     div.panel-body
       if errors
         div.alert.alert-danger.alert-dismissable

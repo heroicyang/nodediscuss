@@ -13,6 +13,7 @@ exports.signup = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
+    req.breadcrumbs('注册');
     return res.render('signup');
   }
 

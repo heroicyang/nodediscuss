@@ -11,6 +11,7 @@ var noopRequestHandler = function(req, res, next) {};
 
 module.exports = exports = function(app) {
   app.get('/', function(req, res) {
+    req.breadcrumbs('社区' );
     res.render('topics', {
       page: { title: 'CNode: Node.js 中文社区' }
     });

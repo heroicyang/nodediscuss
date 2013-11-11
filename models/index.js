@@ -10,7 +10,11 @@
 var fs = require('fs'),
   join = require('path').join,
   glob = require('glob'),
-  mongoose = require('mongoose');
+  mongoose = require('mongoose'),
+  timestampPlugin = require('./mongoose_plugins/timestamp');
+
+// Declares a global plugin executed on all Schemas
+mongoose.plugin(timestampPlugin());
 
 if (!mongoose.modelNames().length) {
   registerModels();

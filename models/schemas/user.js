@@ -100,12 +100,6 @@ UserSchema.virtual('password')
   });
 
 /**
- * Plugins
- */
-UserSchema
-  .plugin(require('../mongoose_plugins/timestamp'));
-
-/**
  * Exports schema and model name
  * @type {object}
  */

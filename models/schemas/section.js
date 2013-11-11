@@ -28,12 +28,6 @@ var SectionSchema = new Schema({
 });
 
 /**
- * Plugins
- */
-SectionSchema
-  .plugin(require('../mongoose_plugins/timestamp'));
-
-/**
  * Exports schema and model name
  * @type {object}
  */

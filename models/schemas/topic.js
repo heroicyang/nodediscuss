@@ -72,12 +72,6 @@ var TopicSchema = new Schema({
 });
 
 /**
- * Plugins
- */
-TopicSchema
-  .plugin(require('../mongoose_plugins/timestamp'));
-
-/**
  * Exports schema and model name
  * @type {object}
  */

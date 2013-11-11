@@ -42,12 +42,6 @@ var TagSchema = new Schema({
 });
 
 /**
- * Plugins
- */
-TagSchema
-  .plugin(require('../mongoose_plugins/timestamp'));
-
-/**
  * Exports schema and model name
  * @type {object}
  */

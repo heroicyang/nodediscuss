@@ -34,12 +34,6 @@ var FavoriteTagSchema = new Schema({
 });
 
 /**
- * Plugins
- */
-FavoriteTagSchema
-  .plugin(require('../mongoose_plugins/timestamp'));
-
-/**
  * Exports schema and model name
  * @type {object}
  */

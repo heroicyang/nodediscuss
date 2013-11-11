@@ -49,12 +49,6 @@ var PageSchema = new Schema({
 });
 
 /**
- * Plugins
- */
-PageSchema
-  .plugin(require('../mongoose_plugins/timestamp'));
-
-/**
  * Exports schema and model name
  * @type {object}
  */

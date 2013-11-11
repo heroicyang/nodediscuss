@@ -50,12 +50,6 @@ var CommentSchema = new Schema({
 });
 
 /**
- * Plugins
- */
-CommentSchema
-  .plugin(require('../mongoose_plugins/timestamp'));
-
-/**
  * Exports schema and model name
  * @type {object}
  */

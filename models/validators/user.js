@@ -26,9 +26,7 @@ module.exports = exports = function(schema) {
  */
 function addEmailValidators(schema) {
   schema.path('email')
-    .validate(function(email) {
-      return !!email;
-    }, 'An email is required!')
+    .required('true', 'An email is required!')
     .validate(function(email) {
       return !!validate(email).isEmail();
     }, 'Doesn\'t look like a valid email.')
@@ -37,7 +35,7 @@ function addEmailValidators(schema) {
         User = this.model(this.constructor.modelName);
       User.findOneByEmail(email, function(err, user) {
         if (err) {
-          throw err;
+          return done(false);
         }
         if (user) {
           return done(user.id === self.id);
@@ -53,21 +51,20 @@ function addEmailValidators(schema) {
  */
 function addUsernameValidators(schema) {
   schema.path('username')
+    .required('true', 'A username is required!')
     .validate(function(username) {
       return username.length >= 6;
     }, 'Username must be at least 6 characters.')
     .validate(function(username) {
       return username.length <= 16;
     }, 'Username must be less than 16 characters.')
-    .validate(function(username) {
-      return !!validate(username).is(/^[a-zA-Z0-9\-_]+$/);
-    }, 'Invalid username! Alphanumerics only.')
+    .match(/^[a-zA-Z0-9\-_]+$/, 'Invalid username! Alphanumerics only.')
     .validate(function(username, done) {
       var self = this,
         User = this.model(this.constructor.modelName);
       User.findOneByUsername(username, function(err, user) {
         if (err) {
-          throw err;
+          return done(false);
         }
         if (user) {
           return done(user.id === self.id);

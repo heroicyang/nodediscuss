@@ -7,9 +7,7 @@
 * Module dependencies
 */
 var sanitize = require('validator').sanitize,
-  _ = require('lodash'),
   async = require('async'),
-  ObjectId = require('mongoose').Types.ObjectId,
   when = require('../when');
 
 /**
@@ -19,8 +17,6 @@ var sanitize = require('validator').sanitize,
 module.exports = exports = function(schema) {
   schema
    .pre('validate', processTopicData)
-   .pre('validate', true, validateAuthor)
-   .pre('validate', true, validateTag)
    .pre('save', true, when('isNew').then(increaseTopicCountOfUser))
    .pre('save', true, when('isNew').then(increaseTopicCountOfTag))
    .pre('remove', true, decreaseTopicCountOfUser)
@@ -36,74 +32,6 @@ function processTopicData(next) {
   this.title = sanitize(this.title).xss();
   this.content = sanitize(this.content).xss();
   next();
-}
-
-/**
- * 验证提供的作者是否存在于数据库的 user collection 中
- * 如果存在则将 topic 的 author 属性值覆写，保存成数据库中最新的副本信息
- */
-function validateAuthor(next, done) {
-  next();
-
-  var User = this.model('User'),
-    self = this,
-    authorId;
-  try {
-    authorId = new ObjectId(this.author.id);
-  } catch (e) {
-    self.invalidate('author.id', 'Invalid author id!', self.author.id);
-    return done();
-  }
-
-  User.findById(authorId, function(err, user) {
-    if (err) {
-      return done(err);
-    }
-
-    if (!user) {
-      self.invalidate('author.id', 'Author does not exist.', self.author.id);
-    } else {
-      _.extend(self.author, {
-        username: user.username,
-        nickname: user.nickname,
-        avatar: user.avatar
-      });
-    }
-    done();
-  });
-}
-
-/**
- * 验证提供的节点是否存在于数据库的  tag collection 中
- * 如果存在则将 topic 的 tag 属性值覆写，保存成数据库中最新的副本信息
- */
-function validateTag(next, done) {
-  next();
-
-  var Tag = this.model('Tag'),
-    self = this,
-    tagId;
-  try {
-    tagId = new ObjectId(this.tag.id);
-  } catch (e) {
-    self.invalidate('tag.id', 'Invalid tag id!', self.tag.id);
-    return done();
-  }
-
-  Tag.findById(tagId, function(err, tag) {
-    if (err) {
-      return done(err);
-    }
-
-    if (!tag) {
-      self.invalidate('tag.id', 'Tag does not exist.', self.tag.id);
-    } else {
-      _.extend(self.tag, {
-        name: tag.name
-      });
-    }
-    done();
-  });
 }
 
 /**

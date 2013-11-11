@@ -22,7 +22,24 @@ describe('Model#Topic', function() {
   afterEach(shared.removeTopics);
 
   describe('Validators', function() {
-    describe('topic#title', function() {
+    describe('Topic#title', function() {
+      it('title is required', function(done) {
+        var topic = new Topic({
+          content: 'this is a test topic...',
+          tag: {
+            id: this.tag.id
+          },
+          author: {
+            id: this.user.id
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
       it('length is too short or too long should throw an error', function(done) {
         var titles = ['test', (new Array(100)).join('test')],
           self = this,
@@ -45,6 +62,131 @@ describe('Model#Topic', function() {
         }, done);
       });
     });
+
+    describe('Topic#content', function() {
+      it('content can not be empty', function(done) {
+        var topic = new Topic({
+          title: 'this is a test topic...',
+          tag: {
+            id: this.tag.id
+          },
+          author: {
+            id: this.user.id
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+
+    describe('Topic#tag.id', function() {
+      it('`tag.id` is required', function(done) {
+        var topic = new Topic({
+          title: 'this is a test topic...',
+          content: 'this is a test topic...',
+          author: {
+            id: this.user.id
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('`tag.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var topic = new Topic({
+          title: 'this is a test topic...',
+          content: 'this is a test topic...',
+          tag: {
+            id: '1234'
+          },
+          author: {
+            id: this.user.id
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('`tag.id` record must exist in the database', function(done) {
+        var topic = new Topic({
+          title: 'this is a test topic...',
+          content: 'this is a test topic...',
+          tag: {
+            id: '123456789012345678901234'
+          },
+          author: {
+            id: this.user.id
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+
+    describe('Topic#author.id', function() {
+      it('`author.id` is required', function(done) {
+        var topic = new Topic({
+          title: 'this is a test topic...',
+          content: 'this is a test topic...',
+          tag: {
+            id: this.tag.id
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('`author.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var topic = new Topic({
+          title: 'this is a test topic...',
+          content: 'this is a test topic...',
+          tag: {
+            id: this.tag.id
+          },
+          author: {
+            id: '1234'
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('`author.id` record must exist in the database', function(done) {
+        var topic = new Topic({
+          title: 'this is a test topic...',
+          content: 'this is a test topic...',
+          tag: {
+            id: this.tag.id
+          },
+          author: {
+            id: '123456789012345678901234'
+          }
+        });
+        topic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
   });
 
   describe('Hooks', function() {
@@ -62,78 +204,6 @@ describe('Model#Topic', function() {
         });
         topic.validate(function() {
           topic.title.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
-          done();
-        });
-      });
-
-      it('validate author id, require a valid author id', function(done) {
-        var topic = new Topic({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          tag: {
-            id: this.tag.id
-          },
-          author: {
-            id: '1234'
-          }
-        });
-        topic.validate(function(err) {
-          should.exist(err);
-          err.name.should.eql('ValidationError');
-          done();
-        });
-      });
-
-      it('validate author id, author must exist', function(done) {
-        var topic = new Topic({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          tag: {
-            id: this.tag.id
-          },
-          author: {
-            id: '123456789012345678901234'
-          }
-        });
-        topic.validate(function(err) {
-          should.exist(err);
-          err.name.should.eql('ValidationError');
-          done();
-        });
-      });
-
-      it('validate tag id, require a valid tag id', function(done) {
-        var topic = new Topic({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          tag: {
-            id: '1234'
-          },
-          author: {
-            id: this.user.id
-          }
-        });
-        topic.validate(function(err) {
-          should.exist(err);
-          err.name.should.eql('ValidationError');
-          done();
-        });
-      });
-
-      it('validate tag id, tag must exist', function(done) {
-        var topic = new Topic({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          tag: {
-            id: '123456789012345678901234'
-          },
-          author: {
-            id: this.user.id
-          }
-        });
-        topic.validate(function(err) {
-          should.exist(err);
-          err.name.should.eql('ValidationError');
           done();
         });
       });

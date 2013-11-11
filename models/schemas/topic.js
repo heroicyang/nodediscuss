@@ -16,13 +16,9 @@ var mongoose = require('mongoose'),
 var TopicSchema = new Schema({
   title: {
     type: String,
-    required: true,
     index: true
   },
-  content: {
-    type: String,
-    required: true
-  },
+  content: String,
   htmlContent: String,
   tag: {
     id: {

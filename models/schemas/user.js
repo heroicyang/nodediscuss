@@ -18,14 +18,12 @@ var UserSchema = new Schema({
     type: String,
     index: true,
     unique: true,
-    required: true,
     lowercase: true
   },
   username: {
     type: String,
     index: true,
     unique: true,
-    required: true,
     lowercase: true
   },
   passwordHashed: String,

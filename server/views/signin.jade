@@ -1,0 +1,35 @@
+extends layout
+block content
+    div.panel.panel-default
+      div.panel-heading
+        include breadcrumb
+      div.panel-body
+        if errors
+          div.alert.alert-danger.alert-dismissable
+            button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
+            each error in errors
+              p #{error}
+        form(role="form", method="POST", action="/signin").form-horizontal
+          div.form-group
+            label(for="email").col-sm-3.control-label Email
+            div.col-sm-6
+              input(type="email", name="email", required)#email.form-control
+          div.form-group
+            label(for="password").col-sm-3.control-label 密码
+            div.col-sm-6
+              input(type="password", name="password", required)#password.form-control
+          div.form-group
+            div.col-sm-offset-3.col-sm-6
+              label
+                input(type="checkbox", name="remember")
+                | &#32;记住登录状态
+          div.form-group
+            div.col-sm-offset-3.col-sm-6
+              input(type="hidden", name="_csrf", value="#{csrfToken}")
+              button(type="submit").btn.btn-primary 登录
+          div.form-group
+            div.col-sm-offset-3.col-sm-6
+              a(href="#"): small 我忘记密码了？
+  block sidebar
+    include ./sidebar/signin_box
+    include ./sidebar/ad_box

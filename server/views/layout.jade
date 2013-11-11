@@ -1,6 +1,7 @@
 doctype 5
 html(lang="zh-CN")
   head
+    meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
     link(type="image/x-icon", rel="icon", href="/img/favicon32.ico")
     title= page.title
@@ -21,8 +22,9 @@ html(lang="zh-CN")
             ul.nav.navbar-nav.navbar-right
               li.active: a(href="/") 社区
               li: a(href="/wiki") Wiki
-              li: a(href="/signup") 注册
-              li: a(href="/signin") 登录
+              if !isAuthenticated
+                li: a(href="/signup") 注册
+                li: a(href="/signin") 登录
             div.col-sm-4.col-md-4.col-lg-4.pull-left
               form(role="search", method="GET", action="/search").navbar-form
                 div.input-group
@@ -51,11 +53,12 @@ html(lang="zh-CN")
               li: a(href="#") RSS
               li.delimiter &#32;&#8226;&#32;
               li: a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") Github
-          p &copy; 2012 - 2013
-          p 由开源社区系统
-            a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") CNodeClub
-            | 强力驱动，版本: 0.0.1，欢迎贡献代码。
-          p Powered by 
-            a(href="http://expressjs.com/", target="_blank") Express
-            | &amp;
-            a(href="mongoosejs.com/", target="_blank") Mongoose
+          div.copyright
+            p &copy; 2012 - 2013
+            p 由开源社区系统
+              a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") CNodeClub
+              | 强力驱动，版本: 0.0.1，欢迎贡献代码。
+            p Powered by 
+              a(href="http://expressjs.com/", target="_blank") Express
+              | &amp;
+              a(href="mongoosejs.com/", target="_blank") Mongoose

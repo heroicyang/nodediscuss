@@ -11,6 +11,7 @@ var path = require('path'),
   MongoStore = require('connect-mongo')(express),
   mongodb = require('./mongodb'),
   config = require('../config'),
+  passport = require('./middlewares/passport'),
   breadcrumb = require('./middlewares/breadcrumb'),
   locals = require('./middlewares/locals'),
   cwd = process.cwd();
@@ -35,6 +36,10 @@ module.exports = exports = function(app) {
       })
     }));
     app.use(express.csrf());
+
+    // 引入 passport 中间件
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     if (!config.static.host) {
       app.use(express.static(path.join(cwd, config.static.cwd)));

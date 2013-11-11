@@ -19,6 +19,8 @@ module.exports = exports = function() {
 
     res.locals.page = {};
     res.locals.page.title = config.title;
+
+    res.locals.isAuthenticated = req.isAuthenticated();
     next();
   };
 };

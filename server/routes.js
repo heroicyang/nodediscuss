@@ -6,7 +6,8 @@
 /**
  * Module dependencies
  */
-var userController = require('./controllers/user');
+var passport = require('./middlewares/passport'),
+  userController = require('./controllers/user');
 var noopRequestHandler = function(req, res, next) {};
 
 module.exports = exports = function(app) {
@@ -20,8 +21,8 @@ module.exports = exports = function(app) {
   // 用户相关的路由配置
   app.get('/signup', userController.signup);
   app.post('/signup', userController.signup);
-  app.get('/signin', noopRequestHandler);
-  app.post('/signin', noopRequestHandler);
+  app.get('/signin', userController.signin);
+  app.post('/signin', userController.signin);
   app.get('/user/:username', noopRequestHandler);
   app.get('/setting', noopRequestHandler);
   app.post('/setting', noopRequestHandler);

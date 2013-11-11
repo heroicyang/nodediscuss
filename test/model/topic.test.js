@@ -297,7 +297,7 @@ describe('Model#Topic', function() {
   });
 
   describe('Methods', function() {
-    describe('Topic#edit(topicData, callback)', function() {
+    describe('Topic.edit(topicData, callback)', function() {
       it('edit topic', function(done) {
         Topic.edit({
           id: this.topic.id,
@@ -310,7 +310,7 @@ describe('Model#Topic', function() {
       });
     });
 
-    describe('Topic#destroy(id, callback)', function() {
+    describe('Topic.destroy(id, callback)', function() {
       it('topic removed', function(done) {
         var self = this;
         Topic.destroy(this.topic.id, function(err) {

@@ -7,9 +7,7 @@
  * Module dependencies
  */
 var sanitize = require('validator').sanitize,
-  _ = require('lodash'),
   async = require('async'),
-  ObjectId = require('mongoose').Types.ObjectId,
   constants = require('../../constants'),
   when = require('../when');
 
@@ -20,8 +18,6 @@ var sanitize = require('validator').sanitize,
 module.exports = exports = function(schema) {
   schema
     .pre('validate', processCommentData)
-    .pre('validate', true, when('isNew').then(validateContent))
-    .pre('validate', true, when('isNew').then(validateAuthor))
     .pre('save', true,
         when('isNew')
           .not('onPage')  // 当评论 Page 时则无需操作 Topic
@@ -58,74 +54,6 @@ module.exports = exports = function(schema) {
 function processCommentData(next) {
   this.content = sanitize(this.content).xss();
   next();
-}
-
-/**
- * 检查评论内容，禁止重复评论
- */
-function validateContent(next, done) {
-  next();
-
-  var Comment = this.model(this.constructor.modelName),
-    self = this;
-  Comment.find({
-    topicId: this.topicId,
-    'author.id': this.author.id
-  }, function(err, comments) {
-    if (err) {
-      return done(err);
-    }
-
-    var repeated = false;
-    if (comments.length) {
-      _.each(comments, function(comment) {
-        if (comment.content === self.content) {
-          repeated = true;
-          return;
-        }
-      });
-    }
-
-    if (repeated) {
-      self.invalidate('content', 'Comment can not be repeated.', self.content);
-    }
-    done();
-  });
-}
-
-/**
- * 验证提供的评论者是否存在于数据库的 user collection 中
- * 并且将最新的 user 部分信息保存到 comment 的 author 属性
- */
-function validateAuthor(next, done) {
-  next();
-
-  var User = this.model('User'),
-    self = this,
-    authorId;
-  try {
-    authorId = new ObjectId(this.author.id);
-  } catch (e) {
-    self.invalidate('author.id', 'Invalid author id!', self.author.id);
-    return done();
-  }
-
-  User.findById(authorId, function(err, user) {
-    if (err) {
-      return done(err);
-    }
-
-    if (!user) {
-      self.invalidate('author.id', 'Author does not exist.', self.author.id);
-    } else {
-      _.extend(self.author, {
-        username: user.username,
-        nickname: user.nickname,
-        avatar: user.avatar
-      });
-    }
-    done();
-  });
 }
 
 /**

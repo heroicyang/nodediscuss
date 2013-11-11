@@ -16,7 +16,6 @@ var mongoose = require('mongoose'),
 var SectionSchema = new Schema({
   name: {
     type: String,
-    required: true,
     index: true,
     unique: true
   },

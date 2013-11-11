@@ -23,16 +23,14 @@ var TopicSchema = new Schema({
   tag: {
     id: {
       type: String,
-      index: true,
-      require: true
+      index: true
     },
     name: String
   },
   author: {
     id: {
       type: String,
-      index: true,
-      require: true
+      index: true
     },
     username: String,
     nickname: String,

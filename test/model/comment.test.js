@@ -22,18 +22,34 @@ describe('Model#Comment', function() {
   afterEach(shared.removeTopics);
   afterEach(shared.removeComments);
 
-  describe('Hooks', function() {
-    describe('pre/comment.js', function() {
-      it('xss sanitize before validation', function(done) {
+  describe('Validators', function() {
+    describe('Comment#topicId', function() {
+      it('topicId is required', function(done) {
         var comment = new Comment({
-          topicId: this.topic.id,
-          content: '<script>alert(\'xss\');</script>',
+          content: 'this is a test comment...',
           author: {
             id: this.user.id
           }
         });
-        comment.validate(function() {
-          comment.content.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
+        comment.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+
+    describe('Comment#content', function() {
+      it('comment content can not be empty', function(done) {
+        var comment = new Comment({
+          topicId: this.topic.id,
+          author: {
+            id: this.user.id
+          }
+        });
+        comment.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
           done();
         });
       });
@@ -52,11 +68,25 @@ describe('Model#Comment', function() {
           done();
         });
       });
+    });
 
-      it('validate author id, require a valid author id', function(done) {
+    describe('Comment#author.id', function() {
+      it('`author.id` is required', function(done) {
         var comment = new Comment({
           topicId: this.topic.id,
-          content: '<script>alert(\'xss\');</script>',
+          content: 'this is a test comment...'
+        });
+        comment.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('`author.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var comment = new Comment({
+          topicId: this.topic.id,
+          content: 'this is a test comment...',
           author: {
             id: '1234'
           }
@@ -68,10 +98,10 @@ describe('Model#Comment', function() {
         });
       });
 
-      it('validate author id, author must exist', function(done) {
-        var comment = new Comment({
+      it('`author.id` record must exist in the database', function(done) {
+        var comment = new Topic({
           topicId: this.topic.id,
-          content: '<script>alert(\'xss\');</script>',
+          content: 'this is a test comment...',
           author: {
             id: '123456789012345678901234'
           }
@@ -79,6 +109,24 @@ describe('Model#Comment', function() {
         comment.validate(function(err) {
           should.exist(err);
           err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('Hooks', function() {
+    describe('pre/comment.js', function() {
+      it('xss sanitize before validation', function(done) {
+        var comment = new Comment({
+          topicId: this.topic.id,
+          content: '<script>alert(\'xss\');</script>',
+          author: {
+            id: this.user.id
+          }
+        });
+        comment.validate(function() {
+          comment.content.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
           done();
         });
       });
@@ -173,7 +221,7 @@ describe('Model#Comment', function() {
   });
 
   describe('Methods', function() {
-    describe('Comment#destroy(id, callback)', function() {
+    describe('Comment.destroy(id, callback)', function() {
       it('delete a comment, but only marked for deletion', function(done) {
         var self = this;
         Comment.destroy(this.comment.id, function(err) {

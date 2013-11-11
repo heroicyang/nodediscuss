@@ -19,13 +19,11 @@ var TagSchema = new Schema({
   name: {
     type: String,
     index: true,
-    unique: true,
-    required: true
+    unique: true
   },
   section: {
     id: {
       type: String,
-      required: true,
       index: true
     },
     name: String

@@ -17,8 +17,7 @@ var CommentSchema = new Schema({
   // 也可存储为 PageSchema 的 id
   topicId: {
     type: String,
-    index: true,
-    required: true
+    index: true
   },
   // 当评论 Page 时设为 true
   onPage: {
@@ -26,16 +25,12 @@ var CommentSchema = new Schema({
     default: false
   },
   commentId: String,
-  content: {
-    type: String,
-    required: true
-  },
+  content: String,
   contentHtml: String,
   author: {
     id: {
       type: String,
-      index: true,
-      required: true
+      index: true
     },
     username: String,
     nickname: String,

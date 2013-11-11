@@ -13,7 +13,7 @@ describe('Model#User', function() {
   afterEach(shared.removeUsers);
 
   describe('Validators', function() {
-    describe('user#email', function() {
+    describe('User#email', function() {
       it('email required', function(done) {
         var user = new User({
           email: '',
@@ -53,7 +53,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('user#username', function() {
+    describe('User#username', function() {
       it('username required', function(done) {
         var user = new User({
           email: 'heroicyang@gmail.com',
@@ -110,7 +110,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('user#password', function() {
+    describe('User#password', function() {
       it('when creating user password can not be blank', function(done) {
         User.create({
           email: 'heroicyang@gmail.com',
@@ -141,7 +141,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('user#website', function() {
+    describe('User#website', function() {
       it('invalid website should throw an error', function(done) {
         var user = new User({
           email: 'heroicyang@gmail.com',
@@ -177,7 +177,7 @@ describe('Model#User', function() {
   });
 
   describe('Methods', function() {
-    describe('user#authenticate(plainText)', function() {
+    describe('User#authenticate(plainText)', function() {
       it('correct password should return true', function(done) {
         var success = this.user.authenticate('111111'),
           failure = this.user.authenticate('123');
@@ -187,7 +187,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#findOneByUsername(username, callback)', function() {
+    describe('User.findOneByUsername(username, callback)', function() {
       it('should return the user if the username matches', function(done) {
         User.findOneByUsername('heroic', function (err, user) {
           should.exist(user);
@@ -204,7 +204,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#findOneByEmail(email, callback)', function() {
+    describe('User.findOneByEmail(email, callback)', function() {
       it('should return the user if the email matches', function(done) {
         User.findOneByEmail('me@heroicyang.com', function (err, user) {
           should.exist(user);
@@ -222,7 +222,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#check(userData, callback)', function() {
+    describe('User.check(userData, callback)', function() {
       it('should return null and `matched` is undefined when user doesn\'t exist', function(done) {
         User.check({
           username: 'heroicyang',
@@ -257,7 +257,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#activate(userData, callback)', function() {
+    describe('User.activate(userData, callback)', function() {
       it('activate the user', function(done) {
         async.waterfall([
           function activateUser(next) {
@@ -278,7 +278,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#changePassword(userData, callback)', function() {
+    describe('User.changePassword(userData, callback)', function() {
       it('new passwords should match', function(done) {
         User.changePassword({
           email: 'me@heroicyang.com',
@@ -321,7 +321,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#edit(userData, callback)', function() {
+    describe('User.edit(userData, callback)', function() {
       it('edit user', function(done) {
         User.edit({
           email: 'me@heroicyang.com',
@@ -336,7 +336,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#isUsernameExist(username, callback)', function() {
+    describe('User.isUsernameExist(username, callback)', function() {
       it('username is already exist', function(done) {
         User.isUsernameExist('heroic', function(err, exist) {
           if (err) {
@@ -358,7 +358,7 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User#isEmailExist(email, callback)', function() {
+    describe('User.isEmailExist(email, callback)', function() {
       it('email is already exist', function(done) {
         User.isEmailExist('me@heroicyang.com', function(err, exist) {
           if (err) {

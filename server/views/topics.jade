@@ -10,7 +10,10 @@ block content
           include topic_cell
   include tags
 block sidebar
-  include ./sidebar/signin_box
-  include ./sidebar/top_tags_box
-  include ./sidebar/related_site_box
-  include ./sidebar/ad_box
+  if isAuthenticated
+    include ./sidebar/user_card
+  else
+    include ./sidebar/about
+  include ./sidebar/top_tags
+  include ./sidebar/related_site
+  include ./sidebar/ad

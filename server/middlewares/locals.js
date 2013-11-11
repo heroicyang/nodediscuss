@@ -21,6 +21,7 @@ module.exports = exports = function() {
     res.locals.page.title = config.title;
 
     res.locals.isAuthenticated = req.isAuthenticated();
+    res.locals.user = req.user;
     next();
   };
 };

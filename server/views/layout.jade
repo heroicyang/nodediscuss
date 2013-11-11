@@ -22,7 +22,11 @@ html(lang="zh-CN")
             ul.nav.navbar-nav.navbar-right
               li.active: a(href="/") 社区
               li: a(href="/wiki") Wiki
-              if !isAuthenticated
+              if isAuthenticated
+                li: a(href="/user/#{user.username}") #{user.nickname}
+                li: a(href="/setting") 设置
+                li: a(href="javascript:;") 退出
+              else
                 li: a(href="/signup") 注册
                 li: a(href="/signin") 登录
             div.col-sm-4.col-md-4.col-lg-4.pull-left
@@ -34,9 +38,9 @@ html(lang="zh-CN")
                       i.glyphicon.glyphicon-search
       div.container
         div.row
-          div.col-md-9
+          div.col-md-9#main
             block content
-          div.col-md-3
+          div.col-md-3#sidebar
             block sidebar
   footer
     div.container

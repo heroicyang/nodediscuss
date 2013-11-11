@@ -1,0 +1,27 @@
+div#user-card.panel.panel-default
+  div.panel-body
+    div.media
+      div.pull-left.author-avatar
+        a(href="/user/#{user.username}")
+          img(src="http://gravatar.qiniudn.com/avatar/02268598e9a9f8bebfd5a9f9b2995f7a?s=48", alt="").media-object.img-rounded.img-responsive
+      div.media-body
+        div.media-heading
+          a(href="/user/#{user.username}").username #{user.nickname}
+        p.tagline 测试个性签名...测试个性签名...测试个性签名...测试个性签名...
+        if user.tagline
+          p.tagline #{user.tagline}
+  ul.list-group
+    li.list-group-item
+      div.row.state
+        div.col-xs-4.col-sm-4
+          div: strong 40
+          div 节点收藏
+        div.col-xs-4.col-sm-4
+          div: strong 20
+          div 话题收藏
+        div.col-xs-4.col-sm-4
+          div: strong 50
+          div 关注
+  div.panel-footer
+    span.notification-count 0
+    span &#32;条未读提醒

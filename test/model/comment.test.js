@@ -37,6 +37,21 @@ describe('Model#Comment', function() {
           done();
         });
       });
+
+      it('topicId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var comment = new Comment({
+          topicId: '1234',
+          content: 'this is a test comment...',
+          author: {
+            id: this.user.id
+          }
+        });
+        comment.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
     });
 
     describe('Comment#content', function() {

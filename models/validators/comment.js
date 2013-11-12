@@ -26,7 +26,15 @@ module.exports = exports = function(schema) {
  */
 function addTopicIdValidators(schema) {
   schema.path('topicId')
-    .required(true, 'A topic id is required!');
+    .required(true, 'A topic id is required!')
+    .validate(function(topicId) {
+      try {
+        topicId = new ObjectId(topicId);
+      } catch (e) {
+        return false;
+      }
+      return true;
+    }, 'Invalid topic id!');
 }
 
 /**

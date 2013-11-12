@@ -16,18 +16,11 @@ var mongoose = require('mongoose'),
 var FavoriteTagSchema = new Schema({
   userId: {
     type: String,
-    index: true,
-    required: true
+    index: true
   },
   tag: {
-    id: {
-      type: String,
-      require: true
-    },
-    name: {
-      type: String,
-      required: true
-    }
+    id: String,
+    name: String
   }
 }, {
   collection: 'favorite_tag'

@@ -19,6 +19,78 @@ describe('Model#FavoriteTag', function() {
   afterEach(shared.removeTags);
   afterEach(shared.removeFavoriteTags);
 
+  describe('Validators', function() {
+    describe('FavoriteTag#userId', function() {
+      it('userId is required', function(done) {
+        var favoriteTag = new FavoriteTag({
+          tag: {
+            id: this.tag.id
+          }
+        });
+        favoriteTag.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('userId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var favoriteTag = new FavoriteTag({
+          userId: '1234',
+          tag: {
+            id: this.tag.id
+          }
+        });
+        favoriteTag.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+
+    describe('FavoriteTag#tag.id', function() {
+      it('`tag.id` is required', function(done) {
+        var favoriteTag = new FavoriteTag({
+          userId: this.user.id
+        });
+        favoriteTag.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('`tag.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var favoriteTag = new FavoriteTag({
+          userId: this.user.id,
+          tag: {
+            id: '1234'
+          }
+        });
+        favoriteTag.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('`tag.id` record must exist in the database', function(done) {
+        var favoriteTag = new FavoriteTag({
+          userId: this.user.id,
+          tag: {
+            id: '123456789012345678901234'
+          }
+        });
+        favoriteTag.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+  });
+
   describe('Hooks', function() {
     describe('pre/favorite_tag.js', function() {
       it('should increase `favoriteTagCount` of user when favorite a tag', function(done) {
@@ -76,7 +148,7 @@ describe('Model#FavoriteTag', function() {
   });
 
   describe('Methods', function() {
-    describe('FavoriteTag#destroy(userId, tagId, callback)', function() {
+    describe('FavoriteTag.destroy(userId, tagId, callback)', function() {
       it('cancel a user\'s favorite tag', function(done) {
         var self = this;
         FavoriteTag.destroy(this.user.id, this.tag.id, function(err) {

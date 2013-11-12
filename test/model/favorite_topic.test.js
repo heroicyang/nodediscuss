@@ -21,6 +21,66 @@ describe('Model#FavoriteTopic', function() {
   afterEach(shared.removeTopics);
   afterEach(shared.removeFavoriteTopics);
 
+  describe('Validators', function() {
+    describe('FavoriteTopic#userId', function() {
+      it('userId is required', function(done) {
+        var favoriteTopic = new FavoriteTopic({
+          topic: {
+            id: this.topic.id
+          }
+        });
+        favoriteTopic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('userId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var favoriteTopic = new FavoriteTopic({
+          userId: '1234',
+          topic: {
+            id: this.topic.id
+          }
+        });
+        favoriteTopic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+
+    describe('FavoriteTopic#topicId', function() {
+      it('topicId is required', function(done) {
+        var favoriteTopic = new FavoriteTopic({
+          userId: {
+            id: this.user.id
+          }
+        });
+        favoriteTopic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+
+      it('topicId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+        var favoriteTopic = new FavoriteTopic({
+          topicId: '1234',
+          userId: {
+            id: this.user.id
+          }
+        });
+        favoriteTopic.validate(function(err) {
+          should.exist(err);
+          err.name.should.eql('ValidationError');
+          done();
+        });
+      });
+    });
+  });
+
   describe('Hooks', function() {
     describe('pre/favorite_topic.js', function() {
       it('should increase `favoriteTopicCount` of user when favorite a topic', function(done) {

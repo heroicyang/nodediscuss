@@ -4,30 +4,26 @@ block content
     div.panel-heading
       include breadcrumb
     div.panel-body
-      if errors
-        div.alert.alert-danger.alert-dismissable
-          button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
-          each error in errors
-            p #{error}
+      include error_alert
       form(role="form", method="POST", action="/signup").form-horizontal
         div.form-group
           label(for="email").col-sm-3.control-label Email
           div.col-sm-6
-            input(type="email", name="email", required)#email.form-control
+            input(type="email", name="email", value="#{email || ''}", required)#email.form-control
             span.help-block 请使用真实电子邮箱注册，注册后不可修改
         div.form-group
           label(for="username").col-sm-3.control-label 用户名
           div.col-sm-6
-            input(type="text", name="username", maxlength="16", required)#username.form-control
+            input(type="text", name="username", value="#{username || ''}", maxlength="16", required)#username.form-control
             span.help-block 请使用长度为 6-16 的字母 a-z 或数字 0-9 ，注册后不可修改
         div.form-group
           label(for="password").col-sm-3.control-label 密码
           div.col-sm-6
             input(type="password", name="password", required)#password.form-control
         div.form-group
-          label(for="password2").col-sm-3.control-label 确认密码
+          label(for="repassword").col-sm-3.control-label 确认密码
           div.col-sm-6
-            input(type="password", name="password2", required)#password2.form-control
+            input(type="password", name="repassword", required)#repassword.form-control
         div.form-group
           div.col-sm-offset-3.col-sm-6
             input(type="hidden", name="_csrf", value="#{csrfToken}")

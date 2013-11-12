@@ -4,11 +4,7 @@ block content
       div.panel-heading
         include breadcrumb
       div.panel-body
-        if errors
-          div.alert.alert-danger.alert-dismissable
-            button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
-            each error in errors
-              p #{error}
+        include error_alert
         form(role="form", method="POST", action="/signin").form-horizontal
           div.form-group
             label(for="email").col-sm-3.control-label Email

@@ -52,10 +52,6 @@ module.exports = exports = function(app) {
   // 通知相关的路由配置
   app.get('/notifications', noopRequestHandler);  // 查看通知的页面
 
-  // 错误处理
-  app.get('/404', noopRequestHandler);  // 404 页面
-  app.get('/500', noopRequestHandler);  // 500 页面
-
   // 单一文档页面的路由
   app.get('/:slug', noopRequestHandler);
 };

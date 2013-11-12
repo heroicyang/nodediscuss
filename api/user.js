@@ -24,7 +24,11 @@ exports.create = function(userData, callback) {
     repassword = userData.repassword;
 
   if (password !== repassword) {
-    return callback(new APIError('两次输入的密码不一致'));
+    return callback(new APIError({
+      repassword: {
+        message: '两次输入的密码不一致'
+      }
+    }));
   }
   return User.create(userData, callback);
 };
@@ -80,11 +84,19 @@ exports.check = function(email, password, callback) {
     }
 
     if (!user) {
-      return callback(new APIError('用户不存在'));
+      return callback(new APIError({
+        username: {
+          message: '用户不存在'
+        }
+      }));
     }
 
     if (!matched) {
-      return callback(new APIError('密码错误'));
+      return callback(new APIError({
+        password: {
+          message: '密码错误'
+        }
+      }));
     }
 
     callback(null, user);

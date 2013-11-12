@@ -14,6 +14,8 @@ var path = require('path'),
   passport = require('./middlewares/passport'),
   breadcrumb = require('./middlewares/breadcrumb'),
   locals = require('./middlewares/locals'),
+  flash = require('./middlewares/flash'),
+  errorHandling = require('./middlewares/error_handling'),
   cwd = process.cwd();
 
 module.exports = exports = function(app) {
@@ -48,6 +50,8 @@ module.exports = exports = function(app) {
       app.use(express.static(path.join(cwd, config.media.cwd)));
     }
 
+    app.use(flash());
+
     // 初始化面包屑导航中间件
     app.use(breadcrumb.init({
       homeTitle: '主页'
@@ -66,4 +70,8 @@ module.exports = exports = function(app) {
   });
 
   app.use(app.router);
+
+  // 引入错误处理中间件
+  app.use(errorHandling.error500());
+  app.use(errorHandling.error404());
 };

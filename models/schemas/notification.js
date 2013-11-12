@@ -7,9 +7,7 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  _ = require('lodash'),
-  constants = require('../constants');
+  Schema = mongoose.Schema;
 
 /**
  * Collection name in the database is `notification`
@@ -22,11 +20,7 @@ var NotificationSchema = new Schema({
     index: true
   },
   userId: String,
-  type: {
-    type: Number,
-    required: true,
-    enum: _.values(constants.NOTIFICATION_TYPE)
-  },
+  type: String,
   topicId: String,
   masterCommentId: String,
   commentId: String,

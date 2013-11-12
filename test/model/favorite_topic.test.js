@@ -138,7 +138,7 @@ describe('Model#FavoriteTopic', function() {
   });
 
   describe('Methods', function() {
-    describe('FavoriteTopic#destroy(userId, topicId, callback)', function() {
+    describe('FavoriteTopic.destroy(userId, topicId, callback)', function() {
       it('cancel a user\'s favorite topic', function(done) {
         var self = this;
         FavoriteTopic.destroy(this.user.id, this.topic.id, function(err) {

@@ -21,6 +21,7 @@ describe('Model#Comment', function() {
   afterEach(shared.removeTags);
   afterEach(shared.removeTopics);
   afterEach(shared.removeComments);
+  afterEach(shared.removeNotifications);
 
   describe('Validators', function() {
     describe('Comment#topicId', function() {

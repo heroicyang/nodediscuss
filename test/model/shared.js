@@ -9,7 +9,8 @@ var User = models.User,
   Topic = models.Topic,
   Comment = models.Comment,
   FavoriteTag = models.FavoriteTag,
-  FavoriteTopic = models.FavoriteTopic;
+  FavoriteTopic = models.FavoriteTopic,
+  Notification = models.Notification;
 
 exports.createUser = function(callback) {
   var self = this;
@@ -181,4 +182,8 @@ exports.createFavoriteTopic = function(callback) {
 
 exports.removeFavoriteTopics = function(callback) {
   FavoriteTopic.remove(callback);
+};
+
+exports.removeNotifications = function(callback) {
+  Notification.remove(callback);
 };

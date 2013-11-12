@@ -10,10 +10,10 @@
 define(exports, {
   // 通知类型
   NOTIFICATION_TYPE: {
-    COMMENT: 1,         // 某人评论了你的话题
-    REPLY_COMMENT: 2,   // 某人回复了你的评论
-    FOLLOW: 3,          // 某人关注了你
-    AT: 4               // 某人@了你
+    COMMENT: '1',         // 某人评论了你的话题
+    REPLY_COMMENT: '2',   // 某人回复了你的评论
+    FOLLOW: '3',          // 某人关注了你
+    AT: '4'               // 某人@了你
   }
 });
 

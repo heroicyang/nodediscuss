@@ -3,6 +3,7 @@ module.exports = exports = {
   host: 'localhost',
   port: '8080',
   title: 'CNode: Node.js 中文技术社区',
+
   session: {
     secret: '',  // 留空时则会以 config/index.js 中生成的随机字串为准 (建议留空)
     maxAge: 6.048e+8  // ms, 7 x 24 x 60 x 60 x 1000
@@ -35,5 +36,14 @@ module.exports = exports = {
     host: '',
     cwd: '/assets',
     uploadPath: '/uploads'  // 以 `media.cwd` 为基准进行 `path.join`
+  },
+
+  // Gravatar 头像
+  avatarProvider: {
+    protocol: 'http',
+    host: 'gravatar.qiniudn.com',
+    pathname: '/avatar/%s',   // %s 占位符将格式化为 email 的 md5 hash
+    search: 's=%d',          // %d 占位符将格式化为头像的大小
+    size: 48
   }
 };

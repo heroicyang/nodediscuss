@@ -3,7 +3,7 @@ div#user-card.panel.panel-default
     div.media
       div.pull-left.author-avatar
         a(href="/user/#{user.username}")
-          img(src="http://gravatar.qiniudn.com/avatar/02268598e9a9f8bebfd5a9f9b2995f7a?s=48", alt="").media-object.img-rounded.img-responsive
+          img(src="#{user.avatar}", alt="").media-object.img-rounded.img-responsive
       div.media-body
         div.media-heading
           a(href="/user/#{user.username}").username #{user.nickname}

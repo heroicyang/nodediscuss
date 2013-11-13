@@ -6,7 +6,11 @@
 /**
  * Module dependencies
  */
-var APIError = require('./error'),
+var crypto = require('crypto'),
+  url = require('url'),
+  util = require('util'),
+  APIError = require('./error'),
+  config = require('../config'),
   models = require('../models'),
   User = models.User;
 
@@ -21,7 +25,11 @@ var APIError = require('./error'),
  */
 exports.create = function(userData, callback) {
   var password = userData.password,
-    repassword = userData.repassword;
+    repassword = userData.repassword,
+    avatarUrl = url.format(config.avatarProvider),
+    avatarSize = config.avatarProvider.size,
+    md5,
+    emailHashed;
 
   if (password !== repassword) {
     return callback(new APIError({
@@ -30,6 +38,14 @@ exports.create = function(userData, callback) {
       }
     }));
   }
+
+  if (userData.email) {
+    md5 = crypto.createHash('md5');
+    md5.update(userData.email);
+    emailHashed = md5.digest('hex');
+    userData.avatar = util.format(avatarUrl, emailHashed, avatarSize);
+  }
+
   return User.create(userData, callback);
 };
 

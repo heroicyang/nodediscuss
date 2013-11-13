@@ -8,6 +8,7 @@
  */
 var url = require('url'),
   util = require('util'),
+  async = require('async'),
   APIError = require('./error'),
   config = require('../config'),
   md5 = require('../utils/md5'),
@@ -132,4 +133,42 @@ exports.check = function(email, password, callback) {
 
     callback(null, user);
   });
+};
+
+/**
+ * 激活用户
+ * @param  {String}   token    激活链接中的令牌信息
+ * @param  {String}   email    激活链接中的 email
+ * @param  {Function} callback 回调函数
+ *  - err     MongooseError|APIError
+ */
+exports.activate = function(token, email, callback) {
+  async.waterfall([
+    function findUser(next) {
+      User.findOneByEmail(email, function(err, user) {
+        if (err) {
+          return next(err);
+        }
+        if (!user || md5(user.salt + user.email) !== token) {
+          return next(new APIError({
+            activated: {
+              message: '信息有误，帐号无法激活'
+            }
+          }));
+        }
+        if (user.state.activated) {
+          return next(new APIError({
+            activated: {
+              message: '帐号已经是激活状态'
+            }
+          }, 'warning'));
+        }
+
+        next(null, user);
+      });
+    },
+    function activateUser(user, next) {
+      user.activate(next);
+    }
+  ], callback);
 };

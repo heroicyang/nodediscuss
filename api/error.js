@@ -22,12 +22,13 @@
  *
  * @author heroic
  */
-function APIError(errors) {
+function APIError(errors, level) {
   Error.call(this);
   Error.captureStackTrace(this, arguments.callee);
   this.message = 'API throw an error';
   this.name = 'APIError';
   this.errors = errors || {};
+  this.level = level || 'danger';
 }
 
 /**

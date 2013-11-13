@@ -5,8 +5,12 @@ block content
         include breadcrumb
       div.panel-body
         include error_alert
-          if _.has(errors, 'activated')
+          if err && _.has(err.errors, 'activated')
             p: a(href="#"): small 没有收到帐号激活邮件？
+        if message
+          div.alert.alert-success.alert-dismissable
+            button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
+            p #{message}
         form(role="form", method="POST", action="/signin").form-horizontal
           div.form-group
             label(for="email").col-sm-3.control-label Email

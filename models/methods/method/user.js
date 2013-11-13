@@ -33,3 +33,16 @@ exports.makeSalt = function() {
 exports.encryptPassword = function(password) {
   return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
 };
+
+/**
+ * 激活用户
+ * @param  {Function} callback 回调函数
+ *  - err   MongooseError
+ */
+exports.activate = function(callback) {
+  this.update({
+    state: {
+      activated: true
+    }
+  }, callback);
+};

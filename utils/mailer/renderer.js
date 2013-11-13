@@ -27,10 +27,10 @@ function getTemplate(filename) {
 }
 
 exports.accountActivation = function(user, callback) {
-  var activationUrl = url.format(_.extend(urlObj, {
+  var activationUrl = url.format(_.extend({
     pathname: '/active',
-    search: 'token=' + md5(config.session.secret) + '&email=' + user.email
-  }));
+    search: 'token=' + md5(user.salt + user.email) + '&email=' + user.email
+  }, urlObj));
 
   jade.renderFile(getTemplate('activation.jade'), {
     user: user,

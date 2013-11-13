@@ -37,6 +37,11 @@ html(lang="zh-CN")
                     button(type="submit").btn.btn-default
                       i.glyphicon.glyphicon-search
       div.container
+        if err && showInGlobal
+          div(class="alert-#{err.level || 'danger'}").global-alert.alert.alert-dismissable
+            button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
+            each error in err.errors
+              p #{error.message}
         div.row
           div.col-md-9#main
             block content

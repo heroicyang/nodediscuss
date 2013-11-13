@@ -14,7 +14,8 @@ module.exports = exports = function(app) {
   app.get('/', function(req, res) {
     req.breadcrumbs('社区' );
     res.render('topics', {
-      page: { title: 'CNode: Node.js 中文社区' }
+      err: req.flash('err'),
+      showInGlobal: true
     });
   });
 
@@ -23,6 +24,7 @@ module.exports = exports = function(app) {
   app.post('/signup', auth.unreachableWhenAuthorized, userController.signup);
   app.get('/signin', auth.unreachableWhenAuthorized, userController.signin);
   app.post('/signin', auth.unreachableWhenAuthorized, userController.signin);
+  app.get('/active', userController.activate);
   app.get('/user/:username', noopRequestHandler);
   app.get('/setting', noopRequestHandler);
   app.post('/setting', noopRequestHandler);

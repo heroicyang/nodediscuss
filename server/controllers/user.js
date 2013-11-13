@@ -7,14 +7,16 @@
  * Module dependencies
  */
 var _ = require('lodash'),
-  api = require('../../api');
+  async = require('async'),
+  api = require('../../api'),
+  config = require('../../config');
 
 exports.signup = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
     var locals = _.extend({}, req.flash('body'), {
-      errors: req.flash('errors')
+      err: req.flash('err')
     });
     req.breadcrumbs('注册');
     return res.render('signup', locals);
@@ -35,7 +37,8 @@ exports.signin = function(req, res, next) {
 
   if ('get' === method) {
     var locals = _.extend({}, req.flash('body'), {
-      errors: req.flash('errors')
+      err: req.flash('err'),
+      message: req.flash('message')
     });
     req.breadcrumbs('登录');
     return res.render('signin', locals);
@@ -62,4 +65,19 @@ exports.signin = function(req, res, next) {
       });
     });
   }
+};
+
+exports.activate = function(req, res, next) {
+  var data = req.query,
+    token = data.token,
+    email = data.email;
+
+  api.user.activate(token, email, function(err) {
+    if (err) {
+      req.session.redirectPath = '/';
+      return next(err);
+    }
+    req.flash('message', '帐号已激活，请登录');
+    res.redirect('/signin');
+  });
 };

@@ -45,5 +45,21 @@ module.exports = exports = {
     pathname: '/avatar/%s',   // %s 占位符将格式化为 email 的 md5 hash
     search: 's=%d',          // %d 占位符将格式化为头像的大小
     size: 48
+  },
+
+  // 邮件发送服务
+  mailer: {
+    // strategy 代表采用何种邮件发送策略
+    // options 即该种发送策略需要的配置选项
+    strategy: 'nodemailer',    // 使用 nodemailer 来发送邮件
+    options: {
+      host: 'smtp.gmail.com',
+      secureConnection: true,
+      port: 465,
+      auth: {
+        user: '',
+        pass: ''
+      }
+    }
   }
 };

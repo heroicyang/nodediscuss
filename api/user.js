@@ -11,6 +11,7 @@ var crypto = require('crypto'),
   util = require('util'),
   APIError = require('./error'),
   config = require('../config'),
+  mailer = require('../utils/mailer'),
   models = require('../models'),
   User = models.User;
 
@@ -46,7 +47,22 @@ exports.create = function(userData, callback) {
     userData.avatar = util.format(avatarUrl, emailHashed, avatarSize);
   }
 
-  return User.create(userData, callback);
+  return User.create(userData, function(err, user) {
+    if (err) {
+      return callback(err);
+    }
+
+    // 向注册用户发送验证邮件
+    var mailOptions = {
+      from: 'no-reply <no-reply@cnodejs.org>',
+      to: user.email,
+      subject: '激活邮件',
+      html: '邮件内容...'
+    };
+    mailer.send('log', mailOptions, function(err) {
+      callback(err, user);
+    });
+  });
 };
 
 /**

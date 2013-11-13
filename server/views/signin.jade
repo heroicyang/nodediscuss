@@ -5,11 +5,13 @@ block content
         include breadcrumb
       div.panel-body
         include error_alert
+          if _.has(errors, 'activated')
+            p: a(href="#"): small 没有收到帐号激活邮件？
         form(role="form", method="POST", action="/signin").form-horizontal
           div.form-group
             label(for="email").col-sm-3.control-label Email
             div.col-sm-6
-              input(type="email", name="email", required)#email.form-control
+              input(type="email", name="email", value="#{email || ''}", required)#email.form-control
           div.form-group
             label(for="password").col-sm-3.control-label 密码
             div.col-sm-6

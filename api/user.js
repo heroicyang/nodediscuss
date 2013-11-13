@@ -131,6 +131,14 @@ exports.check = function(email, password, callback) {
       }));
     }
 
+    if (!user.state.activated) {
+      return callback(new APIError({
+        activated: {
+          message: '帐号未激活'
+        }
+      }));
+    }
+
     callback(null, user);
   });
 };

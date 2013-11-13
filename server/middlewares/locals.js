@@ -6,7 +6,8 @@
 /**
  * Module dependencies
  */
-var config = require('../../config');
+var _ = require('lodash'),
+  config = require('../../config');
 
 module.exports = exports = function() {
   return function(req, res, next) {
@@ -22,6 +23,8 @@ module.exports = exports = function() {
 
     res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.user = req.user;
+
+    res.locals._ = _;
     next();
   };
 };

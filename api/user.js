@@ -6,11 +6,11 @@
 /**
  * Module dependencies
  */
-var crypto = require('crypto'),
-  url = require('url'),
+var url = require('url'),
   util = require('util'),
   APIError = require('./error'),
   config = require('../config'),
+  md5 = require('../utils/md5'),
   mailer = require('../utils/mailer'),
   models = require('../models'),
   User = models.User;
@@ -29,7 +29,6 @@ exports.create = function(userData, callback) {
     repassword = userData.repassword,
     avatarUrl = url.format(config.avatarProvider),
     avatarSize = config.avatarProvider.size,
-    md5,
     emailHashed;
 
   if (password !== repassword) {
@@ -41,9 +40,7 @@ exports.create = function(userData, callback) {
   }
 
   if (userData.email) {
-    md5 = crypto.createHash('md5');
-    md5.update(userData.email);
-    emailHashed = md5.digest('hex');
+    emailHashed = md5(userData.email);
     userData.avatar = util.format(avatarUrl, emailHashed, avatarSize);
   }
 
@@ -53,13 +50,7 @@ exports.create = function(userData, callback) {
     }
 
     // 向注册用户发送验证邮件
-    var mailOptions = {
-      from: 'no-reply <no-reply@cnodejs.org>',
-      to: user.email,
-      subject: '激活邮件',
-      html: '邮件内容...'
-    };
-    mailer.send('log', mailOptions, function(err) {
+    mailer.sendActivationMail(user, function(err) {
       callback(err, user);
     });
   });

@@ -2,7 +2,9 @@ module.exports = exports = {
   debug: false,
   host: 'localhost',
   port: '8080',
+  name: 'CNode',
   title: 'CNode: Node.js 中文技术社区',
+  description: 'CNode: Node.js 中文技术社区',
 
   session: {
     secret: '',  // 留空时则会以 config/index.js 中生成的随机字串为准 (建议留空)
@@ -52,6 +54,8 @@ module.exports = exports = {
     // strategy 代表采用何种邮件发送策略
     // options 即该种发送策略需要的配置选项
     strategy: 'nodemailer',    // 使用 nodemailer 来发送邮件
+    sender: 'no-reply@cnodejs.org',       // 发件人 Email
+    senderName: 'CNode',   // 发件人名称
     options: {
       host: 'smtp.gmail.com',
       secureConnection: true,

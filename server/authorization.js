@@ -4,6 +4,11 @@
  */
 
 /**
+ * Module dependencies
+ */
+var UnauthorizedError = require('../utils/error').UnauthorizedError;
+
+/**
  * 需要登录
  */
 exports.authRequired = function(req, res, next) {
@@ -13,12 +18,7 @@ exports.authRequired = function(req, res, next) {
         res.redirect('/signin');
       },
       'application/json': function() {
-        res.send({
-          error: {
-            message: '你需要先登录后才能继续',
-            code: 500
-          }
-        });
+        res.send(new UnauthorizedError('你需要先登录后才能继续'));
       }
     });
   }
@@ -35,12 +35,7 @@ exports.unreachableWhenAuthorized = function(req, res, next) {
         res.redirect('/');
       },
       'application/json': function() {
-        res.send({
-          error: {
-            message: '抱歉，请止步',
-            code: 500
-          }
-        });
+        res.send(new UnauthorizedError('登录状态下你不能访问该页面'));
       }
     });
   }

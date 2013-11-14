@@ -24,7 +24,7 @@ exports.error404 = function() {
 
 exports.error500 = function() {
   return function(err, req, res, next) {
-    if (err.name === 'ValidationError' || err.name === 'APIError') {
+    if (err.name === 'ValidationError' || err.name === 'CentralizedError') {
       var redirectPath = req.session.redirectPath || req.path;
       if (req.session.redirectPath) {
         delete req.session.redirectPath;

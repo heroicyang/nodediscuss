@@ -9,10 +9,10 @@
 var url = require('url'),
   util = require('util'),
   async = require('async'),
-  APIError = require('./error'),
   config = require('../config'),
   md5 = require('../utils/md5'),
   mailer = require('../utils/mailer'),
+  CentralizedError = require('../utils/error').CentralizedError,
   models = require('../models'),
   User = models.User;
 
@@ -22,7 +22,7 @@ var url = require('url'),
  *  - password    密码
  *  - repassword  确认密码
  * @param  {Function} callback  回调函数
- *  - err    MongooseError|ValidationError|APIError
+ *  - err    MongooseError|ValidationError|CentralizedError
  *  - user   已保存的用户对象
  */
 exports.create = function(userData, callback) {
@@ -33,7 +33,7 @@ exports.create = function(userData, callback) {
     emailHashed;
 
   if (password !== repassword) {
-    return callback(new APIError('两次输入的密码不一致', 'repassword'));
+    return callback(new CentralizedError('两次输入的密码不一致', 'repassword'));
   }
 
   if (userData.email) {
@@ -91,7 +91,7 @@ exports.findByEmail = function(email, callback) {
  * @param  {String}   email    注册时填写的电子邮件
  * @param  {String}   password 密码
  * @param  {Function} callback 回调函数
- *  - err    MongooseError|APIError
+ *  - err    MongooseError|CentralizedError
  *  - user   用户对象
  */
 exports.check = function(email, password, callback) {
@@ -104,15 +104,15 @@ exports.check = function(email, password, callback) {
     }
 
     if (!user) {
-      return callback(new APIError('用户不存在' ,'username'));
+      return callback(new CentralizedError('用户不存在' ,'username'));
     }
 
     if (!matched) {
-      return callback(new APIError('密码错误', 'password'));
+      return callback(new CentralizedError('密码错误', 'password'));
     }
 
     if (!user.state.activated) {
-      return callback(new APIError('帐号未激活', 'activated'));
+      return callback(new CentralizedError('帐号未激活', 'activated'));
     }
 
     callback(null, user);
@@ -124,7 +124,7 @@ exports.check = function(email, password, callback) {
  * @param  {String}   token    激活链接中的令牌信息
  * @param  {String}   email    激活链接中的 email
  * @param  {Function} callback 回调函数
- *  - err     MongooseError|APIError
+ *  - err     MongooseError|CentralizedError
  */
 exports.activate = function(token, email, callback) {
   async.waterfall([
@@ -134,10 +134,10 @@ exports.activate = function(token, email, callback) {
           return next(err);
         }
         if (!user || md5(user.salt + user.email) !== token) {
-          return next(new APIError('信息有误，帐号无法激活', 'activated'));
+          return next(new CentralizedError('信息有误，帐号无法激活', 'activated'));
         }
         if (user.state.activated) {
-          return next(new APIError('帐号已经是激活状态', 'activated', 'warning'));
+          return next(new CentralizedError('帐号已经是激活状态', 'activated', 'warning'));
         }
 
         next(null, user);

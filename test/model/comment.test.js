@@ -161,6 +161,7 @@ describe('Model#Comment', function() {
           should.exist(topic);
           should.exist(topic.lastCommentUser);
           topic.lastCommentUser.username.should.eql(self.user.username);
+          topic.lastCommentedAt.should.eql(self.comment.createdAt);
           done();
         });
       });

@@ -71,9 +71,9 @@ function updateTopic(next, done) {
     $set: {
       lastCommentUser: {
         username: this.author.username,
-        nickname: this.author.nickname,
-        commentedAt: this.createdAt
-      }
+        nickname: this.author.nickname
+      },
+      lastCommentedAt: this.createdAt
     }
   }, done);
 }

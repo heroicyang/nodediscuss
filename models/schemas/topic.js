@@ -38,9 +38,9 @@ var TopicSchema = new Schema({
   },
   lastCommentUser: {
     username: String,
-    nickname: String,
-    commentedAt: Date
+    nickname: String
   },
+  lastCommentedAt: Date,
 
   viewsCount: {
     type: Number,

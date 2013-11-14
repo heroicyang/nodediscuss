@@ -33,11 +33,7 @@ exports.create = function(userData, callback) {
     emailHashed;
 
   if (password !== repassword) {
-    return callback(new APIError({
-      repassword: {
-        message: '两次输入的密码不一致'
-      }
-    }));
+    return callback(new APIError('两次输入的密码不一致', 'repassword'));
   }
 
   if (userData.email) {
@@ -108,27 +104,15 @@ exports.check = function(email, password, callback) {
     }
 
     if (!user) {
-      return callback(new APIError({
-        username: {
-          message: '用户不存在'
-        }
-      }));
+      return callback(new APIError('用户不存在' ,'username'));
     }
 
     if (!matched) {
-      return callback(new APIError({
-        password: {
-          message: '密码错误'
-        }
-      }));
+      return callback(new APIError('密码错误', 'password'));
     }
 
     if (!user.state.activated) {
-      return callback(new APIError({
-        activated: {
-          message: '帐号未激活'
-        }
-      }));
+      return callback(new APIError('帐号未激活', 'activated'));
     }
 
     callback(null, user);
@@ -150,18 +134,10 @@ exports.activate = function(token, email, callback) {
           return next(err);
         }
         if (!user || md5(user.salt + user.email) !== token) {
-          return next(new APIError({
-            activated: {
-              message: '信息有误，帐号无法激活'
-            }
-          }));
+          return next(new APIError('信息有误，帐号无法激活', 'activated'));
         }
         if (user.state.activated) {
-          return next(new APIError({
-            activated: {
-              message: '帐号已经是激活状态'
-            }
-          }, 'warning'));
+          return next(new APIError('帐号已经是激活状态', 'activated', 'warning'));
         }
 
         next(null, user);

@@ -3,7 +3,17 @@ block content
   div.topics
     div.panel.panel-default
       div.panel-heading
-        include breadcrumb
+        div.row
+          div.col-sm-7
+            include breadcrumb
+          div.sorts.col-sm-5
+            span.glyphicon.glyphicon-sort
+            a(href="#").condition.active: span 默认
+            a(href="#").condition: span 优质话题
+            a(href="#").condition: span 无人回复
+            a(href="#").condition: span 最新创建
+            if isAuthenticated
+              a(href="#").btn.btn-default.btn-xs.pull-right 发表话题
       div.panel-body.list
         - var topics = new Array(20)
         for topic in topics

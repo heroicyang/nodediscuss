@@ -23,5 +23,9 @@ div#user-card.panel.panel-default
           div: strong 50
           div 关注
   div.panel-footer
-    span.notification-count 0
-    span &#32;条未读提醒
+    a(href="#").meta
+      span.notification-count.badge 10
+      span &#32;条未读提醒
+    div.pull-right
+      span.glyphicon.glyphicon-tint
+      a(href="#", title="积分").meta: span.score 10

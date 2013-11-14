@@ -13,7 +13,7 @@ var noopRequestHandler = function(req, res, next) {};
 module.exports = exports = function(app) {
   app.get('/', function(req, res) {
     var err = req.flash('err');
-    err.showInGlobal = true;
+    err && (err.showInGlobal = true);
     req.breadcrumbs('社区' );
     res.render('topics', {
       err: err

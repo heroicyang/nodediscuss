@@ -26,9 +26,11 @@ function APIError(msg, itemName, level) {
 
   if (typeof msg === 'object') {
     for (var item in msg) {
-      this.errors[item] = {
-        message: msg[item]
-      };
+      if (msg.hasOwnProperty(item)) {
+        this.errors[item] = {
+          message: msg[item]
+        };
+      }
     }
     level = itemName;
   } else {
@@ -38,14 +40,13 @@ function APIError(msg, itemName, level) {
     };
   }
 
-  level = level || 'danger';
-  this.level = level;
+  this.level = level || 'danger';
   this.message = '';
 
   for (var key in this.errors) {
     if (this.errors.hasOwnProperty(key)) {
       this.message += (key + ' has an ' +
-            level + ' error message: ' + this.errors[key]);
+            this.level + ' error message: ' + this.errors[key]['message']);
       this.message += '; ';
     }
   }

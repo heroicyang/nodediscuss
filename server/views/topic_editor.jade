@@ -1,0 +1,62 @@
+extends layout
+block content
+  div.topics-editor
+    div.panel.panel-default
+      div.panel-heading
+        include breadcrumb
+      div.panel-body
+        include error_alert
+        form(role="form", method="POST", action="/topic/create").form-horizontal
+          div.form-group
+            div.col-xs-12.col-sm-3
+              select.form-control
+                option 请选择节点
+                optgroup(label="Node.js")
+                  option(value="") Node.js
+                optgroup(label="前端")
+                  option(value="") JavaScript
+            div.col-xs-12.visible-xs.mobile-sep &#32;
+            div.col-xs-12.col-sm-9
+              input(type="text", name="title", 
+                maxlength="100", placeholder="请输入标题，字数在10到100个之间", 
+                required)#title.form-control
+          div.form-group.toolbar
+            div.col-sm-12
+              div.wrapper
+                div.btn-group
+                  button(type="button").btn.btn-link.btn-sm
+                    i.glyphicon.glyphicon-picture
+                    | &#32;插入图片
+                  button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-link.btn-sm.dropdown-toggle
+                    &#60;&#32;&#62;&#32;插入代码
+                  ul(role="menu").dropdown-menu.languages-menu
+                    li: a(href="#") JavaScript
+                    li: a(href="#") HTML
+                    li: a(href="#") CSS
+                    li: a(href="#") Shell/Bash
+                  button(type="button", data-toggle="button", data-loading-text="Loding...")#preview.btn.btn-link.btn-sm
+                    i.glyphicon.glyphicon-eye-open
+                    | &#32;预览
+                    //-
+                      i.glyphicon.glyphicon-edit
+                      | &#32;编辑
+                  button(type="button").btn.btn-link.btn-sm.hidden-xs
+                    i.glyphicon.glyphicon-fullscreen
+                    | &#32;全屏
+          div.form-group.editor
+            div.col-sm-12
+              textarea(name="content", rows="20", required)#content.form-control
+block sidebar
+  if isAuthenticated
+    div.hidden-xs
+      include ./sidebar/user_card
+  div.panel.panel-default
+    div.panel-heading
+      strong Markdown 语法参考
+    div.panel-body
+      p 把常用的语法列在这儿
+  div.panel.panel-default
+    div.panel-heading
+      strong 话题发布指南
+    div.panel-body
+      p 一些规则须知

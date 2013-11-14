@@ -27,10 +27,19 @@ exports.index = function(req, res, next) {
     }
 
     var topics = results.topics;
-    req.breadcrumbs('社区' );
+    req.breadcrumbs('社区');
     res.render('topics', {
       err: error,
       topics: topics
     });
   });
+};
+
+exports.create = function(req, res, next) {
+  var method = req.method.toLowerCase();
+
+  if ('get' === method) {
+    req.breadcrumbs('发表新话题');
+    return res.render('topic_editor');
+  }
 };

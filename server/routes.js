@@ -32,8 +32,8 @@ module.exports = exports = function(app) {
   app.get('/section/:name/tags', noopRequestHandler);  // 获取该节点组的所有节点
 
   // 话题相关的路由配置
-  app.get('/topic', noopRequestHandler);   // 发布新话题页面
-  app.post('/topic', noopRequestHandler);
+  app.get('/topic/create', auth.authRequired, topicController.create);   // 发布新话题页面
+  app.post('/topic/create', noopRequestHandler);
   app.get('/topics', noopRequestHandler);  // 各种状态的话题列表
   app.get('/topic/:id', noopRequestHandler);  // 详细话题页面
   app.get('/topic/:id/edit', noopRequestHandler); // 话题编辑页面

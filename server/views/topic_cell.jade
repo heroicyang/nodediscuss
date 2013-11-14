@@ -1,22 +1,23 @@
 div.media.cell
   div.pull-left.author-avatar
-    a(href="#")
-      img(src="http://gravatar.qiniudn.com/avatar/02268598e9a9f8bebfd5a9f9b2995f7a?s=48", alt="").media-object.img-rounded.img-responsive
+    a(href="/user/#{topic.author.username}")
+      img(src!="#{topic.author.avatar}", alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
   div.media-body
     div.pull-right.comment-count
       a(href="#")
-        span.badge 42
+        span.badge #{topic.commentCount}
     div.info
       div.media-heading.title
-          a(href="#") 小伙伴们，我挖了个坑，正在重写 nodeclub 中...小伙伴们，我挖了个坑，正在重写 nodeclub 中...
+          a(href="/topic/#{topic.id}") #{topic.title}
       p.meta
-        a(href="#").tag
-          span.label.label-default Node.js
+        a(href="/tag/#{topic.tag.name}").tag
+          span.label.label-default #{topic.tag.name}
         | &#32;&#8226;&#32;
-        a(href="#").username Heroic Yang
+        a(href="#").username #{topic.author.nickname}
         | &#32;&#8226;&#32;
-        | 最后由&#32;
-        a(href="#").username 大熊
-        | &#32;于
-        span 1小时前
-        | 回复
+        if topic.lastCommentUser
+          | 最后由&#32;
+          a(href="/user/#{topic.lastCommentUser.username}").username #{topic.lastCommentUser.nickname}
+          | &#32;于
+          span moment(topic.lastCommentedAt).fromNow()
+          | 回复

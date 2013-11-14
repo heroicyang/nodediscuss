@@ -7,6 +7,7 @@
  * Module dependencies
  */
 var _ = require('lodash'),
+  moment = require('moment'),
   config = require('../../config');
 
 module.exports = exports = function() {
@@ -25,6 +26,7 @@ module.exports = exports = function() {
     res.locals.user = req.user;
 
     res.locals._ = _;
+    res.locals.moment = moment;
     next();
   };
 };

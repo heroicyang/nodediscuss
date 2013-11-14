@@ -7,18 +7,13 @@
  * Module dependencies
  */
 var auth = require('./authorization'),
-  userController = require('./controllers/user');
+  controllers = require('./controllers'),
+  userController = controllers.user,
+  topicController = controllers.topic;
 var noopRequestHandler = function(req, res, next) {};
 
 module.exports = exports = function(app) {
-  app.get('/', function(req, res) {
-    var err = req.flash('err');
-    err && (err.showInGlobal = true);
-    req.breadcrumbs('社区' );
-    res.render('topics', {
-      err: err
-    });
-  });
+  app.get('/', topicController.index);
 
   // 用户相关的路由配置
   app.get('/signup', auth.unreachableWhenAuthorized, userController.signup);

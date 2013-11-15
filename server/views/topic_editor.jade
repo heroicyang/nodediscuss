@@ -9,12 +9,12 @@ block content
         form(role="form", method="POST", action="/topic/create").form-horizontal
           div.form-group
             div.col-xs-12.col-sm-3
-              select.form-control
+              select(name="tag[id]").form-control
                 option 请选择节点
-                optgroup(label="Node.js")
-                  option(value="") Node.js
-                optgroup(label="前端")
-                  option(value="") JavaScript
+                each tagList, sectionName in tags
+                  optgroup(label="#{sectionName}")
+                    each tag in tagList
+                      option(value="#{tag.id}") #{tag.name} 
             div.col-xs-12.visible-xs.mobile-sep &#32;
             div.col-xs-12.col-sm-9
               input(type="text", name="title", 
@@ -43,6 +43,7 @@ block content
               textarea(name="content", rows="20", required)#content.form-control
           div.form-group
             div.col-sm-12
+              input(type="hidden", name="_csrf", value="#{csrfToken}")
               button(type="submit", data-loading-text="正在发表...").btn.btn-primary 发表
     div.panel.panel-default
       div.panel-heading
@@ -73,7 +74,7 @@ block sidebar
             ``` `hello world` ```
         li
           :markdown
-            多行代码，指定 lang 高亮代码
+            多行代码: 指定 lang 以高亮代码
             ````
             ```[lang]
             console.log('hello world');

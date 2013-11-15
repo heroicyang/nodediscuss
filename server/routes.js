@@ -33,7 +33,7 @@ module.exports = exports = function(app) {
 
   // 话题相关的路由配置
   app.get('/topic/create', auth.authRequired, topicController.create);   // 发布新话题页面
-  app.post('/topic/create', noopRequestHandler);
+  app.post('/topic/create', auth.authRequired, topicController.create);
   app.get('/topics', noopRequestHandler);  // 各种状态的话题列表
   app.get('/topic/:id', noopRequestHandler);  // 详细话题页面
   app.get('/topic/:id/edit', noopRequestHandler); // 话题编辑页面
@@ -51,5 +51,5 @@ module.exports = exports = function(app) {
   app.get('/notifications', noopRequestHandler);  // 查看通知的页面
 
   // 单一文档页面的路由
-  app.get('/:slug', noopRequestHandler);
+  // app.get('/:slug', noopRequestHandler);
 };

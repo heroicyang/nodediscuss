@@ -13,11 +13,12 @@ div.media.cell
         a(href="/tag/#{topic.tag.name}").tag
           span.label.label-default #{topic.tag.name}
         | &#32;&#8226;&#32;
-        a(href="#").username #{topic.author.nickname}
-        | &#32;&#8226;&#32;
-        if topic.lastCommentUser
+        a(href="/user/#{topic.author.username}").username #{topic.author.nickname}
+        
+        if commentCount && topic.lastCommentUser
+          | &#32;&#8226;&#32;
           | 最后由&#32;
           a(href="/user/#{topic.lastCommentUser.username}").username #{topic.lastCommentUser.nickname}
           | &#32;于
-          span moment(topic.lastCommentedAt).fromNow()
+          span= moment(topic.lastCommentedAt).fromNow()
           | 回复

@@ -17,9 +17,9 @@ module.exports = exports = {
   font: {
     files: [{
       expand: true,
-      cwd: 'client/fonts/',
+      cwd: 'client/font/',
       src: ['*'],
-      dest: '<%= dest %>/fonts/'
+      dest: '<%= dest %>/font/'
     }]
   },
   img: {

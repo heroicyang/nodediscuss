@@ -24,25 +24,20 @@ block content
             div.col-sm-12
               div.wrapper
                 div.btn-group
-                  button(type="button").btn.btn-link.btn-sm
-                    i.glyphicon.glyphicon-picture
-                    | &#32;插入图片
-                  button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-link.btn-sm.dropdown-toggle
-                    &#60;&#32;&#62;&#32;插入代码
-                  ul(role="menu").dropdown-menu.languages-menu
-                    li: a(href="#") JavaScript
-                    li: a(href="#") HTML
-                    li: a(href="#") CSS
-                    li: a(href="#") Shell/Bash
-                  button(type="button", data-toggle="button", data-loading-text="Loding...")#preview.btn.btn-link.btn-sm
-                    i.glyphicon.glyphicon-eye-open
-                    | &#32;预览
-                    //-
-                      i.glyphicon.glyphicon-edit
-                      | &#32;编辑
-                  button(type="button").btn.btn-link.btn-sm.hidden-xs
-                    i.glyphicon.glyphicon-fullscreen
-                    | &#32;全屏
+                  button(type="button").btn.btn-default.btn-xs
+                    i.fa.fa-picture-o
+                  div.btn-group
+                    button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-xs.dropdown-toggle
+                      i.fa.fa-code
+                    ul(role="menu").dropdown-menu.languages-menu
+                      li: a(href="#") JavaScript
+                      li: a(href="#") HTML
+                      li: a(href="#") CSS
+                      li: a(href="#") Shell/Bash
+                  button(type="button", data-toggle="button")#preview.btn.btn-default.btn-xs
+                    i.fa.fa-eye
+                  button(type="button").btn.btn-default.btn-xs
+                    i.fa.fa-arrows-alt
           div.form-group.editor
             div.col-sm-12
               textarea(name="content", rows="20", required)#content.form-control

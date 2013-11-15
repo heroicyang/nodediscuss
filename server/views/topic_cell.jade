@@ -14,11 +14,13 @@ div.media.cell
           span.label.label-default #{topic.tag.name}
         | &#32;&#8226;&#32;
         a(href="/user/#{topic.author.username}").username #{topic.author.nickname}
-        
-        if commentCount && topic.lastCommentUser
-          | &#32;&#8226;&#32;
+        | &#32;&#8226;&#32;
+        if topic.commentCount > 0 && topic.lastCommentUser
           | 最后由&#32;
           a(href="/user/#{topic.lastCommentUser.username}").username #{topic.lastCommentUser.nickname}
           | &#32;于
           span= moment(topic.lastCommentedAt).fromNow()
-          | 回复
+          | 评论
+        else
+          | &#32;发表于
+          span= moment(topic.createdAt).fromNow()

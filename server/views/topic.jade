@@ -24,21 +24,65 @@ block content
                   span &#32;&#8226;&#32;#{topic.viewsCount}次阅读
         div.content !{topic.htmlContent}
       div.panel-footer
-        div.pull-left 这里放分享组件
-        div.pull-right 收藏
+        div.pull-left
+          a(href="#", title="分享到新浪微博")
+            i.fa.fa-weibo
+          a(href="#", title="分享到Twitter")
+            i.fa.fa-twitter
+          a(href="#", title="分享到Facebook")
+            i.fa.fa-facebook
+          a(href="#", title="分享到Google+")
+            i.fa.fa-google-plus
+        div.pull-right
+          a(href="#", title="收藏该话题")
+            i.fa.fa-bookmark
         div.clearfix
     div.panel.panel-default
       div.panel-heading
         span #{topic.commentCount}&#32;评论
+        if topic.commentCount > 0
+          span &#32;|&#32;最后评论于&#32;
+          span= moment(topic.lastCommentedAt).format('YYYY-MM-DD HH:mm:ss')
       div.panel-body
         div 这里是评论列表区域
-    div.panel.panel-default
-      div.panel-heading
-        span 添加一条评论
-      div.panel-body 这里放评论框
+    if isAuthenticated
+      div.add-comment
+        div.media
+          div.pull-left.avatar
+            a(href="/user/#{user.username}").avatar
+              img(src!="#{user.avatar}", alt="#{user.nickname}").media-object.img-rounded.img-responsive
+          div.media-body
+            div.topic-editor
+              form(role="form", method="POST", action="/comment/create").form-horizontal
+                div.form-group.toolbar
+                  div.col-sm-12
+                    div.wrapper
+                      div.btn-group
+                        button(type="button").btn.btn-default.btn-sm
+                          i.fa.fa-picture-o
+                        div.btn-group
+                          button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-sm.dropdown-toggle
+                            i.fa.fa-code
+                          ul(role="menu").dropdown-menu.languages-menu
+                            li: a(href="#") JavaScript
+                            li: a(href="#") HTML
+                            li: a(href="#") CSS
+                            li: a(href="#") Shell/Bash
+                        button(type="button", data-toggle="button")#preview.btn.btn-default.btn-sm
+                          i.fa.fa-eye
+                        button(type="button").btn.btn-default.btn-sm
+                          i.fa.fa-arrows-alt
+                div.form-group.editor
+                  div.col-sm-12
+                    textarea(name="content", rows="5", required)#content.form-control
+                div.form-group
+                  div.col-sm-12
+                    input(type="hidden", name="_csrf", value="#{csrfToken}")
+                    button(type="submit", data-loading-text="正在评论...").btn.btn-primary 评论
 block sidebar
   if isAuthenticated
-    include ./sidebar/user_card
+    div.hidden-xs
+      include ./sidebar/user_card
   else
     include ./sidebar/about
   include ./sidebar/top_tags

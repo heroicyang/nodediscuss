@@ -11,6 +11,9 @@ require('./mongodb').connect();
 // Load mongoose models
 require('../models');
 
+// Load moment language globally
+require('moment').lang('zh-cn');
+
 var app = express();
 
 // Load express settings

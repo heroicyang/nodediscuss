@@ -1,0 +1,46 @@
+extends layout
+block content
+  div#topic
+    div.panel.panel-default
+      div.panel-heading
+        div.row
+          div.col-xs-10.col-sm-10
+            include breadcrumb
+      div.panel-body
+        div.row.header
+          div.media
+            div.pull-right.author-avatar
+              a(href="/user/#{topic.author.username}")
+                img(src!="#{topic.author.avatar}", alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
+            div.media-body
+              div.info
+                div.media-heading.title
+                    h3 #{topic.title}
+                p.meta
+                  span By&#32;
+                    a(href="/user/#{topic.author.username}").username #{topic.author.nickname}
+                  span &#32;&#8226;&#32;发表于
+                  span= moment(topic.createdAt).fromNow()
+                  span &#32;&#8226;&#32;#{topic.viewsCount}次阅读
+        div.content !{topic.htmlContent}
+      div.panel-footer
+        div.pull-left 这里放分享组件
+        div.pull-right 收藏
+        div.clearfix
+    div.panel.panel-default
+      div.panel-heading
+        span #{topic.commentCount}&#32;评论
+      div.panel-body
+        div 这里是评论列表区域
+    div.panel.panel-default
+      div.panel-heading
+        span 添加一条评论
+      div.panel-body 这里放评论框
+block sidebar
+  if isAuthenticated
+    include ./sidebar/user_card
+  else
+    include ./sidebar/about
+  include ./sidebar/top_tags
+  include ./sidebar/related_site
+  include ./sidebar/ad

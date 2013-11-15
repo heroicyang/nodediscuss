@@ -110,3 +110,14 @@ exports.create = function(topicData, callback) {
     }
   ], callback);
 };
+
+/**
+ * 根据话题 id 获取话题
+ * @param  {String}   id       话题 id
+ * @param  {Function} callback  回调函数
+ *  - err     MongooseError
+ *  - topic   话题对象
+ */
+exports.getById = function(id, callback) {
+  Topic.findById(id, callback);
+};

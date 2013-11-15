@@ -4,52 +4,76 @@
  */
 
 // 话题列表
-.topics
-  .sorts
-    padding 8px 15px
-    border-bottom 1px solid #dddddd
-    background #fcfcfc
-    font-size 13px
-
-    .fa
-      color #999
-
-    .condition
-      margin-left 10px
-      color #999
-      &.active
-        color #555
-        font-weight bold
-
-  .list
+#topics
+  .panel-body
     padding 0
 
-  .cell
-    padding 8px 10px 1px
-    margin-top 0
+    .sorts
+      padding 8px 15px
+      border-bottom 1px solid #dddddd
+      background #fcfcfc
+      font-size 13px
+
+      .fa
+        color #999
+
+      .condition
+        margin-left 10px
+        color #999
+        &.active
+          color #555
+          font-weight bold
+
+    .cell
+      padding 8px 10px 1px
+      margin-top 0
+      border-bottom 1px solid #dddddd
+      &:last-child
+        border-bottom 0
+
+      .author-avatar
+        width 48px
+
+      .title
+        font-size 16px
+
+      .info
+        padding-right 36px
+
+      .meta
+        color #999
+
+        .tag
+          &:hover
+            text-decoration none
+
+        .username
+          font-weight bold
+          color #777
+
+// 话题详细页面
+#topic
+  .header
     border-bottom 1px solid #dddddd
-    &:last-child
-      border-bottom 0
+    padding 0 15px 15px
 
     .author-avatar
-      width 48px
+      width 64px
 
     .title
-      font-size 16px
-
-    .info
-      padding-right 36px
+      h3
+        margin-top 0
 
     .meta
       color #999
-
-      .tag
-        &:hover
-          text-decoration none
+      margin 15px 0 0
 
       .username
         font-weight bold
         color #777
+
+  .content
+    padding-top 15px
 
 // 话题编辑器页面
 .topic-editor

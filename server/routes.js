@@ -35,7 +35,7 @@ module.exports = exports = function(app) {
   app.get('/topic/create', auth.authRequired, topicController.create);   // 发布新话题页面
   app.post('/topic/create', auth.authRequired, topicController.create);
   app.get('/topics', noopRequestHandler);  // 各种状态的话题列表
-  app.get('/topic/:id', noopRequestHandler);  // 详细话题页面
+  app.get('/topic/:id', topicController.get);  // 详细话题页面
   app.get('/topic/:id/edit', noopRequestHandler); // 话题编辑页面
   app.post('/topic/:id/edit', noopRequestHandler);  // 更新话题
   app.post('/topic/:id/del', noopRequestHandler);  // 删除话题

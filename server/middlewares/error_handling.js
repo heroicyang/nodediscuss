@@ -33,5 +33,6 @@ exports.error500 = function() {
       req.flash('body', req.body);
       res.redirect(redirectPath);
     }
+    console.error(err);
   };
 };

@@ -77,3 +77,21 @@ exports.create = function(req, res, next) {
     });
   }
 };
+
+exports.get = function(req, res, next) {
+  var id = req.params.id;
+  async.parallel({
+    topic: function(next) {
+      api.topic.getById(id, function(err, topic) {
+        next(err, topic);
+      });
+    }
+  }, function(err, results) {
+    if (err) {
+      return next(err);
+    }
+    req.breadcrumbs(results.topic.tag.name, '/tag/' + results.topic.tag.name);
+    req.breadcrumbs('话题详情');
+    res.render('topic', results);
+  });
+};

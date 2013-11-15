@@ -1,6 +1,6 @@
 extends layout
 block content
-  div.topics-editor
+  div.topic-editor
     div.panel.panel-default
       div.panel-heading
         include breadcrumb
@@ -24,34 +24,61 @@ block content
             div.col-sm-12
               div.wrapper
                 div.btn-group
-                  button(type="button").btn.btn-default.btn-xs
+                  button(type="button").btn.btn-default.btn-sm
                     i.fa.fa-picture-o
                   div.btn-group
-                    button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-xs.dropdown-toggle
+                    button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-sm.dropdown-toggle
                       i.fa.fa-code
                     ul(role="menu").dropdown-menu.languages-menu
                       li: a(href="#") JavaScript
                       li: a(href="#") HTML
                       li: a(href="#") CSS
                       li: a(href="#") Shell/Bash
-                  button(type="button", data-toggle="button")#preview.btn.btn-default.btn-xs
+                  button(type="button", data-toggle="button")#preview.btn.btn-default.btn-sm
                     i.fa.fa-eye
-                  button(type="button").btn.btn-default.btn-xs
+                  button(type="button").btn.btn-default.btn-sm
                     i.fa.fa-arrows-alt
           div.form-group.editor
             div.col-sm-12
               textarea(name="content", rows="20", required)#content.form-control
+          div.form-group
+            div.col-sm-12
+              button(type="submit", data-loading-text="正在发表...").btn.btn-primary 发表
+    div.panel.panel-default
+      div.panel-heading
+        strong 话题发布指南
+      div.panel-body
+        ul
+          li: strong 请选择合适的节点来发布话题，如果管理员发现话题内容与节点不符，会将你的话题移至相应节点。
+          li: strong 标题请尽量简洁易懂，最好准确的总结话题内容来进行描述。
+          li: strong 提问型主题请在话题内容中仔细描述你遇到问题，以便他人能更好的帮助你。
+          li: strong 代码请严格使用 Markdown 的格式，这样才具备可读性，无论你是分享心得还是提问。
+          li: strong 最后，这是一个技术社区，请让它保持应有的风貌，大家共同创造一个良好的氛围。
 block sidebar
   if isAuthenticated
     div.hidden-xs
       include ./sidebar/user_card
-  div.panel.panel-default
+  div#markdown-refer.panel.panel-default
     div.panel-heading
       strong Markdown 语法参考
     div.panel-body
-      p 把常用的语法列在这儿
-  div.panel.panel-default
-    div.panel-heading
-      strong 话题发布指南
-    div.panel-body
-      p 一些规则须知
+      ui
+        li: strong 粗体: **粗体**
+        li: em 斜体: *斜体*
+        li 链接: [文字](url)
+        li 图片: ![alt描述](url)
+        li
+          :markdown
+            单行代码: 
+            ``` `hello world` ```
+        li
+          :markdown
+            多行代码，指定 lang 高亮代码
+            ````
+            ```[lang]
+            console.log('hello world');
+            ```
+            ````
+        li
+          span 支持&#32;
+          a(href="https://help.github.com/articles/github-flavored-markdown") GitHub Flavored Markdown

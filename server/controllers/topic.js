@@ -82,8 +82,9 @@ exports.get = function(req, res, next) {
   var id = req.params.id;
   async.parallel({
     topic: function(next) {
-      api.topic.getById(id, function(err, topic) {
-        next(err, topic);
+      // 此处调用增加阅读数量的方法，因为该方法也会返回最新的 topic 信息
+      api.topic.increaseViewsCount(id, function(err, latestTopic) {
+        next(err, latestTopic);
       });
     }
   }, function(err, results) {

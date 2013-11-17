@@ -171,6 +171,23 @@ exports.create = function(topicData, callback) {
 };
 
 /**
+ * 增加话题的浏览数
+ * @param  {String}   id       话题 id
+ * @param  {Function} callback 回调函数
+ *  - err     MongooseError|Error
+ *  - latestTopic   最新的 topic 对象
+ */
+exports.increaseViewsCount = function(id, callback) {
+  Topic.findByIdAndUpdate(id, {
+    $inc: {
+      viewsCount: 1
+    }
+  }, function(err, latestTopic) {
+    callback(err, latestTopic);
+  });
+};
+
+/**
  * 根据话题 id 获取话题
  * @param  {String}   id       话题 id
  * @param  {Function} callback  回调函数

@@ -16,7 +16,6 @@ var ObjectId = require('mongoose').Types.ObjectId,
  */
 module.exports = exports = function(schema) {
   addTitleValidators(schema);
-  addContentValidators(schema);
   addTagValidators(schema);
   addAuthorValidators(schema);
 };
@@ -34,15 +33,6 @@ function addTitleValidators(schema) {
     .validate(function(title) {
       return title.length <= 100;
     }, 'Title must be less than 100 characters.');
-}
-
-/**
- * Adds validators on `content` path
- * @param {Mongoose.Schema} schema
- */
-function addContentValidators(schema) {
-  schema.path('content')
-    .required(true, 'Content can not be empty!');
 }
 
 /**

@@ -39,7 +39,8 @@ marked.setOptions({
 exports.getTopicsByLastCommentedAt = function(callback) {
   Topic.find()
     .sort({
-      lastCommentedAt: -1
+      lastCommentedAt: -1,
+      createdAt: -1
     })
     .exec(callback);
 };

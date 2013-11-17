@@ -7,7 +7,7 @@ block content
           div.col-xs-10.col-sm-10
             include breadcrumb
       div.panel-body
-        div.row.header
+        div.header
           div.media
             div.pull-right.author-avatar
               a(href="/user/#{topic.author.username}")
@@ -22,7 +22,8 @@ block content
                   span &#32;&#8226;&#32;发表于
                   span= moment(topic.createdAt).fromNow()
                   span &#32;&#8226;&#32;#{topic.viewsCount}次阅读
-        div.content !{topic.htmlContent}
+        if topic.content
+          div.row.content !{topic.htmlContent}
       div.panel-footer
         div.pull-left
           a(href="#", title="分享到新浪微博")

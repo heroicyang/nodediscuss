@@ -63,25 +63,6 @@ describe('Model#Topic', function() {
       });
     });
 
-    describe('Topic#content', function() {
-      it('content can not be empty', function(done) {
-        var topic = new Topic({
-          title: 'this is a test topic...',
-          tag: {
-            id: this.tag.id
-          },
-          author: {
-            id: this.user.id
-          }
-        });
-        topic.validate(function(err) {
-          should.exist(err);
-          err.name.should.eql('ValidationError');
-          done();
-        });
-      });
-    });
-
     describe('Topic#tag.id', function() {
       it('`tag.id` is required', function(done) {
         var topic = new Topic({

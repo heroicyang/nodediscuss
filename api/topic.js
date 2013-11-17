@@ -31,63 +31,121 @@ marked.setOptions({
 });
 
 /**
- * 获取所有话题，按照最后评论时间降序排序
+ * 根据查询条件获取话题
+ * @param  {Object}   conditions 查询条件
+ * @param  {Object}   options  查询选项
  * @param  {Function} callback 回调函数
  *  - err     MongooseError
  *  - topics  话题数组
  */
-exports.getTopicsByLastCommentedAt = function(callback) {
-  Topic.find()
-    .sort({
+exports.query = function(conditions, options, callback) {
+  if (typeof conditions === 'function') {
+    callback = conditions;
+    conditions = {};
+    options = {};
+  } else if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  var pageIndex = options.pageIndex || 1,
+    pageSize = options.pageSize || 20,
+    fields = options.fields || null,
+    sort = options.sort || {
       lastCommentedAt: -1,
       createdAt: -1
-    })
-    .exec(callback);
+    },
+    query;
+
+  query = Topic.find(conditions)
+    .sort(sort);
+
+  if (fields) {
+    query = query.select(fields);
+  }
+
+  query = query.skip((pageIndex - 1) * pageSize).limit(pageSize);
+
+  query.exec(callback);
 };
 
 /**
- * 获取精华话题，按照发表时间降序排序
+ * 获取精华话题
+ * @param  {Object}   options  查询选项
  * @param  {Function} callback  回调函数
  *  - err    MongooseError
  *  - topics 话题数组
  */
-exports.getExcellentTopics = function(callback) {
-  Topic.find({
+exports.queryByExcellent = function(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  exports.query({
     excellent: true
-  })
-    .sort({
-      createdAt: -1
-    })
-    .exec(callback);
+  }, options, callback);
 };
 
 /**
- * 获取所有话题，按照发表时间降序排序
+ * 获取最新创建的话题
+ * @param  {Object}   options  查询选项
  * @param  {Function} callback  回调函数
  *  - err     MongooseError
  *  - topics  话题数组
  */
-exports.getTopicsByCreatedAt = function(callback) {
-  Topic.find()
-    .sort({
-      createdAt: -1
-    })
-    .exec(callback);
+exports.queryLatest = function(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  options.sort = {
+    createdAt: -1
+  };
+  
+  exports.query({}, options, callback);
 };
 
 /**
- * 获取没有评论的话题，按照发表时间降序排序
+ * 获取没有评论的话题，并按创建时间倒序排序
+ * @param  {Object}   options  查询选项
  * @param  {Function} callback    回调函数
  *  - err     MongooseError
  *  - topics   话题数组
  */
-exports.getNoCommentTopics = function(callback) {
-  Topic.find()
-    .where('commentCount').lte(0)
-    .sort({
-      createdAt: -1
-    })
-    .exec(callback);
+exports.queryNoComments = function(options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  options.sort = {
+    createdAt: -1
+  };
+
+  exports.query({
+    commentCount: {
+      $lte: 0
+    }
+  }, options, callback);
+};
+
+/**
+ * 根据节点名获取该节点下的话题
+ * @param  {String}   tagName  节点名
+ * @param  {Object}   options  查询选项
+ * @param  {Function} callback 回调函数
+ *  - err     MongooseError
+ *  - topics   话题数组
+ */
+exports.queryByTag = function(tagName, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  exports.query({
+    'tag.name': tagName
+  }, options, callback);
 };
 
 /**

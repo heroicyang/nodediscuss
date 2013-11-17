@@ -17,7 +17,7 @@ exports.index = function(req, res, next) {
     
   async.parallel({
     topics: function(next) {
-      api.topic.getTopicsByLastCommentedAt(function(err, topics) {
+      api.topic.query(function(err, topics) {
         next(err, topics);
       });
     },

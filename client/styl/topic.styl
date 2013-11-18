@@ -4,46 +4,43 @@
  */
 
 // 话题列表
-#topics
+#topic-list
   .panel-body
-    padding 0
+    padding-top 0
+    padding-bottom 0
 
-    .sorts
-      padding 8px 15px
-      border-bottom 1px solid #dddddd
-      background #fcfcfc
-      font-size 13px
+  .sorts
+    padding 8px 15px
+    background #fcfcfc
+    font-size 13px
 
-      .fa
-        color #999
+    .fa
+      color #999
 
-      .condition
-        margin-left 10px
-        color #999
-        &.active
-          color #555
-          font-weight bold
+    .condition
+      margin-left 10px
+      color #999
+      &.active
+        color #555
+        font-weight bold
 
-    .cell
-      padding 8px 10px 1px
-      margin-top 0
-      border-bottom 1px solid #dddddd
-      &:last-child
-        border-bottom 0
+  .list-group-item
+    .author-avatar
+      width 48px
 
-      .author-avatar
-        width 48px
+    .info
+      padding-right 36px
 
       .title
         font-size 16px
 
-      .info
-        padding-right 36px
-
       .meta
         color #999
+        margin-bottom 1px
 
         .tag
+          .label
+            padding .1em .5em .2em
           &:hover
             text-decoration none
 

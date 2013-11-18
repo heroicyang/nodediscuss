@@ -1,29 +1,30 @@
 extends layout
 block content
-  div#topics
-    div.panel.panel-default
-      div.panel-heading
-        div.row
-          div.col-xs-10.col-sm-10
-            include breadcrumb
-          div.col-xs-2.col-sm-2
-            if isAuthenticated
-              a(href="/topic/create").btn.btn-default.btn-xs.pull-right 发表话题
-      div.panel-body
-        div.sorts
-          div.pull-right
-            span.fa.fa-sort-amount-desc
-            a(href="#{path}",
-              class=query.tab ? "" : "active").condition: span 默认
-            a(href="#{path}?tab=excellent",
-              class=(query.tab === 'excellent') ? "active" : "").condition: span 优质话题
-            a(href="#{path}?tab=no_comment",
-              class=(query.tab === 'no_comment') ? "active" : "").condition: span 无人回复
-            a(href="#{path}?tab=latest",
-              class=(query.tab === 'latest') ? "active" : "").condition: span 最新创建
-          div.clearfix
-        for topic in topics
-          include topic_cell
+  div#topic-list.panel.panel-default
+    div.panel-heading
+      div.row
+        div.col-xs-10.col-sm-10
+          include breadcrumb
+        div.col-xs-2.col-sm-2
+          if isAuthenticated
+            a(href="/topic/create").btn.btn-default.btn-xs.pull-right 发表话题
+    div.panel-body
+      div.row.sorts
+        div.pull-right
+          span.fa.fa-sort-amount-desc
+          a(href="#{path}",
+            class=query.tab ? "" : "active").condition: span 默认
+          a(href="#{path}?tab=excellent",
+            class=(query.tab === 'excellent') ? "active" : "").condition: span 优质话题
+          a(href="#{path}?tab=no_comment",
+            class=(query.tab === 'no_comment') ? "active" : "").condition: span 无人回复
+          a(href="#{path}?tab=latest",
+            class=(query.tab === 'latest') ? "active" : "").condition: span 最新创建
+        div.clearfix
+    ul.list-group
+      for topic in topics
+        li.list-group-item
+          include topic_list_item
   include tags
 block sidebar
   if isAuthenticated

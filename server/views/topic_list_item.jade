@@ -1,7 +1,8 @@
 div.media
-  div.pull-left.author-avatar
+  div.pull-left.avatar-48
     a(href="/user/#{topic.author.username}")
-      img(src!="#{topic.author.avatar}", alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
+      img(src!="#{topic.author.avatar}",
+          alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
   div.media-body
     div.pull-right.comment-count
       a(href="/topic/#{topic._id}#comment")

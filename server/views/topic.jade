@@ -1,114 +1,115 @@
 extends layout
 block content
-  div#topic
-    div.panel.panel-default
-      div.panel-heading
-        div.row
-          div.col-xs-10.col-sm-10
-            include breadcrumb
-      div.panel-body
-        div.header
-          div.media
-            div.pull-right.author-avatar
-              a(href="/user/#{topic.author.username}")
-                img(src!="#{topic.author.avatar}",
-                    alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
-            div.media-body
-              div.info
-                div.media-heading.title
-                    h3 #{topic.title}
-                p.meta
-                  span By&#32;
-                    a(href="/user/#{topic.author.username}").username #{topic.author.nickname}
-                  span &#32;&#8226;&#32;发表于
-                  span= moment(topic.createdAt).fromNow()
-                  span &#32;&#8226;&#32;#{topic.viewsCount}次阅读
-        if topic.content
-          div.row.content !{topic.htmlContent}
-      div.panel-footer
-        div.pull-left
-          a(href="#", title="分享到新浪微博")
-            i.fa.fa-weibo
-          a(href="#", title="分享到Twitter")
-            i.fa.fa-twitter
-          a(href="#", title="分享到Facebook")
-            i.fa.fa-facebook
-          a(href="#", title="分享到Google+")
-            i.fa.fa-google-plus
-        div.pull-right
-          a(href="#", title="收藏该话题")
-            i.fa.fa-bookmark
-        div.clearfix
-    if topic.commentCount > 0
-      div#comment.comments.panel.panel-default
-        div.panel-heading
-          span #{topic.commentCount}&#32;评论
-          if topic.commentCount > 0
-            span &#32;|&#32;最后评论于&#32;
-            span= moment(topic.lastCommentedAt).format('YYYY-MM-DD HH:mm:ss')
-        div.panel-body
-          each comment, idx in comments
-            div.row
-              if comment.deleted
-                p 该评论已被删除。
-              else
-                div.media
-                  div.pull-left.avatar
-                      a(href="/user/#{comment.author.username}").avatar
-                        img(src!="#{comment.author.avatar}",
-                            alt="#{comment.author.nickname}").media-object.img-rounded.img-responsive
-                  div.media-body
-                    if isAuthenticated
-                      div.pull-right.action
-                        if comment.author.id !== loggedUser.id
-                          a(href="#", title="回复")
-                            i.fa.fa-reply
-                        else
-                          a(href="#", title="删除")
-                            i.fa.fa-trash-o
-                    div.meta
-                      a(href="/user/#{comment.author.username}").username #{comment.author.nickname}
-                      span= moment(comment.createdAt).fromNow()
-                      span ##{topic.commentCount - idx}楼
-                    div !{comment.htmlContent}
-    else
-      div#comment.no-comment.panel.panel-default
-        div.panel-body 目前尚无评论
-    if isAuthenticated
-      div.add-comment
+  div#topic.panel.panel-default
+    div.panel-heading
+      div.row
+        div.col-xs-10.col-sm-10
+          include breadcrumb
+    div.panel-body
+      div.header
         div.media
-          div.pull-left.avatar
-            a(href="/user/#{loggedUser.username}").avatar
-              img(src!="#{loggedUser.avatar}", alt="#{loggedUser.nickname}").media-object.img-rounded.img-responsive
+          div.pull-right.avatar-64
+            a(href="/user/#{topic.author.username}")
+              img(src!="#{topic.author.avatar}",
+                  alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
           div.media-body
-            div.topic-editor
-              form(role="form", method="POST", action="/comment/create").form-horizontal
-                div.form-group.toolbar
-                  div.col-sm-12
-                    div.wrapper
+            div.info
+              div.media-heading.title
+                  h3 #{topic.title}
+              p.meta
+                span By&#32;
+                  a(href="/user/#{topic.author.username}").username #{topic.author.nickname}
+                span &#32;&#8226;&#32;发表于
+                span= moment(topic.createdAt).fromNow()
+                span &#32;&#8226;&#32;#{topic.viewsCount}次阅读
+      if topic.content
+        div.row.content !{topic.htmlContent}
+    div.panel-footer
+      div.pull-left
+        a(href="#", title="分享到新浪微博")
+          i.fa.fa-weibo
+        a(href="#", title="分享到Twitter")
+          i.fa.fa-twitter
+        a(href="#", title="分享到Facebook")
+          i.fa.fa-facebook
+        a(href="#", title="分享到Google+")
+          i.fa.fa-google-plus
+      div.pull-right
+        a(href="#", title="收藏该话题")
+          i.fa.fa-bookmark
+      div.clearfix
+  if topic.commentCount > 0
+    div#comment-list.panel.panel-default
+      div.panel-heading
+        span #{topic.commentCount}&#32;评论
+        if topic.commentCount > 0
+          span &#32;&#448;&#32;最后评论于&#32;
+          span= moment(topic.lastCommentedAt).format('YYYY-MM-DD HH:mm:ss')
+      ul.list-group
+        each comment, idx in comments
+          li.list-group-item
+            if comment.deleted
+              p 该评论已被删除。
+            else
+              div.media
+                div.pull-left.avatar-48
+                    a(href="/user/#{comment.author.username}")
+                      img(src!="#{comment.author.avatar}",
+                          alt="#{comment.author.nickname}").media-object.img-rounded.img-responsive
+                div.media-body
+                  if isAuthenticated
+                    div.pull-right.action
+                      if comment.author.id !== loggedUser.id
+                        a(href="#", title="回复")
+                          i.fa.fa-reply
+                      else
+                        a(href="#", title="删除")
+                          i.fa.fa-trash-o
+                  div.meta
+                    a(href="/user/#{comment.author.username}").username #{comment.author.nickname}
+                    span= moment(comment.createdAt).fromNow()
+                    span ##{topic.commentCount - idx}楼
+                  div.content !{comment.htmlContent}
+  else
+    div#comment-list.no-comment.panel.panel-default
+      div.panel-body 目前尚无评论
+  if isAuthenticated
+    div.add-comment
+      div.media
+        div.pull-left.avatar-48
+          a(href="/user/#{loggedUser.username}")
+            img(src!="#{loggedUser.avatar}",
+                alt="#{loggedUser.nickname}").media-object.img-rounded.img-responsive
+        div.media-body
+          div.topic-editor
+            form(role="form", method="POST", action="/comment/create").form-horizontal
+              div.form-group.toolbar
+                div.col-sm-12
+                  div.wrapper
+                    div.btn-group
+                      button(type="button").btn.btn-default.btn-sm
+                        i.fa.fa-picture-o
                       div.btn-group
-                        button(type="button").btn.btn-default.btn-sm
-                          i.fa.fa-picture-o
-                        div.btn-group
-                          button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-sm.dropdown-toggle
-                            i.fa.fa-code
-                          ul(role="menu").dropdown-menu.languages-menu
-                            li: a(href="#") JavaScript
-                            li: a(href="#") HTML
-                            li: a(href="#") CSS
-                            li: a(href="#") Shell/Bash
-                        button(type="button", data-toggle="button")#preview.btn.btn-default.btn-sm
-                          i.fa.fa-eye
-                        button(type="button").btn.btn-default.btn-sm
-                          i.fa.fa-arrows-alt
-                div.form-group.editor
-                  div.col-sm-12
-                    textarea(name="content", rows="5", required)#content.form-control
-                div.form-group
-                  div.col-sm-12
-                    input(type="hidden", name="_csrf", value="#{csrfToken}")
-                    input(type="hidden", name="topicId", value="#{topic._id}")
-                    button(type="submit", data-loading-text="正在评论...").btn.btn-primary 评论
+                        button(type="button",
+                               data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-sm.dropdown-toggle
+                          i.fa.fa-code
+                        ul(role="menu").dropdown-menu.languages-menu
+                          li: a(href="#") JavaScript
+                          li: a(href="#") HTML
+                          li: a(href="#") CSS
+                          li: a(href="#") Shell/Bash
+                      button(type="button", data-toggle="button")#preview.btn.btn-default.btn-sm
+                        i.fa.fa-eye
+                      button(type="button").btn.btn-default.btn-sm
+                        i.fa.fa-arrows-alt
+              div.form-group.editor
+                div.col-sm-12
+                  textarea(name="content", rows="5", required)#content.form-control
+              div.form-group
+                div.col-sm-12
+                  input(type="hidden", name="_csrf", value="#{csrfToken}")
+                  input(type="hidden", name="topicId", value="#{topic._id}")
+                  button(type="submit", data-loading-text="正在评论...").btn.btn-primary 评论
 block sidebar
   if isAuthenticated
     div.hidden-xs

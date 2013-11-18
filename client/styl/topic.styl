@@ -25,9 +25,6 @@
         font-weight bold
 
   .list-group-item
-    .author-avatar
-      width 48px
-
     .info
       padding-right 36px
 
@@ -51,9 +48,6 @@
 // 话题详细页面
 #topic
   .header
-    .author-avatar
-      width 64px
-
     .title
       h3
         margin-top 0
@@ -81,23 +75,15 @@
       margin-right 15px
       color #999
 
-  .avatar
-    width 48px
+#comment-list
+  .panel-body
+    padding-top 0
+    padding-bottom 0
 
-  .comments
-    .panel-body
-      padding-top 0
-      padding-bottom 0
-
-    .row
-      padding 10px 15px
-      border-top 1px solid #dddddd
-      &:first-child
-        border-top 0
-
+  .list-group-item
     .action
       a
-        color #999
+        color #777
 
     .meta
       margin-bottom 5px
@@ -106,14 +92,20 @@
 
       a
         font-weight bold
-        color #999
+        color #777
       span
         margin-left 10px
 
-  .no-comment
+    .content
+      p
+        margin-bottom 0
+
+  &.no-comment
     border-style dashed
 
     .panel-body
+      padding-top 15px
+      padding-bottom 15px
       text-align center
 
 // 话题编辑器页面

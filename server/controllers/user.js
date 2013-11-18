@@ -84,12 +84,32 @@ exports.activate = function(req, res, next) {
 
 exports.index = function(req, res, next) {
   var username = req.params.username;
-  api.user.findByUsername(username, function(err, user) {
+  async.parallel({
+    user: function(next) {
+      api.user.findByUsername(username, function(err, user) {
+        next(err, user);
+      });
+    },
+    latestTopics: function(next) {
+      api.topic.query({
+        conditions: { 'author.username': username },
+        sort: { createdAt: -1 }
+      }, function(err, topics) {
+        next(err, topics);
+      });
+    },
+    latestComments: function(next) {
+      api.comment.query({
+        conditions: { 'author.username': username },
+        sort: { createdAt: -1 }
+      }, function(err, comments) {
+        next(err, comments);
+      });
+    }
+  }, function(err, results) {
     if (err) {
       return next(err);
     }
-    res.render('user', {
-      user: user
-    });
+    res.render('user', results);
   });
 };

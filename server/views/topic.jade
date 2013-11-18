@@ -74,7 +74,7 @@ block content
     div#comment-list.no-comment.panel.panel-default
       div.panel-body 目前尚无评论
   if isAuthenticated
-    div.add-comment
+    div#comment.add-comment
       div.media
         div.pull-left.avatar-48
           a(href="/user/#{loggedUser.username}")

@@ -16,7 +16,7 @@ block content
               p #{user.tagline}
           div.extra-info
             p 
-              i.fa.fa-calendar
+              i.fa.fa-clock-o
               | &#32;于&#32;
               span= moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')
               | &#32;加入CNode
@@ -40,12 +40,14 @@ block content
       if user.bio
         li.list-group-item #{user.bio}
         
-  div.panel.panel-default
+  div#topic-list.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近创建的话题
     if user.topicCount > 0
-      div.panel-body
-        div 话题列表
+      ul.list-group
+        each topic in latestTopics
+          li.list-group-item
+            include topic_list_item
       div.panel-footer
         a(href="#") &#187; 查看更多#{user.nickname}创建的话题
   div.panel.panel-default

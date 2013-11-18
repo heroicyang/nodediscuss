@@ -15,30 +15,7 @@ exports.index = function(req, res, next) {
     showInGlobal: true
   });
   var tab = req.query.tab,
-    queryOpts = {};
-
-  switch(tab) {
-    case 'excellent':
-      queryOpts['conditions'] = {
-        excellent: true
-      };
-      break;
-    case 'no_comment':
-      queryOpts['conditions'] = {
-        commentCount: {
-          $lte: 0
-        }
-      };
-      queryOpts['sort'] =  {
-        createdAt: -1
-      };
-      break;
-    case 'latest':
-      queryOpts['sort'] =  {
-        createdAt: -1
-      };
-      break;
-  }
+    queryOpts = getTabQueryOptions(tab);
     
   async.parallel({
     topics: function(next) {
@@ -64,14 +41,16 @@ exports.index = function(req, res, next) {
 };
 
 exports.queryByTag = function(req, res, next) {
-  var tagName = req.params.name;
+  var tab = req.query.tab,
+    tagName = req.params.name,
+    queryOpts = getTabQueryOptions(tab);
+
+  queryOpts.conditions = queryOpts.conditions || {};
+  queryOpts.conditions['tag.name'] = tagName;
+  
   async.parallel({
     topics: function(next) {
-      api.topic.query({
-        conditions: {
-          'tag.name': tagName
-        }
-      }, function(err, topics) {
+      api.topic.query(queryOpts, function(err, topics) {
         next(err, topics);
       });
     },
@@ -148,3 +127,28 @@ exports.get = function(req, res, next) {
     res.render('topic', results);
   });
 };
+
+function getTabQueryOptions(tab) {
+  var queryOpts = {};
+
+  if (tab === 'excellent') {
+    queryOpts.conditions = {
+      excellent: true
+    };
+  } else if (tab === 'no_comment') {
+    queryOpts.conditions = {
+      commentCount: {
+        $lte: 0
+      }
+    };
+    queryOpts.sort =  {
+      createdAt: -1
+    };
+  } else if (tab === 'latest') {
+    queryOpts.sort =  {
+      createdAt: -1
+    };
+  }
+
+  return queryOpts;
+}

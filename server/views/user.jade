@@ -45,6 +45,7 @@ block content
       span #{user.nickname} 最近创建的话题
     if user.topicCount > 0
       ul.list-group
+        - var hiddenAvatar = true
         each topic in latestTopics
           li.list-group-item
             include topic_list_item
@@ -58,7 +59,7 @@ block content
     div.panel-footer
       a(href="#") &#187; 查看更多#{user.nickname}评论的话题
 block sidebar
-  div.panel.panel-default
+  div.panel.panel-default.hidden-xs
     div.panel-heading
       span #{user.nickname} 在 Github 上的代码仓库
     div.panel-body

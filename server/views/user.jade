@@ -3,21 +3,51 @@ block content
   div#profile.panel.panel-default
     div.panel-body
       div.media
-        div.pull-left.author-avatar
+        div.pull-left.avatar-80
           a(href="/user/#{user.username}")
             img(src!="#{user.avatar}",
                 alt="#{user.nickname}").media-object.img-rounded.img-responsive
         div.media-body
+          if isAuthenticated && user.id !== loggedUser.id
+            button(type="button").btn.btn-default.btn-sm.pull-right 加入关注
+          div.media-heading.info
+            h3.nickname #{user.nickname}
+            if user.tagline
+              p #{user.tagline}
+          div.extra-info
+            p 
+              i.fa.fa-calendar
+              | &#32;于&#32;
+              span= moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')
+              | &#32;加入CNode
+            ul.list-inline
+              li 关注 #{user.followingCount}
+              li 粉丝 #{user.followerCount}
+              li 积分 #{user.score || 0}
+    
     ul.list-group
-      li.list-group-item 这里放置各种绑定的信息
-      li.list-group-item 这里是个人简介
+      if user.website || user.location || user.twitter || user.github
+        li.list-group-item
+          ul.list-unstyled
+            if user.website
+              li
+                i.fa.fa-home
+                a(href="#{user.website}", title="个人博客", target="_blank") #{user.website}
+            if user.location
+              li
+                i.fa.fa-map-marker
+                  span #{user.location}
+      if user.bio
+        li.list-group-item #{user.bio}
+        
   div.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近创建的话题
-    div.panel-body
-      div 话题列表
-    div.panel-footer
-      a(href="#") &#187; 查看更多#{user.nickname}创建的话题
+    if user.topicCount > 0
+      div.panel-body
+        div 话题列表
+      div.panel-footer
+        a(href="#") &#187; 查看更多#{user.nickname}创建的话题
   div.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近评论的话题

@@ -9,7 +9,8 @@
 var auth = require('./authorization'),
   controllers = require('./controllers'),
   userController = controllers.user,
-  topicController = controllers.topic;
+  topicController = controllers.topic,
+  commentController = controllers.comment;
 var noopRequestHandler = function(req, res, next) {};
 
 module.exports = exports = function(app) {
@@ -38,7 +39,7 @@ module.exports = exports = function(app) {
   app.post('/topic/:id/favorite/del', noopRequestHandler);  // 取消收藏
 
   // 评论相关的路由配置
-  app.post('/comment', noopRequestHandler);  // 评论话题
+  app.post('/comment/create', auth.authRequired, commentController.create);  // 评论话题
   app.post('/comment/:id/reply', noopRequestHandler);  // 回复评论
   app.post('/comment/:id/del', noopRequestHandler);  // 删除评论
 

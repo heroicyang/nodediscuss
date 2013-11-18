@@ -26,7 +26,7 @@ var CommentSchema = new Schema({
   },
   commentId: String,
   content: String,
-  contentHtml: String,
+  htmlContent: String,
   author: {
     id: {
       type: String,

@@ -10,6 +10,9 @@ var async = require('async'),
   _ = require('lodash'),
   api = require('../../api');
 
+/**
+ * 话题列表页面
+ */
 exports.index = function(req, res, next) {
   var error = _.extend(req.flash('err'), {
     showInGlobal: true
@@ -40,6 +43,9 @@ exports.index = function(req, res, next) {
   });
 };
 
+/**
+ * 节点下的话题列表页面
+ */
 exports.queryByTag = function(req, res, next) {
   var tab = req.query.tab,
     tagName = req.params.name,
@@ -47,7 +53,7 @@ exports.queryByTag = function(req, res, next) {
 
   queryOpts.conditions = queryOpts.conditions || {};
   queryOpts.conditions['tag.name'] = tagName;
-  
+
   async.parallel({
     topics: function(next) {
       api.topic.query(queryOpts, function(err, topics) {
@@ -69,6 +75,9 @@ exports.queryByTag = function(req, res, next) {
   });
 };
 
+/**
+ * 发布新话题
+ */
 exports.create = function(req, res, next) {
   var method = req.method.toLowerCase();
 
@@ -109,6 +118,9 @@ exports.create = function(req, res, next) {
   }
 };
 
+/**
+ * 话题详细页面
+ */
 exports.get = function(req, res, next) {
   var id = req.params.id;
   async.parallel({
@@ -116,6 +128,13 @@ exports.get = function(req, res, next) {
       // 此处调用增加阅读数量的方法，因为该方法也会返回最新的 topic 信息
       api.topic.increaseViewsCount(id, function(err, latestTopic) {
         next(err, latestTopic);
+      });
+    },
+    comments: function(next) {
+      api.comment.query({
+        conditions: { topicId: id }
+      }, function(err, comments) {
+        next(err, comments);
       });
     }
   }, function(err, results) {

@@ -4,7 +4,7 @@ div.media.cell
       img(src!="#{topic.author.avatar}", alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
   div.media-body
     div.pull-right.comment-count
-      a(href="#")
+      a(href="/topic/#{topic._id}#comment")
         span.badge #{topic.commentCount}
     div.info
       div.media-heading.title

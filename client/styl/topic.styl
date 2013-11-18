@@ -84,9 +84,40 @@
       margin-right 15px
       color #999
 
-  .add-comment
-    .avatar
-      width 48px
+  .avatar
+    width 48px
+
+  .comments
+    .panel-body
+      padding-top 0
+      padding-bottom 0
+
+    .row
+      padding 10px 15px
+      border-top 1px solid #dddddd
+      &:first-child
+        border-top 0
+
+    .action
+      a
+        color #999
+
+    .meta
+      margin-bottom 5px
+      padding-right 50px
+      color #999
+
+      a
+        font-weight bold
+        color #999
+      span
+        margin-left 10px
+
+  .no-comment
+    border-style dashed
+
+    .panel-body
+      text-align center
 
 // 话题编辑器页面
 .topic-editor

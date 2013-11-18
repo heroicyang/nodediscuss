@@ -25,16 +25,11 @@ module.exports = exports = function(app) {
   app.get('/setting', noopRequestHandler);
   app.post('/setting', noopRequestHandler);
 
-  // 节点相关的路由配置
-  app.get('/tags', noopRequestHandler);  // 获取所有节点
-  app.get('/tags/top', noopRequestHandler);  // 获取热门节点
-  app.get('/tag/:name', noopRequestHandler);  // 该节点下的所有话题
-  app.get('/section/:name/tags', noopRequestHandler);  // 获取该节点组的所有节点
-
   // 话题相关的路由配置
-  app.get('/topic/create', auth.authRequired, topicController.create);   // 发布新话题页面
+  app.get('/topic/create', auth.authRequired, topicController.create);
   app.post('/topic/create', auth.authRequired, topicController.create);
-  app.get('/topics', noopRequestHandler);  // 各种状态的话题列表
+  app.get('/tag/:name', topicController.queryByTag);  // 该节点下的所有话题
+  app.get('/topics', topicController.index);
   app.get('/topic/:id', topicController.get);  // 详细话题页面
   app.get('/topic/:id/edit', noopRequestHandler); // 话题编辑页面
   app.post('/topic/:id/edit', noopRequestHandler);  // 更新话题

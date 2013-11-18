@@ -25,6 +25,9 @@ module.exports = exports = function() {
     res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.user = req.user;
 
+    res.locals.path = req.path;
+    res.locals.query = req.query;
+    
     res.locals._ = _;
     res.locals.moment = moment;
     next();

@@ -8,7 +8,7 @@ div.media.cell
         span.badge #{topic.commentCount}
     div.info
       div.media-heading.title
-          a(href="/topic/#{topic.id}") #{topic.title}
+          a(href="/topic/#{topic._id}") #{topic.title}
       p.meta
         a(href="/tag/#{topic.tag.name}").tag
           span.label.label-default #{topic.tag.name}

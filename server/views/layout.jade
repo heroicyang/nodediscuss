@@ -20,15 +20,18 @@ html(lang="zh-CN")
               img(src="/img/logo.png", title="Node.js 中文社区").img-responsive
           div.navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
-              li.active: a(href="/") 社区
+              li(class=(path === '/' || path === '/topics') ? "active" : "")
+                a(href="/") 社区
               li: a(href="/wiki") Wiki
               if isAuthenticated
                 li: a(href="/user/#{user.username}") #{user.nickname}
                 li: a(href="/setting") 设置
                 li: a(href="javascript:;") 退出
               else
-                li: a(href="/signup") 注册
-                li: a(href="/signin") 登录
+                li(class=(path === '/signup') ? "active" : "")
+                  a(href="/signup") 注册
+                li(class=(path === '/signin') ? "active" : "")
+                  a(href="/signin") 登录
             div.col-sm-4.col-md-4.col-lg-4.pull-left
               form(role="search", method="GET", action="/search").navbar-form
                 div.input-group

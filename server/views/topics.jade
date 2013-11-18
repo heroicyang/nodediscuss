@@ -13,10 +13,14 @@ block content
         div.sorts
           div.pull-right
             span.fa.fa-sort-amount-desc
-            a(href="#").condition.active: span 默认
-            a(href="#").condition: span 优质话题
-            a(href="#").condition: span 无人回复
-            a(href="#").condition: span 最新创建
+            a(href="#{path}",
+              class=query.tab ? "" : "active").condition: span 默认
+            a(href="#{path}?tab=excellent",
+              class=(query.tab === 'excellent') ? "active" : "").condition: span 优质话题
+            a(href="#{path}?tab=no_comment",
+              class=(query.tab === 'no_comment') ? "active" : "").condition: span 无人回复
+            a(href="#{path}?tab=latest",
+              class=(query.tab === 'latest') ? "active" : "").condition: span 最新创建
           div.clearfix
         for topic in topics
           include topic_cell

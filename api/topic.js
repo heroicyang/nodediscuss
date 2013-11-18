@@ -7,57 +7,39 @@
  * Module dependencies
  */
 var async = require('async'),
-  marked = require('marked'),
-  hljs = require('highlight.js'),
+  marked = require('../utils/marked'),
   models = require('../models'),
   Topic = models.Topic;
 
-marked.setOptions({
-  gfm: true,
-  highlight: function(code, lang) {
-    if (lang) {
-      return hljs.highlight(lang, code).value;
-    } else {
-      return hljs.highlightAuto(code).value;
-    }
-  },
-  tables: true,
-  breaks: true,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-  langPrefix: 'lang-'
-});
-
 /**
  * 根据查询条件获取话题
- * @param  {Object}   conditions 查询条件
  * @param  {Object}   options  查询选项
+ *  - conditions  {Object}   查询条件，默认查询全部
+ *  - pageIndex   {Number}   当前页数，默认为第1页
+ *  - pageSize    {Number}   每页记录条数，默认20条
+ *  - fields      {Object|String}  需要返回的字段，默认全部
+ *  - sort        {Object}   排序条件，默认按创建时间和最后评论时间逆序排序
  * @param  {Function} callback 回调函数
  *  - err     MongooseError
  *  - topics  话题数组
  */
-exports.query = function(conditions, options, callback) {
-  if (typeof conditions === 'function') {
-    callback = conditions;
-    conditions = {};
-    options = {};
-  } else if (typeof options === 'function') {
+exports.query = function(options, callback) {
+  if (typeof options === 'function') {
     callback = options;
     options = {};
   }
 
-  var pageIndex = options.pageIndex || 1,
+  var conditions = options.conditions,
+    pageIndex = options.pageIndex || 1,
     pageSize = options.pageSize || 20,
     fields = options.fields || null,
     sort = options.sort || {
       lastCommentedAt: -1,
       createdAt: -1
     },
-    query;
+    query = Topic.query();
 
-  query = Topic.find(conditions)
+  query = query.find(conditions)
     .sort(sort);
 
   if (fields) {
@@ -67,85 +49,6 @@ exports.query = function(conditions, options, callback) {
   query = query.skip((pageIndex - 1) * pageSize).limit(pageSize);
 
   query.exec(callback);
-};
-
-/**
- * 获取精华话题
- * @param  {Object}   options  查询选项
- * @param  {Function} callback  回调函数
- *  - err    MongooseError
- *  - topics 话题数组
- */
-exports.queryByExcellent = function(options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-
-  exports.query({
-    excellent: true
-  }, options, callback);
-};
-
-/**
- * 获取最新创建的话题
- * @param  {Object}   options  查询选项
- * @param  {Function} callback  回调函数
- *  - err     MongooseError
- *  - topics  话题数组
- */
-exports.queryLatest = function(options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-  options.sort = {
-    createdAt: -1
-  };
-  
-  exports.query({}, options, callback);
-};
-
-/**
- * 获取没有评论的话题，并按创建时间倒序排序
- * @param  {Object}   options  查询选项
- * @param  {Function} callback    回调函数
- *  - err     MongooseError
- *  - topics   话题数组
- */
-exports.queryNoComments = function(options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-  options.sort = {
-    createdAt: -1
-  };
-
-  exports.query({
-    commentCount: {
-      $lte: 0
-    }
-  }, options, callback);
-};
-
-/**
- * 根据节点名获取该节点下的话题
- * @param  {String}   tagName  节点名
- * @param  {Object}   options  查询选项
- * @param  {Function} callback 回调函数
- *  - err     MongooseError
- *  - topics   话题数组
- */
-exports.queryByTag = function(tagName, options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-
-  exports.query({
-    'tag.name': tagName
-  }, options, callback);
 };
 
 /**

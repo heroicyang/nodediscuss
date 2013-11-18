@@ -24,7 +24,7 @@ html(lang="zh-CN")
                 a(href="/") 社区
               li: a(href="/wiki") Wiki
               if isAuthenticated
-                li: a(href="/user/#{user.username}") #{user.nickname}
+                li: a(href="/user/#{loggedUser.username}") #{loggedUser.nickname}
                 li: a(href="/setting") 设置
                 li: a(href="javascript:;") 退出
               else

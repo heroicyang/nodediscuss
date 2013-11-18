@@ -2,28 +2,28 @@ div#user-card.panel.panel-default
   div.panel-body
     div.media
       div.pull-left.author-avatar
-        a(href="/user/#{user.username}")
-          img(src="#{user.avatar}", alt="").media-object.img-rounded.img-responsive
+        a(href="/user/#{loggedUser.username}")
+          img(src="#{loggedUser.avatar}", alt="").media-object.img-rounded.img-responsive
       div.media-body
         div.media-heading
-          a(href="/user/#{user.username}").username #{user.nickname}
+          a(href="/user/#{loggedUser.username}").username #{loggedUser.nickname}
         p.tagline 测试个性签名...测试个性签名...测试个性签名...测试个性签名...
-        if user.tagline
-          p.tagline #{user.tagline}
+        if loggedUser.tagline
+          p.tagline #{loggedUser.tagline}
   ul.list-group
     li.list-group-item
       div.row.state
         div.col-xs-4.col-sm-4
           div
-            a(href="#"): strong 40
+            a(href="#"): strong #{loggedUser.favoriteTagCount}
           div 节点收藏
         div.col-xs-4.col-sm-4
           div
-            a(href="#"): strong 20
+            a(href="#"): strong #{loggedUser.favoriteTopicCount}
           div 话题收藏
         div.col-xs-4.col-sm-4
           div
-            a(href="#"): strong 50
+            a(href="#"): strong #{loggedUser.followingCount}
           div 关注
   div.panel-footer
     a(href="#").notification
@@ -32,4 +32,4 @@ div#user-card.panel.panel-default
     div.pull-right.score
       span(data-toggle="tooltip", title="积分")
         i.fa.fa-tint
-        | &#32;10
+        | &#32;#{loggedUser.score || 0}

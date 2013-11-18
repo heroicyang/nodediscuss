@@ -60,7 +60,7 @@ block content
                   div.media-body
                     if isAuthenticated
                       div.pull-right.action
-                        if comment.author.id !== user.id
+                        if comment.author.id !== loggedUser.id
                           a(href="#", title="回复")
                             i.fa.fa-reply
                         else
@@ -78,8 +78,8 @@ block content
       div.add-comment
         div.media
           div.pull-left.avatar
-            a(href="/user/#{user.username}").avatar
-              img(src!="#{user.avatar}", alt="#{user.nickname}").media-object.img-rounded.img-responsive
+            a(href="/user/#{loggedUser.username}").avatar
+              img(src!="#{loggedUser.avatar}", alt="#{loggedUser.nickname}").media-object.img-rounded.img-responsive
           div.media-body
             div.topic-editor
               form(role="form", method="POST", action="/comment/create").form-horizontal

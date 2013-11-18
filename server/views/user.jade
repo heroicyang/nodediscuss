@@ -1,0 +1,33 @@
+extends layout
+block content
+  div#profile.panel.panel-default
+    div.panel-body
+      div.media
+        div.pull-left.author-avatar
+          a(href="/user/#{user.username}")
+            img(src!="#{user.avatar}",
+                alt="#{user.nickname}").media-object.img-rounded.img-responsive
+        div.media-body
+    ul.list-group
+      li.list-group-item 这里放置各种绑定的信息
+      li.list-group-item 这里是个人简介
+  div.panel.panel-default
+    div.panel-heading
+      span #{user.nickname} 最近创建的话题
+    div.panel-body
+      div 话题列表
+    div.panel-footer
+      a(href="#") &#187; 查看更多#{user.nickname}创建的话题
+  div.panel.panel-default
+    div.panel-heading
+      span #{user.nickname} 最近评论的话题
+    div.panel-body
+      div 话题列表
+    div.panel-footer
+      a(href="#") &#187; 查看更多#{user.nickname}评论的话题
+block sidebar
+  div.panel.panel-default
+    div.panel-heading
+      span #{user.nickname} 在 Github 上的代码仓库
+    div.panel-body
+      div 仓库列表

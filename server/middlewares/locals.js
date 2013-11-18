@@ -23,7 +23,7 @@ module.exports = exports = function() {
     res.locals.page.title = config.title;
 
     res.locals.isAuthenticated = req.isAuthenticated();
-    res.locals.user = req.user;
+    res.locals.loggedUser = req.user;
 
     res.locals.path = req.path;
     res.locals.query = req.query;

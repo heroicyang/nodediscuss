@@ -22,7 +22,7 @@ module.exports = exports = function(app) {
   app.get('/signin', auth.unreachableWhenAuthorized, userController.signin);
   app.post('/signin', auth.unreachableWhenAuthorized, userController.signin);
   app.get('/active', userController.activate);
-  app.get('/user/:username', noopRequestHandler);
+  app.get('/user/:username', userController.index);
   app.get('/setting', noopRequestHandler);
   app.post('/setting', noopRequestHandler);
 

@@ -81,3 +81,15 @@ exports.activate = function(req, res, next) {
     res.redirect('/signin');
   });
 };
+
+exports.index = function(req, res, next) {
+  var username = req.params.username;
+  api.user.findByUsername(username, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+    res.render('user', {
+      user: user
+    });
+  });
+};

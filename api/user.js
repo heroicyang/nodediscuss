@@ -72,7 +72,7 @@ exports.findById = function(id, callback) {
  *  - user   用户对象
  */
 exports.findByUsername = function(username, callback) {
-  return User.findByUsername(username, callback);
+  return User.findOneByUsername(username, callback);
 };
 
 /**
@@ -83,7 +83,7 @@ exports.findByUsername = function(username, callback) {
  *  - user   用户对象
  */
 exports.findByEmail = function(email, callback) {
-  return User.findByEmail(email, callback);
+  return User.findOneByEmail(email, callback);
 };
 
 /**

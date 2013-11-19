@@ -10,7 +10,8 @@ var auth = require('./authorization'),
   controllers = require('./controllers'),
   userController = controllers.user,
   topicController = controllers.topic,
-  commentController = controllers.comment;
+  commentController = controllers.comment,
+  notificationController = controllers.notification;
 var noopRequestHandler = function(req, res, next) {};
 
 module.exports = exports = function(app) {
@@ -44,7 +45,7 @@ module.exports = exports = function(app) {
   app.post('/comment/:id/del', noopRequestHandler);  // 删除评论
 
   // 通知相关的路由配置
-  app.get('/notifications', noopRequestHandler);  // 查看通知的页面
+  app.get('/notifications', auth.authRequired, notificationController.index);  // 查看通知的页面
 
   // 单一文档页面的路由
   // app.get('/:slug', noopRequestHandler);

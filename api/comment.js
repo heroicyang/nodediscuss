@@ -58,3 +58,7 @@ exports.query = function(options, callback) {
 
   query.exec(callback);
 };
+
+exports.getById = function(id, callback) {
+  Comment.findById(id, callback);
+};

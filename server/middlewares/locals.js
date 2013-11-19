@@ -20,7 +20,11 @@ module.exports = exports = function() {
     res.locals.breadcrumbs = req.breadcrumbs();
 
     res.locals.page = {};
+    res.locals.page.name = config.name;
     res.locals.page.title = config.title;
+    res.locals.page.description = config.description;
+
+    res.locals.constants = require('../../models').constants;
 
     res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.loggedUser = req.user;

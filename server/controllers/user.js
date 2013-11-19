@@ -103,7 +103,22 @@ exports.index = function(req, res, next) {
         conditions: { 'author.username': username },
         sort: { createdAt: -1 }
       }, function(err, comments) {
-        next(err, comments);
+        if (err) {
+          return next(err);
+        }
+        async.map(comments, function(comment, next) {
+          api.topic.getById(comment.topicId, function(err, topic) {
+            if (err) {
+              return next(err);
+            }
+            _.extend(comment, {
+              topic: topic
+            });
+            next(null, comment);
+          });
+        }, function(err, comments) {
+          next(err, comments);
+        });
       });
     }
   }, function(err, results) {

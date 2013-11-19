@@ -18,3 +18,37 @@
 
     ul
       margin-bottom 0
+
+#latest-comments
+  .list-group-item
+    padding-top 0
+
+    .describe
+      position relative
+      border-bottom 1px solid #ddd
+      padding 10px 15px
+      background-image linear-gradient(#fcfcfc, #eaeaea)
+      background-repeat repeat-x
+      color #999
+      font-size 13px
+      &:after
+        content ''
+        display block
+        height 0
+        width 0
+        border 8px solid #fff
+        border-width 0 8px 8px 8px
+        border-color rgba(238, 238, 238, 0) rgba(238, 238, 238, 0) #fff rgba(238, 238, 238, 0)
+        position absolute
+        left 20px
+        bottom -2px
+
+      .title
+        padding-right 70px
+
+      a
+        color #666
+
+    .comment-content
+      padding-top 10px
+      margin-bottom -5px

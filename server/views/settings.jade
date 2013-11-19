@@ -1,0 +1,108 @@
+extends layout
+block content
+  div.panel.panel-default
+    div.panel-heading
+      include breadcrumb
+    div.panel-body
+      include error_alert
+      form(role="form", method="POST", action="/settings").form-horizontal
+        div.form-group
+          label.col-xs-3.col-sm-3.control-label 用户名
+          div.col-xs-6.col-sm-6
+            p.form-control-static #{loggedUser.username}
+        div.form-group
+          label.col-xs-3.col-sm-3.control-label Email
+          div.col-xs-6.col-sm-6
+            p.form-control-static #{loggedUser.email}
+        div.form-group
+          label(for="nickname").col-sm-3.control-label 昵称
+          div.col-sm-6
+            input(type="text",
+                  name="nickname",
+                  value="#{loggedUser.nickname}")#nickname.form-control
+        div.form-group
+          label(for="website").col-sm-3.control-label 个人网站
+          div.col-sm-6
+            input(type="text",
+                  name="website",
+                  value="#{loggedUser.website || ''}")#website.form-control
+        div.form-group
+          label(for="location").col-sm-3.control-label 所在地
+          div.col-sm-6
+            input(type="text",
+                  name="location",
+                  value="#{loggedUser.location || ''}")#location.form-control
+        div.form-group
+          label(for="tagline").col-sm-3.control-label 签名
+          div.col-sm-6
+            input(type="text",
+                  name="tagline",
+                  value="#{loggedUser.tagline || ''}")#tagline.form-control
+        div.form-group
+          label(for="bio").col-sm-3.control-label 个人简介
+          div.col-sm-6
+            textarea(name="bio", rows="5")#bio.form-control #{loggedUser.bio || ''}
+        div.form-group
+          label(for="twitter").col-sm-3.control-label Twitter
+          div.col-sm-6
+            input(type="text",
+                  name="twitter",
+                  value="#{loggedUser.twitter || ''}")#twitter.form-control
+        div.form-group
+          label(for="github").col-sm-3.control-label GitHub Username
+          div.col-sm-6
+            input(type="text",
+                  name="github",
+                  value="#{loggedUser.github || ''}")#github.form-control
+        div.form-group
+          div.col-sm-offset-3.col-sm-6
+            input(type="hidden", name="_csrf", value="#{csrfToken}")
+            button(type="submit").btn.btn-primary 保存设置
+  div#settings-avatar.panel.panel-default
+    div.panel-heading
+      span 头像
+    div.panel-body
+      div.form-horizontal
+        div.form-group
+          label.col-sm-3.control-label 当前头像
+          div.col-sm-6.avatars
+            img(src!="#{loggedUser.avatar}",
+                alt="#{loggedUser.nickname}").avatar-80.img-rounded.img-responsive.pull-left
+            img(src!="#{loggedUser.avatar}",
+                alt="#{loggedUser.nickname}").avatar-64.img-rounded.img-responsive.pull-left
+            img(src!="#{loggedUser.avatar}",
+                alt="#{loggedUser.nickname}").avatar-48.img-rounded.img-responsive.pull-left
+      div.row.instruction
+        span CNode 使用 
+          a(href="http://en.wikipedia.org/wiki/Gravatar",
+            target="_blank") Gravatar 
+          | 提供的头像服务，与你的 Email 关联，如需更换头像请在 
+          a(href="http://en.gravatar.com/",
+            target="_blank") Gravatar 
+          | 注册或登录后更改。
+  div.panel.panel-default
+    div.panel-heading
+      span 更改密码
+      div.pull-right
+        span: small 如果不更改密码，请留空
+    div.panel-body
+      form(role="form", method="POST", action="/password/change").form-horizontal
+        div.form-group
+          label(for="old-password").col-sm-3.control-label 当前密码
+          div.col-sm-6
+            input(type="password", name="oldPassword")#old-password.form-control
+        div.form-group
+          label(for="new-password").col-sm-3.control-label 新密码
+          div.col-sm-6
+            input(type="password", name="newPassword")#new-password.form-control
+        div.form-group
+          label(for="new-password2").col-sm-3.control-label 确认新密码
+          div.col-sm-6
+            input(type="password", name="newPassword2")#new-password2.form-control
+        div.form-group
+          div.col-sm-offset-3.col-sm-6
+            input(type="hidden", name="_csrf", value="#{csrfToken}")
+            button(type="submit").btn.btn-primary 更改密码
+block sidebar
+  div.hidden-xs
+    include ./sidebar/user_card

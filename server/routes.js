@@ -23,8 +23,8 @@ module.exports = exports = function(app) {
   app.post('/signin', auth.unreachableWhenAuthorized, userController.signin);
   app.get('/active', userController.activate);
   app.get('/user/:username', userController.index);
-  app.get('/setting', noopRequestHandler);
-  app.post('/setting', noopRequestHandler);
+  app.get('/settings', auth.authRequired, userController.settings);
+  app.post('/settings', auth.authRequired, userController.settings);
 
   // 话题相关的路由配置
   app.get('/topic/create', auth.authRequired, topicController.create);

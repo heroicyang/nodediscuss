@@ -128,3 +128,20 @@ exports.index = function(req, res, next) {
     res.render('user', results);
   });
 };
+
+exports.settings = function(req, res, next) {
+  var method = req.method.toLowerCase();
+
+  if ('get' === method) {
+    api.user.findById(req.user.id, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      req.breadcrumbs('设置');
+      res.render('settings', {
+        loggedUser: user
+      });
+    });
+    return ;
+  }
+};

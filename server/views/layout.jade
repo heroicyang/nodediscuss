@@ -26,7 +26,8 @@ html(lang="zh-CN")
               if isAuthenticated
                 li(class=(path === '/user/#{loggedUser.username}') ? "active" : "")
                   a(href="/user/#{loggedUser.username}") #{loggedUser.nickname}
-                li: a(href="/setting") 设置
+                li(class=(path === '/settings') ? "active" : "")
+                  a(href="/settings") 设置
                 li: a(href="javascript:;") 退出
               else
                 li(class=(path === '/signup') ? "active" : "")

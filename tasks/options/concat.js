@@ -10,8 +10,12 @@ module.exports = exports = {
   development: {
     files: [{
       src: [
-        'client/js/libs/jquery-1.8.3.js',
-        'client/js/libs/bootstrap.js'
+        'client/js/lib/jquery.js',
+        'client/js/lib/json2.js',
+        'client/js/lib/lodash.underscore.js',
+        'client/js/lib/backbone.js',
+        'client/js/lib/bootstrap.js',
+        'client/js/lib/require.js'
       ],
       dest: '<%= dest %>/js/lib.js'
     }]

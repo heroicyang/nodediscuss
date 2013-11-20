@@ -7,6 +7,7 @@ var NC = window.NC = {
   },
   loadModule: function(options, callback) {
     var moduleName = options.name;
+    callback = callback || NC.NOOP;
     NC.Loader.require([moduleName], function(Module) {
       callback(new Module(options));
     });

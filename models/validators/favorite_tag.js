@@ -25,7 +25,7 @@ module.exports = exports = function(schema) {
  */
 function addUserIdValidators(schema) {
   schema.path('userId')
-    .required(true, 'A user id is required!')
+    .required(true, '必须提供用户 id!')
     .validate(function(userId) {
       try {
         userId = new ObjectId(userId);
@@ -33,7 +33,7 @@ function addUserIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid user id!');
+    }, '不是有效的用户 id!');
 }
 
 /**
@@ -42,7 +42,7 @@ function addUserIdValidators(schema) {
  */
 function addTagValidators(schema) {
   schema.path('tag.id')
-    .required(true, 'Tag can not be blank!')
+    .required(true, '必须提供节点 id!')
     .validate(function(tagId) {
       try {
         tagId = new ObjectId(tagId);
@@ -50,7 +50,7 @@ function addTagValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid tag id!')
+    }, '不是有效的节点 id!')
     .validate(function(tagId, done) {
       var Tag = this.model('Tag'),
         self = this;
@@ -65,5 +65,5 @@ function addTagValidators(schema) {
         });
         done(true);
       });
-    }, 'Tag does not exist.');
+    }, '节点不存在。');
 }

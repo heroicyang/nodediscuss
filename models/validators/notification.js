@@ -30,7 +30,7 @@ module.exports = exports = function(schema) {
  */
 function addMasterIdValidators(schema) {
   schema.path('masterId')
-    .required(true, 'Master id is required!')
+    .required(true, '必须提供被提醒方 id!')
     .validate(function(masterId) {
       try {
         masterId = new ObjectId(masterId);
@@ -38,7 +38,7 @@ function addMasterIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid master id!');
+    }, '被提醒方 id 不是有效的用户 id!');
 }
 
 /**
@@ -47,7 +47,7 @@ function addMasterIdValidators(schema) {
  */
 function addUserIdValidators(schema) {
   schema.path('userId')
-    .required(true, 'User id is required!')
+    .required(true, '必须提供用户 id!')
     .validate(function(userId) {
       try {
         userId = new ObjectId(userId);
@@ -55,7 +55,7 @@ function addUserIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid user id!');
+    }, '不是有效的用户 id!');
 }
 
 /**
@@ -64,10 +64,10 @@ function addUserIdValidators(schema) {
  */
 function addTypeValidators(schema) {
   schema.path('type')
-    .required(true, 'Type is required!')
+    .required(true, '必须提供提醒类型!')
     .enum({
       values: _.values(constants.NOTIFICATION_TYPE),
-      message: 'Invalid notification type!'
+      message: '不是有效的提醒类型!'
     });
 }
 
@@ -84,7 +84,7 @@ function addTopicIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid topic id!');
+    }, '不是有效的话题 id!');
 }
 
 /**
@@ -100,7 +100,7 @@ function addMasterCommentIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid master comment id!');
+    }, '不是有效的评论 id!');
 }
 
 /**
@@ -116,5 +116,5 @@ function addCommentIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid comment id!');
+    }, '不是有效的评论 id!');
 }

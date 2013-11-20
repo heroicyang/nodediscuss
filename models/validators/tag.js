@@ -25,7 +25,7 @@ module.exports = exports = function(schema) {
  */
 function addNameValidators(schema) {
   schema.path('name')
-    .required(true, 'A tag name is required!');
+    .required(true, '节点名称必填!');
 }
 
 /**
@@ -34,7 +34,7 @@ function addNameValidators(schema) {
  */
 function addSectionValidators(schema) {
   schema.path('section.id')
-    .required(true, 'Section can not be blank!')
+    .required(true, '必须提供节点组 id!')
     .validate(function(sectionId) {
       try {
         sectionId = new ObjectId(sectionId);
@@ -42,7 +42,7 @@ function addSectionValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid section id!')
+    }, '不是有效的节点组 id!')
     .validate(function(sectionId, done) {
       var Section = this.model('Section'),
         self = this;
@@ -57,5 +57,5 @@ function addSectionValidators(schema) {
         });
         done(true);
       });
-    }, 'Section does not exist.');
+    }, '该节点组不存在。');
 }

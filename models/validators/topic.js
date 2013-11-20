@@ -26,13 +26,13 @@ module.exports = exports = function(schema) {
  */
 function addTitleValidators(schema) {
   schema.path('title')
-    .required(true, 'A title is required!')
+    .required(true, '标题必填!')
     .validate(function(title) {
       return title.length >= 10;
-    }, 'Title must be at least 10 characters.')
+    }, '标题至少为10个字符。')
     .validate(function(title) {
       return title.length <= 100;
-    }, 'Title must be less than 100 characters.');
+    }, '标题最多为100个字符。');
 }
 
 /**
@@ -41,7 +41,7 @@ function addTitleValidators(schema) {
  */
 function addTagValidators(schema) {
   schema.path('tag.id')
-    .required(true, 'Tag can not be blank!')
+    .required(true, '节点不能为空!')
     .validate(function(tagId) {
       try {
         tagId = new ObjectId(tagId);
@@ -49,7 +49,7 @@ function addTagValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid tag id!')
+    }, '不是有效的节点 id!')
     .validate(function(tagId, done) {
       var Tag = this.model('Tag'),
         self = this;
@@ -64,7 +64,7 @@ function addTagValidators(schema) {
         });
         done(true);
       });
-    }, 'Tag does not exist.');
+    }, '该节点不存在。');
 }
 
 /**
@@ -73,7 +73,7 @@ function addTagValidators(schema) {
  */
 function addAuthorValidators(schema) {
   schema.path('author.id')
-    .required(true, 'Author can not be blank!')
+    .required(true, '必须提供作者 id!')
     .validate(function(authorId) {
       try {
         authorId = new ObjectId(authorId);
@@ -81,7 +81,7 @@ function addAuthorValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid author id!')
+    }, '不是有效的作者 id!')
     .validate(function(authorId, done) {
       var User = this.model('User'),
         self = this;
@@ -98,5 +98,5 @@ function addAuthorValidators(schema) {
         });
         done(true);
       });
-    }, 'Author does not exist.');
+    }, '该作者不存在。');
 }

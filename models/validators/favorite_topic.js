@@ -24,7 +24,7 @@ module.exports = exports = function(schema) {
  */
 function addUserIdValidators(schema) {
   schema.path('userId')
-    .required(true, 'A user id is required!')
+    .required(true, '必须提供用户 id!')
     .validate(function(userId) {
       try {
         userId = new ObjectId(userId);
@@ -32,7 +32,7 @@ function addUserIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid user id!');
+    }, '不是有效的用户 id!');
 }
 
 /**
@@ -41,7 +41,7 @@ function addUserIdValidators(schema) {
  */
 function addTopicIdValidators(schema) {
   schema.path('topicId')
-    .required(true, 'A topic id is required!')
+    .required(true, '必须提供话题 id!')
     .validate(function(topicId) {
       try {
         topicId = new ObjectId(topicId);
@@ -49,5 +49,5 @@ function addTopicIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid topic id!');
+    }, '不是有效的话题 id!');
 }

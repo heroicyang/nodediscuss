@@ -26,10 +26,10 @@ module.exports = exports = function(schema) {
  */
 function addEmailValidators(schema) {
   schema.path('email')
-    .required('true', 'An email is required!')
+    .required('true', '电子邮件地址必填!')
     .validate(function(email) {
       return !!validate(email).isEmail();
-    }, 'Doesn\'t look like a valid email.')
+    }, '不像是有效的电子邮件地址。')
     .validate(function(email, done) {
       var self = this,
         User = this.model(this.constructor.modelName);
@@ -42,7 +42,7 @@ function addEmailValidators(schema) {
         }
         done(true);
       });
-    }, 'This email is already registered.');
+    }, '该邮件地址已被注册。');
 }
 
 /**
@@ -51,14 +51,14 @@ function addEmailValidators(schema) {
  */
 function addUsernameValidators(schema) {
   schema.path('username')
-    .required('true', 'A username is required!')
+    .required('true', '用户名不能为空!')
     .validate(function(username) {
       return username.length >= 6;
-    }, 'Username must be at least 6 characters.')
+    }, '用户名至少为6位。')
     .validate(function(username) {
       return username.length <= 16;
-    }, 'Username must be less than 16 characters.')
-    .match(/^[a-zA-Z0-9\-_]+$/, 'Invalid username! Alphanumerics only.')
+    }, '用户名最多为16位。')
+    .match(/^[a-zA-Z0-9\-_]+$/, '用户名无效! 仅支持字母与数字。')
     .validate(function(username, done) {
       var self = this,
         User = this.model(this.constructor.modelName);
@@ -71,7 +71,7 @@ function addUsernameValidators(schema) {
         }
         done(true);
       });
-    }, 'This username is already taken.');
+    }, '该用户名已被注册。');
 }
 
 /**
@@ -85,19 +85,19 @@ function addPasswordValidators(schema) {
         return !!this.password;
       }
       return true;
-    }, 'Password cannot be blank.')
+    }, '密码不能为空!')
     .validate(function() {
       if (!this.password) {
         return true;
       }
       return this.password.length >= 6;
-    }, 'Password must be at least 6 characters.')
+    }, '密码至少为6位。')
     .validate(function() {
       if (!this.password) {
         return true;
       }
       return this.password.length <= 31;
-    }, 'Password must be less than 31 characters.');
+    }, '密码最多为31位');
 }
 
 /**
@@ -111,5 +111,5 @@ function addWebsiteValidators(schema) {
         return !!validate(website).isUrl();
       }
       return true;
-    }, 'Doesn\'t look like a valid website url.');
+    }, '不像是有效的网站地址。');
 }

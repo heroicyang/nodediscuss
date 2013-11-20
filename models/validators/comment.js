@@ -26,7 +26,7 @@ module.exports = exports = function(schema) {
  */
 function addTopicIdValidators(schema) {
   schema.path('topicId')
-    .required(true, 'A topic id is required!')
+    .required(true, '必须提供话题 id!')
     .validate(function(topicId) {
       try {
         topicId = new ObjectId(topicId);
@@ -34,7 +34,7 @@ function addTopicIdValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid topic id!');
+    }, '不是有效的话题 id!');
 }
 
 /**
@@ -43,7 +43,7 @@ function addTopicIdValidators(schema) {
  */
 function addContentValidators(schema) {
   schema.path('content')
-    .required(true, 'Comment content is required!')
+    .required(true, '评论内容不能为空!')
     .validate(function(content, done) {
       // 如果触发本次验证是对 comment 进行软删除，那就直接跳过
       if (this.deleted) {
@@ -73,7 +73,7 @@ function addContentValidators(schema) {
 
         done(!repeated);
       });
-    }, 'Comment can not be repeated.');
+    }, '不能发布重复评论!');
 }
 
 /**
@@ -82,7 +82,7 @@ function addContentValidators(schema) {
  */
 function addAuthorValidators(schema) {
   schema.path('author.id')
-    .required(true, 'Author can not be blank!')
+    .required(true, '必须提供评论用户 id!')
     .validate(function(authorId) {
       try {
         authorId = new ObjectId(authorId);
@@ -90,7 +90,7 @@ function addAuthorValidators(schema) {
         return false;
       }
       return true;
-    }, 'Invalid author id!')
+    }, '不是有效的用户 id!')
     .validate(function(authorId, done) {
       var User = this.model('User'),
         self = this;
@@ -107,5 +107,5 @@ function addAuthorValidators(schema) {
         });
         done(true);
       });
-    }, 'Author does not exist.');
+    }, '评论用户不存在。');
 }

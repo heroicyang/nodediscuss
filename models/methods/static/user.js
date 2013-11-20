@@ -115,7 +115,7 @@ exports.changePassword = function(userData, callback) {
     newPassword2 = userData.newPassword2;
 
   if (newPassword !== newPassword2) {
-    return callback(new Error('Your new passwords do not match.'));
+    return callback(new Error('两次输入的密码不匹配!'));
   }
 
   this.findOne()
@@ -129,7 +129,7 @@ exports.changePassword = function(userData, callback) {
         return callback(err);
       }
       if (!user.authenticate(oldPassword)) {
-        return callback(new Error('Your password is incorrect.'));
+        return callback(new Error('当前密码不正确!'));
       }
 
       user.password = newPassword;

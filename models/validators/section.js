@@ -18,5 +18,5 @@ module.exports = exports = function(schema) {
  */
 function addNameValidators(schema) {
   schema.path('name')
-    .required(true, 'A section name is required!');
+    .required(true, '节点组名称必填!');
 }

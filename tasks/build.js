@@ -39,21 +39,12 @@ module.exports = exports = function(grunt) {
 
   function generateAssetsJson(target) {
     // TODO: target=production
-    var assetsJson;
-    var appModules = grunt.file.expand({
-      filter: 'isFile',
-      cwd: 'client/js/app'
-    }, "**");
-
-    appModules = grunt.util._.map(appModules, function(module) {
-      return 'app/' + module;
-    });
-    assetsJson = {
+    var assetsJson = {
       files: [
         'lib.js',
         'app.js',
         'requirejs.config.js'
-      ].concat(appModules)
+      ]
     };
 
     grunt.file.write('assets.json', JSON.stringify(assetsJson, null, '\t'));

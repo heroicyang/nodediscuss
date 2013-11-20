@@ -10,16 +10,16 @@ NC.Module.define('SignupForm',
         this.$form = this.$el;
         this.form = new Form(this.$form, {
           email: [
-            Validator.Required({ msg: 'Email 不能为空' }),
-            Validator.Email({ msg: 'Email 格式不正确，请检查后重新填写' })
+            Validator.Required({ msg: '电子邮件地址必填!' }),
+            Validator.Email({ msg: '不像是有效的电子邮件地址。' })
           ],
           username: [
-            Validator.Required({ msg: '用户名不能为空' }),
-            Validator.AlphaNumeric({ msg: '用户名只能使用字母 a-z 或数字 0-9' }),
+            Validator.Required({ msg: '用户名必填!' }),
+            Validator.AlphaNumeric({ msg: '用户名无效! 仅支持字母与数字。' }),
             Validator.Length({
               min: 6,
               max: 16,
-              msg: '请使用长度为 %s-%s 的字母或数字'
+              msg: '用户名长度为 %s - %s。'
             })
           ],
           password: [
@@ -27,15 +27,15 @@ NC.Module.define('SignupForm',
             Validator.Length({
               min: 6,
               max: 31,
-              msg: '密码长度必须为 %s-%s，请检查'
+              msg: '密码长度为 %s - %s。'
             })
           ],
           repassword: [
-            Validator.Required({ msg: '请再次输入你的密码' }),
+            Validator.Required({ msg: '请再次输入你的密码。' }),
             Validator.Length({
               min: 6,
               max: 31,
-              msg: '密码长度必须为 %s-%s，请检查'
+              msg: '密码长度为 %s - %s。'
             })
           ]
         });

@@ -56,7 +56,7 @@ NC.Loader.define('Validator', [], function() {
     return function(el, callback) {
       var val = el.val(),
         errors = [],
-        msg = options.msg || '该项不能为空';
+        msg = options.msg || '该项必填!';
 
       if (('checkbox' === el.attr('type') &&
             'checked' !== el.attr('checked')) || !val) {
@@ -80,7 +80,7 @@ NC.Loader.define('Validator', [], function() {
     return function(el, callback) {
       var val = el.val(),
         errors = [],
-        msg = options.msg || '该项只能为字母或数字';
+        msg = options.msg || '该项仅支持字母与数字。';
 
       if (val && !val.match(/^[a-zA-Z0-9\-_]+$/)) {
         errors.push(msg);
@@ -108,7 +108,7 @@ NC.Loader.define('Validator', [], function() {
         errors = [],
         max = options.max || Infinity,
         min = options.min || 0,
-        msg = options.msg || '该项长度必须在%s至%s之间';
+        msg = options.msg || '该项长度为 %s 至 %s 之间。';
 
       if (valLen < min || valLen > max) {
         errors.push(format(msg, min, max));
@@ -131,7 +131,7 @@ NC.Loader.define('Validator', [], function() {
     return function(el, callback) {
       var val = el.val(),
         errors = [],
-        msg = options.msg || '不是正确的 Email 格式';
+        msg = options.msg || '不像是有效的电子邮件地址。';
 
       if (val && !val.match(/.+@.+\..+/gi)) {
         errors.push(msg);

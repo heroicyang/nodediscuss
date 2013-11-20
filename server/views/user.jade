@@ -66,7 +66,7 @@ block content
               div.comment-date.pull-right
                 span= moment(comment.createdAt).fromNow()
               div.title
-                span 评论了 #{comment.author.nickname} 创建的话题&#32;
+                span 评论了 #{comment.topic.author.nickname} 创建的话题&#32;
                 i.fa.fa-angle-right
                 a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
             div.comment-content !{comment.htmlContent}

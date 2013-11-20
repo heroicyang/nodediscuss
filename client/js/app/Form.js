@@ -25,6 +25,7 @@ NC.Loader.define('Form', ['Validator'], function(Validator) {
       $el.on('focus', function() {
         $el.next('.help-block.error').remove();
         $el.closest('.form-group').removeClass('has-error');
+        $el.next('.help-block').show();
       });
     });
 
@@ -71,9 +72,11 @@ NC.Loader.define('Form', ['Validator'], function(Validator) {
 
     $el.next('.help-block.error').remove();
     if (errors[0]) {
+      $el.next('.help-block').hide();
       $el.after('<span class="help-block error">' + errors[0] + '</span>');
       $controlGroupEl.addClass('has-error');
     } else {
+      $el.next('.help-block').show();
       $controlGroupEl.removeClass('has-error');
     }
   }

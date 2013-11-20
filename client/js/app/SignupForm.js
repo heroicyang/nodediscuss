@@ -23,7 +23,7 @@ NC.Module.define('SignupForm',
             })
           ],
           password: [
-            Validator.Required({ msg: '密码不能为空' }),
+            Validator.Required({ msg: '密码不能为空。' }),
             Validator.Length({
               min: 6,
               max: 31,

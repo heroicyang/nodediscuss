@@ -57,8 +57,7 @@ block content
           li: strong 最后，这是一个技术社区，请让它保持应有的风貌，大家共同创造一个良好的氛围。
 block sidebar
   if isAuthenticated
-    div.hidden-xs
-      include ./sidebar/user_card
+    include ./sidebar/user_card
   div#markdown-refer.panel.panel-default
     div.panel-heading
       strong Markdown 语法参考

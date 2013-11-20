@@ -112,8 +112,7 @@ block content
                   button(type="submit", data-loading-text="正在评论...").btn.btn-primary 评论
 block sidebar
   if isAuthenticated
-    div.hidden-xs
-      include ./sidebar/user_card
+    include ./sidebar/user_card
   else
     include ./sidebar/about
   include ./sidebar/top_tags

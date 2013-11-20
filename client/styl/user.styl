@@ -22,26 +22,34 @@
 #latest-comments
   .list-group-item
     padding-top 0
+    background #fafafa
 
     .describe
       position relative
       border-bottom 1px solid #ddd
       padding 10px 15px
-      background-image linear-gradient(#fcfcfc, #eaeaea)
-      background-repeat repeat-x
+      background #fff
       color #999
       font-size 13px
+
+      &:before,
       &:after
         content ''
-        display block
-        height 0
-        width 0
-        border 8px solid #fff
-        border-width 0 8px 8px 8px
-        border-color rgba(238, 238, 238, 0) rgba(238, 238, 238, 0) #fff rgba(238, 238, 238, 0)
         position absolute
-        left 20px
-        bottom -2px
+        bottom -1px
+        left 30px
+        border-left 6px solid transparent
+        border-right 6px solid transparent
+        border-bottom 6px solid #fafafa
+        margin-left -6px
+        
+      &:before
+        bottom -1px
+        border-left 8px solid transparent
+        border-right 8px solid transparent
+        border-bottom 8px solid
+        border-bottom-color inherit
+        margin-left -8px
 
       .title
         padding-right 70px

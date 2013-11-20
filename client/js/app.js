@@ -16,8 +16,9 @@ var NC = window.NC = {
 
 _.extend(NC.Module, {
   define: function(name, deps, callback) {
+    var self = this;
     return NC.Loader.define(name, deps, function() {
-      return callback.apply(this, arguments);
+      return callback.apply(self, arguments);
     });
   }
 });

@@ -16,7 +16,8 @@ exports.signup = function(req, res, next) {
 
   if ('get' === method) {
     var locals = _.extend({}, req.flash('body'), {
-      err: req.flash('err')
+      err: req.flash('err'),
+      message: req.flash('message')
     });
     req.breadcrumbs('注册');
     return res.render('signup', locals);
@@ -27,7 +28,8 @@ exports.signup = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      res.send(user);
+      req.flash('message', '注册成功，我们已经向你的电子邮箱发送了一封激活邮件，请前往查收并激活你的帐号。');
+      res.redirect('signup');
     });
   }
 };
@@ -77,7 +79,7 @@ exports.activate = function(req, res, next) {
       req.session.redirectPath = '/';
       return next(err);
     }
-    req.flash('message', '帐号已激活，请登录');
+    req.flash('message', '帐号已激活，请登录。');
     res.redirect('/signin');
   });
 };

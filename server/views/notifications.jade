@@ -5,37 +5,41 @@ block content
       div.row
         div.col-xs-10.col-sm-10
           include breadcrumb
-    ul.list-group
-      each notification in notifications
-        li.list-group-item
-          div.media
-            div.pull-left.avatar-32
-              a(href="/user/#{notification.user.username}")
-                img(src!="#{notification.user.avatar}",
-                    alt="#{notification.user.nickname}").media-object.img-rounded.img-responsive
-            div.media-body
-              div.pull-right.action
-                if !notification.hasRead
-                  a(href="#", title="标记为已读")
-                    i.fa.fa-check-circle-o
-              div.media-heading.title
-                a(href="/user/#{notification.user.username}") #{notification.user.nickname}
-                case notification.type
-                  when constants.NOTIFICATION_TYPE.COMMENT
-                    | &#32;评论了你创建的话题&#32;
-                    a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
-                  when constants.NOTIFICATION_TYPE.REPLY_COMMENT
-                    | &#32;回复了你在&#32;
-                    a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
-                    | &#32;中的评论
-                  when constants.NOTIFICATION_TYPE.FOLLOW
-                    | &#32;关注了你
-                  when constants.NOTIFICATION_TYPE.AT
-                    | &#32;在评论&#32;
-                    a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
-                    | &#32;时提到了你
-              div.content
-                if notification.type !== constants.NOTIFICATION_TYPE.FOLLOW
-                  | !{notification.comment.htmlContent}
+    if notifications.length > 0
+      ul.list-group
+        each notification in notifications
+          li.list-group-item
+            div.media
+              div.pull-left.avatar-32
+                a(href="/user/#{notification.user.username}")
+                  img(src!="#{notification.user.avatar}",
+                      alt="#{notification.user.nickname}").media-object.img-rounded.img-responsive
+              div.media-body
+                div.pull-right.action
+                  if !notification.hasRead
+                    a(href="#", title="标记为已读")
+                      i.fa.fa-check-circle-o
+                div.media-heading.title
+                  a(href="/user/#{notification.user.username}") #{notification.user.nickname}
+                  case notification.type
+                    when constants.NOTIFICATION_TYPE.COMMENT
+                      | &#32;评论了你创建的话题&#32;
+                      a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
+                    when constants.NOTIFICATION_TYPE.REPLY_COMMENT
+                      | &#32;回复了你在&#32;
+                      a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
+                      | &#32;中的评论
+                    when constants.NOTIFICATION_TYPE.FOLLOW
+                      | &#32;关注了你
+                    when constants.NOTIFICATION_TYPE.AT
+                      | &#32;在评论&#32;
+                      a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
+                      | &#32;时提到了你
+                div.content
+                  if notification.type !== constants.NOTIFICATION_TYPE.FOLLOW
+                    | !{notification.comment.htmlContent}
+    else
+      div.panel-body
+        span 暂无提醒。
 block sidebar
   include ./sidebar/user_card

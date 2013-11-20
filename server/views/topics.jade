@@ -1,6 +1,6 @@
 extends layout
 block content
-  div#topic-list.panel.panel-default
+  div#topic-list-panel.panel.panel-default
     div.panel-heading
       div.row
         div.col-xs-10.col-sm-10
@@ -21,7 +21,7 @@ block content
           a(href="#{path}?tab=latest",
             class=(query.tab === 'latest') ? "active" : "").condition: span 最新创建
         div.clearfix
-    ul.list-group
+    ul.list-group.topic-list
       for topic in topics
         li.list-group-item
           include topic_list_item

@@ -1,6 +1,6 @@
 extends layout
 block content
-  div#topic.panel.panel-default
+  div#topic-panel.panel.panel-default
     div.panel-heading
       div.row
         div.col-xs-10.col-sm-10
@@ -39,7 +39,7 @@ block content
           i.fa.fa-bookmark-o
       div.clearfix
   if topic.commentCount > 0
-    div#comment-list.panel.panel-default
+    div#comment-list-panel.panel.panel-default
       div.panel-heading
         span #{topic.commentCount}&#32;评论
         if topic.commentCount > 0
@@ -71,7 +71,7 @@ block content
                     span ##{topic.commentCount - idx}楼
                   div.content !{comment.htmlContent}
   else
-    div#comment-list.no-comment.panel.panel-default
+    div#comment-list-panel.no-comment.panel.panel-default
       div.panel-body 目前尚无评论
   if isAuthenticated
     div#comment.add-comment

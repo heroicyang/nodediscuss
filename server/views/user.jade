@@ -1,6 +1,6 @@
 extends layout
 block content
-  div#profile.panel.panel-default
+  div#profile-panel.panel.panel-default
     div.panel-body
       div.media
         div.pull-left.avatar-80
@@ -40,7 +40,7 @@ block content
       if user.bio
         li.list-group-item #{user.bio}
         
-  div#topic-list.panel.panel-default
+  div.topic-list.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近创建的话题
     if user.topicCount > 0
@@ -53,7 +53,9 @@ block content
         a(href="#")
           i.fa.fa-angle-double-right
           | &#32;查看更多#{user.nickname}创建的话题
-  div#latest-comments.panel.panel-default
+    else
+      div.panel-body
+  div#latest-comments-panel.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近评论的话题
     if latestComments.length > 0
@@ -72,6 +74,8 @@ block content
         a(href="#")
           i.fa.fa-angle-double-right
           | &#32;查看更多#{user.nickname}评论的话题
+    else
+      div.panel-body
 block sidebar
   div.panel.panel-default.hidden-xs
     div.panel-heading

@@ -8,7 +8,9 @@
  */
 var _ = require('lodash'),
   moment = require('moment'),
-  config = require('../../config');
+  config = require('../../config'),
+  assets = require('../../assets.json'),
+  constants = require('../../models').constants;
 
 module.exports = exports = function() {
   return function(req, res, next) {
@@ -23,8 +25,9 @@ module.exports = exports = function() {
     res.locals.page.name = config.name;
     res.locals.page.title = config.title;
     res.locals.page.description = config.description;
+    res.locals.assets = assets;
 
-    res.locals.constants = require('../../models').constants;
+    res.locals.constants = constants;
 
     res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.loggedUser = req.user;

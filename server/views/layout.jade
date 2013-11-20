@@ -6,7 +6,8 @@ html(lang="zh-CN")
     link(type="image/x-icon", rel="icon", href="/img/favicon32.ico")
     title= page.title
     link(href="/css/style.css", rel="stylesheet")
-    script(src="/js/lib.js")
+    each file in assets.files
+      script(src="/js/#{file}")
   body
     div#container-wrap
       div(role="navigation").navbar.navbar-default.navbar-static-top

@@ -18,22 +18,46 @@ module.exports = exports = function(grunt) {
     grunt.task.run('clean');
 
     switch(target) {
-      case 'pro':
-      case 'production':
-      case 'release':
-        grunt.log.writeln('Building client...');
-        break;
-      case 'dev':
-      case 'development':
-      default:
-        grunt.task.run('stylus:development');
-        grunt.task.run('concat:development');
-        grunt.task.run('copy');
-        grunt.task.run('watch:build');
-        watching();
-        break;
+    case 'pro':
+    case 'production':
+    case 'release':
+      grunt.log.writeln('Building client...');
+      break;
+    case 'dev':
+    case 'development':
+    default:
+      grunt.task.run('stylus:development');
+      grunt.task.run('concat:development');
+      grunt.task.run('copy');
+      grunt.task.run('watch:build');
+      watching();
+      break;
     }
+
+    generateAssetsJson(target);
   });
+
+  function generateAssetsJson(target) {
+    // TODO: target=production
+    var assetsJson;
+    var appModules = grunt.file.expand({
+      filter: 'isFile',
+      cwd: 'client/js/app'
+    }, "**");
+
+    appModules = grunt.util._.map(appModules, function(module) {
+      return 'app/' + module;
+    });
+    assetsJson = {
+      files: [
+        'lib.js',
+        'app.js',
+        'requirejs.config.js'
+      ].concat(appModules)
+    };
+
+    grunt.file.write('assets.json', JSON.stringify(assetsJson, null, '\t'));
+  }
 
   function watching() {
     // 响应 `grunt-contrib-watch` 插件的 `watch` 事件，并根据...

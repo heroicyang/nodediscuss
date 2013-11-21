@@ -11,7 +11,8 @@ html(lang="zh-CN")
       div(role="navigation").navbar.navbar-default.navbar-static-top
         div.container
           div.navbar-header
-            button(type="button", data-toggle="collapse", data-target=".navbar-collapse").navbar-toggle
+            button(type="button", data-toggle="collapse",
+                   data-target=".navbar-collapse").navbar-toggle
               span.icon-bar
               span.icon-bar
               sapn.icon-bar
@@ -75,15 +76,23 @@ html(lang="zh-CN")
                 a(href="http://expressjs.com/", target="_blank") Express
                 | &amp;
                 a(href="mongoosejs.com/", target="_blank") Mongoose
+    
+    //- 根据 grunt build 之后的结果引入 js 文件
     each file in assets.files
       script(src="/js/#{file}")
-    script(type="text/javascript").
-      $(document).ajaxSend(function(e, xhr) {
-        xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
-      });
+    //- 如果用户已登录，则设置前端的用户对象
+    if isAuthenticated
+      script(type="text/javascript").
+        NC.loggedUser.set(!{loggedUserJson});
+    //- 继承 layout 模板的其它页面可以通过这个块来插入 js 代码
     block script
-    script(type="text/javascript")
-      (function() {
+    //- 用自执行函数来初始化前端模块，因为里面还会用到一些临时变量，防止其污染全局
+    script(type="text/javascript").
+      ;(function() {
+        $(document).ajaxSend(function(e, xhr) {
+          xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
+        });
+
         var moduleChildren = [];
         if (typeof moduleMapping !== 'undefined') {
           if (!_.isArray(moduleMapping)) {
@@ -91,11 +100,12 @@ html(lang="zh-CN")
           }
           moduleChildren = moduleMapping;
         }
-
-        moduleChildren.push({
-          name: 'LogoutButton',
-          el: '#logout'
-        });
+        if (NC.loggedUser.isAuthenticated()) {
+          moduleChildren.push({
+            name: 'LogoutButton',
+            el: '#logout'
+          });
+        }
 
         NC.loadModule({
           name: 'App',

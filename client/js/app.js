@@ -149,6 +149,12 @@ var NC = window.NC = {
         delete this._childrenIdMap[child.id];
       }
     }
+  }),
+  /** 暂时使用 UserModel 来保存登录后的用户信息 */
+  User: Backbone.Model.extend({
+    isAuthenticated: function() {
+      return !!this.get('_id');
+    }
   })
 };
 
@@ -163,3 +169,6 @@ _.extend(NC.Module, {
     });
   }
 });
+
+/** 登录的用户对象 */
+NC.loggedUser = new NC.User();

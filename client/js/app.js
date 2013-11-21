@@ -46,6 +46,16 @@ var NC = window.NC = {
     getChildById: function(id) {
       return this._childrenIdMap[id];
     },
+    getChildByModuleName: function(name) {
+      return _.find(this.children, function(child) {
+        return child.moduleName === name;
+      });
+    },
+    getChildrenByModuleName: function(name) {
+      return _.filter(this.children, function(child) {
+        return child.moduleName === name;
+      });
+    },
     addChild: function(module, index) {
       var idx = -1;
       if (typeof index !== 'undefined') {
@@ -68,6 +78,24 @@ var NC = window.NC = {
       if (module.id) {
         this._childrenIdMap[module.id] = module;
       }
+    },
+    remove: function() {
+      if (this.parent) {
+        this.parent.removeChild(this);
+      }
+      Backbone.View.prototype.remove.apply(this, arguments);
+    },
+    removeChild: function(child) {
+      if (child.parent !== this) {
+        return;
+      }
+      child.parent = null;
+      this.children = _.filter(this.children, function(item) {
+        return child !== item;
+      });
+      if (child.id) {
+        delete this._childrenIdMap[child.id];
+      }
     }
   })
 };
@@ -76,7 +104,9 @@ _.extend(NC.Module, {
   define: function(name, deps, callback) {
     var self = this;
     return NC.Loader.define(name, deps, function() {
-      return callback.apply(self, arguments);
+      var module = callback.apply(self, arguments);
+      module.prototype.moduleName = module.moduleName = name;
+      return module;
     });
   }
 });

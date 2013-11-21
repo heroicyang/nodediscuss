@@ -15,6 +15,7 @@ module.exports = exports = {
         'client/js/lib/lodash.underscore.js',
         'client/js/lib/backbone.js',
         'client/js/lib/bootstrap.js',
+        'client/js/lib/widearea.js',
         'client/js/lib/require.js'
       ],
       dest: '<%= dest %>/js/lib.js'

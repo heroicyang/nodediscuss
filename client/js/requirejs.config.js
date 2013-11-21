@@ -4,6 +4,6 @@
  */
 (function(requirejs) {
   requirejs.config({
-    baseUrl: 'js/app'
+    baseUrl: '/js/app'
   });
 }(window.requirejs));

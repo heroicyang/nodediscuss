@@ -1,3 +1,7 @@
+/**
+ * 注册表单模块
+ * @author heroic
+ */
 NC.Module.define('SignupForm',
   ['Form', 'Validator'],
   function(Form, Validator) {

@@ -26,10 +26,10 @@ div#user-card.panel.panel-default.hidden-xs
             a(href="#"): strong #{loggedUser.followingCount}
           div 关注
   div.panel-footer
-    a(href="/notifications").notification
-      span.count.badge 10
-      span &#32;条未读提醒
     div.pull-right.score
       span(data-toggle="tooltip", title="积分")
         i.fa.fa-tint
         | &#32;#{loggedUser.score || 0}
+    a(href="/notifications").notification
+      span.count.badge 10
+      span &#32;条未读提醒

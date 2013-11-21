@@ -6,7 +6,7 @@ html(lang="zh-CN")
     link(type="image/x-icon", rel="icon", href="/img/favicon32.ico")
     title= page.title
     link(href="/css/style.css", rel="stylesheet")
-  body
+  body#app
     div#container-wrap
       div(role="navigation").navbar.navbar-default.navbar-static-top
         div.container
@@ -78,3 +78,20 @@ html(lang="zh-CN")
     each file in assets.files
       script(src="/js/#{file}")
     block script
+    script(type="text/javascript")
+      (function() {
+        var moduleChildren = [];
+        if (typeof moduleMapping !== 'undefined') {
+          if (!_.isArray(moduleMapping)) {
+            moduleMapping = [moduleMapping];
+          }
+          moduleChildren = moduleMapping;
+        }
+        NC.loadModule({
+          name: 'App',
+          el: '#app',
+          children: moduleChildren
+        }, function(module) {
+          NC.app = module;
+        });
+      }());

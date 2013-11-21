@@ -41,6 +41,8 @@ NC.Module.define('SignupForm',
         });
       },
       onFormValidated: function() {
+        var signupButton = this.getChildById('signupButton');
+        signupButton.showLoading();
         this.$form.off('submit');
         this.$form.submit();
       }

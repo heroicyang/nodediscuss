@@ -69,6 +69,14 @@ exports.signin = function(req, res, next) {
   }
 };
 
+exports.logout = function(req, res, next) {
+  req.logout();
+  req.session.destroy();
+  res.send({
+    success: true
+  });
+};
+
 exports.activate = function(req, res, next) {
   var data = req.query,
     token = data.token,

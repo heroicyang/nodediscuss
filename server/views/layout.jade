@@ -27,7 +27,7 @@ html(lang="zh-CN")
                   a(href="/user/#{loggedUser.username}") #{loggedUser.nickname}
                 li(class=(path === '/settings') ? "active" : "")
                   a(href="/settings") 设置
-                li: a(href="javascript:;") 退出
+                li: a(href="#")#logout 退出
               else
                 li(class=(path === '/signup') ? "active" : "")
                   a(href="/signup") 注册
@@ -77,6 +77,10 @@ html(lang="zh-CN")
                 a(href="mongoosejs.com/", target="_blank") Mongoose
     each file in assets.files
       script(src="/js/#{file}")
+    script(type="text/javascript").
+      $(document).ajaxSend(function(e, xhr) {
+        xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
+      });
     block script
     script(type="text/javascript")
       (function() {
@@ -87,6 +91,12 @@ html(lang="zh-CN")
           }
           moduleChildren = moduleMapping;
         }
+
+        moduleChildren.push({
+          name: 'LogoutButton',
+          el: '#logout'
+        });
+
         NC.loadModule({
           name: 'App',
           el: '#app',

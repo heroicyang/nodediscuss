@@ -22,6 +22,7 @@ module.exports = exports = function(app) {
   app.post('/signup', auth.unreachableWhenAuthorized, userController.signup);
   app.get('/signin', auth.unreachableWhenAuthorized, userController.signin);
   app.post('/signin', auth.unreachableWhenAuthorized, userController.signin);
+  app.post('/logout', auth.authRequired, userController.logout);
   app.get('/active', userController.activate);
   app.get('/user/:username', userController.index);
   app.get('/settings', auth.authRequired, userController.settings);

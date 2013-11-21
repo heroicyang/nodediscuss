@@ -80,6 +80,11 @@ html(lang="zh-CN")
     //- 根据 grunt build 之后的结果引入 js 文件
     each file in assets.files
       script(src="/js/#{file}")
+    //- 设置 ajax 模式下的 csrf
+    script(type="text/javascript").
+      $(document).ajaxSend(function(e, xhr) {
+        xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
+      });
     //- 如果用户已登录，则设置前端的用户对象
     if isAuthenticated
       script(type="text/javascript").
@@ -89,10 +94,6 @@ html(lang="zh-CN")
     //- 用自执行函数来初始化前端模块，因为里面还会用到一些临时变量，防止其污染全局
     script(type="text/javascript").
       ;(function() {
-        $(document).ajaxSend(function(e, xhr) {
-          xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
-        });
-
         var moduleChildren = [];
         if (typeof moduleMapping !== 'undefined') {
           if (!_.isArray(moduleMapping)) {

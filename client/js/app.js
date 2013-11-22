@@ -155,7 +155,7 @@ var NC = window.NC = {
      */
     empty: function() {
       while (this.children.length) {
-        this.children.remove();
+        this.children[0].remove();
       }
       this.children = [];
       this._childrenIdMap = {};

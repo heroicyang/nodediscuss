@@ -130,6 +130,7 @@ var NC = window.NC = {
       if (this.parent) {
         this.parent.removeChild(this);
       }
+      this.empty();
       Backbone.View.prototype.remove.apply(this, arguments);
     },
     /**
@@ -148,6 +149,16 @@ var NC = window.NC = {
       if (child.id) {
         delete this._childrenIdMap[child.id];
       }
+    },
+    /**
+     * 如果该模块包含子模块，则将其子模块全部 remove
+     */
+    empty: function() {
+      while (this.children.length) {
+        this.children.remove();
+      }
+      this.children = [];
+      this._childrenIdMap = {};
     }
   }),
   /** 暂时使用 UserModel 来保存登录后的用户信息 */

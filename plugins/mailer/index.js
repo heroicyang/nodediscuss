@@ -6,7 +6,7 @@
 /**
  * Module dependencies
  */
-var Strategy = require('./Strategy'),
+var Strategy = require('./strategy'),
   LogStrategy = require('./strategies/log');
 
 module.exports = exports = Mailer;
@@ -28,7 +28,7 @@ function Mailer() {
  *    mailer.use('log', new LogStrategy());
  *    
  * @param  {String|Object} name     策略名称
- * @param  {Object} strategy        发送策略
+ * @param  {Object} strategy        发送策略对象
  * @return {Mailer}
  */
 Mailer.prototype.use = function(name, strategy) {

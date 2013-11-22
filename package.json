@@ -23,7 +23,8 @@
     "passport": "~0.1.17",
     "nodemailer": "~0.5.5",
     "marked": "~0.2.10",
-    "highlight.js": "~7.4.0"
+    "highlight.js": "~7.4.0",
+    "node-uuid": "~1.4.1"
   },
   "devDependencies": {
     "mocha": "1.13.0",

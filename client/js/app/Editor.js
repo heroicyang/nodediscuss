@@ -70,11 +70,6 @@ NC.Module.define('Editor', [], function() {
         codeWrap = '\n```' + lang + '\n\n' + '```\n',
         cursorMove = lang.length + 5;  // 5: 第一行起始和结束的换行符，以及 ``` 的长度
 
-      // 处理 IE，IE 中的 \n 符长度为 2
-      if (document.selection) {
-        cursorMove = lang.length + 7;
-      }
-
       this._replaceSelection(codeWrap, cursorMove);
     },
     /**
@@ -95,16 +90,15 @@ NC.Module.define('Editor', [], function() {
         textarea.value = val.substr(0, selectionStart) +
             text + val.substr(selectionEnd, val.length);
 
-        textarea.focus();
         textarea.selectionStart = selectionStart + cursorMove;
       } else if (document.selection) {
         var range = document.selection.createRange();
         range.text = text;
-
-        range.moveStart('character', cursorMove);
-        range.collapse();
-        range.select();
+        range.moveEnd('character', cursorMove);
+        range.collapse(false);
       }
+
+      textarea.focus();
     }
   });
 });

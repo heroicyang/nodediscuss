@@ -27,6 +27,10 @@ NC.Module.define('Editor', [], function() {
       'click #et-upload-pic': 'onUploadPicClick',
       'click #et-insert-code .lang': 'onCodeInsertClick'
     },
+    /** 
+     * 重写 Backbone.View 生成 $el 的方法，把界面上本身该是 $el 的元素给替换掉
+     * 换成经过包装了标签页以及底部工具栏的元素
+     */
     _ensureElement: function() {
       var el = $('#editor-wrap').html(),
         $el = $(el),
@@ -38,8 +42,10 @@ NC.Module.define('Editor', [], function() {
 
       this.setElement($el, false);
     },
+    /** 初始化的时候设置所谓的禅模式编辑器 */
     initialize: function() {
-      //TODO: 这玩意有个 BUG，数据是存在 localStorage 里的，所以多个页面上的 textarea 数据不能清除
+      // TODO: 这玩意有个 BUG，数据存在 localStorage 里，
+      // 导致页面上的 textarea 数据不能清除
       // 待主体功能完成了，重写下他这个插件好了
       this.wideArea = wideArea().setOptions({
         closeIconLabel: '退出禅模式',
@@ -48,6 +54,7 @@ NC.Module.define('Editor', [], function() {
       });
       this.$textarea = this.$('textarea');
     },
+    /** 格式化文本框中的 markdown 文本 */
     onTabShow: function(e) {
       if ($(e.target).attr('href') === '#preview') {
         $('#preview').html(marked(this.$textarea.val()));
@@ -56,11 +63,48 @@ NC.Module.define('Editor', [], function() {
     onUploadPicClick: function(e) {
 
     },
+    /** 生成一段预设的代码模板 */
     onCodeInsertClick: function(e) {
+      e.preventDefault();
+      var lang = $(e.currentTarget).data('lang'),
+        codeWrap = '\n```' + lang + '\n\n' + '```\n',
+        cursorMove = lang.length + 5;  // 5: 第一行起始和结束的换行符，以及 ``` 的长度
 
+      // 处理 IE，IE 中的 \n 符长度为 2
+      if (document.selection) {
+        cursorMove = lang.length + 7;
+      }
+
+      this._replaceSelection(codeWrap, cursorMove);
     },
-    onModeSwitchClick: function(e) {
+    /**
+     * 将内容插入（替换）到文本框中光标所选择的地方
+     * @param  {String} text       需要插入的文本
+     * @param  {Number} cursorMove 插入文本后光标需要向后移动的字符数
+     */
+    _replaceSelection: function(text, cursorMove) {
+      var textarea = this.$textarea.get(0),
+        val = textarea.value;
+      text = text || '';
+      cursorMove = cursorMove || 0;
 
+      if (textarea.setSelectionRange) {
+        var selectionStart = textarea.selectionStart,
+          selectionEnd = textarea.selectionEnd;
+
+        textarea.value = val.substr(0, selectionStart) +
+            text + val.substr(selectionEnd, val.length);
+
+        textarea.focus();
+        textarea.selectionStart = selectionStart + cursorMove;
+      } else if (document.selection) {
+        var range = document.selection.createRange();
+        range.text = text;
+
+        range.moveStart('character', cursorMove);
+        range.collapse();
+        range.select();
+      }
     }
   });
 });

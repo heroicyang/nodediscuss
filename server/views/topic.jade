@@ -83,28 +83,9 @@ block content
         div.media-body
           div.topic-editor
             form(role="form", method="POST", action="/comment/create").form-horizontal
-              div.form-group.toolbar
+              div.form-group
                 div.col-sm-12
-                  div.wrapper
-                    div.btn-group
-                      button(type="button").btn.btn-default.btn-sm
-                        i.fa.fa-picture-o
-                      div.btn-group
-                        button(type="button",
-                               data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-sm.dropdown-toggle
-                          i.fa.fa-code
-                        ul(role="menu").dropdown-menu.languages-menu
-                          li: a(href="#") JavaScript
-                          li: a(href="#") HTML
-                          li: a(href="#") CSS
-                          li: a(href="#") Shell/Bash
-                      button(type="button", data-toggle="button")#preview.btn.btn-default.btn-sm
-                        i.fa.fa-eye
-                      button(type="button").btn.btn-default.btn-sm
-                        i.fa.fa-arrows-alt
-              div.form-group.editor
-                div.col-sm-12
-                  textarea(name="content", rows="5", required)#content.form-control
+                  textarea(name="content", rows="5", required)#comment-editor.form-control
               div.form-group
                 div.col-sm-12
                   input(type="hidden", name="_csrf", value="#{csrfToken}")
@@ -118,3 +99,9 @@ block sidebar
   include ./sidebar/top_tags
   include ./sidebar/related_site
   include ./sidebar/ad
+block script
+  script(type="text/javascript").
+    var moduleMapping = {
+      name: 'Editor',
+      el: '#comment-editor'
+    };

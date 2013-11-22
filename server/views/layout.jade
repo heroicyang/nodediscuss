@@ -116,3 +116,27 @@ html(lang="zh-CN")
           NC.app = module;
         });
       }());
+    //- 编辑器模板
+    script(type="text/template", id="editor-wrap")
+      div.panel.panel-default.editor
+        div.panel-body
+          ul.nav.nav-tabs
+            li.active: a(href="#write", data-toggle="tab") 编辑
+            li: a(href="#preview", data-toggle="tab") 预览
+          div.tab-content
+            div#write.tab-pane.fade.in.active
+              div.toolbar.form-control
+                button(type="button")#et-upload-pic.btn.btn-link.btn-xs
+                  i.fa.fa-picture-o
+                  | &#32;上传图片
+                div#et-insert-code.btn-group.dropup
+                  button(type="button",
+                         data-toggle="dropdown").btn.btn-link.btn-xs.dropdown-toogle
+                    i.fa.fa-code
+                    | 插入代码
+                  ul(role="menu").dropdown-menu.lang-menu
+                    li: a(href="#").lang JavaScript
+                    li: a(href="#").lang HTML
+                    li: a(href="#").lang CSS
+                    li: a(href="#").lang Shell/Bash
+            div#preview.tab-pane.fade 这里是预览

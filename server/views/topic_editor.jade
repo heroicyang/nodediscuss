@@ -19,23 +19,9 @@ block content
             input(type="text", name="title", 
               maxlength="100", placeholder="请输入标题，字数在10到100个之间", 
               required)#title.form-control
-        div.form-group.editor
+        div.form-group
           div.col-sm-12
-            div.toolbar
-              div.btn-group
-                button(type="button").btn.btn-default.btn-sm
-                  i.fa.fa-picture-o
-                div.btn-group
-                  button(type="button", data-toggle="dropdown")#insert-code-btn.btn.btn-default.btn-sm.dropdown-toggle
-                    i.fa.fa-code
-                  ul(role="menu").dropdown-menu.languages-menu
-                    li: a(href="#") JavaScript
-                    li: a(href="#") HTML
-                    li: a(href="#") CSS
-                    li: a(href="#") Shell/Bash
-                button(type="button", data-toggle="button")#preview.btn.btn-default.btn-sm
-                  i.fa.fa-eye
-            textarea(name="content", rows="20", data-widearea="enable")#content.form-control
+            textarea(name="content", rows="16")#content-editor.form-control
         div.form-group
           div.col-sm-12
             input(type="hidden", name="_csrf", value="#{csrfToken}")
@@ -78,4 +64,7 @@ block sidebar
           a(href="https://help.github.com/articles/github-flavored-markdown") GitHub Flavored Markdown
 block script
   script(type="text/javascript").
-    wideArea();
+    var moduleMapping = {
+      name: 'Editor',
+      el: '#content-editor'
+    };

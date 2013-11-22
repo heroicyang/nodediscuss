@@ -76,7 +76,7 @@ block content
   if isAuthenticated
     div#comment.add-comment
       div.media
-        div.pull-left.avatar-48
+        div.pull-left.avatar-48.hidden-xs
           a(href="/user/#{loggedUser.username}")
             img(src!="#{loggedUser.avatar}",
                 alt="#{loggedUser.nickname}").media-object.img-rounded.img-responsive

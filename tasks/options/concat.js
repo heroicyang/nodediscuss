@@ -16,6 +16,8 @@ module.exports = exports = {
         'client/js/lib/backbone.js',
         'client/js/lib/bootstrap.js',
         'client/js/lib/widearea.js',
+        'client/js/lib/marked.js',
+        'client/js/lib/highlight.js',
         'client/js/lib/require.js'
       ],
       dest: '<%= dest %>/js/lib.js'

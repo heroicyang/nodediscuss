@@ -36,7 +36,7 @@ exports.sendActivationMail = function(user, callback) {
         subject: config.name + '帐号激活',
         html: html
       };
-      mailer.send('log', mailOptions, next);
+      mailer.send(config.mailer.strategy, mailOptions, next);
     }
   ], callback);
 };

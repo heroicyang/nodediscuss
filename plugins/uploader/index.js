@@ -8,7 +8,7 @@
  */
 var util = require('util'),
   path = require('path'),
-  fs = require('file'),
+  fs = require('fs'),
   uuid = require('node-uuid'),
   Strategy = require('./strategy');
 

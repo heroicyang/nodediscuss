@@ -65,5 +65,10 @@ module.exports = exports = {
         pass: ''
       }
     }
+  },
+  // 文件上传服务
+  uploader: {
+    strategy: 'local',  // 使用 local 策略上传到本地目录，即上面的  media 中指定的 uploadPath
+    options: {}   // 如果使用第三方文件服务器（如 S3），则填写需要的配置项
   }
 };

@@ -37,7 +37,15 @@ module.exports = exports = function(app) {
         url: mongodb.connectionString
       })
     }));
-    app.use(express.csrf());
+    
+    // 引入 csrf 中间件
+    app.use(function(req, res, next) {
+      // 当上传图片时，跳过此中间件
+      if (req.path === '/upload/image') {
+        return next();
+      }
+      express.csrf().apply(this, arguments);
+    });
 
     // 引入 passport 中间件
     app.use(passport.initialize());

@@ -24,7 +24,8 @@
     "nodemailer": "~0.5.5",
     "marked": "~0.2.10",
     "highlight.js": "~7.4.0",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "connect-multiparty": "~1.0.1"
   },
   "devDependencies": {
     "mocha": "1.13.0",

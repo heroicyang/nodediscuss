@@ -6,7 +6,9 @@
 /**
  * Module dependencies
  */
-var auth = require('./authorization'),
+var mutilpart = require('connect-multiparty'),
+  uploader = require('../utils/uploader'),
+  auth = require('./authorization'),
   controllers = require('./controllers'),
   userController = controllers.user,
   topicController = controllers.topic,
@@ -15,6 +17,19 @@ var auth = require('./authorization'),
 var noopRequestHandler = function(req, res, next) {};
 
 module.exports = exports = function(app) {
+  // 上传文件
+  app.post('/upload/image', auth.authRequired, mutilpart(), function(req, res, next) {
+    uploader.upload(req.files.file, function(err, files, errors) {
+      if (err) {
+        return next(err);
+      }
+      if (errors) {
+        console.dir(errors);  // 应该传回给前端显示哪些文件上传出错
+      }
+      res.send(files);
+    });
+  });
+
   app.get('/', topicController.index);
 
   // 用户相关的路由配置

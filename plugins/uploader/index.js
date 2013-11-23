@@ -8,6 +8,7 @@
  */
 var util = require('util'),
   path = require('path'),
+  fs = require('file'),
   uuid = require('node-uuid'),
   Strategy = require('./strategy');
 
@@ -96,6 +97,15 @@ Uploader.prototype.upload = function(strategy, files, callback) {
   files.forEach(function(file) {
     var uid = uuid.v1(),
       fileExt = path.extname(file.name);
+    // 包装一下 callback，在调用时先将文件对象从本地磁盘删除
+    // express 的 multipart 中间件在收到请求后会把文件存储在本地的 /tmp 或者配置时指定的目录
+    var callbackWrap = function() {
+      var args = arguments;
+      fs.rmdir(file.path, function(err) {
+        // 这里暂时不处理删除文件出错的情况，毕竟这不影响真正的业务逻辑
+        return callback.apply(null, args);
+      });
+    };
     // 覆盖文件原有文件名
     file._name = file.name;
     file.name = uid + fileExt;
@@ -106,7 +116,7 @@ Uploader.prototype.upload = function(strategy, files, callback) {
         // 此时需要再判断一下，如果本次只上传一个文件，且已经出错了
         // 则直接调用回调函数，上面的 forEach 本身也没有数据继续往下执行了
         if (fileCount === 1) {
-          return callback(err);
+          return callbackWrap(err);
         }
         // 否则只做错误收集，然后继续上传后面的文件
         errors[file._name] = err;
@@ -115,13 +125,13 @@ Uploader.prototype.upload = function(strategy, files, callback) {
       // 此时还要再判断一下，如果本次只上传一个文件，而且也没有出错
       // 那也直接调用回调函数，告诉其上传成功
       if (fileCount === 1) {
-        return callback(null, file);
+        return callbackWrap(null, file);
       }
 
       // 如果是批量文件上传，不管出错与否，都得等到计数器变为 0 才去调用回调函数
       fileCount -= 1;
       if (fileCount === 0) {
-        callback(null, files, errors);
+        callbackWrap(null, files, errors);
       }
     });
   });

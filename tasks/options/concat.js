@@ -18,6 +18,9 @@ module.exports = exports = {
         'client/js/lib/widearea.js',
         'client/js/lib/marked.js',
         'client/js/lib/highlight.js',
+        'client/js/lib/jquery.ui.widget.js',
+        'client/js/lib/jquery.iframe-transport.js',
+        'client/js/lib/jquery.fileupload.js',
         'client/js/lib/require.js'
       ],
       dest: '<%= dest %>/js/lib.js'

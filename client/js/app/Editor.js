@@ -24,7 +24,6 @@ NC.Module.define('Editor', [], function() {
   return NC.Module.extend({
     events: {
       'show.bs.tab .nav-tabs a[data-toggle="tab"]': 'onTabShow',
-      'click #et-upload-pic': 'onUploadPicClick',
       'click #et-insert-code .lang': 'onCodeInsertClick'
     },
     /** 
@@ -53,15 +52,26 @@ NC.Module.define('Editor', [], function() {
         fullScreenIconLabel: '禅模式'  // 也是 BUG，根本设置不了
       });
       this.$textarea = this.$('textarea');
+
+      _.bindAll(this);
+      this.setupFileupload();
+    },
+    setupFileupload: function() {
+      this.$('#et-upload-pic').fileupload({
+        url: '/upload/image',
+        dataType: 'json',
+        fileInput: $('#fileupload')
+      })
+        .bind('fileuploadsend', this.beforeImageUpload)
+        .bind('fileuploaddone', this.onImageUploaded)
+        .bind('fileuploadfail', this.onImageUploadError)
+        .bind('fileuploadalways', this.onImageUploadEnd);
     },
     /** 格式化文本框中的 markdown 文本 */
     onTabShow: function(e) {
       if ($(e.target).attr('href') === '#preview') {
         $('#preview').html(marked(this.$textarea.val()));
       }
-    },
-    onUploadPicClick: function(e) {
-
     },
     /** 生成一段预设的代码模板 */
     onCodeInsertClick: function(e) {
@@ -71,6 +81,26 @@ NC.Module.define('Editor', [], function() {
         cursorMove = lang.length + 5;  // 5: 第一行起始和结束的换行符，以及 ``` 的长度
 
       this._replaceSelection(codeWrap, cursorMove);
+    },
+    beforeImageUpload: function(e, data) {
+      console.log('正在上传图片...');
+    },
+    onImageUploaded: function(e, data) {
+      var res = data.result,
+        self = this;
+      if (res.success) {
+        _.each(res.files, function(file) {
+          var img = '![' + file.originalFilename + ']' +
+              '(' + file.url + ')';
+          self._replaceSelection(img);
+        });
+      }
+    },
+    onImageUploadError: function(e, data) {
+
+    },
+    onImageUploadEnd: function(e, data) {
+      console.log('图片上传完成...');
     },
     /**
      * 将内容插入（替换）到文本框中光标所选择的地方

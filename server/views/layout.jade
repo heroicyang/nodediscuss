@@ -126,9 +126,10 @@ html(lang="zh-CN")
           div.tab-content
             div#write.tab-pane.fade.in.active
               div.toolbar.form-control
-                button(type="button")#et-upload-pic.btn.btn-link.btn-xs
+                span#et-upload-pic.btn.btn-link.btn-xs
                   i.fa.fa-picture-o
                   | &#32;上传图片
+                  input(type="file", id="fileupload", name="images", multiple)
                 div#et-insert-code.btn-group.dropup
                   button(type="button",
                          data-toggle="dropdown").btn.btn-link.btn-xs.dropdown-toogle

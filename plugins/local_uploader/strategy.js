@@ -14,6 +14,7 @@ var fs = require('fs'),
 /**
  * LocalStrategy constructor
  * @param {Object} options
+ *  - uploadPath     文件上传到哪个目录
  */
 function LocalStrategy(options) {
   options = options || {};

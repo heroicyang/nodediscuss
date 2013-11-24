@@ -14,6 +14,11 @@ var util = require('util'),
 /**
  * QiniuStrategy constructor
  * @param {Object} options
+ *  - uploadPath     文件上传到哪个目录
+ *  - accessKey      七牛云存储 AK
+ *  - secretKey      七牛云存储 SK
+ *  - bucket         要存储文件的空间
+ *  - domain         该空间的域名
  */
 function QiniuStrategy(options) {
   options = options || {};
@@ -39,7 +44,7 @@ QiniuStrategy.prototype.upload = function(file, callback) {
     bucket: this.options.bucket,
     domain: this.options.domain
   });
-  
+
   client.uploadFile(file.path, {
     key: path.join(this.uploadPath, file.name)
   }, function(err) {

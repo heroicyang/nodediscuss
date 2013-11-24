@@ -6,8 +6,7 @@
 /**
  * Module dependencies
  */
-var uploader = require('../utils/uploader'),
-  auth = require('./authorization'),
+var auth = require('./authorization'),
   controllers = require('./controllers'),
   uploadController = controllers.upload,
   userController = controllers.user,

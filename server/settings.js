@@ -9,6 +9,7 @@
 var path = require('path'),
   express = require('express'),
   MongoStore = require('connect-mongo')(express),
+  mutilpart = require('connect-multiparty'),
   mongodb = require('./mongodb'),
   config = require('../config'),
   passport = require('./middlewares/passport'),
@@ -26,6 +27,7 @@ module.exports = exports = function(app) {
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
+    app.use('/upload/image', mutilpart());
 
     app.use(express.cookieParser(config.session.secret));
     app.use(express.session({

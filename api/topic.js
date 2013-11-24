@@ -34,8 +34,8 @@ exports.query = function(options, callback) {
     pageSize = options.pageSize || 20,
     fields = options.fields || null,
     sort = options.sort || {
-      lastCommentedAt: -1,
-      createdAt: -1
+      createdAt: -1,
+      lastCommentedAt: -1
     },
     query = Topic.query();
 

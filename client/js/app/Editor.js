@@ -82,16 +82,21 @@ NC.Module.define('Editor', [], function() {
 
       this._replaceSelection(codeWrap, cursorMove);
     },
-    beforeImageUpload: function(e, data) {
-      console.log('正在上传图片...');
+    beforeImageUpload: function() {
+      this.$('#et-upload-pic').hide();
+      this.$('.uploading').show();
     },
     onImageUploaded: function(e, data) {
       var res = data.result,
         self = this;
       if (res.success) {
         _.each(res.files, function(file) {
+          if (file.error) {
+            console.log('图片: ', file.originalFilename, '上传失败，请稍后再试!');
+            return;
+          }
           var img = '![' + file.originalFilename + ']' +
-              '(' + file.url + ')';
+              '(' + file.url + ')\n';
           self._replaceSelection(img);
         });
       }
@@ -99,8 +104,9 @@ NC.Module.define('Editor', [], function() {
     onImageUploadError: function(e, data) {
 
     },
-    onImageUploadEnd: function(e, data) {
-      console.log('图片上传完成...');
+    onImageUploadEnd: function() {
+      this.$('#et-upload-pic').show();
+      this.$('.uploading').hide();
     },
     /**
      * 将内容插入（替换）到文本框中光标所选择的地方

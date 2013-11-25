@@ -70,7 +70,7 @@ NC.Loader.define('Form', ['Validator'], function(Validator) {
       self.results = [];
       self.validate(function() {
         if (self.hasErrors()) {
-          return;
+          return self.trigger('invalidated', self.results);
         }
         self.trigger('validated');
       });

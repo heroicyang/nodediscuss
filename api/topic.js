@@ -158,10 +158,7 @@ exports.favorite = function(args, callback) {
 exports.removeFavorite = function(args, callback) {
   var topicId = args.id,
     userId = args.userId;
-  FavoriteTopic.findOneAndRemove({
-    topicId: topicId,
-    userId: userId
-  }, function(err) {
+  FavoriteTopic.destroy(userId, topicId, function(err) {
     callback(err);
   });
 };

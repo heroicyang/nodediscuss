@@ -5,6 +5,10 @@ NC.Module.define('CommentForm',
       initialize: function() {
         this.setupForm();
       },
+      onBuildComplete: function() {
+        this.editor = this.getChildById('contentEditor');
+        this.listenTo(NC.PubSub, 'editor:insert', this.onInsertTextToEditor);
+      },
       setupForm: function() {
         this.$form = this.$el;
         this.form = new Form(this.$form, {
@@ -14,6 +18,9 @@ NC.Module.define('CommentForm',
         }, {
           isErrMsgOnHelpBlock: false
         });
+      },
+      onInsertTextToEditor: function(data) {
+        console.log(data);
       }
     });
   });

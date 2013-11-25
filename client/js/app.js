@@ -24,157 +24,165 @@ var NC = window.NC = {
       callback(new Module(options));
     });
   },
-  /** 将 Backbone View 抽象为模块 */
-  Module: Backbone.View.extend({
-    constructor: function(options) {
-      Backbone.View.apply(this, arguments);
-      this.children = [];
-      this._childrenIdMap = {};
-      this._build(options);
-    },
-    initialize: function() {},
-    onBuildComplete: function() {},
-    /**
-     * 依次去构建该模块下面的子模块，模块结构的最终形态和 DOM 树结构类似
-     * @param  {Object} options 模块配置项
-     *  - name   required    模块名称必须提供
-     *  - id     optional    模块 id, 如果需要在父模块对象中通过 `getChildById` 方法访问子模块对象，则提供。
-     *  - data   optional    在模块中保存一些临时数据
-     *  - 其余属性均为 Backbone View 所需属性
-     * @api private
-     */
-    _build: function(options) {
-      options = options || {};
-      if (options.id) {
-        this.id = options.id;
-      }
-      if (options.data) {
-        this.data = options.data;
-      }
-      if (options.parent) {
-        options.parent.addChild(this);
-      }
-
-      var self = this,
-        children = options.children,
-        childCount = children && children.length;
-
-      _.each(children, function(child) {
-        var $el = $(child.el, self.$el);
-        NC.loadModule(_.defaults({
-          el: $el,
-          parent: self
-        }, child), function() {
-          childCount -= 1;
-          if (childCount === 0) {
-            self.onBuildComplete();
-          }
-        });
-      });
-    },
-    /**
-     * 根据 moduleMapping 配置中提供的 id 项来获取相应的子模块对象
-     * @param  {String} id    模块 id
-     * @api public
-     */
-    getChildById: function(id) {
-      return this._childrenIdMap[id];
-    },
-    /**
-     * 根据模块名称获取第一个匹配的模块对象
-     * @param  {String} name   模块名称
-     * @api public
-     */
-    getChildByModuleName: function(name) {
-      return _.find(this.children, function(child) {
-        return child.moduleName === name;
-      });
-    },
-    /**
-     * 根据模块名称获取所有匹配的模块对象
-     * @param  {String} name   模块名称
-     * @api public
-     */
-    getChildrenByModuleName: function(name) {
-      return _.filter(this.children, function(child) {
-        return child.moduleName === name;
-      });
-    },
-    /**
-     * 将子模块对象添加到父模块对象中，方便管理
-     * @param {NC.Module} module   模块对象
-     * @param {Number} index  添加的位置
-     * @api pravite
-     */
-    addChild: function(module, index) {
-      var idx = -1;
-      if (typeof index !== 'undefined') {
-        idx = index;
-      }
-
-      if (module.parent !== this) {
-        if (module.parent) {
-          module.remove();
-        }
-        module.parent = this;
-      }
-
-      if (idx === -1) {
-        this.children.push(module);
-      } else {
-        this.children.splice(idx, 0, module);
-      }
-
-      if (module.id) {
-        this._childrenIdMap[module.id] = module;
-      }
-    },
-    /**
-     * 重载 Backbone.View.remove，以便将其从父模块对象移除
-     * @api public
-     */
-    remove: function() {
-      if (this.parent) {
-        this.parent.removeChild(this);
-      }
-      this.empty();
-      Backbone.View.prototype.remove.apply(this, arguments);
-    },
-    /**
-     * 从父模块对象中移出子模块对象
-     * @param  {NC.Module} child   子模块对象
-     * @api pravite
-     */
-    removeChild: function(child) {
-      if (child.parent !== this) {
-        return;
-      }
-      child.parent = null;
-      this.children = _.filter(this.children, function(item) {
-        return child !== item;
-      });
-      if (child.id) {
-        delete this._childrenIdMap[child.id];
-      }
-    },
-    /**
-     * 如果该模块包含子模块，则将其子模块全部 remove
-     */
-    empty: function() {
-      while (this.children.length) {
-        this.children[0].remove();
-      }
-      this.children = [];
-      this._childrenIdMap = {};
-    }
-  }),
-  /** 暂时使用 UserModel 来保存登录后的用户信息 */
-  User: Backbone.Model.extend({
-    isAuthenticated: function() {
-      return !!this.get('_id');
-    }
-  })
+  /**
+   * 用来做全局的事件监听和触发，代表消息的发布订阅
+   *
+   * Examples:
+   *
+   *    this.listenTo(NC.PubSub, 'channel:topic', this.onMessageReceived);
+   *    this.listenTo(NC.PubSub, 'channel', this.onMessageReceived);   // all channel
+   *    NC.PubSub.trigger('channel:topic', 'this is a test message');
+   */
+  PubSub: {}
 };
+
+/** 从 Backbone.Events 继承，使其具有事件监听和触发能力  */
+_.extend(NC.PubSub, Backbone.Events);
+
+/** 将 Backbone View 抽象为模块 */
+NC.Module = Backbone.View.extend({
+  constructor: function(options) {
+    Backbone.View.apply(this, arguments);
+    this.children = [];
+    this._childrenIdMap = {};
+    this._build(options);
+  },
+  initialize: NC.NOOP,
+  onBuildComplete: NC.NOOP,
+  /**
+   * 依次去构建该模块下面的子模块，模块结构的最终形态和 DOM 树结构类似
+   * @param  {Object} options 模块配置项
+   *  - name   required    模块名称必须提供
+   *  - id     optional    模块 id, 如果需要在父模块对象中通过 `getChildById` 方法访问子模块对象，则提供。
+   *  - data   optional    在模块中保存一些临时数据
+   *  - 其余属性均为 Backbone View 所需属性
+   * @api private
+   */
+  _build: function(options) {
+    options = options || {};
+    if (options.id) {
+      this.id = options.id;
+    }
+    if (options.data) {
+      this.data = options.data;
+    }
+    if (options.parent) {
+      options.parent.addChild(this);
+    }
+
+    var self = this,
+      children = options.children,
+      childCount = children && children.length;
+
+    _.each(children, function(child) {
+      var $el = $(child.el, self.$el);
+      NC.loadModule(_.defaults({
+        el: $el,
+        parent: self
+      }, child), function() {
+        childCount -= 1;
+        if (childCount === 0) {
+          self.onBuildComplete();
+        }
+      });
+    });
+  },
+  /**
+   * 根据 moduleMapping 配置中提供的 id 项来获取相应的子模块对象
+   * @param  {String} id    模块 id
+   * @api public
+   */
+  getChildById: function(id) {
+    return this._childrenIdMap[id];
+  },
+  /**
+   * 根据模块名称获取第一个匹配的模块对象
+   * @param  {String} name   模块名称
+   * @api public
+   */
+  getChildByModuleName: function(name) {
+    return _.find(this.children, function(child) {
+      return child.moduleName === name;
+    });
+  },
+  /**
+   * 根据模块名称获取所有匹配的模块对象
+   * @param  {String} name   模块名称
+   * @api public
+   */
+  getChildrenByModuleName: function(name) {
+    return _.filter(this.children, function(child) {
+      return child.moduleName === name;
+    });
+  },
+  /**
+   * 将子模块对象添加到父模块对象中，方便管理
+   * @param {NC.Module} module   模块对象
+   * @param {Number} index  添加的位置
+   * @api pravite
+   */
+  addChild: function(module, index) {
+    var idx = -1;
+    if (typeof index !== 'undefined') {
+      idx = index;
+    }
+
+    if (module.parent !== this) {
+      if (module.parent) {
+        module.remove();
+      }
+      module.parent = this;
+    }
+
+    if (idx === -1) {
+      this.children.push(module);
+    } else {
+      this.children.splice(idx, 0, module);
+    }
+
+    if (module.id) {
+      this._childrenIdMap[module.id] = module;
+    }
+  },
+  /**
+   * 重载 Backbone.View.remove，以便将其从父模块对象移除
+   * @api public
+   */
+  remove: function() {
+    if (this.parent) {
+      this.parent.removeChild(this);
+    }
+    this.empty();
+    Backbone.View.prototype.remove.apply(this, arguments);
+  },
+  /**
+   * 从父模块对象中移出子模块对象
+   * @param  {NC.Module} child   子模块对象
+   * @api pravite
+   */
+  removeChild: function(child) {
+    if (child.parent !== this) {
+      return;
+    }
+    child.parent = null;
+    this.children = _.filter(this.children, function(item) {
+      return child !== item;
+    });
+    if (child.id) {
+      delete this._childrenIdMap[child.id];
+    }
+  },
+  /**
+   * 如果该模块包含子模块，则将其子模块全部 remove
+   */
+  empty: function() {
+    while (this.children.length) {
+      this.children[0].remove();
+    }
+    this.children = [];
+    this._childrenIdMap = {};
+  }
+});
 
 /** 扩展 NC.Module，包装一个专门用于 Backbone.View 模块定义的方法 */
 _.extend(NC.Module, {
@@ -185,6 +193,13 @@ _.extend(NC.Module, {
       module.prototype.moduleName = module.moduleName = name;
       return module;
     });
+  }
+});
+
+/** 暂时使用 UserModel 来保存登录后的用户信息 */
+NC.User = Backbone.Model.extend({
+  isAuthenticated: function() {
+    return !!this.get('_id');
   }
 });
 

@@ -27,8 +27,14 @@ exports.list = function(req, res, next) {
       });
     },
     tags: function(next) {
-      api.tag.getGroupedTags(function(err, tags) {
-        next(err, tags);
+      api.tag.query({
+        notPaged: true
+      },function(err, tags) {
+        if (err) {
+          return next(err);
+        }
+        tags = groupingTagsBySection(tags);
+        next(null, tags);
       });
     }
   }, function(err, results) {
@@ -61,8 +67,14 @@ exports.queryByTag = function(req, res, next) {
       });
     },
     tags: function(next) {
-      api.tag.getGroupedTags(function(err, tags) {
-        next(err, tags);
+      api.tag.query({
+        notPaged: true
+      },function(err, tags) {
+        if (err) {
+          return next(err);
+        }
+        tags = groupingTagsBySection(tags);
+        next(null, tags);
       });
     }
   }, function(err, results) {
@@ -84,8 +96,14 @@ exports.create = function(req, res, next) {
   if ('get' === method) {
     async.waterfall([
       function getTags(next) {
-        api.tag.getGroupedTags(function(err, tags) {
-          next(err, tags);
+        api.tag.query({
+          notPaged: true
+        },function(err, tags) {
+          if (err) {
+            return next(err);
+          }
+          tags = groupingTagsBySection(tags);
+          next(null, tags);
         });
       }
     ], function(err, tags) {
@@ -183,4 +201,10 @@ function getTabQueryOptions(tab) {
   }
 
   return queryOpts;
+}
+
+function groupingTagsBySection(tags) {
+  return _.groupBy(tags, function(tag) {
+    return tag.section.name;
+  });
 }

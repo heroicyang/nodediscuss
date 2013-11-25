@@ -60,7 +60,8 @@ NC.Module.define('Editor', [], function() {
       this.$('#et-upload-pic').fileupload({
         url: '/upload/image',
         dataType: 'json',
-        fileInput: $('#fileupload')
+        fileInput: $('#fileupload'),
+        singleFileUploads: false
       })
         .bind('fileuploadsend', this.beforeImageUpload)
         .bind('fileuploaddone', this.onImageUploaded)
@@ -85,28 +86,49 @@ NC.Module.define('Editor', [], function() {
     beforeImageUpload: function() {
       this.$('#et-upload-pic').hide();
       this.$('.uploading').show();
+      this.$('.toolbar .error').hide();
     },
     onImageUploaded: function(e, data) {
       var res = data.result,
+        failedImgs = [],
         self = this;
       if (res.success) {
         _.each(res.files, function(file) {
           if (file.error) {
-            console.log('图片: ', file.originalFilename, '上传失败，请稍后再试!');
+            failedImgs.push(file.originalFilename);
             return;
           }
           var img = '![' + file.originalFilename + ']' +
               '(' + file.url + ')\n';
-          self._replaceSelection(img);
+          self._replaceSelection(img, img.length);
         });
+
+        if (failedImgs.length > 0) {
+          var $failedImgs = this.$('.toolbar .error .failed-images');
+          $failedImgs.tooltip({
+            title: failedImgs.join('\n'),
+            container: 'body'
+          });
+          $failedImgs.html('<strong>部分</strong>');
+          this.$('.toolbar .error').show();
+        }
+      } else {
+        this.onImageUploadError();
       }
     },
-    onImageUploadError: function(e, data) {
-
+    onImageUploadError: function() {
+      this.$('.toolbar .error').show();
     },
     onImageUploadEnd: function() {
       this.$('#et-upload-pic').show();
       this.$('.uploading').hide();
+    },
+    /**
+     * 对外暴露一个插入文本的方法
+     * @param  {String} text
+     */
+    insert: function(text) {
+      this._replaceSelection(text, text.length);
     },
     /**
      * 将内容插入（替换）到文本框中光标所选择的地方

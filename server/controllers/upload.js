@@ -27,6 +27,7 @@ if (config.media.host) {
 }
 
 exports.uploadImage = function(req, res, next) {
+  console.dir(req.files);
   uploader.upload(req.files.images, function(err, uploadedFiles, failedFiles) {
     if (err) {
       return next(err);

@@ -76,12 +76,14 @@ exports.create = function(topicData, callback) {
 
 /**
  * 增加话题的浏览数
- * @param  {String}   id       话题 id
+ * @param  {Object}   topicData   
+ *  - id      话题 id
  * @param  {Function} callback 回调函数
  *  - err     MongooseError|Error
  *  - latestTopic   最新的 topic 对象
  */
-exports.increaseViewsCount = function(id, callback) {
+exports.increaseViewsCount = function(topicData, callback) {
+  var id = topicData.id;
   Topic.findByIdAndUpdate(id, {
     $inc: {
       viewsCount: 1
@@ -93,31 +95,54 @@ exports.increaseViewsCount = function(id, callback) {
 
 /**
  * 根据话题 id 获取话题
- * @param  {String}   id       话题 id
+ * @param  {Object}   topicData   
+ *  - id      话题 id
  * @param  {Function} callback  回调函数
  *  - err     MongooseError
  *  - topic   话题对象
  */
-exports.getById = function(id, callback) {
-  Topic.findById(id, callback);
+exports.getById = function(topicData, callback) {
+  Topic.findById(topicData.id, callback);
 };
 
 /**
  * 根据话题 id 查询该话题是否被某个用户收藏
- * @param  {String}   id       话题 id
- * @param  {String}   userId   用户 id
+ * @param  {Object}   args
+ *  - topicId       话题 id
+ *  - userId        用户 id
  * @param  {Function} callback 回调函数
  *  - err    MongooseError
  *  - favorited   true: 收藏, false: 未收藏
  */
-exports.isFavoritedBy = function(id, userId, callback) {
+exports.isFavoritedBy = function(args, callback) {
+  var topicId = args.topicId,
+    userId = args.userId;
   FavoriteTopic.findOne({
-    topicId: id,
+    topicId: topicId,
     userId: userId
   }, function(err, favoriteTopic) {
     if (err) {
       return callback(err);
     }
     callback(null, !!favoriteTopic);
+  });
+};
+
+/**
+ * 收藏话题
+ * @param  {Object}   args
+ *  - topicId       话题 id
+ *  - userId        用户 id
+ * @param  {Function} callback 回调函数
+ *  - err    MongooseError
+ */
+exports.favorite = function(args, callback) {
+  var topicId = args.topicId,
+    userId = args.userId;
+  FavoriteTopic.create({
+    topicId: topicId,
+    userId: userId
+  }, function(err) {
+    callback(err);
   });
 };

@@ -126,7 +126,9 @@ exports.get = function(req, res, next) {
   async.parallel({
     topic: function(next) {
       // 此处调用增加阅读数量的方法，因为该方法也会返回最新的 topic 信息
-      api.topic.increaseViewsCount(id, function(err, latestTopic) {
+      api.topic.increaseViewsCount({
+        id: id
+      }, function(err, latestTopic) {
         next(err, latestTopic);
       });
     },
@@ -141,7 +143,10 @@ exports.get = function(req, res, next) {
       if (!req.isAuthenticated()) {
         return next(null, false);
       }
-      api.topic.isFavoritedBy(id, req.user.id, function(err, favorited) {
+      api.topic.isFavoritedBy({
+        topicId: id,
+        userId: req.user.id
+      }, function(err, favorited) {
         return next(err, favorited);
       });
     }

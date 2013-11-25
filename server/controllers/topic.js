@@ -93,7 +93,7 @@ exports.create = function(req, res, next) {
         return next(err);
       }
       req.breadcrumbs('发表新话题');
-      res.render('topic_editor', {
+      res.render('topic_edit', {
         tags: tags,
         err: req.flash('err')
       });

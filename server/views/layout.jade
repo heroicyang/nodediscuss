@@ -144,3 +144,9 @@ html(lang="zh-CN")
                     li: a(href="#", data-lang="css").lang CSS
                     li: a(href="#", data-lang="bash").lang Shell/Bash
             div#preview.tab-pane.fade
+    script(type="text/template", id="client-alert-danger")
+      div.alert.alert-danger.alert-dismissable
+        button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
+        | <% _.each(errors, function(error) { %>
+        p <%= error %>
+        | <% }); %>

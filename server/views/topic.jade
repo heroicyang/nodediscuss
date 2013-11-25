@@ -25,7 +25,7 @@ block content
       if topic.content
         div.row.content !{topic.htmlContent}
     div.panel-footer
-      div.pull-left
+      div.pull-left.share
         a(href="#", title="分享到新浪微博")
           i.fa.fa-weibo
         a(href="#", title="分享到Twitter")
@@ -34,9 +34,17 @@ block content
           i.fa.fa-facebook
         a(href="#", title="分享到Google+")
           i.fa.fa-google-plus
-      div.pull-right
-        a(href="#", title="收藏该话题")
-          i.fa.fa-bookmark-o
+      if isAuthenticated
+        div.pull-right
+          if loggedUser.id === topic.author.id
+            a(href="/topic/#{topic._id}/edit", title="编辑话题")
+              i.fa.fa-pencil-square-o
+          else if isFavorited
+            a(href="#", title="取消收藏该话题")
+              i.fa.fa-bookmark
+          else
+            a(href="#", title="收藏该话题")
+              i.fa.fa-bookmark-o
       div.clearfix
   if topic.commentCount > 0
     div#comment-list-panel.panel.panel-default

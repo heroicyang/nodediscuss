@@ -9,7 +9,8 @@
 var async = require('async'),
   marked = require('../utils/marked'),
   models = require('../models'),
-  Topic = models.Topic;
+  Topic = models.Topic,
+  FavoriteTopic = models.FavoriteTopic;
 
 /**
  * 根据查询条件获取话题
@@ -99,4 +100,24 @@ exports.increaseViewsCount = function(id, callback) {
  */
 exports.getById = function(id, callback) {
   Topic.findById(id, callback);
+};
+
+/**
+ * 根据话题 id 查询该话题是否被某个用户收藏
+ * @param  {String}   id       话题 id
+ * @param  {String}   userId   用户 id
+ * @param  {Function} callback 回调函数
+ *  - err    MongooseError
+ *  - favorited   true: 收藏, false: 未收藏
+ */
+exports.isFavoritedBy = function(id, userId, callback) {
+  FavoriteTopic.findOne({
+    topicId: id,
+    userId: userId
+  }, function(err, favoriteTopic) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, !!favoriteTopic);
+  });
 };

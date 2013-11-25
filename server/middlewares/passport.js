@@ -6,7 +6,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-  api.user.findById(id, function (err, user) {
+  api.user.getById(id, function (err, user) {
     done(err, user);
   });
 });

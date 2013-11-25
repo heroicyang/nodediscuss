@@ -60,7 +60,7 @@ exports.create = function(userData, callback) {
  *  - err    MongooseError
  *  - user   用户对象
  */
-exports.findById = function(id, callback) {
+exports.getById = function(id, callback) {
   return User.findById(id, callback);
 };
 
@@ -71,7 +71,7 @@ exports.findById = function(id, callback) {
  *  - err    MongooseError
  *  - user   用户对象
  */
-exports.findByUsername = function(username, callback) {
+exports.getByUsername = function(username, callback) {
   return User.findOneByUsername(username, callback);
 };
 
@@ -82,7 +82,7 @@ exports.findByUsername = function(username, callback) {
  *  - err    MongooseError
  *  - user   用户对象
  */
-exports.findByEmail = function(email, callback) {
+exports.getByEmail = function(email, callback) {
   return User.findOneByEmail(email, callback);
 };
 

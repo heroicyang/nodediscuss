@@ -136,6 +136,14 @@ exports.get = function(req, res, next) {
       }, function(err, comments) {
         next(err, comments);
       });
+    },
+    isFavorited: function(next) {
+      if (!req.isAuthenticated()) {
+        return next(null, false);
+      }
+      api.topic.isFavoritedBy(id, req.user.id, function(err, favorited) {
+        return next(err, favorited);
+      });
     }
   }, function(err, results) {
     if (err) {

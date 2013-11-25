@@ -30,13 +30,16 @@ module.exports = exports = function() {
     res.locals.constants = constants;
 
     res.locals.isAuthenticated = req.isAuthenticated();
-    var simpledUser = _.pick(req.user, [
-      '_id', 'username', 'nickname', 'avatar', 'topicCount',
-      'wikiCount', 'followerCount', 'followingCount',
-      'favoriteTopicCount', 'favoriteTagCount'
-    ]);
-    res.locals.loggedUser = simpledUser;
-    res.locals.loggedUserJson = JSON.stringify(simpledUser);
+    if (req.isAuthenticated()) {
+      var simpledUser = _.pick(req.user, [
+        '_id', 'username', 'nickname', 'avatar', 'topicCount',
+        'wikiCount', 'followerCount', 'followingCount',
+        'favoriteTopicCount', 'favoriteTagCount'
+      ]);
+      simpledUser.id = req.user.id;
+      res.locals.loggedUser = simpledUser;
+      res.locals.loggedUserJson = JSON.stringify(simpledUser);
+    }
 
     res.locals.path = req.path;
     res.locals.query = req.query;

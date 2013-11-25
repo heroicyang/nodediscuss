@@ -24,7 +24,7 @@ exports.signup = function(req, res, next) {
   }
 
   if ('post' === method) {
-    api.user.create(req.body, function(err, user) {
+    api.user.create(req.body, function(err) {
       if (err) {
         return next(err);
       }
@@ -96,7 +96,7 @@ exports.index = function(req, res, next) {
   var username = req.params.username;
   async.parallel({
     user: function(next) {
-      api.user.findByUsername(username, function(err, user) {
+      api.user.getByUsername(username, function(err, user) {
         next(err, user);
       });
     },
@@ -143,7 +143,7 @@ exports.settings = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    api.user.findById(req.user.id, function(err, user) {
+    api.user.getById(req.user.id, function(err, user) {
       if (err) {
         return next(err);
       }

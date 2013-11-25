@@ -20,6 +20,8 @@ NC.Module.define('SigninForm',
           password: [
             Validator.Required({ msg: '密码不能为空。' })
           ]
+        }, {
+          errClassEl: '.form-group'
         });
       },
       onFormValidated: function() {

@@ -42,6 +42,8 @@ NC.Module.define('SignupForm',
               msg: '密码长度为 %s - %s。'
             })
           ]
+        }, {
+          errClassEl: '.form-group'
         });
       },
       onFormValidated: function() {

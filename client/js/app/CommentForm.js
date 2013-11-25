@@ -2,7 +2,7 @@ NC.Module.define('CommentForm',
   ['Form', 'Validator'],
   function(Form, Validator) {
     return NC.Module.extend({
-      onBuildComplete: function() {
+      initialize: function() {
         this.setupForm();
       },
       setupForm: function() {

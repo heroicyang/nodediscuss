@@ -34,10 +34,13 @@ NC.Module.define('Editor', [], function() {
       var el = $('#editor-wrap').html(),
         $el = $(el),
         $textarea = $(_.result(this, 'el')),
-        $textareaClone = $textarea.clone(true).attr('data-widearea', 'enable');
+        $parent = $textarea.parent();
 
-      $textarea.replaceWith($el);
-      $el.find('#write').prepend($textareaClone);
+      $textarea = $textarea.detach();
+
+      $el.find('#write').prepend($textarea.attr('data-widearea', 'enable'));
+      $parent.html($el);
+      $textarea = null;
 
       this.setElement($el, false);
     },

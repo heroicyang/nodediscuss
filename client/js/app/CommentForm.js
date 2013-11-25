@@ -7,7 +7,7 @@ NC.Module.define('CommentForm',
       },
       onBuildComplete: function() {
         this.editor = this.getChildById('contentEditor');
-        this.listenTo(NC.PubSub, 'editor:insert', this.onInsertTextToEditor);
+        this.listenTo(NC.pubsub, 'editor:insert', this.insertTextToEditor);
       },
       setupForm: function() {
         this.$form = this.$el;
@@ -19,8 +19,8 @@ NC.Module.define('CommentForm',
           isErrMsgOnHelpBlock: false
         });
       },
-      onInsertTextToEditor: function(data) {
-        console.log(data);
+      insertTextToEditor: function(data) {
+        this.editor.insert(data);
       }
     });
   });

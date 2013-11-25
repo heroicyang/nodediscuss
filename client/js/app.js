@@ -29,15 +29,15 @@ var NC = window.NC = {
    *
    * Examples:
    *
-   *    this.listenTo(NC.PubSub, 'channel:topic', this.onMessageReceived);
-   *    this.listenTo(NC.PubSub, 'channel', this.onMessageReceived);   // all channel
-   *    NC.PubSub.trigger('channel:topic', 'this is a test message');
+   *    this.listenTo(NC.pubsub, 'channel:topic', this.onMessageReceived);
+   *    this.listenTo(NC.pubsub, 'channel', this.onMessageReceived);   // all channel
+   *    NC.pubsub.trigger('channel:topic', 'this is a test message');
    */
-  PubSub: {}
+  pubsub: {}
 };
 
-/** 从 Backbone.Events 继承，使其具有事件监听和触发能力  */
-_.extend(NC.PubSub, Backbone.Events);
+/** 增强 pubsub，使其具备事件监听和触发能力  */
+_.extend(NC.pubsub, Backbone.Events);
 
 /** 将 Backbone View 抽象为模块 */
 NC.Module = Backbone.View.extend({

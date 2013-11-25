@@ -34,7 +34,7 @@ module.exports = exports = function(app) {
 
   app.post('/logout', auth.authRequired, userCtrl.logout);
   app.get('/active', userCtrl.activate);
-  app.get('/user/:username', userCtrl.index);
+  app.get('/user/:username', userCtrl.get);
 
   app.all('/settings', auth.authRequired);
   app.get('/settings', userCtrl.settings);

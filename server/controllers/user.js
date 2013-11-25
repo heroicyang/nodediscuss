@@ -52,7 +52,10 @@ exports.signin = function(req, res, next) {
       password = data.password,
       remember = data.remember;
 
-    api.user.check(email, password, function(err, user) {
+    api.user.check({
+      email: email,
+      password: password
+    }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -82,7 +85,10 @@ exports.activate = function(req, res, next) {
     token = data.token,
     email = data.email;
 
-  api.user.activate(token, email, function(err) {
+  api.user.activate({
+    token: token,
+    email: email
+  }, function(err) {
     if (err) {
       req.session.redirectPath = '/';
       return next(err);
@@ -92,11 +98,13 @@ exports.activate = function(req, res, next) {
   });
 };
 
-exports.index = function(req, res, next) {
+exports.get = function(req, res, next) {
   var username = req.params.username;
   async.parallel({
     user: function(next) {
-      api.user.getByUsername(username, function(err, user) {
+      api.user.get({
+        username: username
+      }, function(err, user) {
         next(err, user);
       });
     },
@@ -117,7 +125,9 @@ exports.index = function(req, res, next) {
           return next(err);
         }
         async.map(comments, function(comment, next) {
-          api.topic.getById(comment.topicId, function(err, topic) {
+          api.topic.get({
+            id: comment.topicId
+          }, function(err, topic) {
             if (err) {
               return next(err);
             }
@@ -143,7 +153,9 @@ exports.settings = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    api.user.getById(req.user.id, function(err, user) {
+    api.user.get({
+      id: req.user.id
+    }, function(err, user) {
       if (err) {
         return next(err);
       }

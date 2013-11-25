@@ -85,7 +85,7 @@ exports.create = function(topicData, callback) {
  */
 exports.get = function(args, callback) {
   var id = args.id,
-    isView = typeof args.isView !== 'undefined' ? args : false;
+    isView = typeof args.isView !== 'undefined' ? args.isView : false;
   if (isView) {
     Topic.findByIdAndUpdate(id, {
       $inc: {

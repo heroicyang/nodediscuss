@@ -54,47 +54,37 @@ exports.create = function(userData, callback) {
 };
 
 /**
- * 根据用户 id 查询用户
- * @param  {String}   id       用户 id
+ * 获取某个用户
+ * @param  {Object}   userData  用户对象信息，包括下面属性之一即可
+ *  - id     用户 id
+ *  - username  用户名
+ *  - email   电子邮件地址
  * @param  {Function} callback 回调函数
- *  - err    MongooseError
- *  - user   用户对象
+ *  - err   MongooseError
+ *  - user  查询到的用户对象
  */
-exports.getById = function(id, callback) {
-  return User.findById(id, callback);
-};
-
-/**
- * 根据用户名查询用户
- * @param  {String}   username       用户名
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
- *  - user   用户对象
- */
-exports.getByUsername = function(username, callback) {
-  return User.findOneByUsername(username, callback);
-};
-
-/**
- * 根据电子邮件地址查询用户
- * @param  {String}   email    电子邮件
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
- *  - user   用户对象
- */
-exports.getByEmail = function(email, callback) {
-  return User.findOneByEmail(email, callback);
+exports.get = function(userData, callback) {
+  if (userData.id) {
+    return User.findById(userData.id, callback);
+  } else if (userData.username) {
+    return User.findOneByUsername(userData.username, callback);
+  } else if (userData.email) {
+    return User.findOneByEmail(userData.email, callback);
+  }
 };
 
 /**
  * 检查用户是否可以登录
- * @param  {String}   email    注册时填写的电子邮件
- * @param  {String}   password 密码
+ * @param  {Object}   userData    用户对象信息
+ *  - email     required, 注册时填写的电子邮件
+ *  - password  required, 密码
  * @param  {Function} callback 回调函数
  *  - err    MongooseError|CentralizedError
  *  - user   用户对象
  */
-exports.check = function(email, password, callback) {
+exports.check = function(userData, callback) {
+  var email = userData.email,
+    password = userData.password;
   return User.check({
     email: email,
     password: password
@@ -121,12 +111,15 @@ exports.check = function(email, password, callback) {
 
 /**
  * 激活用户
- * @param  {String}   token    激活链接中的令牌信息
- * @param  {String}   email    激活链接中的 email
+ * @param  {Object}   args
+ *  - token    激活链接中的令牌信息
+ *  - email    激活链接中的 email
  * @param  {Function} callback 回调函数
  *  - err     MongooseError|CentralizedError
  */
-exports.activate = function(token, email, callback) {
+exports.activate = function(args, callback) {
+  var email = args.email,
+    token = args.token;
   async.waterfall([
     function findUser(next) {
       User.findOneByEmail(email, function(err, user) {

@@ -36,7 +36,7 @@ exports.query = function(options, callback) {
     sort = options.sort || {
       createdAt: -1
     },
-    query = Tag.find();
+    query = Tag.find().lean();
 
   query = query.find(conditions)
     .sort(sort);

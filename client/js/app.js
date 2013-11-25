@@ -33,6 +33,7 @@ var NC = window.NC = {
       this._build(options);
     },
     initialize: function() {},
+    onBuildComplete: function() {},
     /**
      * 依次去构建该模块下面的子模块，模块结构的最终形态和 DOM 树结构类似
      * @param  {Object} options 模块配置项
@@ -55,14 +56,20 @@ var NC = window.NC = {
       }
 
       var self = this,
-        children = options.children;
+        children = options.children,
+        childCount = children && children.length;
 
       _.each(children, function(child) {
         var $el = $(child.el, self.$el);
         NC.loadModule(_.defaults({
           el: $el,
           parent: self
-        }, child));
+        }, child), function() {
+          childCount -= 1;
+          if (childCount === 0) {
+            self.onBuildComplete();
+          }
+        });
       });
     },
     /**

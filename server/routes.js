@@ -21,7 +21,7 @@ module.exports = exports = function(app) {
   app.post('/upload/image',
       auth.authRequired, uploadCtrl.uploadImage);
 
-  app.get('/', topicCtrl.index);
+  app.get('/', topicCtrl.list);
 
   // 用户相关的路由配置
   app.all('/signup', auth.unreachableWhenAuthorized);
@@ -46,7 +46,7 @@ module.exports = exports = function(app) {
   app.post('/topic/create', topicCtrl.create);
 
   app.get('/tag/:name', topicCtrl.queryByTag);  // 该节点下的所有话题
-  app.get('/topics', topicCtrl.index);
+  app.get('/topics', topicCtrl.list);
   app.get('/topic/:id', topicCtrl.get);  // 详细话题页面
 
   app.all('/topic/:id/*', auth.authRequired);

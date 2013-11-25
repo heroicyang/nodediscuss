@@ -75,34 +75,28 @@ exports.create = function(topicData, callback) {
 };
 
 /**
- * 增加话题的浏览数
- * @param  {Object}   topicData   
- *  - id      话题 id
- * @param  {Function} callback 回调函数
- *  - err     MongooseError|Error
- *  - latestTopic   最新的 topic 对象
- */
-exports.increaseViewsCount = function(topicData, callback) {
-  var id = topicData.id;
-  Topic.findByIdAndUpdate(id, {
-    $inc: {
-      viewsCount: 1
-    }
-  }, function(err, latestTopic) {
-    callback(err, latestTopic);
-  });
-};
-
-/**
  * 根据话题 id 获取话题
- * @param  {Object}   topicData   
+ * @param  {Object}   args   
  *  - id      话题 id
+ *  - isView  是否为查看该话题。如果是查看该话题则会将话题的 viewsCount 属性值 +1
  * @param  {Function} callback  回调函数
  *  - err     MongooseError
  *  - topic   话题对象
  */
-exports.getById = function(topicData, callback) {
-  Topic.findById(topicData.id, callback);
+exports.get = function(args, callback) {
+  var id = args.id,
+    isView = typeof args.isView !== 'undefined' ? args : false;
+  if (isView) {
+    Topic.findByIdAndUpdate(id, {
+      $inc: {
+        viewsCount: 1
+      }
+    }, function(err, topic) {
+      callback(err, topic);
+    });
+  } else {
+    Topic.findById(id, callback);
+  }
 };
 
 /**

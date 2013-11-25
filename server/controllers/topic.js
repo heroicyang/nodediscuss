@@ -13,7 +13,7 @@ var async = require('async'),
 /**
  * 话题列表页面
  */
-exports.index = function(req, res, next) {
+exports.list = function(req, res, next) {
   var error = _.extend(req.flash('err'), {
     showInGlobal: true
   });
@@ -125,11 +125,11 @@ exports.get = function(req, res, next) {
   var id = req.params.id;
   async.parallel({
     topic: function(next) {
-      // 此处调用增加阅读数量的方法，因为该方法也会返回最新的 topic 信息
-      api.topic.increaseViewsCount({
-        id: id
-      }, function(err, latestTopic) {
-        next(err, latestTopic);
+      api.topic.get({
+        id: id,
+        isView: true
+      }, function(err, topic) {
+        next(err, topic);
       });
     },
     comments: function(next) {

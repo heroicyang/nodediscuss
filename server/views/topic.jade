@@ -40,10 +40,10 @@ block content
             a(href="/topic/#{topic._id}/edit", title="编辑话题")
               i.fa.fa-pencil-square-o
           else if isFavorited
-            a(href="#", title="取消收藏该话题")
+            a(href="#", title="取消收藏该话题").favorite-btn
               i.fa.fa-bookmark
           else
-            a(href="#", title="收藏该话题")
+            a(href="#", title="收藏该话题").favorite-btn
               i.fa.fa-bookmark-o
       div.clearfix
   if topic.commentCount > 0
@@ -110,6 +110,10 @@ block sidebar
 block script
   script(type="text/javascript").
     var moduleMapping = {
-      name: 'Editor',
-      el: '#comment-editor'
+      name: 'TopicPage',
+      el: '#topic-panel',
+      data: {
+        id: '#{topic._id}',
+        isFavorited: #{isFavorited}
+      }
     };

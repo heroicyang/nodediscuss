@@ -53,8 +53,8 @@ module.exports = exports = function(app) {
   app.get('/topic/:id/edit', noopRequestHandler); // 话题编辑页面
   app.post('/topic/:id/edit', noopRequestHandler);  // 更新话题
   app.post('/topic/:id/del', noopRequestHandler);  // 删除话题
-  app.post('/topic/:id/favorite', api.requestHandler(api.topic.favorite));  // 收藏话题
-  app.post('/topic/:id/del_favorite', noopRequestHandler);  // 取消收藏
+  app.post('/topic/:id/favorite', api.requestHandler(api.topic.favorite));
+  app.post('/topic/:id/del_favorite', api.requestHandler(api.topic.removeFavorite));
 
   // 评论相关的路由配置
   app.all('/comment/*', auth.authRequired);

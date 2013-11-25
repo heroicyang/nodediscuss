@@ -108,14 +108,14 @@ exports.getById = function(topicData, callback) {
 /**
  * 根据话题 id 查询该话题是否被某个用户收藏
  * @param  {Object}   args
- *  - topicId       话题 id
- *  - userId        用户 id
+ *  - id       话题 id
+ *  - userId   用户 id
  * @param  {Function} callback 回调函数
  *  - err    MongooseError
  *  - favorited   true: 收藏, false: 未收藏
  */
 exports.isFavoritedBy = function(args, callback) {
-  var topicId = args.topicId,
+  var topicId = args.id,
     userId = args.userId;
   FavoriteTopic.findOne({
     topicId: topicId,
@@ -131,15 +131,34 @@ exports.isFavoritedBy = function(args, callback) {
 /**
  * 收藏话题
  * @param  {Object}   args
- *  - topicId       话题 id
- *  - userId        用户 id
+ *  - id       话题 id
+ *  - userId   用户 id
  * @param  {Function} callback 回调函数
  *  - err    MongooseError
  */
 exports.favorite = function(args, callback) {
-  var topicId = args.topicId,
+  var topicId = args.id,
     userId = args.userId;
   FavoriteTopic.create({
+    topicId: topicId,
+    userId: userId
+  }, function(err) {
+    callback(err);
+  });
+};
+
+/**
+ * 取消话题收藏
+ * @param  {Object}   args
+ *  - id       话题 id
+ *  - userId   用户 id
+ * @param  {Function} callback 回调函数
+ *  - err    MongooseError
+ */
+exports.removeFavorite = function(args, callback) {
+  var topicId = args.id,
+    userId = args.userId;
+  FavoriteTopic.findOneAndRemove({
     topicId: topicId,
     userId: userId
   }, function(err) {

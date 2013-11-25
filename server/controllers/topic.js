@@ -144,7 +144,7 @@ exports.get = function(req, res, next) {
         return next(null, false);
       }
       api.topic.isFavoritedBy({
-        topicId: id,
+        id: id,
         userId: req.user.id
       }, function(err, favorited) {
         return next(err, favorited);

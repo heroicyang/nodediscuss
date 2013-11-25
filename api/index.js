@@ -25,6 +25,10 @@ module.exports = exports = {
 exports.requestHandler = function(apiMethod) {
   return function(req, res, next) {
     var options = _.extend(req.body, req.query, req.params);
+    if (req.isAuthenticated()) {
+      options.userId = req.user.id;
+    }
+    
     async.waterfall([
       function call(next) {
         if (apiMethod.length === 1) {

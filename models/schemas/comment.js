@@ -24,7 +24,7 @@ var CommentSchema = new Schema({
     type: Boolean,
     default: false
   },
-  commentId: String,
+  commentIds: [String],
   content: String,
   htmlContent: String,
   author: {

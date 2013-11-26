@@ -190,7 +190,7 @@ describe('Model#Comment', function() {
           function replyComment(next) {
             Comment.create({
               topicId: self.topic.id,
-              commentId: self.comment.id,
+              commentIds: [self.comment.id],
               content: 'this is a reply comment...',
               author: {
                 id: self.user.id

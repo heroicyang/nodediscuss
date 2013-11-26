@@ -118,7 +118,10 @@ exports.get = function(req, res, next) {
     },
     latestComments: function(next) {
       api.comment.query({
-        conditions: { 'author.username': username },
+        conditions: {
+          'author.username': username,
+          deleted: false
+        },
         sort: { createdAt: -1 }
       }, function(err, comments) {
         if (err) {

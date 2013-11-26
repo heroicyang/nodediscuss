@@ -58,7 +58,9 @@ block content
           - var floor = topic.commentCount - idx
           li(id="comment-#{floor}").list-group-item
             if comment.deleted
-              p 该评论已被删除。
+              p.deleted
+                | 该评论已被删除。
+                span ##{floor}楼
             else
               div.media
                 div.pull-left.avatar-48
@@ -77,7 +79,8 @@ block content
                           i.fa.fa-reply
                       else
                         a(href="#", title="删除",
-                          data-comment-id="#{comment._id}").del-comment-btn
+                          data-comment-id="#{comment._id}",
+                          data-floor="#{floor}").del-comment-btn
                           i.fa.fa-trash-o
                   div.meta
                     a(href="/user/#{comment.author.username}").username #{comment.author.nickname}

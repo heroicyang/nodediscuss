@@ -58,9 +58,8 @@ module.exports = exports = function(app) {
 
   // 评论相关的路由配置
   app.all('/comment/*', auth.authRequired);
-  app.post('/comment/create', commentCtrl.create);  // 评论话题
-  app.post('/comment/:id/reply', noopRequestHandler);  // 回复评论
-  app.post('/comment/:id/del', noopRequestHandler);  // 删除评论
+  app.post('/comment/create', commentCtrl.create);
+  app.post('/comment/:id/del', api.requestHandler(api.comment.remove));  // 删除评论
 
   // 通知相关的路由配置
   app.get('/notifications',

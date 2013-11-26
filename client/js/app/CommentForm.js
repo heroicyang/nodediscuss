@@ -4,6 +4,7 @@ NC.Module.define('CommentForm',
     return NC.Module.extend({
       initialize: function() {
         this.setupForm();
+        this.listenTo(this.form, 'validated', this.onFormValidated);
       },
       onBuildComplete: function() {
         this.editor = this.getChildById('contentEditor');
@@ -18,6 +19,12 @@ NC.Module.define('CommentForm',
         }, {
           isErrMsgOnHelpBlock: false
         });
+      },
+      onFormValidated: function() {
+        var commentButton = this.getChildById('commentButton');
+        commentButton.showLoading();
+        this.$form.off('submit');
+        this.$form.submit();
       },
       insertTextToEditor: function(data) {
         this.editor.insert(data);

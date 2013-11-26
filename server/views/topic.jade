@@ -55,7 +55,8 @@ block content
           span= moment(topic.lastCommentedAt).format('YYYY-MM-DD HH:mm:ss')
       ul.list-group
         each comment, idx in comments
-          li.list-group-item
+          - var floor = topic.commentCount - idx
+          li(id="comment-#{floor}").list-group-item
             if comment.deleted
               p 该评论已被删除。
             else
@@ -68,15 +69,18 @@ block content
                   if isAuthenticated
                     div.pull-right.action
                       if comment.author.id !== loggedUser.id
-                        a(href="#", title="回复")
+                        a(href="#comment", title="回复",
+                          data-username="#{comment.author.username}",
+                          data-nickname="#{comment.author.nickname}",
+                          data-floor="#{floor}").reply-comment-btn
                           i.fa.fa-reply
                       else
-                        a(href="#", title="删除")
+                        a(href="#", title="删除").del-comment-btn
                           i.fa.fa-trash-o
                   div.meta
                     a(href="/user/#{comment.author.username}").username #{comment.author.nickname}
                     span= moment(comment.createdAt).fromNow()
-                    span ##{topic.commentCount - idx}楼
+                    span ##{floor}楼
                   div.content !{comment.htmlContent}
   else
     div#comment-list-panel.no-comment.panel.panel-default
@@ -97,7 +101,8 @@ block content
               div.col-sm-12
                 input(type="hidden", name="_csrf", value="#{csrfToken}")
                 input(type="hidden", name="topicId", value="#{topic._id}")
-                button(type="submit", data-loading-text="正在评论...").btn.btn-primary 评论
+                button(type="submit",
+                       data-loading-text="正在评论...")#comment-btn.btn.btn-primary 评论
 block sidebar
   if isAuthenticated
     include ./sidebar/user_card
@@ -116,6 +121,13 @@ block script
           id: '#{topic._id}',
           isFavorited: #{isFavorited}
         }
+      },
+      {
+        name: 'CommentList',
+        el: '#comment-list-panel',
+        data: {
+          id: '#{topic._id}'
+        }
       }
     ];
     if (NC.currentUser.isAuthenticated()) {
@@ -127,6 +139,11 @@ block script
             name: 'Editor',
             el: '#comment-editor',
             id: 'contentEditor'
+          },
+          {
+            name: 'ButtonBase',
+            el: '#comment-btn',
+            id: 'commentButton'
           }
         ]
       });

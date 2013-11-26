@@ -73,16 +73,20 @@ NC.Module.define('Editor', [], function() {
     },
     /** 格式化文本框中的 markdown 文本 */
     onTabShow: function(e) {
+      var val = this.$textarea.val();
       if ($(e.target).attr('href') === '#preview') {
-        $('#preview').html(marked(this.$textarea.val()));
+        if (this.processValue) {
+          val = this.processValue(val);
+        }
+        $('#preview').html(marked(val));
       }
     },
     /** 生成一段预设的代码模板 */
     onCodeInsertClick: function(e) {
       e.preventDefault();
       var lang = $(e.currentTarget).data('lang'),
-        codeWrap = '\n```' + lang + '\n\n' + '```\n',
-        cursorMove = lang.length + 5;  // 5: 第一行起始和结束的换行符，以及 ``` 的长度
+        codeWrap = '```' + lang + '\n\n' + '```',
+        cursorMove = lang.length + 4;  // 4: 开头的 ``` 长度 + 第一行结束的换行符
 
       this._replaceSelection(codeWrap, cursorMove);
     },
@@ -143,6 +147,11 @@ NC.Module.define('Editor', [], function() {
         val = textarea.value;
       text = text || '';
       cursorMove = cursorMove || 0;
+
+      if (val) {
+        text = '\n' + text;
+        cursorMove += 1;
+      }
 
       if (textarea.setSelectionRange) {
         var selectionStart = textarea.selectionStart,

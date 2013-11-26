@@ -134,6 +134,9 @@ block script
       moduleMapping.push({
         name: 'CommentForm',
         el: '#comment-form',
+        data: {
+          id: '#{topic._id}'
+        },
         children: [
           {
             name: 'Editor',

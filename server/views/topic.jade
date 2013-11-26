@@ -70,12 +70,14 @@ block content
                     div.pull-right.action
                       if comment.author.id !== loggedUser.id
                         a(href="#comment", title="回复",
+                          data-comment-id="#{comment._id}",
                           data-username="#{comment.author.username}",
                           data-nickname="#{comment.author.nickname}",
                           data-floor="#{floor}").reply-comment-btn
                           i.fa.fa-reply
                       else
-                        a(href="#", title="删除").del-comment-btn
+                        a(href="#", title="删除",
+                          data-comment-id="#{comment._id}").del-comment-btn
                           i.fa.fa-trash-o
                   div.meta
                     a(href="/user/#{comment.author.username}").username #{comment.author.nickname}

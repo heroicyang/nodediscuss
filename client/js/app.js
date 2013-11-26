@@ -203,5 +203,5 @@ NC.User = Backbone.Model.extend({
   }
 });
 
-/** 登录的用户对象 */
-NC.loggedUser = new NC.User();
+/** 当前访问的用户对象 */
+NC.currentUser = new NC.User();

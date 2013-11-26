@@ -88,7 +88,7 @@ html(lang="zh-CN")
     //- 如果用户已登录，则设置前端的用户对象
     if isAuthenticated
       script(type="text/javascript").
-        NC.loggedUser.set(!{loggedUserJson});
+        NC.currentUser.set(!{loggedUserJson});
     //- 继承 layout 模板的其它页面可以通过这个块来插入 js 代码
     block script
     //- 用自执行函数来初始化前端模块，因为里面还会用到一些临时变量，防止其污染全局
@@ -101,7 +101,7 @@ html(lang="zh-CN")
           }
           moduleChildren = moduleMapping;
         }
-        if (NC.loggedUser.isAuthenticated()) {
+        if (NC.currentUser.isAuthenticated()) {
           moduleChildren.push({
             name: 'LogoutButton',
             el: '#logout'

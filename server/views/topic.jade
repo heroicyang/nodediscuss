@@ -116,8 +116,10 @@ block script
           id: '#{topic._id}',
           isFavorited: #{isFavorited}
         }
-      },
-      {
+      }
+    ];
+    if (NC.currentUser.isAuthenticated()) {
+      moduleMapping.push({
         name: 'CommentForm',
         el: '#comment-form',
         children: [
@@ -127,5 +129,5 @@ block script
             id: 'contentEditor'
           }
         ]
-      }
-    ];
+      });
+    }

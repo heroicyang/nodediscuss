@@ -213,27 +213,6 @@ describe('Model#Comment', function() {
           }
         ], done);
       });
-      
-      it('should decrease `commentCount` of topic when delete a topic comment', function(done) {
-        var self = this;
-        Comment.destroy(this.comment.id, function(err) {
-          if (err) {
-            return done(err);
-          }
-          Topic.findById(self.topic.id, function(err, topic) {
-            if (err) {
-              return done(err);
-            }
-            topic.commentCount.should.eql(0);
-            done();
-          });
-        });
-      });
-
-      it('should decrease `commentCount` of page when delete a page comment', function(done) {
-        // TODO
-        done();
-      });
     });
   });
 

@@ -39,17 +39,7 @@ module.exports = exports = function(schema) {
           .and(function() {
             return this.commentIds.length > 0;
           })  // 有 commentIds 才代表是回复某条评论
-          .then(notifyCommentsAuthor))
-    .pre('save', true,    // 由于是非物理删除评论，所以仍然是执行的保存操作
-        when('deleted')   // 该属性代表评论被删除
-          .not('onPage')
-          .not('isNew')
-          .then(decreaseCommentCountOfTopic))
-    .pre('save', true,
-        when('deleted')
-          .and('onPage')
-          .not('isNew')
-          .then(decreaseCommentCountOfPage));
+          .then(notifyCommentsAuthor));
 };
 
 /**
@@ -152,33 +142,5 @@ function notifyCommentsAuthor(next, done) {
         }, next);
       }
     ], next);
-  }, done);
-}
-
-/**
- * 当删除评论时减掉对应话题的评论数
- */
-function decreaseCommentCountOfTopic(next, done) {
-  next();
-
-  var Topic = this.model('Topic');
-  Topic.findByIdAndUpdate(this.topicId, {
-    $inc: {
-      commentCount: -1
-    }
-  }, done);
-}
-
-/**
- * 当删除评论时减掉对应 Page 的评论数
- */
-function decreaseCommentCountOfPage(next, done) {
-  next();
-
-  var Page = this.model('Page');
-  Page.findByIdAndUpdate(this.topicId, {
-    $inc: {
-      commentCount: -1
-    }
   }, done);
 }

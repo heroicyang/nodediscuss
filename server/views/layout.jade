@@ -149,9 +149,25 @@ html(lang="zh-CN")
                   a(href="#").failed-images
                   span 图片上传失败，请稍后再试!
             div#preview.tab-pane.fade
+    //- 前端警告框模板
     script(type="text/template", id="client-alert-danger")
       div.alert.alert-danger.alert-dismissable
         button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
         | <% _.each(errors, function(error) { %>
         p <%= error %>
         | <% }); %>
+    //- 前端确认框模板
+    script(type="text/template", id="confirm-dialog-tmpl")
+      div.modal.fade
+        div.modal-dialog
+          div.modal-content
+            div.modal-header
+              button(type="button",
+                     data-dismiss="modal",
+                     aria-hidden="true").close &times;
+              h4.modal-title
+            div.modal-body: p
+            div.modal-footer
+              button(type="button",
+                     data-dismiss="modal").btn.btn-default 取消
+              button(type="button")#confirm-btn.btn.btn-primary 确定

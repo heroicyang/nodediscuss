@@ -2,9 +2,8 @@ extends layout
 block content
   div#notification-list.panel.panel-default
     div.panel-heading
-      div.row
-        div.col-xs-10.col-sm-10
-          include breadcrumb
+      button(type="button").btn.btn-default.btn-xs.pull-right 全部标记为已读
+      include breadcrumb
     if notifications.length > 0
       ul.list-group
         each notification in notifications
@@ -15,10 +14,9 @@ block content
                   img(src!="#{notification.user.avatar}",
                       alt="#{notification.user.nickname}").media-object.img-rounded.img-responsive
               div.media-body
-                div.pull-right.action
-                  if !notification.hasRead
-                    a(href="#", title="标记为已读")
-                      i.fa.fa-check-circle-o
+                if !notification.hasRead
+                  div.pull-right.unread
+                    i.fa.fa-flag
                 div.media-heading.title
                   a(href="/user/#{notification.user.username}") #{notification.user.nickname}
                   case notification.type
@@ -35,9 +33,13 @@ block content
                       | &#32;在评论&#32;
                       a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
                       | &#32;时提到了你
-                div.content
-                  if notification.type !== constants.NOTIFICATION_TYPE.FOLLOW
-                    | !{notification.comment.htmlContent}
+                if notification.type !== constants.NOTIFICATION_TYPE.FOLLOW
+                  div.panel.panel-default.content
+                    div.div.panel-body
+                      if notification.comment.deleted
+                        span 评论已被删除！
+                      else
+                        | !{notification.comment.htmlContent}
     else
       div.panel-body
         span 暂无提醒。

@@ -24,7 +24,9 @@ exports.index = function(req, res, next) {
         async.parallel({
           user: function(next) {
             api.user
-              .findById(notification.userId, function(err, user) {
+              .get({
+                id: notification.userId
+              }, function(err, user) {
                 next(err, user);
               });
           },
@@ -33,7 +35,9 @@ exports.index = function(req, res, next) {
               return next(null, null);
             }
             api.topic
-              .getById(notification.topicId, function(err, topic) {
+              .get({
+                id: notification.topicId
+              }, function(err, topic) {
                 next(err, topic);
               });
           },
@@ -42,7 +46,9 @@ exports.index = function(req, res, next) {
               return next(null, null);
             }
             api.comment
-              .getById(notification.masterCommentId, function(err, comment) {
+              .get({
+                id: notification.masterCommentId
+              }, function(err, comment) {
                 next(err, comment);
               });
           },
@@ -51,7 +57,9 @@ exports.index = function(req, res, next) {
               return next(null, null);
             }
             api.comment
-              .getById(notification.commentId, function(err, comment) {
+              .get({
+                id: notification.commentId
+              }, function(err, comment) {
                 next(err, comment);
               });
           }

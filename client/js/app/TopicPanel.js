@@ -24,6 +24,7 @@ NC.Module.define('TopicPanel', [], function() {
               self.$('.favorite-btn i').removeClass('fa-bookmark-o');
               self.$('.favorite-btn i').addClass('fa-bookmark');
             }
+            self.data.isFavorited = !self.data.isFavorited;
           }
         });
     }

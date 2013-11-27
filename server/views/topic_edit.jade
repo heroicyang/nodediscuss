@@ -33,8 +33,10 @@ block content
         div.form-group
           div.col-sm-12
             input(type="hidden", name="_csrf", value="#{csrfToken}")
+            if topic
+              input(type="hidden", name="id", value="#{topic._id}")
             button(type="submit",
-                   data-loading-text="正在发表...")#submit-topic-btn.btn.btn-primary 发表
+                   data-loading-text="正在发布...")#submit-topic-btn.btn.btn-primary 发布
   div.panel.panel-default
     div.panel-heading
       strong 话题发布指南

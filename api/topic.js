@@ -7,10 +7,24 @@
  * Module dependencies
  */
 var async = require('async'),
+  _ = require('lodash'),
   marked = require('../utils/marked'),
   models = require('../models'),
   Topic = models.Topic,
   FavoriteTopic = models.FavoriteTopic;
+
+/**
+ * 处理话题内容中的 @
+ * @param  {String} content 话题内容
+ * @return {String}   将 @ 替换成 markdown 链接标记之后的内容
+ */
+function processAt(content) {
+  return content.replace(/@([a-zA-Z0-9\-_]+)\s?/g, function(group, p1) {
+    return _.template('[@<%= username %>](/user/<%= username %>) ', {
+      username: p1
+    });
+  });
+}
 
 /**
  * 根据查询条件获取话题
@@ -61,7 +75,9 @@ exports.query = function(options, callback) {
 exports.create = function(topicData, callback) {
   async.waterfall([
     function processMarkdown(next) {
-      marked(topicData.content, function(err, htmlContent) {
+      var content = topicData.content;
+      content = processAt(content);
+      marked(content, function(err, htmlContent) {
         next(err, htmlContent);
       });
     },
@@ -69,6 +85,30 @@ exports.create = function(topicData, callback) {
       topicData.htmlContent = htmlContent;
       Topic.create(topicData, function(err) {
         next(err);
+      });
+    }
+  ], callback);
+};
+
+/**
+ * 编辑话题
+ * @param  {Object}   topicData 话题对象
+ * @param  {Function} callback  回调函数
+ *  - err     MongooseError|Error
+ */
+exports.edit = function(topicData, callback) {
+  async.waterfall([
+    function processMarkdown(next) {
+      var content = topicData.content;
+      content = processAt(content);
+      marked(content, function(err, htmlContent) {
+        next(err, htmlContent);
+      });
+    },
+    function updateTopic(htmlContent, next) {
+      topicData.htmlContent = htmlContent;
+      Topic.edit(topicData, function(err) {
+        return next(err);
       });
     }
   ], callback);

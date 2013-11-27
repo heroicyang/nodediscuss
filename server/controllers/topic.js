@@ -110,7 +110,7 @@ exports.create = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      req.breadcrumbs('发表新话题');
+      req.breadcrumbs('发布新话题');
       res.render('topic_edit', {
         tags: tags,
         err: req.flash('err')
@@ -167,6 +167,19 @@ exports.edit = function(req, res, next) {
       });
     });
     return;
+  }
+
+  if ('post' === method) {
+    var data = req.body;
+    if (data.id !== topicId) {
+      return next('Ops! 貌似某些地方出错啦!');
+    }
+    api.topic.edit(data, function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/topic/' + topicId);
+    });
   }
 };
 

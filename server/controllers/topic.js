@@ -61,6 +61,21 @@ exports.queryByTag = function(req, res, next) {
   queryOpts.conditions['tag.name'] = tagName;
 
   async.parallel({
+    tag: function(next) {
+      api.tag.get({
+        name: tagName
+      }, function(err, tag) {
+        if (err) {
+          return next(err);
+        }
+        if (!tag) {
+          err = new Error('话题不存在！');
+          err.code = 404;
+          return next(err);
+        }
+        return next(null, tag);
+      });
+    },
     topics: function(next) {
       api.topic.query(queryOpts, function(err, topics) {
         next(err, topics);

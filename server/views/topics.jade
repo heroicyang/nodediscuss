@@ -2,12 +2,27 @@ extends layout
 block content
   div#topic-list-panel.panel.panel-default
     div.panel-heading
-      div.row
-        div.col-xs-10.col-sm-10
-          include breadcrumb
-        div.col-xs-2.col-sm-2
+      if tag
+        div.pull-right.tag-head
+          span 主题总数&#32;
+            strong #{tag.topicCount}
           if isAuthenticated
-            a(href="/topic/create").btn.btn-default.btn-xs.pull-right 发表话题
+            | &#32;&#8226;&#32;
+            a(href="#") 收藏该节点
+        include breadcrumb
+        if isAuthenticated  
+          div.row.tag-content
+            div.col-xs-9.col-sm-11
+              p #{tag.describe}
+            div.col-xs-3.col-sm-1
+              a(href="/topic/create").btn.btn-default.btn-xs.pull-right 发布话题
+        else
+          div.tag-content
+            p #{tag.describe}
+      else
+        if isAuthenticated
+          a(href="/topic/create").btn.btn-default.btn-xs.pull-right 发布话题
+        include breadcrumb
     div.panel-body
       div.row.sorts
         div.pull-right

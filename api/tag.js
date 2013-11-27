@@ -51,3 +51,22 @@ exports.query = function(options, callback) {
 
   query.exec(callback);
 };
+
+/**
+ * 根据节点 id 或节点名获取节点
+ * @param  {Object}   tagData
+ *  - id    节点 id
+ *  - name  节点名
+ * @param  {Function} callback
+ *  - err     MongooseError
+ *  - tag     节点对象
+ */
+exports.get = function(tagData, callback) {
+  if (tagData.id) {
+    return Tag.findById(tagData.id, callback);
+  } else if (tagData.name) {
+    return Tag.findOne({
+      name: tagData.name
+    }, callback);
+  }
+};

@@ -76,6 +76,18 @@ exports.queryByTag = function(req, res, next) {
         return next(null, tag);
       });
     },
+    isTagFavorited: function(next) {
+      if (!req.isAuthenticated()) {
+        return next(null, false);
+      }
+      
+      api.tag.isFavoritedBy({
+        name: tagName,
+        userId: req.user.id
+      }, function(err, favorited) {
+        next(err, favorited);
+      });
+    },
     topics: function(next) {
       api.topic.query(queryOpts, function(err, topics) {
         next(err, topics);

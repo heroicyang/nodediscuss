@@ -40,18 +40,23 @@ module.exports = exports = function(app) {
   app.get('/settings', userCtrl.settings);
   app.post('/settings', userCtrl.settings);
 
+  // 节点相关的路由配置
+  app.get('/tag/:name', topicCtrl.queryByTag);
+  app.all('/tag/:id/*', auth.authRequired);
+  app.post('/tag/:id/favorite', api.requestHandler(api.tag.favorite));
+  app.post('/tag/:id/del_favorite', api.requestHandler(api.tag.removeFavorite));
+
   // 话题相关的路由配置
   app.all('/topic/create', auth.authRequired);
   app.get('/topic/create', topicCtrl.create);
   app.post('/topic/create', topicCtrl.create);
 
-  app.get('/tag/:name', topicCtrl.queryByTag);  // 该节点下的所有话题
   app.get('/topics', topicCtrl.list);
-  app.get('/topic/:id', topicCtrl.get);  // 详细话题页面
+  app.get('/topic/:id', topicCtrl.get);
 
   app.all('/topic/:id/*', auth.authRequired);
-  app.get('/topic/:id/edit', auth.isTopicAuthor, topicCtrl.edit); // 话题编辑页面
-  app.post('/topic/:id/edit', auth.isTopicAuthor, topicCtrl.edit);  // 更新话题
+  app.get('/topic/:id/edit', auth.isTopicAuthor, topicCtrl.edit);
+  app.post('/topic/:id/edit', auth.isTopicAuthor, topicCtrl.edit);
   app.post('/topic/:id/del', noopRequestHandler);  // 删除话题
   app.post('/topic/:id/favorite', api.requestHandler(api.topic.favorite));
   app.post('/topic/:id/del_favorite', api.requestHandler(api.topic.removeFavorite));
@@ -59,7 +64,7 @@ module.exports = exports = function(app) {
   // 评论相关的路由配置
   app.all('/comment/*', auth.authRequired);
   app.post('/comment/create', commentCtrl.create);
-  app.post('/comment/:id/del', api.requestHandler(api.comment.remove));  // 删除评论
+  app.post('/comment/:id/del', api.requestHandler(api.comment.remove));
 
   // 通知相关的路由配置
   app.get('/notifications',

@@ -50,7 +50,7 @@ module.exports = exports = function(app) {
   app.get('/topic/:id', topicCtrl.get);  // 详细话题页面
 
   app.all('/topic/:id/*', auth.authRequired);
-  app.get('/topic/:id/edit', noopRequestHandler); // 话题编辑页面
+  app.get('/topic/:id/edit', auth.isTopicAuthor, topicCtrl.edit); // 话题编辑页面
   app.post('/topic/:id/edit', noopRequestHandler);  // 更新话题
   app.post('/topic/:id/del', noopRequestHandler);  // 删除话题
   app.post('/topic/:id/favorite', api.requestHandler(api.topic.favorite));

@@ -116,7 +116,7 @@ exports.create = function(req, res, next) {
         err: req.flash('err')
       });
     });
-    return ;
+    return;
   }
 
   if ('post' === method) {
@@ -133,6 +133,40 @@ exports.create = function(req, res, next) {
       }
       res.redirect('/');
     });
+  }
+};
+
+/** 话题编辑页面 */
+exports.edit = function(req, res, next) {
+  var method = req.method.toLowerCase(),
+    topicId = req.params.id;
+
+  if ('get' === method) {
+    async.parallel({
+      tags: function(next) {
+        api.tag.query({
+          notPaged: true
+        },function(err, tags) {
+          if (err) {
+            return next(err);
+          }
+          tags = groupingTagsBySection(tags);
+          next(null, tags);
+        });
+      }
+    }, function(err, results) {
+      if (err) {
+        return next(err);
+      }
+      req.breadcrumbs('话题详情', '/topic/' + req.topic._id);
+      req.breadcrumbs('编辑话题');
+      res.render('topic_edit', {
+        tags: results.tags,
+        topic: req.topic,
+        err: req.flash('err')
+      });
+    });
+    return;
   }
 };
 

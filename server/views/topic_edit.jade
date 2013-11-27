@@ -5,7 +5,10 @@ block content
       include breadcrumb
     div.panel-body
       include error_alert
-      form(role="form", method="POST", action="/topic/create")#topic-edit-form.form-horizontal
+      - var url = '/topic/create'
+      if topic
+        url = '/topic/' + topic._id + '/edit'
+      form(role="form", method="POST", action="#{url}")#topic-edit-form.form-horizontal
         div.form-group
           div.col-xs-12.col-sm-3
             select(name="tag[id]").form-control
@@ -13,15 +16,20 @@ block content
               each tagList, sectionName in tags
                 optgroup(label="#{sectionName}")
                   each tag in tagList
-                    option(value="#{tag.id}") #{tag.name} 
+                    if topic && topic.tag.id === tag._id.toString()
+                      option(value="#{tag._id}", selected) #{tag.name}
+                    else
+                      option(value="#{tag._id}") #{tag.name}
           div.col-xs-12.visible-xs.mobile-sep &#32;
           div.col-xs-12.col-sm-9
             input(type="text", name="title", 
               maxlength="100", placeholder="请输入标题，字数在10到100个之间", 
+              value=topic ? topic.title : '',
               required)#title.form-control
         div.form-group
           div.col-sm-12
             textarea(name="content", rows="16")#content-editor.form-control
+              !{topic ? topic.content : ''}
         div.form-group
           div.col-sm-12
             input(type="hidden", name="_csrf", value="#{csrfToken}")

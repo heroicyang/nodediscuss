@@ -10,7 +10,7 @@ block content
         div.media-body
           if isAuthenticated && user.id !== loggedUser.id
             button(type="button").btn.btn-default.btn-sm.pull-right 加入关注
-          div.media-heading.info
+          div.media-heading
             h3.nickname #{user.nickname}
             if user.tagline
               p #{user.tagline}
@@ -55,7 +55,7 @@ block content
           | &#32;查看更多#{user.nickname}创建的话题
     else
       div.panel-body
-  div#latest-comments-panel.panel.panel-default
+  div#latest-comment-list.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近评论的话题
     if latestComments.length > 0
@@ -69,7 +69,7 @@ block content
                 span 评论了 #{comment.topic.author.nickname} 创建的话题&#32;
                 i.fa.fa-angle-right
                 a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
-            div.comment-content !{comment.htmlContent}
+            div.content !{comment.htmlContent}
       div.panel-footer
         a(href="#")
           i.fa.fa-angle-double-right

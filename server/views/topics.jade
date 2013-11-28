@@ -1,6 +1,6 @@
 extends layout
 block content
-  div#topic-list-panel.panel.panel-default
+  div#community-topics.panel.panel-default
     div.panel-heading
       if tag
         div.pull-right.tag-head
@@ -33,13 +33,13 @@ block content
         div.pull-right
           span.fa.fa-sort-amount-desc
           a(href="#{path}",
-            class=query.tab ? "" : "active").condition: span 默认
+            class=query.tab ? "" : "active").tab: span 默认
           a(href="#{path}?tab=excellent",
-            class=(query.tab === 'excellent') ? "active" : "").condition: span 优质话题
+            class=(query.tab === 'excellent') ? "active" : "").tab: span 优质话题
           a(href="#{path}?tab=no_comment",
-            class=(query.tab === 'no_comment') ? "active" : "").condition: span 无人回复
+            class=(query.tab === 'no_comment') ? "active" : "").tab: span 无人回复
           a(href="#{path}?tab=latest",
-            class=(query.tab === 'latest') ? "active" : "").condition: span 最新创建
+            class=(query.tab === 'latest') ? "active" : "").tab: span 最新创建
         div.clearfix
     ul.list-group.topic-list
       for topic in topics

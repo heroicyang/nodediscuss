@@ -3,8 +3,31 @@
  * @author heroic
  */
 
-// 话题列表面板
-#topic-list-panel
+// 通用的话题列表样式
+.topic-list
+  .list-group-item
+    .content
+      padding-right 36px
+
+      .title
+        font-size 16px
+
+      .meta
+        color #999
+        margin-bottom 1px
+
+        .tag
+          .label
+            padding .1em .5em .2em
+          &:hover
+            text-decoration none
+
+        .username
+          font-weight bold
+          color #777
+
+// 社区页面的话题列表
+#community-topics
   .tag-head
     font-size 12px
     color #777
@@ -29,43 +52,20 @@
     .fa
       color #999
 
-    .condition
+    .tab
       margin-left 10px
       color #999
       &.active
         color #555
         font-weight bold
 
-// 话题列表
-.topic-list
-  .list-group-item
-    .info
-      padding-right 36px
-
-      .title
-        font-size 16px
-
-      .meta
-        color #999
-        margin-bottom 1px
-
-        .tag
-          .label
-            padding .1em .5em .2em
-          &:hover
-            text-decoration none
-
-        .username
-          font-weight bold
-          color #777
-
-// 节点导航面板
-#tag-nav-panel
+// 社区页面的节点导航
+#tags-nav
   .section
     text-align right
     color #999
 
-// 详细页面话题面板
+// 话题详细页面的话题内容面板
 #topic-panel
   .header
     .title
@@ -108,8 +108,8 @@
     .share > a
       margin-right 15px
 
-// 详细页面评论列表面板
-#comment-list-panel
+// 话题详细页面的评论列表
+.comment-list
   .panel-body
     padding-top 0
     padding-bottom 0
@@ -136,6 +136,7 @@
       a
         font-weight bold
         color #777
+
       span
         margin-left 10px
 
@@ -151,7 +152,7 @@
       padding-bottom 15px
       text-align center
 
-// 话题编辑器页面
-#topic-edit-panel
+// 话题发布页面
+#topic-edit
   .mobile-sep
     margin 6px 0

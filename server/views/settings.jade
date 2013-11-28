@@ -58,21 +58,21 @@ block content
           div.col-sm-offset-3.col-sm-6
             input(type="hidden", name="_csrf", value="#{csrfToken}")
             button(type="submit").btn.btn-primary 保存设置
-  div#settings-avatar-panel.panel.panel-default
+  div#avatar-setting.panel.panel-default
     div.panel-heading
       span 头像
     div.panel-body
       div.form-horizontal
         div.form-group
           label.col-sm-3.control-label 当前头像
-          div.col-sm-6.avatars
+          div.col-sm-6.current
             img(src!="#{loggedUser.avatar}",
                 alt="#{loggedUser.nickname}").avatar-80.img-rounded.img-responsive.pull-left
             img(src!="#{loggedUser.avatar}",
                 alt="#{loggedUser.nickname}").avatar-64.img-rounded.img-responsive.pull-left
             img(src!="#{loggedUser.avatar}",
                 alt="#{loggedUser.nickname}").avatar-48.img-rounded.img-responsive.pull-left
-      div.row.instruction
+      div.row.intro
         span CNode 使用 
           a(href="http://en.wikipedia.org/wiki/Gravatar",
             target="_blank") Gravatar 

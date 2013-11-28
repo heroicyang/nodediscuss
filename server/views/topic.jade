@@ -47,7 +47,7 @@ block content
               i.fa.fa-bookmark-o
       div.clearfix
   if topic.commentCount > 0
-    div#comment-list-panel.panel.panel-default
+    div.comment-list.panel.panel-default
       div.panel-heading
         span #{topic.commentCount}&#32;评论
         if topic.commentCount > 0
@@ -88,7 +88,7 @@ block content
                     span ##{floor}楼
                   div.content !{comment.htmlContent}
   else
-    div#comment-list-panel.no-comment.panel.panel-default
+    div.comment-list.no-comment.panel.panel-default
       div.panel-body 目前尚无评论
   if isAuthenticated
     div#comment.add-comment
@@ -129,7 +129,7 @@ block script
       },
       {
         name: 'CommentList',
-        el: '#comment-list-panel',
+        el: '.comment-list',
         data: {
           id: '#{topic._id}'
         }

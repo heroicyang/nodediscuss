@@ -135,7 +135,9 @@ exports.get = function(req, res, next) {
               return next(err);
             }
             _.extend(comment, {
-              topic: topic
+              topic: topic || {
+                deleted: true
+              }
             });
             next(null, comment);
           });

@@ -66,9 +66,12 @@ block content
               div.comment-date.pull-right
                 span= moment(comment.createdAt).fromNow()
               div.title
-                span 评论了 #{comment.topic.author.nickname} 创建的话题&#32;
-                i.fa.fa-angle-right
-                a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
+                if comment.topic.deleted
+                  span 评论的该条话题已被删除。
+                else
+                  span 评论了 #{comment.topic.author.nickname} 创建的话题&#32;
+                  i.fa.fa-angle-right
+                  a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
             div.content !{comment.htmlContent}
       div.panel-footer
         a(href="#")

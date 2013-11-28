@@ -10,7 +10,10 @@ block content
       ul.list-group.topic-list
         each topic in topics
           li.list-group-item
-            include topic_list_item
+            if topic.deleted
+              span 该话题已被删除。
+            else
+              include topic_list_item
 block sidebar
   include ./sidebar/user_card
   include ./sidebar/top_tags

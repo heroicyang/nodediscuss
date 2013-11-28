@@ -11,7 +11,6 @@ var async = require('async'),
   models = require('../models'),
   Topic = models.Topic,
   FavoriteTopic = models.FavoriteTopic,
-  Tag = models.Tag,
   FavoriteTag = models.FavoriteTag;
 
 /**
@@ -50,7 +49,7 @@ exports.queryFavoriteTopics = function(options, callback) {
     function mappingTopics(favorites, next) {
       async.map(favorites, function(favorite, next) {
         Topic.findById(favorite.topicId, fields, function(err, topic) {
-          next(err, topic);
+          next(err, topic || { deleted: true });
         });
       }, function(err, favoriteTopics) {
         next(err, favoriteTopics);

@@ -16,7 +16,9 @@ block content
               each tagList, sectionName in tags
                 optgroup(label="#{sectionName}")
                   each tag in tagList
-                    if topic && topic.tag.id === tag._id.toString()
+                    if currentTag && currentTag._id.toString() == tag._id.toString()
+                      option(value="#{tag._id}", selected) #{tag.name}
+                    else if topic && topic.tag.id === tag._id.toString()
                       option(value="#{tag._id}", selected) #{tag.name}
                     else
                       option(value="#{tag._id}") #{tag.name}

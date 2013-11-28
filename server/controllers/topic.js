@@ -121,8 +121,8 @@ exports.create = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    async.waterfall([
-      function getTags(next) {
+    async.parallel({
+      tags: function(next) {
         api.tag.query({
           notPaged: true
         },function(err, tags) {
@@ -132,16 +132,26 @@ exports.create = function(req, res, next) {
           tags = groupingTagsBySection(tags);
           next(null, tags);
         });
+      },
+      currentTag: function(next) {
+        var tagName = req.query.tag;
+        if (!tagName) {
+          return next(null, null);
+        }
+        api.tag.get({
+          name: tagName
+        }, function(err, tag) {
+          next(err, tag);
+        });
       }
-    ], function(err, tags) {
+    }, function(err, results) {
       if (err) {
         return next(err);
       }
       req.breadcrumbs('发布新话题');
-      res.render('topic_edit', {
-        tags: tags,
+      res.render('topic_edit', _.extend(results, {
         err: req.flash('err')
-      });
+      }));
     });
     return;
   }

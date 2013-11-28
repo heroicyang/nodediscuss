@@ -153,9 +153,10 @@ html(lang="zh-CN")
     script(type="text/template", id="client-alert-danger")
       div.alert.alert-danger.alert-dismissable
         button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
-        | <% _.each(errors, function(error) { %>
-        p <%= error %>
-        | <% }); %>
+        ul
+          | <% _.each(errors, function(error) { %>
+          li <%= error %>
+          | <% }); %>
     //- 前端确认框模板
     script(type="text/template", id="confirm-dialog-tmpl")
       div.modal.fade

@@ -1,5 +1,6 @@
 if err && err.errors
   div.alert.alert-danger.alert-dismissable
     button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
-    each error in err.errors
-      p #{error.message}
+    ul
+      each error in err.errors
+        li #{error.message}

@@ -225,6 +225,9 @@ exports.edit = function(req, res, next) {
  */
 exports.get = function(req, res, next) {
   var id = req.params.id;
+  var error = _.extend(req.flash('err'), {
+    showInGlobal: true
+  });
   async.parallel({
     topic: function(next) {
       api.topic.get({
@@ -258,7 +261,9 @@ exports.get = function(req, res, next) {
     }
     req.breadcrumbs(results.topic.tag.name, '/tag/' + results.topic.tag.name);
     req.breadcrumbs('话题详情');
-    res.render('topic', results);
+    res.render('topic', _.extend(results, {
+      err: error
+    }));
   });
 };
 

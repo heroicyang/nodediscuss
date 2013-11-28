@@ -73,7 +73,7 @@ function addContentValidators(schema) {
 
         done(!repeated);
       });
-    }, '不能发布重复评论!');
+    }, '不能发表重复评论!');
 }
 
 /**

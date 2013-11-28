@@ -1,5 +1,5 @@
 /**
- * 为 UserSchema 定义静态方法（Model类方法）
+ * User 类方法
  * @author heroic
  */
 

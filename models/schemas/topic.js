@@ -72,7 +72,7 @@ var TopicSchema = new Schema({
 });
 
 /**
- * Exports schema and model name
+ * Expose schema and model name
  * @type {object}
  */
 module.exports = {

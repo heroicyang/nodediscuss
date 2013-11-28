@@ -1,5 +1,5 @@
 /**
- * 为 UserSchema 定义实例方法
+ * 定义 User 的实例方法
  * @author heroic
  */
 

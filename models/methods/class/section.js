@@ -1,5 +1,5 @@
 /**
- * 定义 SectionSchema 的静态方法
+ * Section 类方法
  * @author heroic
  */
 

@@ -44,8 +44,8 @@ function registerModels() {
           schema = schemaInfo.schema,
           modelName = schemaInfo.modelName,
           validatorPath = getFullPath('./validators/' + schemaFile),
-          methodPath = getFullPath('./methods/method/' + schemaFile),
-          staticMethodPath = getFullPath('./methods/static/' + schemaFile),
+          instanceMethodPath = getFullPath('./methods/instance/' + schemaFile),
+          classMethodPath = getFullPath('./methods/class/' + schemaFile),
           preHookPath = getFullPath('./hooks/pre/' + schemaFile),
           postHookPath = getFullPath('./hooks/post/' + schemaFile);
 
@@ -55,13 +55,13 @@ function registerModels() {
         }
 
         // Adds instance methods
-        if (fs.existsSync(methodPath)) {
-          schema.method(require(methodPath));
+        if (fs.existsSync(instanceMethodPath)) {
+          schema.method(require(instanceMethodPath));
         }
 
-        // Adds static methods
-        if (fs.existsSync(staticMethodPath)) {
-          schema.static(require(staticMethodPath));
+        // Adds class methods
+        if (fs.existsSync(classMethodPath)) {
+          schema.static(require(classMethodPath));
         }
 
         // Adds pre hooks

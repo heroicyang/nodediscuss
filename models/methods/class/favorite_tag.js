@@ -1,5 +1,5 @@
 /**
- * 定义 FavoriteTagSchema 的静态方法
+ * FavoriteTag 类方法
  * @author heroic
  */
 

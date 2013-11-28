@@ -52,7 +52,7 @@ exports.query = function(options, callback) {
       createdAt: -1,
       lastCommentedAt: -1
     },
-    query = Topic.query();
+    query = Topic.find().lean();
 
   query = query.find(conditions)
     .sort(sort);

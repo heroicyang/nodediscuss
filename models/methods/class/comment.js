@@ -1,5 +1,5 @@
 /**
- * 定义 CommentSchema 的静态方法
+ * Comment 类方法
  * @author heroic
  */
 
@@ -11,11 +11,7 @@
  * @return {null}
  */
 exports.destroy = function(id, callback) {
-  this.findById(id, function(err, comment) {
-    if (err) {
-      return callback(err);
-    }
-    comment.deleted = true;
-    comment.save(callback);
-  });
+  this.findByIdAndUpdate(id, {
+    deleted: true
+  }, callback);
 };

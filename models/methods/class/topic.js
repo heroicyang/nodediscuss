@@ -1,5 +1,5 @@
 /**
- * 定义 TopicSchema 静态方法
+ * Topic 类方法
  * @author heroic
  */
 
@@ -46,13 +46,4 @@ exports.destroy = function(id, callback) {
     }
     topic.remove(callback);
   });
-};
-
-/**
- * 导出一个只返回纯 json 对象结果的查询
- * 在此基础上做其它的查询操作
- * @return {Query}     Mongoose Query 对象
- */
-exports.query = function() {
-  return this.find().lean();
 };

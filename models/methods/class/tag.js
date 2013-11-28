@@ -1,5 +1,5 @@
 /**
- * 定义 TagSchema 静态方法
+ * Tag 类方法
  * @author  heroic
  */
 

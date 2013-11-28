@@ -1,5 +1,5 @@
 /**
- * 定义 FavoriteTopicSchema 的静态方法
+ * FavoriteTopic 类方法
  * @author heroic
  */
 

@@ -234,46 +234,6 @@ describe('Model#Topic', function() {
           });
         });
       });
-
-      it('should remove all comments on this topic', function(done) {
-        var self = this;
-        async.waterfall([
-          function createComments(next) {
-            Comment.create([{
-              topicId: self.topic.id,
-              content: 'comment here...',
-              author: {
-                id: self.user.id
-              }
-            }, {
-              topicId: self.topic.id,
-              content: 'comment here...',
-              author: {
-                id: self.user.id
-              }
-            }], function(err) {
-              next(err);
-            });
-          },
-          function removeTopic(next) {
-            Topic.destroy(self.topic.id, function(err) {
-              if (err) {
-                return next(err);
-              }
-              Comment.find({
-                topicId: self.topic.id
-              }, function(err, comments) {
-                if (err) {
-                  return next(err);
-                }
-                comments.should.be.empty;
-                comments.should.have.length(0);
-                next();
-              });
-            });
-          }
-        ], done);
-      });
     });
   });
 

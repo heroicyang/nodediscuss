@@ -110,10 +110,6 @@
 
 // 话题详细页面的评论列表
 .comment-list
-  .panel-body
-    padding-top 0
-    padding-bottom 0
-
   .list-group-item
     .deleted
       margin-bottom 0
@@ -144,13 +140,10 @@
       p:last-child
         margin-bottom 0
 
-  &.no-comment
-    border-style dashed
-
-    .panel-body
-      padding-top 15px
-      padding-bottom 15px
-      text-align center
+// 话题详细页面的无评论时提示
+.no-comment
+  border-style dashed
+  text-align center
 
 // 话题发布页面
 #topic-edit

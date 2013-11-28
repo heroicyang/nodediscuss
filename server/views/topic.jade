@@ -47,13 +47,13 @@ block content
               i.fa.fa-bookmark-o
       div.clearfix
   if topic.commentCount > 0
-    div.comment-list.panel.panel-default
+    div.panel.panel-default
       div.panel-heading
         span #{topic.commentCount}&#32;评论
         if topic.commentCount > 0
           span &#32;&#448;&#32;最后评论于&#32;
           span= moment(topic.lastCommentedAt).format('YYYY-MM-DD HH:mm:ss')
-      ul.list-group
+      ul.list-group.comment-list
         each comment, idx in comments
           - var floor = topic.commentCount - idx
           li(id="comment-#{floor}").list-group-item
@@ -88,7 +88,7 @@ block content
                     span ##{floor}楼
                   div.content !{comment.htmlContent}
   else
-    div.comment-list.no-comment.panel.panel-default
+    div.no-comment.panel.panel-default
       div.panel-body 目前尚无评论
   if isAuthenticated
     div#comment.add-comment

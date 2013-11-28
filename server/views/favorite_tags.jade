@@ -1,12 +1,17 @@
 extends layout
 block content
-  div.panel.panel-default
+  div#favorite-tags.panel.panel-default
     div.panel-heading
       include breadcrumb
-    if loggedUser.favoriteTopicCount <= 0
+    if loggedUser.favoriteTagCount <= 0
       div.panel-body
-        span 你还没有收藏过话题。
+        span 你还没有收藏过节点。
     else
+      div.panel-body
+        ul.list-inline.tags
+          each tag in tags
+            li: a(href="/tag/#{tag.name}")
+              span.label.label-default #{tag.name}
       ul.list-group.topic-list
         each topic in topics
           li.list-group-item

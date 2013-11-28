@@ -70,6 +70,7 @@ module.exports = exports = function(app) {
   // 收藏列表相关的路由
   app.all('/favorite/*', auth.authRequired);
   app.get('/favorite/topics', favoriteCtrl.topicList);
+  app.get('/favorite/tags', favoriteCtrl.tagList);
 
   // 通知相关的路由配置
   app.get('/notifications',

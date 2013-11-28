@@ -42,7 +42,7 @@ block content
             class=(query.tab === 'latest') ? "active" : "").tab: span 最新创建
         div.clearfix
     ul.list-group.topic-list
-      for topic in topics
+      each topic in topics
         li.list-group-item
           include topic_list_item
   include tag_nav

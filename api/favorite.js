@@ -7,6 +7,7 @@
  * Module dependencies
  */
 var async = require('async'),
+  _ = require('lodash'),
   models = require('../models'),
   Topic = models.Topic,
   FavoriteTopic = models.FavoriteTopic,
@@ -56,4 +57,16 @@ exports.queryFavoriteTopics = function(options, callback) {
       });
     }
   ], callback);
+};
+
+exports.tags = function(options, callback) {
+  var userId = options.userId;
+  FavoriteTag.find({
+    userId: userId
+  }, function(err, favoriteTags) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, _.pluck(favoriteTags, 'tag'));
+  });
 };

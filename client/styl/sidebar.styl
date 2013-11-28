@@ -3,39 +3,50 @@
  * @author heroic
  */
 
-#sidebar
-  #user-card
-    .username
-      font-weight bold
-      font-size 16px
+// 登录后的侧边栏用户信息
+#user-card
+  .username
+    font-weight bold
+    font-size 16px
 
-    .tagline
-      font-size 12px
-      color #999
+  .tagline
+    font-size 12px
+    color #999
 
-    .state
-      text-align center
+  .state
+    text-align center
+    a
+      color #777
 
-    .panel-footer
-      font-size 13px
+      strong 
+        color #444
+      
+      &:hover,
+      &:hover strong
+        color #4183c4
+        text-decoration none
 
-      .badge
-        padding 2px 6px
-        background #b94c22
+  .panel-footer
+    font-size 13px
 
-      .notification
-        color #777
+    .badge
+      padding 2px 6px
+      background #b94c22
 
-      .score
-        .fa
-          color #4183c4
+    .notification
+      color #777
 
-  #markdown-refer
-    li
-      margin-bottom 2px
-    p
-      margin 0
+    .score
+      .fa
+        color #4183c4
 
-    pre
-      margin 0
-      padding 5px 5px 0
+// 发布话题时侧边栏的 Markdown 语法参考
+#markdown-refer
+  li
+    margin-bottom 2px
+  p
+    margin 0
+
+  pre
+    margin 0
+    padding 5px 5px 0

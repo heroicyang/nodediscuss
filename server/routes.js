@@ -13,6 +13,7 @@ var auth = require('./authorization'),
   userCtrl = controllers.user,
   topicCtrl = controllers.topic,
   commentCtrl = controllers.comment,
+  favoriteCtrl = controllers.favorite,
   notificationCtrl = controllers.notification;
 var noopRequestHandler = function(req, res, next) {};
 
@@ -65,6 +66,10 @@ module.exports = exports = function(app) {
   app.all('/comment/*', auth.authRequired);
   app.post('/comment/create', commentCtrl.create);
   app.post('/comment/:id/del', api.requestHandler(api.comment.remove));
+
+  // 收藏列表相关的路由
+  app.all('/favorite/*', auth.authRequired);
+  app.get('/favorite/topics', favoriteCtrl.topicList);
 
   // 通知相关的路由配置
   app.get('/notifications',

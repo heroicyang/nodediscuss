@@ -8,5 +8,6 @@ module.exports = exports = {
   user: require('./user'),
   topic: require('./topic'),
   comment: require('./comment'),
+  favorite: require('./favorite'),
   notification: require('./notification')
 };

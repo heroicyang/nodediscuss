@@ -14,17 +14,20 @@ div#user-card.panel.panel-default.hidden-xs
     li.list-group-item
       div.row.state
         div.col-xs-4.col-sm-4
-          div
-            a(href="#"): strong #{loggedUser.favoriteTagCount}
-          div 节点收藏
+          a(href="/favorite/tags")
+            span: strong #{loggedUser.favoriteTagCount}
+            br
+            span 节点收藏
         div.col-xs-4.col-sm-4
-          div
-            a(href="#"): strong #{loggedUser.favoriteTopicCount}
-          div 话题收藏
+          a(href="/favorite/topics")
+            span: strong #{loggedUser.favoriteTopicCount}
+            br
+            span 话题收藏
         div.col-xs-4.col-sm-4
-          div
-            a(href="#"): strong #{loggedUser.followingCount}
-          div 关注
+          a(href="/following")
+            span: strong #{loggedUser.followingCount}
+            br
+            span 关注
   div.panel-footer
     div.pull-right.score
       span(data-toggle="tooltip", title="积分")

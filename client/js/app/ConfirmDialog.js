@@ -10,6 +10,11 @@ NC.Module.define('ConfirmDialog', [], function() {
       this.$('.modal-title').text(title);
       this.$('.modal-body p').text(content);
       this.$el.modal();
+      this.$el.on('shown.bs.modal', function() {
+        $('body').addClass('modal-open');
+      }).on('hidden.bs.modal', function() {
+        $('body').removeClass('modal-open');
+      });
     },
     onConfirmClick: function() {
       this.trigger('confirmed');

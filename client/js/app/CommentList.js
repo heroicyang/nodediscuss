@@ -17,23 +17,6 @@ NC.Module.define('CommentList', [], function() {
     },
     onDeleteCommentClick: function(e) {
       e.preventDefault();
-      window.confirm('确认要删除该条评论？', function(confirmed) {
-        if (confirmed) {
-          var $el = $(e.currentTarget),
-            id = $el.data('comment-id'),
-            floor = $el.data('floor'),
-            url = '/comment/' + id + '/del',
-            $commentItem = $el.closest('li.list-group-item');
-          $.post(url)
-            .done(function(data) {
-              if (data.success) {
-                $commentItem.empty();
-                $commentItem.html('<p class="deleted">该评论已被删除。<span>#' + floor + '楼</span></p>');
-              }
-            });
-        }
-      });
-      /*  使用 Bootstrap 模态对话框的形式
       var self = this;
       NC.loadModule({
         name: 'ConfirmDialog',
@@ -53,7 +36,7 @@ NC.Module.define('CommentList', [], function() {
               }
             });
         });
-      });*/
+      });
     }
   });
 });

@@ -43,7 +43,10 @@ exports.list = function(req, res, next) {
         query: conditions,
         sort: sort
       }, function(err, results) {
-        next(err, _.extend(results.topics, {
+        if (err) {
+          return next(err);
+        }
+        next(null, _.extend(results.topics, {
           totalCount: results.totalCount
         }));
       });

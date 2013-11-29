@@ -68,4 +68,5 @@ CentralizedError.prototype.__proto__ = Error.prototype;
 /**
  * Expose other errors
  */
-exports.UnauthorizedError = require('./errors/unauthorized');
+exports.NotAllowedError = require('./errors/notallowed');
+exports.NotFoundError = require('./errors/notfound');

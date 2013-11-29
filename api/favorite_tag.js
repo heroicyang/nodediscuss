@@ -31,7 +31,7 @@ var async = require('async'),
 exports.query = function(options, callback) {
   options = options || {};
   var userId = options.userId,
-    includeTopics = typeof options.includeTopics === undefined ?
+    includeTopics = typeof options.includeTopics !== undefined ?
         options.includeTopics : true,
     pageIndex = options.pageIndex,
     pageSize = options.pageSize,
@@ -64,9 +64,7 @@ exports.query = function(options, callback) {
           });
         });
     }
-  ], function(err, results) {
-    callback(err, results);
-  });
+  ], callback);
 };
 
 /**

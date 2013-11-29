@@ -11,7 +11,7 @@ NC.Module.define('ButtonBase', [], function() {
       this.$el.button();
     },
     onButtonClick: function() {
-      this.trigger('buttonClick');
+      this.trigger('button:click');
     },
     showLoading: function() {
       this.$el.button('loading');

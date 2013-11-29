@@ -116,8 +116,9 @@ exports.get = function(req, res, next) {
         next(err, user);
       });
     },
-    followed: ['user', function(next, user) {
-      if (!req.isAuthenticated() || req.username === user.username) {
+    followed: ['user', function(next, results) {
+      var user = results.user;
+      if (!req.isAuthenticated() || req.user.username === user.username) {
         return next(null);
       }
       api.relation.check({

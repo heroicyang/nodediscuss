@@ -36,7 +36,7 @@ exports.follow = function(args, callback) {
  * @param  {Function} callback
  *  - err    MongooseError
  */
-exports.follow = function(args, callback) {
+exports.unfollow = function(args, callback) {
   var userId = args.userId,
     followId = args.followId;
   Relation.destroy(userId, followId, callback);

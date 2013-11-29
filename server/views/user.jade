@@ -10,9 +10,11 @@ block content
         div.media-body
           if isAuthenticated && user.id !== loggedUser.id
             if followed
-              button(type="button")#follow-btn.btn.btn-default.btn-sm.pull-right 取消关注
+              button(type="button",
+                     data-loading-text="取消关注...")#follow-btn.btn.btn-default.btn-sm.pull-right 取消关注
             else
-              button(type="button")#follow-btn.btn.btn-default.btn-sm.pull-right 加入关注
+              button(type="button",
+                     data-loading-text="加入关注...")#follow-btn.btn.btn-default.btn-sm.pull-right 加入关注
           div.media-heading
             h3.nickname #{user.nickname}
             if user.tagline
@@ -88,3 +90,14 @@ block sidebar
       span #{user.nickname} 在 GitHub 上的代码仓库
     div.panel-body
       div 仓库列表
+block script
+  if isAuthenticated && user.id !== loggedUser.id
+    script(type="text/javascript").
+      var moduleMapping = {
+        name: 'FollowButton',
+        el: '#follow-btn',
+        data: {
+          followId: '#{user.id}',
+          followed: #{followed}
+        }
+      };

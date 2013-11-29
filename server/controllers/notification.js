@@ -14,7 +14,7 @@ exports.index = function(req, res, next) {
   async.waterfall([
     function queryNotifications(next) {
       api.notification.query({
-        conditions: { masterId: req.user.id }
+        conditions: { masterId: req.currentUser.id }
       }, function(err, notifications) {
         next(err, notifications);
       });

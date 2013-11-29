@@ -83,7 +83,7 @@ exports.queryByTag = function(req, res, next) {
       
       api.tag.isFavoritedBy({
         name: tagName,
-        userId: req.user.id
+        userId: req.currentUser.id
       }, function(err, favorited) {
         next(err, favorited);
       });
@@ -160,7 +160,7 @@ exports.create = function(req, res, next) {
     var data = req.body;
     _.extend(data, {
       author: {
-        id: req.user.id
+        id: req.currentUser.id
       }
     });
 
@@ -250,7 +250,7 @@ exports.get = function(req, res, next) {
       }
       api.topic.isFavoritedBy({
         id: id,
-        userId: req.user.id
+        userId: req.currentUser.id
       }, function(err, favorited) {
         return next(err, favorited);
       });

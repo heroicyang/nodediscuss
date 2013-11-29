@@ -31,14 +31,14 @@ module.exports = exports = function() {
 
     res.locals.isAuthenticated = req.isAuthenticated();
     if (req.isAuthenticated()) {
-      var simpledUser = _.pick(req.user, [
+      var currentUser = _.pick(req.currentUser, [
         '_id', 'username', 'nickname', 'avatar', 'topicCount',
         'wikiCount', 'followerCount', 'followingCount',
         'favoriteTopicCount', 'favoriteTagCount'
       ]);
-      simpledUser.id = req.user.id;
-      res.locals.loggedUser = simpledUser;
-      res.locals.loggedUserJson = JSON.stringify(simpledUser);
+      currentUser.id = req.currentUser.id;
+      res.locals.currentUser = req.currentUser;
+      res.locals.currentUserJson = JSON.stringify(currentUser);
     }
 
     res.locals.path = req.path;

@@ -118,11 +118,11 @@ exports.get = function(req, res, next) {
     },
     followed: ['user', function(next, results) {
       var user = results.user;
-      if (!req.isAuthenticated() || req.user.username === user.username) {
+      if (!req.isAuthenticated() || req.currentUser.username === user.username) {
         return next(null);
       }
       api.relation.check({
-        userId: req.user.id,
+        userId: req.currentUser.id,
         followId: user.id
       }, function(err, followed) {
         next(err, followed);
@@ -179,7 +179,7 @@ exports.settings = function(req, res, next) {
 
   if ('get' === method) {
     api.user.get({
-      id: req.user.id
+      id: req.currentUser.id
     }, function(err, user) {
       if (err) {
         return next(err);

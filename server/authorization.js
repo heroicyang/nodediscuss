@@ -59,7 +59,7 @@ exports.isTopicAuthor = function(req, res, next) {
       err.code = 404;
       return next(err);
     }
-    if (!req.isAuthenticated() || topic.author.id !== req.user.id) {
+    if (!req.isAuthenticated() || topic.author.id !== req.currentUser.id) {
       if ('get' === method) {
         return res.redirect('/topic/' + topicId);
       }

@@ -24,8 +24,8 @@ html(lang="zh-CN")
                 a(href="/") 社区
               li: a(href="/wiki") Wiki
               if isAuthenticated
-                li(class=(path === '/user/#{loggedUser.username}') ? "active" : "")
-                  a(href="/user/#{loggedUser.username}") #{loggedUser.nickname}
+                li(class=(path === '/user/#{currentUser.username}') ? "active" : "")
+                  a(href="/user/#{currentUser.username}") #{currentUser.nickname}
                 li(class=(path === '/settings') ? "active" : "")
                   a(href="/settings") 设置
                 li: a(href="#")#logout 退出
@@ -88,7 +88,7 @@ html(lang="zh-CN")
     //- 如果用户已登录，则设置前端的用户对象
     if isAuthenticated
       script(type="text/javascript").
-        NC.currentUser.set(!{loggedUserJson});
+        NC.currentUser.set(!{currentUserJson});
     //- 继承 layout 模板的其它页面可以通过这个块来插入 js 代码
     block script
     //- 用自执行函数来初始化前端模块，因为里面还会用到一些临时变量，防止其污染全局

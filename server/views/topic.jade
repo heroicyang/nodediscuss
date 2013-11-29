@@ -36,7 +36,7 @@ block content
           i.fa.fa-google-plus
       if isAuthenticated
         div.pull-right
-          if loggedUser.id === topic.author.id
+          if currentUser.id === topic.author.id
             a(href="/topic/#{topic._id}/edit", title="编辑话题")
               i.fa.fa-pencil-square-o
           else if isFavorited
@@ -70,7 +70,7 @@ block content
                 div.media-body
                   if isAuthenticated
                     div.pull-right.action
-                      if comment.author.id !== loggedUser.id
+                      if comment.author.id !== currentUser.id
                         a(href="#comment", title="回复",
                           data-comment-id="#{comment._id}",
                           data-username="#{comment.author.username}",
@@ -94,9 +94,9 @@ block content
     div#comment.add-comment
       div.media
         div.pull-left.avatar-48.hidden-xs
-          a(href="/user/#{loggedUser.username}")
-            img(src!="#{loggedUser.avatar}",
-                alt="#{loggedUser.nickname}").media-object.img-rounded.img-responsive
+          a(href="/user/#{currentUser.username}")
+            img(src!="#{currentUser.avatar}",
+                alt="#{currentUser.nickname}").media-object.img-rounded.img-responsive
         div.media-body
           form(role="form", method="POST", action="/comment/create")#comment-form.form-horizontal
             div.form-group

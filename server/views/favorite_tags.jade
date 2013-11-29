@@ -3,7 +3,7 @@ block content
   div#favorite-tags.panel.panel-default
     div.panel-heading
       include breadcrumb
-    if loggedUser.favoriteTagCount <= 0
+    if currentUser.favoriteTagCount <= 0
       div.panel-body
         span 你还没有收藏过节点。
     else

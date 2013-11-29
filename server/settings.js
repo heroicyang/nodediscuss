@@ -50,7 +50,9 @@ module.exports = exports = function(app) {
     });
 
     // 引入 passport 中间件
-    app.use(passport.initialize());
+    app.use(passport.initialize({
+      userProperty: 'currentUser'
+    }));
     app.use(passport.session());
 
     if (!config.static.host) {

@@ -9,51 +9,51 @@ block content
         div.form-group
           label.col-xs-3.col-sm-3.control-label 用户名
           div.col-xs-6.col-sm-6
-            p.form-control-static #{loggedUser.username}
+            p.form-control-static #{currentUser.username}
         div.form-group
           label.col-xs-3.col-sm-3.control-label Email
           div.col-xs-6.col-sm-6
-            p.form-control-static #{loggedUser.email}
+            p.form-control-static #{currentUser.email}
         div.form-group
           label(for="nickname").col-sm-3.control-label 昵称
           div.col-sm-6
             input(type="text",
                   name="nickname",
-                  value="#{loggedUser.nickname}")#nickname.form-control
+                  value="#{currentUser.nickname}")#nickname.form-control
         div.form-group
           label(for="website").col-sm-3.control-label 个人网站
           div.col-sm-6
             input(type="text",
                   name="website",
-                  value="#{loggedUser.website || ''}")#website.form-control
+                  value="#{currentUser.website || ''}")#website.form-control
         div.form-group
           label(for="location").col-sm-3.control-label 所在地
           div.col-sm-6
             input(type="text",
                   name="location",
-                  value="#{loggedUser.location || ''}")#location.form-control
+                  value="#{currentUser.location || ''}")#location.form-control
         div.form-group
           label(for="tagline").col-sm-3.control-label 签名
           div.col-sm-6
             input(type="text",
                   name="tagline",
-                  value="#{loggedUser.tagline || ''}")#tagline.form-control
+                  value="#{currentUser.tagline || ''}")#tagline.form-control
         div.form-group
           label(for="bio").col-sm-3.control-label 个人简介
           div.col-sm-6
-            textarea(name="bio", rows="5")#bio.form-control #{loggedUser.bio || ''}
+            textarea(name="bio", rows="5")#bio.form-control #{currentUser.bio || ''}
         div.form-group
           label(for="twitter").col-sm-3.control-label Twitter
           div.col-sm-6
             input(type="text",
                   name="twitter",
-                  value="#{loggedUser.twitter || ''}")#twitter.form-control
+                  value="#{currentUser.twitter || ''}")#twitter.form-control
         div.form-group
           label(for="github").col-sm-3.control-label GitHub Username
           div.col-sm-6
             input(type="text",
                   name="github",
-                  value="#{loggedUser.github || ''}")#github.form-control
+                  value="#{currentUser.github || ''}")#github.form-control
         div.form-group
           div.col-sm-offset-3.col-sm-6
             input(type="hidden", name="_csrf", value="#{csrfToken}")
@@ -66,12 +66,12 @@ block content
         div.form-group
           label.col-sm-3.control-label 当前头像
           div.col-sm-6.current
-            img(src!="#{loggedUser.avatar}",
-                alt="#{loggedUser.nickname}").avatar-80.img-rounded.img-responsive.pull-left
-            img(src!="#{loggedUser.avatar}",
-                alt="#{loggedUser.nickname}").avatar-64.img-rounded.img-responsive.pull-left
-            img(src!="#{loggedUser.avatar}",
-                alt="#{loggedUser.nickname}").avatar-48.img-rounded.img-responsive.pull-left
+            img(src!="#{currentUser.avatar}",
+                alt="#{currentUser.nickname}").avatar-80.img-rounded.img-responsive.pull-left
+            img(src!="#{currentUser.avatar}",
+                alt="#{currentUser.nickname}").avatar-64.img-rounded.img-responsive.pull-left
+            img(src!="#{currentUser.avatar}",
+                alt="#{currentUser.nickname}").avatar-48.img-rounded.img-responsive.pull-left
       div.row.intro
         span CNode 使用 
           a(href="http://en.wikipedia.org/wiki/Gravatar",

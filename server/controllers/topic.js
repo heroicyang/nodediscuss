@@ -19,9 +19,13 @@ exports.create = function(req, res, next) {
     async.parallel({
       tags: function(next) {
         api.tag.query({
-          notPaged: true
-        },function(err, tags) {
-          next(err, _.groupBy(tags, function(tag) {
+          pageSize: Infinity
+        }, function(err, results) {
+          if (err) {
+            return next(err);
+          }
+          var tags = results.tags;
+          next(null, _.groupBy(tags, function(tag) {
             return tag.section.name;
           }));
         });
@@ -74,9 +78,13 @@ exports.edit = function(req, res, next) {
     async.parallel({
       tags: function(next) {
         api.tag.query({
-          notPaged: true
-        },function(err, tags) {
-          next(err, _.groupBy(tags, function(tag) {
+          pageSize: Infinity
+        }, function(err, results) {
+          if (err) {
+            return next(err);
+          }
+          var tags = results.tags;
+          next(null, _.groupBy(tags, function(tag) {
             return tag.section.name;
           }));
         });

@@ -49,9 +49,14 @@ exports.list = function(req, res, next) {
       });
     },
     tags: function(next) {
-      var q = api.tag.query();
-      q.execQuery(function(err, tags) {
-        next(err, _.groupBy(tags, function(tag) {
+      api.tag.query({
+        pageSize: Infinity
+      }, function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        var tags = results.tags;
+        next(null, _.groupBy(tags, function(tag) {
           return tag.section.name;
         }));
       });

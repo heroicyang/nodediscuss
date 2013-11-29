@@ -39,30 +39,25 @@ exports.topics = function(req, res, next) {
   }
 
   async.parallel({
-    isFavorited: function(next) {
-      if (!req.isAuthenticated()) {
-        return next(null);
-      }
-
-      api.tag.isFavoritedBy({
-        userId: req.currentUser.id
-      }, function(err, favorited) {
-        next(err, favorited);
-      });
-    },
     topics: function(next) {
       api.topic.query({
-        conditions: conditions,
+        query: conditions,
         sort: sort
-      }, function(err, topics) {
-        next(err, topics);
+      }, function(err, results) {
+        next(err, _.extend(results.topics, {
+          totalCount: results.totalCount
+        }));
       });
     },
     tags: function(next) {
       api.tag.query({
-        notPaged: true
-      }, function(err, tags) {
-        next(err, _.groupBy(tags, function(tag) {
+        pageSize: Infinity
+      }, function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        var tags = results.tags;
+        next(null, _.groupBy(tags, function(tag) {
           return tag.section.name;
         }));
       });
@@ -83,7 +78,7 @@ exports.topics = function(req, res, next) {
 /** 根据节点名获取节点 */
 exports.load = function(req, res, next) {
   var name = req.params.name;
-  api.tag.get({
+  api.tag.get.call(req, {
     name: name
   }, function(err, tag) {
     if (err) {

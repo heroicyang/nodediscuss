@@ -135,7 +135,7 @@ exports.get = function(args, callback) {
       }
     },
     function checkFavorite(topic, next) {
-      if (!userId) {
+      if (!userId || !topic) {
         return next(null, topic);
       }
       topic.isFavoritedBy(userId, function(err, favorited) {

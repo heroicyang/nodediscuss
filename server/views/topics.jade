@@ -8,7 +8,7 @@ block content
             strong #{tag.topicCount}
           if isAuthenticated
             | &#32;&#8226;&#32;
-            if isTagFavorited
+            if isFavorited
               a(href="#", title="取消收藏#{tag.name}节点")#favorite-tag-btn 取消收藏
             else
               a(href="#", title="收藏#{tag.name}节点")#favorite-tag-btn 收藏该节点
@@ -31,15 +31,15 @@ block content
     div.panel-body
       div.row.sorts
         div.pull-right
-          span.fa.fa-sort-amount-desc
+          span.fa.fa-filter
           a(href="#{path}",
-            class=query.tab ? "" : "active").tab: span 默认
-          a(href="#{path}?tab=excellent",
-            class=(query.tab === 'excellent') ? "active" : "").tab: span 优质话题
-          a(href="#{path}?tab=no_comment",
-            class=(query.tab === 'no_comment') ? "active" : "").tab: span 无人回复
-          a(href="#{path}?tab=latest",
-            class=(query.tab === 'latest') ? "active" : "").tab: span 最新创建
+            class=filterType ? "" : "active").filter: span 默认
+          a(href="#{path}/excellent",
+            class=(filterType === 'excellent') ? "active" : "").filter: span 优质话题
+          a(href="#{path}/no-comment",
+            class=(filterType === 'no-comment') ? "active" : "").filter: span 无人回复
+          a(href="#{path}/latest",
+            class=(filterType === 'latest') ? "active" : "").filter: span 最新创建
         div.clearfix
     ul.list-group.topic-list
       each topic in topics
@@ -63,6 +63,6 @@ block script
         data: {
           id: '#{tag._id}',
           name: '#{tag.name}',
-          isFavorited: #{isTagFavorited}
+          isFavorited: #{isFavorited}
         }
       };

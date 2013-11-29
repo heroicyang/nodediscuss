@@ -1,85 +1,85 @@
 /**
  * 路由配置
- * @author  heroic
+ * @author heroic
  */
 
 /**
  * Module dependencies
  */
-var auth = require('./authorization'),
-  api = require('../api'),
-  controllers = require('./controllers'),
-  uploadCtrl = controllers.upload,
-  userCtrl = controllers.user,
-  topicCtrl = controllers.topic,
-  commentCtrl = controllers.comment,
-  favoriteCtrl = controllers.favorite,
-  notificationCtrl = controllers.notification;
-var noopRequestHandler = function(req, res, next) {};
+var api = require('../api'),
+  auth = require('./middlewares/auth'),
+  upload = require('./controllers/upload'),
+  user = require('./controllers/user'),
+  settings = require('./controllers/settings'),
+  topics = require('./controllers/topics'),
+  tag = require('./controllers/tag'),
+  topic = require('./controllers/topic'),
+  comment = require('./controllers/comment'),
+  favorite = require('./controllers/favorite'),
+  notification = require('./controllers/notification');
 
 module.exports = exports = function(app) {
-  // 上传文件
-  app.post('/upload/image',
-      auth.authRequired, uploadCtrl.uploadImage);
+  // 文件上传
+  app.all('/upload/:type', auth.isLogin);
+  app.post('/upload/image', upload.uploadImage);
 
-  app.get('/', topicCtrl.list);
+  // 用户
+  app.all('/signup', auth.unLogin, user.signup);
+  app.all('/signin', auth.unLogin, user.signin);
+  app.get('/active', user.activate);
+  app.post('/logout', auth.isLogin, user.logout);
+  app.all('/forgot_pass', user.forgotPassword);
 
-  // 用户相关的路由配置
-  app.all('/signup', auth.unreachableWhenAuthorized);
-  app.get('/signup', userCtrl.signup);
-  app.post('/signup', userCtrl.signup);
+  app.all('/user/:username', user.load);
+  app.get('/user/:username', user.get);
+  app.post('/user/:username/:op', auth.isLogin);
+  // 关注的相关操作直接调用 api
+  app.post('/user/:username/follow',
+      api.requestHandler(require('../api/relation').create));
+  app.post('/user/:username/unfollow',
+      api.requestHandler(require('../api/relation').remove));
 
-  app.all('/signin', auth.unreachableWhenAuthorized);
-  app.get('/signin', userCtrl.signin);
-  app.post('/signin', userCtrl.signin);
+  // 用户设置
+  app.all('/settings/:op', auth.isLogin);
+  app.all('/settings/profile', settings.profile);
+  app.post('/settings/change_pass', settings.changePassword);
 
-  app.post('/logout', auth.authRequired, userCtrl.logout);
-  app.get('/active', userCtrl.activate);
-  app.get('/user/:username', userCtrl.get);
+  // 提醒
+  app.all('/notifications/:op?', auth.isLogin);
+  app.get('/notifications', notification.list);
+  app.post('/notifications/read', notification.read);
 
-  app.all('/user/:followId/*', auth.authRequired);
-  app.post('/user/:followId/follow', api.requestHandler(api.relation.follow));
-  app.post('/user/:followId/unfollow', api.requestHandler(api.relation.unfollow));
+  // 话题列表
+  app.get('/', topics.list);
+  app.get('/topics/:type?', topics.list);
+  app.get('/tag/:name', tag.load, tag.topics);
+  app.get('/tag/:name/topics/:type?', tag.load, tag.topics);
 
-  app.all('/settings', auth.authRequired);
-  app.get('/settings', userCtrl.settings);
-  app.post('/settings', userCtrl.settings);
+  // 单个话题
+  app.all('/topic/create', auth.isLogin, topic.create);
+  app.get('/topic/:id', topic.load, topic.get);
+  app.all('/topic/:id/:op', auth.isLogin, topic.load);
+  app.all('/topic/:id/edit', auth.isTopicAuthor, topic.edit);
+  app.post('/topic/:id/remove', auth.isTopicAuthor, topic.remove);
 
-  // 节点相关的路由配置
-  app.get('/tag/:name', topicCtrl.queryByTag);
-  app.all('/tag/:id/*', auth.authRequired);
-  app.post('/tag/:id/favorite', api.requestHandler(api.tag.favorite));
-  app.post('/tag/:id/del_favorite', api.requestHandler(api.tag.removeFavorite));
+  // 收藏相关操作直接调用 api
+  app.post('/topic/:id/favorite',
+      api.requestHandler(api.favorite.topic.create));
+  app.post('/topic/:id/favorite?remove',
+      api.requestHandler(api.favorite.topic.remove));
+  app.post('/tag/:name/:op', auth.isLogin, tag.load);
+  app.post('/tag/:name/favorite',
+      api.requestHandler(api.favorite.tag.create));
+  app.post('/tag/:name/favorite?remove',
+      api.requestHandler(api.favorite.tag.remove));
+  // 收藏列表
+  app.get('/favorite/:type', auth.isLogin);
+  app.get('/favorite/topics', favorite.topics);
+  app.get('/favorite/tags', favorite.tags);
 
-  // 话题相关的路由配置
-  app.all('/topic/create', auth.authRequired);
-  app.get('/topic/create', topicCtrl.create);
-  app.post('/topic/create', topicCtrl.create);
-
-  app.get('/topics', topicCtrl.list);
-  app.get('/topic/:id', topicCtrl.get);
-
-  app.all('/topic/:id/*', auth.authRequired);
-  app.get('/topic/:id/edit', auth.isTopicAuthor, topicCtrl.edit);
-  app.post('/topic/:id/edit', auth.isTopicAuthor, topicCtrl.edit);
-  app.post('/topic/:id/del', noopRequestHandler);  // 删除话题
-  app.post('/topic/:id/favorite', api.requestHandler(api.topic.favorite));
-  app.post('/topic/:id/del_favorite', api.requestHandler(api.topic.removeFavorite));
-
-  // 评论相关的路由配置
-  app.all('/comment/*', auth.authRequired);
-  app.post('/comment/create', commentCtrl.create);
-  app.post('/comment/:id/del', api.requestHandler(api.comment.remove));
-
-  // 收藏列表相关的路由
-  app.all('/favorite/*', auth.authRequired);
-  app.get('/favorite/topics', favoriteCtrl.topicList);
-  app.get('/favorite/tags', favoriteCtrl.tagList);
-
-  // 通知相关的路由配置
-  app.get('/notifications',
-      auth.authRequired, notificationCtrl.index);  // 查看通知的页面
-
-  // 单一文档页面的路由
-  // app.get('/:slug', noopRequestHandler);
+  // 评论
+  app.post('/comment/create', auth.isLogin, comment.create);
+  // 删除评论直接调用 api
+  app.post('/comment/:id/remove', auth.isLogin, comment.load,
+      auth.isCommentAuthor, api.requestHandler(api.comment.remove));
 };

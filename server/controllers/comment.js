@@ -41,3 +41,7 @@ exports.create = function(req, res, next) {
     res.redirect('/topic/' + topicId);
   });
 };
+
+exports.load = function(req, res, next) {
+  var id = req.params.id;
+};

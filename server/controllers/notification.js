@@ -1,5 +1,5 @@
 /**
- * 提醒系统相关的控制逻辑
+ * 通知中心相关的控制逻辑
  * @author heroic
  */
 
@@ -10,7 +10,8 @@ var async = require('async'),
   _ = require('lodash'),
   api = require('../../api');
 
-exports.index = function(req, res, next) {
+/** 通知中心页面 */
+exports.list = function(req, res, next) {
   async.waterfall([
     function queryNotifications(next) {
       api.notification.query({
@@ -78,9 +79,14 @@ exports.index = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    req.breadcrumbs('提醒系统');
+    req.breadcrumbs('通知中心');
     res.render('notifications', {
       notifications: notifications
     });
   });
+};
+
+/** 将未读提醒标记为已读 */
+exports.read = function(req, res, next) {
+
 };

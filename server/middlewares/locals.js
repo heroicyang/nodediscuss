@@ -42,7 +42,6 @@ module.exports = exports = function() {
     }
 
     res.locals.path = req.path;
-    res.locals.query = req.query;
     
     res.locals._ = _;
     res.locals.moment = moment;

@@ -26,44 +26,13 @@ function processAt(content) {
   });
 }
 
-/**
- * 根据查询条件获取话题
- * @param  {Object}   options  查询选项
- *  - conditions  {Object}   查询条件，默认查询全部
- *  - pageIndex   {Number}   当前页数，默认为第1页
- *  - pageSize    {Number}   每页记录条数，默认20条
- *  - fields      {Object|String}  需要返回的字段，默认全部
- *  - sort        {Object}   排序条件，默认按创建时间和最后评论时间逆序排序
- * @param  {Function} callback 回调函数
- *  - err     MongooseError
- *  - topics  话题数组
- */
-exports.query = function(options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
+exports.query = function(conditions, callback) {
+  var q = Topic.query(conditions);
+  if (!callback) {
+    return q;
+  } else {
+    q.execQuery(callback);
   }
-
-  var conditions = options.conditions,
-    pageIndex = options.pageIndex || 1,
-    pageSize = options.pageSize || 20,
-    fields = options.fields || null,
-    sort = options.sort || {
-      createdAt: -1,
-      lastCommentedAt: -1
-    },
-    query = Topic.find().lean();
-
-  query = query.find(conditions)
-    .sort(sort);
-
-  if (fields) {
-    query = query.select(fields);
-  }
-
-  query = query.skip((pageIndex - 1) * pageSize).limit(pageSize);
-
-  query.exec(callback);
 };
 
 /**

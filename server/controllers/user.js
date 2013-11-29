@@ -1,5 +1,5 @@
 /**
- * 用户相关的视图控制逻辑
+ * 用户相关的控制逻辑
  * @author heroic
  */
 
@@ -9,7 +9,7 @@
 var _ = require('lodash'),
   async = require('async'),
   api = require('../../api'),
-  config = require('../../config');
+  NotFoundError = require('../../utils/error').NotFoundError;
 
 exports.signup = function(req, res, next) {
   var method = req.method.toLowerCase();
@@ -98,26 +98,30 @@ exports.activate = function(req, res, next) {
   });
 };
 
-exports.get = function(req, res, next) {
+exports.forgotPassword = function(req, res, next) {
+
+};
+
+exports.load = function(req, res, next) {
   var username = req.params.username;
-  async.auto({
-    user: function(next) {
-      api.user.get({
-        username: username
-      }, function(err, user) {
-        if (err) {
-          return next(err);
-        }
-        if (!user) {
-          err = new Error('Ops! 用户不存在！');
-          err.code = 404;
-          return next(err);
-        }
-        next(err, user);
-      });
-    },
-    followed: ['user', function(next, results) {
-      var user = results.user;
+  api.user.get({
+    username: username
+  }, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(new NotFoundError('该用户不存在。'));
+    }
+    req.user = user;
+    next();
+  });
+};
+
+exports.get = function(req, res, next) {
+  var user = req.user;
+  async.parallel({
+    followed: function(next, results) {
       if (!req.isAuthenticated() || req.currentUser.username === user.username) {
         return next(null);
       }
@@ -127,10 +131,10 @@ exports.get = function(req, res, next) {
       }, function(err, followed) {
         next(err, followed);
       });
-    }],
+    },
     latestTopics: function(next) {
       api.topic.query({
-        conditions: { 'author.username': username },
+        conditions: { 'author.username': user.username },
         sort: { createdAt: -1 }
       }, function(err, topics) {
         next(err, topics);
@@ -139,7 +143,7 @@ exports.get = function(req, res, next) {
     latestComments: function(next) {
       api.comment.query({
         conditions: {
-          'author.username': username,
+          'author.username': user.username,
           deleted: false
         },
         sort: { createdAt: -1 }
@@ -170,25 +174,8 @@ exports.get = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.render('user', results);
+    res.render('user', _.extend(results, {
+      user: user
+    }));
   });
-};
-
-exports.settings = function(req, res, next) {
-  var method = req.method.toLowerCase();
-
-  if ('get' === method) {
-    api.user.get({
-      id: req.currentUser.id
-    }, function(err, user) {
-      if (err) {
-        return next(err);
-      }
-      req.breadcrumbs('设置');
-      res.render('settings', {
-        loggedUser: user
-      });
-    });
-    return ;
-  }
 };

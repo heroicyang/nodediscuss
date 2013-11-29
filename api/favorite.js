@@ -13,6 +13,13 @@ var async = require('async'),
   FavoriteTopic = models.FavoriteTopic,
   FavoriteTag = models.FavoriteTag;
 
+var topic = {},
+  tag = {};
+module.exports = exports = {
+  topic: topic,
+  tag: tag
+};
+
 /**
  * 根据查询条件获取收藏的话题
  * @param  {Object}   options  查询选项

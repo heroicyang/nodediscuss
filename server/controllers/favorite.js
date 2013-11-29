@@ -10,7 +10,7 @@ var async = require('async'),
   _ = require('lodash'),
   api = require('../../api');
 
-exports.topicList = function(req, res, next) {
+exports.topics = function(req, res, next) {
   api.favorite.queryFavoriteTopics({
     userId: req.currentUser.id
   }, function(err, topics) {
@@ -24,7 +24,7 @@ exports.topicList = function(req, res, next) {
   });
 };
 
-exports.tagList = function(req, res, next) {
+exports.tags = function(req, res, next) {
   async.waterfall([
     function getAllFavoriteTags(next) {
       api.favorite.tags({

@@ -11,10 +11,12 @@ var fs = require('fs'),
   join = require('path').join,
   glob = require('glob'),
   mongoose = require('mongoose'),
-  timestampPlugin = require('./mongoose_plugins/timestamp');
+  timestampPlugin = require('./mongoose_plugins/timestamp'),
+  paginationPlugin = require('./mongoose_plugins/pagination');
 
 // Declares a global plugin executed on all Schemas
 mongoose.plugin(timestampPlugin());
+mongoose.plugin(paginationPlugin());
 
 if (!mongoose.modelNames().length) {
   registerModels();

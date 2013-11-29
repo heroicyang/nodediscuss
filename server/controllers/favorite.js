@@ -1,56 +1,34 @@
 /**
- * 用户收藏列表的逻辑控制
+ * 用户收藏列表相关的控制逻辑
  * @author heroic
  */
 
 /**
  * Module dependencies
  */
-var async = require('async'),
-  _ = require('lodash'),
-  api = require('../../api');
+var api = require('../../api');
 
+/** 话题收藏列表页面 */
 exports.topics = function(req, res, next) {
-  api.favorite.queryFavoriteTopics({
+  api.favorite.topic.query({
     userId: req.currentUser.id
-  }, function(err, topics) {
+  }, function(err, results) {
     if (err) {
       return next(err);
     }
     req.breadcrumbs('话题收藏');
-    res.render('favorite_topics', {
-      topics: topics
-    });
+    res.render('favorite_topics', results);
   });
 };
 
+/** 节点收藏页面 */
 exports.tags = function(req, res, next) {
-  async.waterfall([
-    function getAllFavoriteTags(next) {
-      api.favorite.tags({
-        userId: req.currentUser.id
-      }, function(err, tags) {
-        next(err, tags);
-      });
-    },
-    function queryTopics(tags, next) {
-      var tagIds = _.pluck(tags, 'id');
-      api.topic.query({
-        conditions: {
-          'tag.id': { $in: tagIds }
-        }
-      }, function(err, topics) {
-        next(err, {
-          tags: tags,
-          topics: topics
-        });
-      });
-    }
-  ], function(err, results) {
+  api.favorite.tag.query({
+    userId: req.currentUser.id
+  }, function(err, results) {
     if (err) {
       return next(err);
     }
-
     req.breadcrumbs('节点收藏');
     res.render('favorite_tags', results);
   });

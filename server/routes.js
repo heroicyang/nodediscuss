@@ -64,14 +64,14 @@ module.exports = exports = function(app) {
 
   // 收藏相关操作直接调用 api
   app.post('/topic/:id/favorite',
-      api.requestHandler(api.favorite.topic.create));
+      api.requestHandler(api.favoriteTopic.create));
   app.post('/topic/:id/favorite?remove',
-      api.requestHandler(api.favorite.topic.remove));
+      api.requestHandler(api.favoriteTopic.remove));
   app.post('/tag/:name/:op', auth.isLogin, tag.load);
   app.post('/tag/:name/favorite',
-      api.requestHandler(api.favorite.tag.create));
+      api.requestHandler(api.favoriteTag.create));
   app.post('/tag/:name/favorite?remove',
-      api.requestHandler(api.favorite.tag.remove));
+      api.requestHandler(api.favoriteTag.remove));
   // 收藏列表
   app.get('/favorite/:type', auth.isLogin);
   app.get('/favorite/topics', favorite.topics);

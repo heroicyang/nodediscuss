@@ -15,6 +15,7 @@ module.exports = exports = {
   tag: require('./tag'),
   comment: require('./comment'),
   favorite: require('./favorite'),
+  relation: require('./relation'),
   notification: require('./notification')
 };
 

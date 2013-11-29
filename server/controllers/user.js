@@ -100,14 +100,33 @@ exports.activate = function(req, res, next) {
 
 exports.get = function(req, res, next) {
   var username = req.params.username;
-  async.parallel({
+  async.auto({
     user: function(next) {
       api.user.get({
         username: username
       }, function(err, user) {
+        if (err) {
+          return next(err);
+        }
+        if (!user) {
+          err = new Error('Ops! 用户不存在！');
+          err.code = 404;
+          return next(err);
+        }
         next(err, user);
       });
     },
+    followed: ['user', function(next, user) {
+      if (!req.isAuthenticated() || req.username === user.username) {
+        return next(null);
+      }
+      api.relation.check({
+        userId: req.user.id,
+        followId: user.id
+      }, function(err, followed) {
+        next(err, followed);
+      });
+    }],
     latestTopics: function(next) {
       api.topic.query({
         conditions: { 'author.username': username },

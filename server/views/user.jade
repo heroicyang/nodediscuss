@@ -9,7 +9,10 @@ block content
                 alt="#{user.nickname}").media-object.img-rounded.img-responsive
         div.media-body
           if isAuthenticated && user.id !== loggedUser.id
-            button(type="button").btn.btn-default.btn-sm.pull-right 加入关注
+            if followed
+              button(type="button")#follow-btn.btn.btn-default.btn-sm.pull-right 取消关注
+            else
+              button(type="button")#follow-btn.btn.btn-default.btn-sm.pull-right 加入关注
           div.media-heading
             h3.nickname #{user.nickname}
             if user.tagline

@@ -37,6 +37,10 @@ module.exports = exports = function(app) {
   app.get('/active', userCtrl.activate);
   app.get('/user/:username', userCtrl.get);
 
+  app.all('/user/:followId/*', auth.authRequired);
+  app.post('/user/:followId/follow', api.requestHandler(api.relation.follow));
+  app.post('/user/:followId/unfollow', api.requestHandler(api.relation.unfollow));
+
   app.all('/settings', auth.authRequired);
   app.get('/settings', userCtrl.settings);
   app.post('/settings', userCtrl.settings);

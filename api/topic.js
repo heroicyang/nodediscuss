@@ -10,15 +10,14 @@ var async = require('async'),
   _ = require('lodash'),
   marked = require('../utils/marked'),
   models = require('../models'),
-  Topic = models.Topic,
-  FavoriteTopic = models.FavoriteTopic;
+  Topic = models.Topic;
 
 /**
  * 处理话题内容中的 @
  * @param  {String} content 话题内容
  * @return {String}   将 @ 替换成 markdown 链接标记之后的内容
  */
-function processAt(content) {
+function parseMention(content) {
   return content.replace(/@([a-zA-Z0-9\-_]+)\s?/g, function(group, p1) {
     return _.template('[@<%= username %>](/user/<%= username %>) ', {
       username: p1
@@ -67,7 +66,7 @@ exports.create = function(topicData, callback) {
   async.waterfall([
     function processMarkdown(next) {
       var content = topicData.content;
-      content = processAt(content);
+      content = parseMention(content);
       marked(content, function(err, htmlContent) {
         next(err, htmlContent);
       });
@@ -91,7 +90,7 @@ exports.edit = function(topicData, callback) {
   async.waterfall([
     function processMarkdown(next) {
       var content = topicData.content;
-      content = processAt(content);
+      content = parseMention(content);
       marked(content, function(err, htmlContent) {
         next(err, htmlContent);
       });
@@ -149,27 +148,4 @@ exports.get = function(args, callback) {
       });
     }
   ], callback);
-};
-
-/**
- * 检查某个话题是否被某个用户收藏
- * @param  {Object}   args
- *  - id       required   话题 id
- *  - userId   required   用户 id
- * @param  {Function} callback
- *  - err
- *  - favorited   true: 收藏, false: 未收藏
- */
-exports.isFavoritedBy = function(args, callback) {
-  var topicId = (this.topic && this.topic.id) || args.id,
-    userId = args.userId;
-  FavoriteTopic.findOne({
-    topicId: topicId,
-    userId: userId
-  }, function(err, favoriteTopic) {
-    if (err) {
-      return callback(err);
-    }
-    callback(null, !!favoriteTopic);
-  });
 };

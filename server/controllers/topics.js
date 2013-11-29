@@ -18,7 +18,7 @@ exports.list = function(req, res, next) {
   });
 
   var conditions = {},
-    sort = { createdAt: -1 };
+    sort;
   switch(filter) {
   case 'excellent':
     conditions.excellent = true;
@@ -39,10 +39,13 @@ exports.list = function(req, res, next) {
 
   async.parallel({
     topics: function(next) {
-      var q = api.topic.query(conditions);
-      q.query = q.query.sort(sort);
-      q.paginate(1, 20).exec(function(err, count, topics) {
-        next(err, topics);
+      api.topic.query({
+        query: conditions,
+        sort: sort
+      }, function(err, results) {
+        next(err, _.extend(results.topics, {
+          totalCount: results.totalCount
+        }));
       });
     },
     tags: function(next) {

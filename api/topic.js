@@ -26,20 +26,42 @@ function processAt(content) {
   });
 }
 
-exports.query = function(conditions, callback) {
+/**
+ * 获取话题列表
+ * @param  {Object}   options
+ *  - query          optional   查询条件，默认查询全部
+ *  - pageIndex      optional   当前页数，默认 1
+ *  - pageSize       optional   返回的记录数，默认 20
+ *  - sort  {Object} optional   排序规则，默认按创建时间倒序
+ * @param  {Function} callback
+ *  - err
+ *  - results
+ *    - totalCount    符合查询条件话题记录总数
+ *    - topics        话题列表
+ */
+exports.query = function(options, callback) {
+  options = options || {};
+  var conditions = options.query || {},
+    pageIndex = options.pageIndex,
+    pageSize = options.pageSize,
+    sort = options.sort || { createdAt: -1 };
+
   var q = Topic.query(conditions);
-  if (!callback) {
-    return q;
-  } else {
-    q.execQuery(callback);
-  }
+  q.query = q.query.sort(sort);
+  q.paginate(pageIndex, pageSize)
+    .exec(function(err, count, topics) {
+      callback(err, {
+        totalCount: count,
+        topics: topics
+      });
+    });
 };
 
 /**
- * 发表新话题
+ * 发布新话题
  * @param  {Object}   topicData 话题对象
- * @param  {Function} callback  回调函数
- *  - err     MongooseError|Error
+ * @param  {Function} callback
+ *  - err
  */
 exports.create = function(topicData, callback) {
   async.waterfall([
@@ -62,8 +84,8 @@ exports.create = function(topicData, callback) {
 /**
  * 编辑话题
  * @param  {Object}   topicData 话题对象
- * @param  {Function} callback  回调函数
- *  - err     MongooseError|Error
+ * @param  {Function} callback
+ *  - err
  */
 exports.edit = function(topicData, callback) {
   async.waterfall([
@@ -84,41 +106,62 @@ exports.edit = function(topicData, callback) {
 };
 
 /**
- * 根据话题 id 获取话题
+ * 根据 id 获取话题
  * @param  {Object}   args   
- *  - id      话题 id
- *  - isView  是否为查看该话题。如果是查看该话题则会将话题的 viewsCount 属性值 +1
- * @param  {Function} callback  回调函数
- *  - err     MongooseError
+ *  - id      required   话题 id
+ *  - isView  optional   是否为查看话题。是则将话题的浏览数+1
+ * @param  {Function} callback
+ *  - err
  *  - topic   话题对象
  */
 exports.get = function(args, callback) {
   var id = args.id,
+    userId = this.currentUser && this.currentUser.id,
     isView = typeof args.isView !== 'undefined' ? args.isView : false;
-  if (isView) {
-    Topic.findByIdAndUpdate(id, {
-      $inc: {
-        viewsCount: 1
+
+  async.waterfall([
+    function getTopic(next) {
+      if (isView) {
+        Topic.findByIdAndUpdate(id, {
+          $inc: {
+            viewsCount: 1
+          }
+        }, function(err, topic) {
+          next(err, topic);
+        });
+      } else {
+        Topic.findById(id, function(err, topic) {
+          next(err, topic);
+        });
       }
-    }, function(err, topic) {
-      callback(err, topic);
-    });
-  } else {
-    Topic.findById(id, callback);
-  }
+    },
+    function checkFavorite(topic, next) {
+      if (!userId) {
+        return next(null, topic);
+      }
+      topic.isFavoritedBy(userId, function(err, favorited) {
+        if (err) {
+          return next(err);
+        }
+        next(null, _.extend(topic, {
+          isFavorited: favorited
+        }));
+      });
+    }
+  ], callback);
 };
 
 /**
- * 根据话题 id 查询该话题是否被某个用户收藏
+ * 检查某个话题是否被某个用户收藏
  * @param  {Object}   args
- *  - id       话题 id
- *  - userId   用户 id
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
+ *  - id       required   话题 id
+ *  - userId   required   用户 id
+ * @param  {Function} callback
+ *  - err
  *  - favorited   true: 收藏, false: 未收藏
  */
 exports.isFavoritedBy = function(args, callback) {
-  var topicId = args.id,
+  var topicId = (this.topic && this.topic.id) || args.id,
     userId = args.userId;
   FavoriteTopic.findOne({
     topicId: topicId,
@@ -128,40 +171,5 @@ exports.isFavoritedBy = function(args, callback) {
       return callback(err);
     }
     callback(null, !!favoriteTopic);
-  });
-};
-
-/**
- * 收藏话题
- * @param  {Object}   args
- *  - id       话题 id
- *  - userId   用户 id
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
- */
-exports.favorite = function(args, callback) {
-  var topicId = args.id,
-    userId = args.userId;
-  FavoriteTopic.create({
-    topicId: topicId,
-    userId: userId
-  }, function(err) {
-    callback(err);
-  });
-};
-
-/**
- * 取消话题收藏
- * @param  {Object}   args
- *  - id       话题 id
- *  - userId   用户 id
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
- */
-exports.removeFavorite = function(args, callback) {
-  var topicId = args.id,
-    userId = args.userId;
-  FavoriteTopic.destroy(userId, topicId, function(err) {
-    callback(err);
   });
 };

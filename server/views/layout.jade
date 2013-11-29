@@ -42,7 +42,7 @@ html(lang="zh-CN")
                     button(type="submit").btn.btn-default
                       i.fa.fa-search
       div.container
-        if err && err.showInGlobal
+        if err && err.global
           div(class="alert-#{err.level || 'danger'}").global-alert.alert.alert-dismissable
             button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
             each error in err.errors

@@ -109,7 +109,7 @@ exports.edit = function(req, res, next) {
 /** 根据话题 id 获取话题 */
 exports.load = function(req, res, next) {
   var id = req.params.id;
-  api.topic.get({
+  api.topic.get.call(req, {
     id: id
   }, function(err, topic) {
     if (err) {
@@ -134,16 +134,6 @@ exports.get = function(req, res, next) {
         conditions: { topicId: req.topic.id }
       }, function(err, comments) {
         next(err, comments);
-      });
-    },
-    isFavorited: function(next) {
-      if (!req.isAuthenticated()) {
-        return next(null);
-      }
-      api.topic.isFavoritedBy({
-        userId: req.currentUser.id
-      }, function(err, favorited) {
-        return next(err, favorited);
       });
     }
   }, function(err, results) {

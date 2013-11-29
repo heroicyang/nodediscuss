@@ -10,12 +10,14 @@ module.exports = exports = function() {
     this.conditions = conditions;
     this.query = model.find(conditions).lean();
   }
+
   Paginate.prototype.paginate = function(pageIndex, pageSize) {
     pageIndex = pageIndex || 1;
     pageSize = pageSize || 20;
     this.query = this.query.skip((pageIndex - 1) * pageSize).limit(pageSize);
     return this;
   };
+
   Paginate.prototype.exec = function(callback) {
     var self = this;
     this.model.count(this.conditions, function(err, count) {
@@ -27,6 +29,7 @@ module.exports = exports = function() {
       });
     });
   };
+
   Paginate.prototype.execQuery = function(callback) {
     this.query.exec(callback);
   };

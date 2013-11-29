@@ -9,22 +9,22 @@ NC.Module.define('TopicPanel', [], function() {
         self = this;
 
       if (this.data.isFavorited) {
-        requestURL = '/topic/' + this.data.id + '/del_favorite';
+        requestURL = '/topic/' + this.data.id + '/unfavorite';
       }
 
       $.post(requestURL)
         .done(function(data) {
           if (data.success) {
+            self.data.isFavorited = !self.data.isFavorited;
             if (self.data.isFavorited) {
-              self.$('.favorite-btn').attr('title', '收藏该话题');
-              self.$('.favorite-btn i').removeClass('fa-bookmark');
-              self.$('.favorite-btn i').addClass('fa-bookmark-o');
-            } else {
               self.$('.favorite-btn').attr('title', '取消收藏该话题');
               self.$('.favorite-btn i').removeClass('fa-bookmark-o');
               self.$('.favorite-btn i').addClass('fa-bookmark');
+            } else {
+              self.$('.favorite-btn').attr('title', '收藏该话题');
+              self.$('.favorite-btn i').removeClass('fa-bookmark');
+              self.$('.favorite-btn i').addClass('fa-bookmark-o');
             }
-            self.data.isFavorited = !self.data.isFavorited;
           }
         });
     }

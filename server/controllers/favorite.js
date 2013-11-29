@@ -10,7 +10,7 @@ var api = require('../../api');
 
 /** 话题收藏列表页面 */
 exports.topics = function(req, res, next) {
-  api.favorite.topic.query({
+  api.favoriteTopic.query({
     userId: req.currentUser.id
   }, function(err, results) {
     if (err) {
@@ -23,7 +23,7 @@ exports.topics = function(req, res, next) {
 
 /** 节点收藏页面 */
 exports.tags = function(req, res, next) {
-  api.favorite.tag.query({
+  api.favoriteTag.query({
     userId: req.currentUser.id
   }, function(err, results) {
     if (err) {

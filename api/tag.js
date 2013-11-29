@@ -7,8 +7,7 @@
  * Module dependencies
  */
 var models = require('../models'),
-  Tag = models.Tag,
-  FavoriteTag = models.FavoriteTag;
+  Tag = models.Tag;
 
 exports.query = function(conditions, callback) {
   var q = Tag.query(conditions);
@@ -58,45 +57,5 @@ exports.isFavoritedBy = function(args, callback) {
       return callback(err);
     }
     callback(null, !!favoriteTag);
-  });
-};
-
-/**
- * 收藏节点
- * @param  {Object}   args
- *  - id       节点 id
- *  - name     节点名
- *  - userId   用户 id
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
- */
-exports.favorite = function(args, callback) {
-  var id = args.id,
-    name = args.name,
-    userId = args.userId;
-  FavoriteTag.create({
-    userId: userId,
-    tag: {
-      id: id,
-      name: name
-    }
-  }, function(err) {
-    callback(err);
-  });
-};
-
-/**
- * 取消节点收藏
- * @param  {Object}   args
- *  - id       节点 id
- *  - userId   用户 id
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
- */
-exports.removeFavorite = function(args, callback) {
-  var tagId = args.id,
-    userId = args.userId;
-  FavoriteTag.destroy(userId, tagId, function(err) {
-    callback(err);
   });
 };

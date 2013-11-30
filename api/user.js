@@ -55,40 +55,64 @@ exports.create = function(userData, callback) {
 
 /**
  * 获取某个用户
- * @param  {Object}   userData  用户对象信息，包括下面属性之一即可
- *  - id     用户 id
+ * @param  {Object}   userData
+ *  - id        用户 id
  *  - username  用户名
- *  - email   电子邮件地址
- * @param  {Function} callback 回调函数
+ *  - email     电子邮件地址
+ * @param  {Function} callback
  *  - err   MongooseError
  *  - user  查询到的用户对象
  */
 exports.get = function(userData, callback) {
-  if (userData.id) {
-    return User.findById(userData.id, callback);
-  } else if (userData.username) {
-    return User.findOneByUsername(userData.username, callback);
-  } else if (userData.email) {
-    return User.findOneByEmail(userData.email, callback);
-  }
+  var id = userData.id,
+    username = userData.username,
+    email = userData.email,
+    currentUserId = this.currentUser && this.currentUser.id;
+  async.waterfall([
+    function getUser(next) {
+      if (id) {
+        User.findById(id, function(err, user) {
+          next(err, user);
+        });
+      } else if (username) {
+        User.findOneByUsername(username, function(err, user) {
+          next(err, user);
+        });
+      } else if (email) {
+        User.findOneByEmail(email, function(err, user) {
+          next(err, user);
+        });
+      }
+    },
+    function checkRelation(user, next) {
+      if (!user || !currentUserId || user.id === currentUserId) {
+        return next(null, user);
+      }
+      user.isFollowedBy(currentUserId, function(err, followed) {
+        if (err) {
+          return next(err);
+        }
+        user.isFollowed = followed;
+        next(null, user);
+      });
+    }
+  ], callback);
 };
 
 /**
  * 检查用户是否可以登录
- * @param  {Object}   userData    用户对象信息
- *  - email     required, 注册时填写的电子邮件
- *  - password  required, 密码
- * @param  {Function} callback 回调函数
+ * @param  {Object}   userData
+ *  - email     required  注册时填写的电子邮件
+ *  - password  required  密码
+ * @param  {Function} callback
  *  - err    MongooseError|CentralizedError
  *  - user   用户对象
  */
 exports.check = function(userData, callback) {
   var email = userData.email,
     password = userData.password;
-  return User.check({
-    email: email,
-    password: password
-  }, function(err, user, matched) {
+
+  User.findOneByEmail(email, function(err, user) {
     if (err) {
       return callback(err);
     }
@@ -97,7 +121,7 @@ exports.check = function(userData, callback) {
       return callback(new CentralizedError('用户不存在' ,'username'));
     }
 
-    if (!matched) {
+    if (!user.authenticate(password)) {
       return callback(new CentralizedError('密码错误', 'password'));
     }
 

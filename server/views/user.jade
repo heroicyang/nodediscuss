@@ -9,7 +9,7 @@ block content
                 alt="#{user.nickname}").media-object.img-rounded.img-responsive
         div.media-body
           if isAuthenticated && user.id !== currentUser.id
-            if followed
+            if user.isFollowed
               button(type="button",
                      data-loading-text="取消关注...")#follow-btn.btn.btn-default.btn-sm.pull-right 取消关注
             else
@@ -98,6 +98,6 @@ block script
         el: '#follow-btn',
         data: {
           followId: '#{user.id}',
-          followed: #{followed}
+          followed: #{user.isFollowed}
         }
       };

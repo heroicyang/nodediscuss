@@ -37,96 +37,27 @@ exports.findOneByEmail = function(email, callback) {
 };
 
 /**
- * 根据 username/email 查询用户，检查提供的密码是否匹配
- * @param  {Object}   userData  合法的user json对象，必须包含以下属性
- *  - username/email  用户名或者邮箱
- *  - password        密码
- * @param  {Function} callback 回调函数
- *  - err       MongooseError
- *  - user      用户不存在返回 null；存在则返回该用户信息
- *  - matched   用户不存在时不会传入该参数。匹配通过则返回 true，否则返回 false
- * @return {null}
+ * 修改用户密码
+ * @param  {Object}   userData
+ *  - id             required  用户 id
+ *  - oldPassword    required  当前密码
+ *  - newPassword    required  新密码
+ * @param  {Function} callback 
+ *  - err
+ *  - user   最新的 user 对象
  */
-exports.check = function(userData, callback) {
-  this.findOne()
-    .or([{
-      username: userData.username
-    }, {
-      email: userData.email
-    }])
+exports.changePassword = function(userData, callback) {
+  var id = userData.id || userData._id,
+    oldPassword = userData.oldPassword,
+    newPassword = userData.newPassword;
+
+  this.findById(id)
     .exec(function(err, user) {
       if (err) {
         return callback(err);
       }
       if (!user) {
-        return callback(null, null);
-      }
-
-      callback(null, user, user.authenticate(userData.password));
-    });
-};
-
-/**
- * 根据 username/email 查询用户，激活用户
- * @param  {Object}   userData   合法的user json对象，必须包含以下属性
- *  - username/email  用户名或者邮箱
- * @param  {Function} callback   回调函数
- *  - err       MongooseError
- * @return {null}
- */
-exports.activate = function(userData, callback) {
-  this.findOne()
-    .or([{
-      username: userData.username
-    }, {
-      email: userData.email
-    }])
-    .exec(function(err, user) {
-      if (err) {
-        return callback(err);
-      }
-      user.update({
-        state: {
-          activated: true
-        }
-      }, function(err) {
-        callback(err);
-      });
-    });
-};
-
-/**
- * 根据 username/email 查询用户，修改用户密码
- * @param  {Object}   userData   合法的user json对象，必须包含以下属性
- *  - username/email   用户名或者邮箱
- *  - oldPassword      当前密码
- *  - newPassword      新密码
- *  - newPassword2     再次确认的新密码
- * @param  {Function} callback    回调函数
- *  - err    Error/MongooseError
- *  - user   最新的 user 对象
- * @return {null}
- */
-exports.changePassword = function(userData, callback) {
-  var username = userData.username,
-    email = userData.email,
-    oldPassword = userData.oldPassword,
-    newPassword = userData.newPassword,
-    newPassword2 = userData.newPassword2;
-
-  if (newPassword !== newPassword2) {
-    return callback(new Error('两次输入的密码不匹配!'));
-  }
-
-  this.findOne()
-    .or([{
-      username: username
-    }, {
-      email: email
-    }])
-    .exec(function(err, user) {
-      if (err) {
-        return callback(err);
+        return callback(null, user);
       }
       if (!user.authenticate(oldPassword)) {
         return callback(new Error('当前密码不正确!'));
@@ -140,30 +71,22 @@ exports.changePassword = function(userData, callback) {
 };
 
 /**
- * 根据 username/email 查找用户，并修改用户信息
- * @param  {Object}   userData   合法的user json对象，必须包含以下属性
- *  - username/email   用户名或者邮箱
- * @param  {Function} callback   回调函数
- *  - err    MongooseError
+ * 修改用户信息
+ * @param  {Object}   userData
+ *  - id    required  用户 id
+ * @param  {Function} callback
+ *  - err
  *  - user   修改后的 user 对象
- * @return {null}
  */
 exports.edit = function(userData, callback) {
-  var username = userData.username,
-    email = userData.email;
-  userData = _.omit(userData, ['_id', 'id', 'username', 'email']);
+  var id = userData.id || userData._id;
 
-  this.findOne()
-    .or([{
-      username: username
-    }, {
-      email: email
-    }])
+  this.findById(id)
     .exec(function(err, user) {
       if (err) {
         return callback(err);
       }
-      if (_.isEmpty(userData)) {
+      if (!user || _.isEmpty(userData)) {
         return callback(null, user);
       }
 
@@ -175,10 +98,9 @@ exports.edit = function(userData, callback) {
 /**
  * 检查用户名是否存在
  * @param  {String}   username  用户名
- * @param  {Function} callback  回调函数
- *  - err    MongooseError
+ * @param  {Function} callback
+ *  - err
  *  - exist  true: 存在，false: 不存在
- * @return {null}
  */
 exports.isUsernameExist = function(username, callback) {
   this.findOneByUsername(username, function(err, user) {
@@ -192,10 +114,9 @@ exports.isUsernameExist = function(username, callback) {
 /**
  * 检查用户名是否存在
  * @param  {String}   email     E-mail
- * @param  {Function} callback  回调函数
- *  - err    MongooseError
+ * @param  {Function} callback
+ *  - err
  *  - exist  true: 存在，false: 不存在
- * @return {null}
  */
 exports.isEmailExist = function(email, callback) {
   this.findOneByEmail(email, function(err, user) {

@@ -104,7 +104,7 @@ exports.forgotPassword = function(req, res, next) {
 
 exports.load = function(req, res, next) {
   var username = req.params.username;
-  api.user.get({
+  api.user.get.call(req, {
     username: username
   }, function(err, user) {
     if (err) {
@@ -121,36 +121,34 @@ exports.load = function(req, res, next) {
 exports.get = function(req, res, next) {
   var user = req.user;
   async.parallel({
-    followed: function(next, results) {
-      if (!req.isAuthenticated() || req.currentUser.username === user.username) {
-        return next(null);
-      }
-      api.relation.check({
-        userId: req.currentUser.id,
-        followId: user.id
-      }, function(err, followed) {
-        next(err, followed);
-      });
-    },
     latestTopics: function(next) {
       api.topic.query({
-        conditions: { 'author.username': user.username },
-        sort: { createdAt: -1 }
-      }, function(err, topics) {
-        next(err, topics);
+        query: {
+          'author.username': user.username
+        }
+      }, function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        next(null, _.extend(results.topics, {
+          totalCount: results.totalCount
+        }));
       });
     },
     latestComments: function(next) {
       api.comment.query({
-        conditions: {
+        query: {
           'author.username': user.username,
           deleted: false
-        },
-        sort: { createdAt: -1 }
-      }, function(err, comments) {
+        }
+      }, function(err, results) {
         if (err) {
           return next(err);
         }
+
+        var comments = _.extend(results.comments, {
+          totalCount: results.totalCount
+        });
         async.map(comments, function(comment, next) {
           api.topic.get({
             id: comment.topicId

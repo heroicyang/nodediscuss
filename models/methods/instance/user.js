@@ -46,3 +46,20 @@ exports.activate = function(callback) {
     }
   }, callback);
 };
+
+/**
+ * 检查当前用户是否被某个用户关注
+ * @param  {String}   userId   用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - followed       true: 关注, false: 未关注
+ */
+exports.isFollowedBy = function(userId, callback) {
+  var Relation = this.model('Relation');
+  Relation.findOne({
+    userId: userId,
+    followId: this.id
+  }, function(err, relation) {
+    callback(err, !!relation);
+  });
+};

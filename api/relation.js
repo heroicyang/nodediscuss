@@ -41,26 +41,3 @@ exports.unfollow = function(args, callback) {
     followId = args.followId;
   Relation.destroy(userId, followId, callback);
 };
-
-/**
- * 检查用户是否关注了某个用户
- * @param  {Object}   args
- *  - userId    当前用户 id
- *  - followId  对方用户 id
- * @param  {Function} callback
- *  - err    MongooseError
- *  - followed  true: 已关注，false: 未关注
- */
-exports.check = function(args, callback) {
-  var userId = args.userId,
-    followId = args.followId;
-  Relation.findOne({
-    userId: userId,
-    followId: followId
-  }, function(err, relation) {
-    if (err) {
-      return callback(err);
-    }
-    callback(null, !!relation);
-  });
-};

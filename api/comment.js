@@ -12,41 +12,34 @@ var async = require('async'),
   Comment = models.Comment;
 
 /**
- * 根据查询条件获取话题评论
- * @param  {Object}   options  查询选项
- *  - conditions  {Object}   查询条件，默认查询全部
- *  - pageIndex   {Number}   当前页数，默认为第1页
- *  - pageSize    {Number}   每页记录条数，默认20条
- *  - fields      {Object|String}  需要返回的字段，默认全部
- *  - sort        {Object}   排序条件，默认按创建时间逆序排序
- * @param  {Function} callback 回调函数
- *  - err     MongooseError
- *  - comments  评论数组
+ * 获取话题的评论列表
+ * @param  {Object}   options
+ *  - query          optional   查询条件，默认查询全部
+ *  - pageIndex      optional   当前页数，默认 1
+ *  - pageSize       optional   返回的记录数，默认 20
+ *  - sort  {Object} optional   排序规则，默认按创建时间倒序
+ * @param  {Function} callback
+ *  - err
+ *  - results
+ *    - totalCount    符合查询条件评论记录总数
+ *    - comments        评论列表
  */
 exports.query = function(options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
+  options = options || {};
+  var conditions = options.query || {},
+    pageIndex = options.pageIndex,
+    pageSize = options.pageSize,
+    sort = options.sort || { createdAt: -1 };
 
-  var query = Comment.find().lean(),
-    conditions = options.conditions || {},
-    pageIndex = options.pageIndex || 1,
-    pageSize = options.pageSize || 20,
-    fields = options.fields || null,
-    sort = options.sort || {
-      createdAt: -1
-    };
-
-  query = query.find(conditions).sort(sort);
-
-  if (fields) {
-    query = query.select(fields);
-  }
-
-  query = query.skip((pageIndex - 1) * pageSize).limit(pageSize);
-
-  query.exec(callback);
+  var q = Comment.query(conditions);
+  q.query = q.query.sort(sort);
+  q.paginate(pageIndex, pageSize)
+    .exec(function(err, count, comments) {
+      callback(err, {
+        totalCount: count,
+        comments: comments
+      });
+    });
 };
 
 /**

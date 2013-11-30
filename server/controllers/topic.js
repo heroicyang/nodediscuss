@@ -139,9 +139,16 @@ exports.get = function(req, res, next) {
   async.parallel({
     comments: function(next) {
       api.comment.query({
-        conditions: { topicId: req.topic.id }
-      }, function(err, comments) {
-        next(err, comments);
+        query: {
+          fkId: req.topic.id
+        }
+      }, function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        next(null, _.extend(results.comments, {
+          totalCount: results.totalCount
+        }));
       });
     }
   }, function(err, results) {

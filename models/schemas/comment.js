@@ -36,6 +36,10 @@ var CommentSchema = new Schema({
     nickname: String,
     avatar: String
   },
+  floor: {
+    type: Number,
+    default: 0
+  },
   likeCount: {
     type: Number,
     default: 0

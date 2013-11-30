@@ -54,13 +54,12 @@ block content
           span &#32;&#448;&#32;最后评论于&#32;
           span= moment(topic.lastCommentedAt).format('YYYY-MM-DD HH:mm:ss')
       ul.list-group.comment-list
-        each comment, idx in comments
-          - var floor = topic.commentCount - idx
-          li(id="comment-#{floor}").list-group-item
+        each comment in comments
+          li(id="comment-#{comment.floor}").list-group-item
             if comment.deleted
               p.deleted
                 | 该评论已被删除。
-                span ##{floor}楼
+                span ##{comment.floor}楼
             else
               div.media
                 div.pull-left.avatar-48
@@ -75,17 +74,17 @@ block content
                           data-comment-id="#{comment._id}",
                           data-username="#{comment.author.username}",
                           data-nickname="#{comment.author.nickname}",
-                          data-floor="#{floor}").reply-comment-btn
+                          data-floor="#{comment.floor}").reply-comment-btn
                           i.fa.fa-reply
                       else
                         a(href="#", title="删除",
                           data-comment-id="#{comment._id}",
-                          data-floor="#{floor}").del-comment-btn
+                          data-floor="#{comment.floor}").del-comment-btn
                           i.fa.fa-trash-o
                   div.meta
                     a(href="/user/#{comment.author.username}").username #{comment.author.nickname}
                     span= moment(comment.createdAt).fromNow()
-                    span ##{floor}楼
+                    span ##{comment.floor}楼
                   div.content !{comment.contentHtml}
   else
     div.no-comment.panel.panel-default

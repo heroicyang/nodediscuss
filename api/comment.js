@@ -84,5 +84,13 @@ exports.get = function(args, callback) {
  *  - err    MongooseError
  */
 exports.remove = function(args, callback) {
-  Comment.destroy(args.id, callback);
+  if (this.comment) {
+    this.comment.destroy(function(err) {
+      callback(err);
+    });
+  } else {
+    Comment.destroy(args.id, function(err) {
+      callback(err);
+    });
+  }
 };

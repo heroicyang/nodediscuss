@@ -147,6 +147,15 @@ describe('Model#Comment', function() {
         });
       });
 
+      it('`floor` of comment should equals `commentCount` of topic', function(done) {
+        var self = this;
+        Topic.findById(this.topic.id, function(err, topic) {
+          should.exist(topic);
+          self.comment.floor.should.eql(topic.commentCount);
+          done();
+        });
+      });
+
       it('should increase `commentCount` of topic when comment on topic', function(done) {
         Topic.findById(this.topic.id, function(err, topic) {
           should.exist(topic);

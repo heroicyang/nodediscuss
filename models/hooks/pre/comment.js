@@ -29,7 +29,8 @@ module.exports = exports = function(schema) {
         return done();
       }
 
-      var Topic = this.model('Topic');
+      var Topic = this.model('Topic'),
+        self = this;
       Topic.findByIdAndUpdate(this.fkId, {
         $inc: {
           commentCount: 1
@@ -41,7 +42,15 @@ module.exports = exports = function(schema) {
           },
           lastCommentedAt: this.createdAt
         }
-      }, done);
+      }, function(err, topic) {
+        if (err) {
+          return done(err);
+        }
+        if (topic) {
+          self.floor = topic.commentCount;
+        }
+        done();
+      });
     })
     .pre('save', true, function(next, done) {
       next();
@@ -50,12 +59,21 @@ module.exports = exports = function(schema) {
         return done();
       }
 
-      var Page = this.model('Page');
+      var Page = this.model('Page'),
+        self = this;
       Page.findByIdAndUpdate(this.fkId, {
         $inc: {
           commentCount: 1
         }
-      }, done);
+      }, function(err, page) {
+        if (err) {
+          return done(err);
+        }
+        if (page) {
+          self.floor = page.commentCount;
+        }
+        done();
+      });
     });
 
   // 创建评论时会通知对应的话题作者，或者该评论所针对的另外一条(多条)评论的作者

@@ -10,9 +10,9 @@ NC.Module.define('FollowButton',
         var self = this,
           url;
         if (this.data.followed) {
-          url = '/user/' + this.data.followId + '/unfollow';
+          url = '/user/' + this.data.followUsername + '/unfollow';
         } else {
-          url = '/user/' + this.data.followId + '/follow';
+          url = '/user/' + this.data.followUsername + '/follow';
         }
 
         $.post(url)

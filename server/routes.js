@@ -30,14 +30,14 @@ module.exports = exports = function(app) {
   app.post('/logout', auth.isLogin, user.logout);
   app.all('/forgot_pass', user.forgotPassword);
 
-  app.all('/user/:username', user.load);
+  app.all('/user/:username/:op?', user.load);
   app.get('/user/:username', user.get);
   app.post('/user/:username/:op', auth.isLogin);
   // 关注的相关操作直接调用 api
   app.post('/user/:username/follow',
-      api.requestHandler(require('../api/relation').create));
+      api.requestHandler(api.relation.create));
   app.post('/user/:username/unfollow',
-      api.requestHandler(require('../api/relation').remove));
+      api.requestHandler(api.relation.remove));
 
   // 用户设置
   app.all('/settings/:op', auth.isLogin);

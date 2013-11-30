@@ -17,9 +17,9 @@ var models = require('../models'),
  * @param  {Function} callback
  *  - err    MongooseError
  */
-exports.follow = function(args, callback) {
-  var userId = args.userId,
-    followId = args.followId;
+exports.create = function(args, callback) {
+  var userId = (this.currentUser && this.currentUser.id) || args.userId,
+    followId = (this.user && this.user.id) || args.followId;
   Relation.create({
     userId: userId,
     followId: followId
@@ -36,8 +36,8 @@ exports.follow = function(args, callback) {
  * @param  {Function} callback
  *  - err    MongooseError
  */
-exports.unfollow = function(args, callback) {
-  var userId = args.userId,
-    followId = args.followId;
+exports.remove = function(args, callback) {
+  var userId = (this.currentUser && this.currentUser.id) || args.userId,
+    followId = (this.user && this.user.id) || args.followId;
   Relation.destroy(userId, followId, callback);
 };

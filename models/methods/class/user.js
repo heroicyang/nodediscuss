@@ -40,7 +40,6 @@ exports.findOneByEmail = function(email, callback) {
  * 修改用户密码
  * @param  {Object}   userData
  *  - id             required  用户 id
- *  - oldPassword    required  当前密码
  *  - newPassword    required  新密码
  * @param  {Function} callback 
  *  - err
@@ -48,7 +47,6 @@ exports.findOneByEmail = function(email, callback) {
  */
 exports.changePassword = function(userData, callback) {
   var id = userData.id || userData._id,
-    oldPassword = userData.oldPassword,
     newPassword = userData.newPassword;
 
   this.findById(id)
@@ -58,9 +56,6 @@ exports.changePassword = function(userData, callback) {
       }
       if (!user) {
         return callback(null, user);
-      }
-      if (!user.authenticate(oldPassword)) {
-        return callback(new Error('当前密码不正确!'));
       }
 
       user.password = newPassword;

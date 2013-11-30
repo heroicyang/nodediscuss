@@ -30,7 +30,7 @@ module.exports = exports = function(schema) {
       }
 
       var Topic = this.model('Topic');
-      Topic.findByIdAndUpdate(this.topicId, {
+      Topic.findByIdAndUpdate(this.fkId, {
         $inc: {
           commentCount: 1
         },
@@ -51,7 +51,7 @@ module.exports = exports = function(schema) {
       }
 
       var Page = this.model('Page');
-      Page.findByIdAndUpdate(this.topicId, {
+      Page.findByIdAndUpdate(this.fkId, {
         $inc: {
           commentCount: 1
         }
@@ -73,7 +73,7 @@ module.exports = exports = function(schema) {
         async.waterfall([
           function findTopicAuthor(next) {
             var Topic = self.model('Topic');
-            Topic.findById(self.topicId, function(err, topic) {
+            Topic.findById(self.fkId, function(err, topic) {
               next(err, topic);
             });
           },
@@ -84,7 +84,7 @@ module.exports = exports = function(schema) {
               masterId: topicAuthorId,
               userId: self.author.id,
               type: constants.NOTIFICATION_TYPE.COMMENT,
-              topicId: self.topicId,
+              topicId: self.fkId,
               commentId: self.id
             }, next);
           }
@@ -106,7 +106,7 @@ module.exports = exports = function(schema) {
                 masterId: commentAuthorId,
                 userId: self.author.id,
                 type: constants.NOTIFICATION_TYPE.REPLY_COMMENT,
-                topicId: self.topicId,
+                topicId: self.fkId,
                 masterCommentId: commentId,
                 commentId: self.id
               }, next);

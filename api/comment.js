@@ -51,12 +51,12 @@ exports.query = function(options, callback) {
 exports.create = function(commentData, callback) {
   async.waterfall([
     function processMarkdown(next) {
-      marked(commentData.content, function(err, htmlContent) {
-        next(err, htmlContent);
+      marked(commentData.content, function(err, contentHtml) {
+        next(err, contentHtml);
       });
     },
-    function createComment(htmlContent, next) {
-      commentData.htmlContent = htmlContent;
+    function createComment(contentHtml, next) {
+      commentData.contentHtml = contentHtml;
       Comment.create(commentData, function(err) {
         next(err);
       });

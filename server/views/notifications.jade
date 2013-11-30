@@ -39,7 +39,7 @@ block content
                       if notification.comment.deleted
                         span 评论已被删除！
                       else
-                        | !{notification.comment.htmlContent}
+                        | !{notification.comment.contentHtml}
     else
       div.panel-body
         span 暂无提醒。

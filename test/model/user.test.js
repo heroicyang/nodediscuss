@@ -222,95 +222,12 @@ describe('Model#User', function() {
       });
     });
 
-    describe('User.check(userData, callback)', function() {
-      it('should return null and `matched` is undefined when user doesn\'t exist', function(done) {
-        User.check({
-          username: 'heroicyang',
-          password: '111111'
-        }, function(err, user, matched) {
-          should.not.exist(user);
-          (matched === undefined).should.be.true;
-          done();
-        });
-      });
-
-      it('should return the user and `matched` is true when matches', function(done) {
-        User.check({
-          username: 'heroic',
-          password: '111111'
-        }, function(err, user, matched) {
-          should.exist(user);
-          matched.should.be.true;
-          done();
-        });
-      });
-
-      it('should return the user but `matched` is false when mismatches', function(done) {
-        User.check({
-          username: 'heroic',
-          password: '123456'
-        }, function(err, user, matched) {
-          should.exist(user);
-          matched.should.be.false;
-          done();
-        });
-      });
-    });
-
-    describe('User.activate(userData, callback)', function() {
-      it('activate the user', function(done) {
-        async.waterfall([
-          function activateUser(next) {
-            User.activate({
-              username: 'heroic'  // or { email: 'me@heroicyang.com' }
-            }, function(err) {
-              next(err);
-            });
-          },
-          function getUserState(next) {
-            User.findOneByUsername('heroic', function(err, user) {
-              should.exist(user);
-              user.state.activated.should.be.true;
-              next(null);
-            });
-          }
-        ], done);
-      });
-    });
-
     describe('User.changePassword(userData, callback)', function() {
-      it('new passwords should match', function(done) {
-        User.changePassword({
-          email: 'me@heroicyang.com',
-          oldPassword: '111111',
-          newPassword: '123456',
-          newPassword2: '234567'
-        }, function(err, user) {
-          should.exist(err);
-          should.not.exist(user);
-          done();
-        });
-      });
-
-      it('should give the correct old password', function(done) {
-        User.changePassword({
-          email: 'me@heroicyang.com',
-          oldPassword: 'asdasd',
-          newPassword: '123456',
-          newPassword2: '123456'
-        }, function(err, user) {
-          should.exist(err);
-          should.not.exist(user);
-          done();
-        });
-      });
-
       it('password changed', function(done) {
         User.changePassword({
-          email: 'me@heroicyang.com',
+          id: this.user.id,
           oldPassword: '111111',
-          newPassword: '123456',
-          newPassword2: '123456'
+          newPassword: '123456'
         }, function(err, user) {
           should.not.exist(err);
           should.exist(user);
@@ -324,7 +241,7 @@ describe('Model#User', function() {
     describe('User.edit(userData, callback)', function() {
       it('edit user', function(done) {
         User.edit({
-          email: 'me@heroicyang.com',
+          id: this.user.id,
           nickname: 'Heroic Yang',
           website: 'heroicyang.com'
         }, function(err, user) {

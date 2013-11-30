@@ -15,21 +15,21 @@ var ObjectId = require('mongoose').Types.ObjectId,
  * @return {Function}
  */
 module.exports = exports = function(schema) {
-  addTopicIdValidators(schema);
+  addFKIdValidators(schema);
   addContentValidators(schema);
   addAuthorValidators(schema);
 };
 
 /**
- * Adds validators on `topicId` path
+ * Adds validators on `fkId` path
  * @param {Mongoose.Schema} schema
  */
-function addTopicIdValidators(schema) {
-  schema.path('topicId')
+function addFKIdValidators(schema) {
+  schema.path('fkId')
     .required(true, '必须提供话题 id!')
-    .validate(function(topicId) {
+    .validate(function(fkId) {
       try {
-        topicId = new ObjectId(topicId);
+        fkId = new ObjectId(fkId);
       } catch (e) {
         return false;
       }
@@ -53,7 +53,7 @@ function addContentValidators(schema) {
       var Comment = this.model('Comment');
 
       Comment.find({
-        topicId: this.topicId,
+        fkId: this.fkId,
         'author.id': this.author.id,
         deleted: false
       }, function(err, comments) {

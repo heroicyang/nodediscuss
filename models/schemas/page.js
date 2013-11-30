@@ -29,7 +29,7 @@ var PageSchema = new Schema({
     type: String,
     required: true
   },
-  htmlContent: String,
+  contentHtml: String,
   authors: [{
     id: {
       type: String,

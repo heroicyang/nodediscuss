@@ -23,7 +23,7 @@ block content
                 span= moment(topic.createdAt).fromNow()
                 span &#32;&#8226;&#32;#{topic.viewsCount}次阅读
       if topic.content
-        div.row.content !{topic.htmlContent}
+        div.row.content !{topic.contentHtml}
     div.panel-footer
       div.pull-left.share
         a(href="#", title="分享到新浪微博")
@@ -86,7 +86,7 @@ block content
                     a(href="/user/#{comment.author.username}").username #{comment.author.nickname}
                     span= moment(comment.createdAt).fromNow()
                     span ##{floor}楼
-                  div.content !{comment.htmlContent}
+                  div.content !{comment.contentHtml}
   else
     div.no-comment.panel.panel-default
       div.panel-body 目前尚无评论

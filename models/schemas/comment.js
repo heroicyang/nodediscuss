@@ -14,8 +14,8 @@ var mongoose = require('mongoose'),
  * @type {Schema}
  */
 var CommentSchema = new Schema({
-  // 也可存储为 PageSchema 的 id
-  topicId: {
+  // 所关联到的外键 id，即 Topic 或 Page 的 id
+  fkId: {
     type: String,
     index: true
   },
@@ -26,7 +26,7 @@ var CommentSchema = new Schema({
   },
   commentIds: [String],
   content: String,
-  htmlContent: String,
+  contentHtml: String,
   author: {
     id: {
       type: String,

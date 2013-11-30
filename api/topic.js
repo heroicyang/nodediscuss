@@ -67,12 +67,12 @@ exports.create = function(topicData, callback) {
     function processMarkdown(next) {
       var content = topicData.content;
       content = parseMention(content);
-      marked(content, function(err, htmlContent) {
-        next(err, htmlContent);
+      marked(content, function(err, contentHtml) {
+        next(err, contentHtml);
       });
     },
-    function createTopic(htmlContent, next) {
-      topicData.htmlContent = htmlContent;
+    function createTopic(contentHtml, next) {
+      topicData.contentHtml = contentHtml;
       Topic.create(topicData, function(err) {
         next(err);
       });
@@ -91,12 +91,12 @@ exports.edit = function(topicData, callback) {
     function processMarkdown(next) {
       var content = topicData.content;
       content = parseMention(content);
-      marked(content, function(err, htmlContent) {
-        next(err, htmlContent);
+      marked(content, function(err, contentHtml) {
+        next(err, contentHtml);
       });
     },
-    function updateTopic(htmlContent, next) {
-      topicData.htmlContent = htmlContent;
+    function updateTopic(contentHtml, next) {
+      topicData.contentHtml = contentHtml;
       Topic.edit(topicData, function(err) {
         return next(err);
       });

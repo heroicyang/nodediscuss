@@ -19,7 +19,7 @@ var TopicSchema = new Schema({
     index: true
   },
   content: String,
-  htmlContent: String,
+  contentHtml: String,
   tag: {
     id: {
       type: String,

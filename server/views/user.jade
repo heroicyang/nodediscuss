@@ -77,7 +77,7 @@ block content
                   span 评论了 #{comment.topic.author.nickname} 创建的话题&#32;
                   i.fa.fa-angle-right
                   a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
-            div.content !{comment.htmlContent}
+            div.content !{comment.contentHtml}
       div.panel-footer
         a(href="#")
           i.fa.fa-angle-double-right

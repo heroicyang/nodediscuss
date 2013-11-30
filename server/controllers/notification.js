@@ -15,9 +15,16 @@ exports.list = function(req, res, next) {
   async.waterfall([
     function queryNotifications(next) {
       api.notification.query({
-        conditions: { masterId: req.currentUser.id }
-      }, function(err, notifications) {
-        next(err, notifications);
+        query: {
+          masterId: req.currentUser.id
+        }
+      }, function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        next(null, _.extend(results.notifications, {
+          totalCount: results.totalCount
+        }));
       });
     },
     function populateRelated(notifications, next) {

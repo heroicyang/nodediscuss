@@ -2,14 +2,15 @@ extends layout
 block content
   div#notification-list.panel.panel-default
     div.panel-heading
-      form(action="/notifications/read", method="POST")
-        input(type="hidden", name="_csrf", value="#{csrfToken}")
-        button(type="submit").btn.btn-default.btn-xs.pull-right 全部标记为已读
+      if currentUser.unreadNotificationCount > 0
+        form(action="/notifications/read", method="POST")
+          input(type="hidden", name="_csrf", value="#{csrfToken}")
+          button(type="submit").btn.btn-default.btn-xs.pull-right 全部标记为已读
       include breadcrumb
-    if notifications.length > 0
-      ul.list-group
+    ul.list-group
+      if pagination.totalCount > 0
         each notification in notifications
-          li(class=notification.hasRead ? null : "unread").list-group-item
+          li(class=notification.hasRead ? null : "unread").list-group-item.item
             div.media
               div.pull-left.avatar-48
                 a(href="/user/#{notification.user.username}")
@@ -33,8 +34,10 @@ block content
                   p
                     a(href="/topic/#{notification.topic._id}#comment-#{notification.comment.floor}")
                       | #{notification.topic.title}
-    else
-      div.panel-body
-        span 暂无提醒。
+        li.list-group-item
+          include pagination
+      else
+        li.list-group-item
+          span 暂无提醒。
 block sidebar
   include ./sidebar/user_card

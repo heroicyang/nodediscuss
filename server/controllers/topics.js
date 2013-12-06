@@ -8,14 +8,21 @@
  */
 var async = require('async'),
   _ = require('lodash'),
+  config = require('../../config'),
   api = require('../../api');
 
 /** 话题列表页面 */
 exports.list = function(req, res, next) {
-  var filter = req.params.type;
+  var filter = req.params.type,
+    pageIndex = parseInt(req.query.pageIndex || 1, 10);
+
   var error = _.extend(req.flash('err'), {
     global: true
   });
+  var pagination = {
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  };
 
   var conditions = {},
     sort;
@@ -41,14 +48,15 @@ exports.list = function(req, res, next) {
     topics: function(next) {
       api.topic.query({
         query: conditions,
-        sort: sort
+        sort: sort,
+        pageIndex: pageIndex,
+        pageSize: config.pagination.pageSize
       }, function(err, results) {
         if (err) {
           return next(err);
         }
-        next(null, _.extend(results.topics, {
-          totalCount: results.totalCount
-        }));
+        pagination.totalCount = results.totalCount;
+        next(err, results.topics);
       });
     },
     tags: function(next) {
@@ -68,9 +76,11 @@ exports.list = function(req, res, next) {
     if (err) {
       return next(err);
     }
+
     req.breadcrumbs('社区');
     res.render('topics', _.extend(results, {
-      path: '/topics',
+      pagination: pagination,
+      url: '/topics',
       filterType: filter,
       err: error
     }));

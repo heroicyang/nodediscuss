@@ -32,19 +32,25 @@ block content
       div.row.sorts
         div.pull-right
           span.fa.fa-filter
-          a(href="#{path}",
+          a(href="#{url}",
             class=filterType ? "" : "active").filter: span 默认
-          a(href="#{path}/excellent",
+          a(href="#{url}/excellent",
             class=(filterType === 'excellent') ? "active" : "").filter: span 优质话题
-          a(href="#{path}/no-comment",
+          a(href="#{url}/no-comment",
             class=(filterType === 'no-comment') ? "active" : "").filter: span 无人回复
-          a(href="#{path}/latest",
+          a(href="#{url}/latest",
             class=(filterType === 'latest') ? "active" : "").filter: span 最新创建
         div.clearfix
     ul.list-group.topic-list
-      each topic in topics
+      if pagination.totalCount > 0
+        each topic in topics
+          li.list-group-item
+            include topic_list_item
         li.list-group-item
-          include topic_list_item
+          include pagination
+      else
+        li.list-group-item
+          span 暂无相关话题。
   include tag_nav
 block sidebar
   if isAuthenticated

@@ -8,13 +8,20 @@
  */
 var async = require('async'),
   _ = require('lodash'),
+  config = require('../../config'),
   api = require('../../api'),
   NotFoundError = require('../../utils/error').NotFoundError;
 
 /** 节点下面的话题列表 */
 exports.topics = function(req, res, next) {
   var name = req.params.name,
-    filter = req.params.type;
+    filter = req.params.type,
+    pageIndex = parseInt(req.query.pageIndex || 1, 10);
+
+  var pagination = {
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  };
 
   var sort,
     conditions = {
@@ -42,14 +49,15 @@ exports.topics = function(req, res, next) {
     topics: function(next) {
       api.topic.query({
         query: conditions,
-        sort: sort
+        sort: sort,
+        pageIndex: pageIndex,
+        pageSize: config.pagination.pageSize
       }, function(err, results) {
         if (err) {
           return next(err);
         }
-        next(null, _.extend(results.topics, {
-          totalCount: results.totalCount
-        }));
+        pagination.totalCount = results.totalCount;
+        next(err, results.topics);
       });
     },
     tags: function(next) {
@@ -69,9 +77,11 @@ exports.topics = function(req, res, next) {
     if (err) {
       return next(err);
     }
+
     req.breadcrumbs(name);
     res.render('topics', _.extend(results, {
-      path: '/tag/' + req.tag.name + '/topics',
+      pagination: pagination,
+      url: '/tag/' + req.tag.name + '/topics',
       filterType: filter,
       tag: req.tag
     }));

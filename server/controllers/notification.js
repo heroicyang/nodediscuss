@@ -8,23 +8,31 @@
  */
 var async = require('async'),
   _ = require('lodash'),
+  config = require('../../config'),
   api = require('../../api');
 
 /** 通知中心页面 */
 exports.list = function(req, res, next) {
+  var pageIndex = parseInt(req.query.pageIndex || 1, 10);
+  var pagination = {
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  };
+
   async.waterfall([
     function queryNotifications(next) {
       api.notification.query({
         query: {
           masterId: req.currentUser.id
-        }
+        },
+        pageIndex: pageIndex,
+        pageSize: config.pagination.pageSize
       }, function(err, results) {
         if (err) {
           return next(err);
         }
-        next(null, _.extend(results.notifications, {
-          totalCount: results.totalCount
-        }));
+        pagination.totalCount = results.totalCount;
+        next(null, results.notifications);
       });
     },
     function populateRelated(notifications, next) {
@@ -77,7 +85,8 @@ exports.list = function(req, res, next) {
     }
     req.breadcrumbs('通知中心');
     res.render('notifications', {
-      notifications: notifications
+      notifications: notifications,
+      pagination: pagination
     });
   });
 };

@@ -117,7 +117,7 @@ html(lang="zh-CN")
         });
       }());
     //- 编辑器模板
-    script(type="text/template", id="editor-wrap")
+    script(type="text/template", id="editor-wrap-tmpl")
       div.panel.panel-default.editor
         div.panel-body
           ul.nav.nav-tabs
@@ -149,8 +149,15 @@ html(lang="zh-CN")
                   a(href="#").failed-images
                   span 图片上传失败，请稍后再试!
             div#preview.tab-pane.fade
+    //- 全屏编辑器模板
+    script(type="text/template", id="zenarea-tmpl")
+      div.widearea-overlayLayer.light
+        textarea.widearea-fullscreen.widearea
+        div.widearea-controlPanel
+          a(href="#", title="退出禅模式", draggable="false").widearea-icon.close
+          a(href="#", title="切换主题", draggable="false").widearea-icon.changeTheme
     //- 前端警告框模板
-    script(type="text/template", id="client-alert-danger")
+    script(type="text/template", id="alert-danger-tmpl")
       div.alert.alert-danger.alert-dismissable
         button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
         ul

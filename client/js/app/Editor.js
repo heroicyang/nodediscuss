@@ -24,6 +24,7 @@ NC.Module.define('Editor', [], function() {
   return NC.Module.extend({
     events: {
       'show.bs.tab .nav-tabs a[data-toggle="tab"]': 'onTabShow',
+      'click .fullscreen': 'onZenButtonClick',
       'click #et-insert-code .lang': 'onCodeInsertClick'
     },
     /** 
@@ -31,7 +32,7 @@ NC.Module.define('Editor', [], function() {
      * 换成经过包装了标签页以及底部工具栏的元素
      */
     _ensureElement: function() {
-      var el = $('#editor-wrap').html(),
+      var el = $('#editor-wrap-tmpl').html(),
         $el = $(el),
         $textarea = $(_.result(this, 'el')),
         $parent = $textarea.parent();
@@ -44,34 +45,38 @@ NC.Module.define('Editor', [], function() {
 
       this.setElement($el, false);
     },
-    /** 初始化的时候设置所谓的禅模式编辑器 */
     initialize: function() {
-      // TODO: 这玩意有个 BUG，数据存在 localStorage 里，
-      // 导致页面上的 textarea 数据不能清除
-      // 待主体功能完成了，重写下他这个插件好了
-      this.wideArea = wideArea().setOptions({
-        closeIconLabel: '退出禅模式',
-        changeThemeIconLabel: '切换主题',
-        fullScreenIconLabel: '禅模式'  // 也是 BUG，根本设置不了
-      });
       this.$textarea = this.$('textarea');
-
       _.bindAll(this);
+      this.setupZenArea();
       this.setupFileupload();
     },
+    setupZenArea: function() {
+      var $zenButton = $('<a>')
+        .addClass('widearea-icon fullscreen')
+        .attr('title', '禅模式')
+        .attr('href', '#')
+        .attr('draggable', false)
+        .css({
+          position: 'absolute',
+          top: '5px',
+          right: '5px'
+        });
+      this.$textarea.before($zenButton);
+    },
     setupFileupload: function() {
-      this.$('#et-upload-pic').fileupload({
-        url: '/upload/image',
-        dataType: 'json',
-        fileInput: $('#fileupload'),
-        singleFileUploads: false
-      })
+      this.$('#et-upload-pic')
+        .fileupload({
+          url: '/upload/image',
+          dataType: 'json',
+          fileInput: $('#fileupload'),
+          singleFileUploads: false
+        })
         .bind('fileuploadsend', this.beforeImageUpload)
         .bind('fileuploaddone', this.onImageUploaded)
         .bind('fileuploadfail', this.onImageUploadError)
         .bind('fileuploadalways', this.onImageUploadEnd);
     },
-    /** 格式化文本框中的 markdown 文本 */
     onTabShow: function(e) {
       var val = this.$textarea.val();
       if ($(e.target).attr('href') === '#preview') {
@@ -80,6 +85,48 @@ NC.Module.define('Editor', [], function() {
         }
         $('#preview').html(marked(val));
       }
+    },
+    onZenButtonClick: function(e) {
+      e.preventDefault();
+      var $zenAreaWrap = this.$zenAreaWrap || $($('#zenarea-tmpl').html()),
+        $zenArea = $('textarea', $zenAreaWrap),
+        self = this;
+
+      function disableFullScreen() {
+        self.$zenAreaWrap = $zenAreaWrap.detach();
+        $(window).off('keydown');
+        $('body').css('overflow', '');
+        self.$textarea.focus();
+        self.$textarea.val($zenArea.val());
+      }
+
+      $(window).on('keydown', function(e) {
+        if (e.keyCode === 27) {
+          disableFullScreen();
+        }
+      });
+
+      if (!this.$zenAreaWrap) {
+        $('.close', $zenAreaWrap).on('click', function(e) {
+          e.preventDefault();
+          disableFullScreen();
+        });
+        $('.changeTheme', $zenAreaWrap).on('click', function(e) {
+          e.preventDefault();
+          if ($zenAreaWrap.hasClass('light')) {
+            $zenAreaWrap.removeClass('light');
+            $zenAreaWrap.addClass('dark');
+          } else if ($zenAreaWrap.hasClass('dark')) {
+            $zenAreaWrap.removeClass('dark');
+            $zenAreaWrap.addClass('light');
+          }
+        });
+      }
+
+      $('body').append($zenAreaWrap);
+      $('body').css('overflow', 'hidden');
+      $zenArea.focus();
+      $zenArea.val(this.$textarea.val());
     },
     /** 生成一段预设的代码模板 */
     onCodeInsertClick: function(e) {

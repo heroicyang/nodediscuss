@@ -27,7 +27,7 @@ NC.Module.define('TopicEditForm',
       },
       onFormInvalidated: function(data) {
         var errors = [],
-          template = _.template($('#client-alert-danger').html());
+          template = _.template($('#alert-danger-tmpl').html());
 
         _.each(data, function(item) {
           errors = errors.concat(item.errors);

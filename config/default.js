@@ -40,6 +40,11 @@ module.exports = exports = {
     uploadPath: '/uploads'  // 以 `media.cwd` 为基准进行 `path.join`
   },
 
+  // 分页配置
+  pagination: {
+    pageSize: 20,     // 每页显示的记录数量
+  },
+
   // Gravatar 头像
   avatarProvider: {
     protocol: 'http',

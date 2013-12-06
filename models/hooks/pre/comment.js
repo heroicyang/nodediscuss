@@ -98,6 +98,12 @@ module.exports = exports = function(schema) {
           function createNotification(topic, next) {
             var Notification = self.model('Notification'),
               topicAuthorId = topic.author.id;
+
+            // 该话题作者自己发表评论则不发送提醒
+            if (topicAuthorId === self.author.id) {
+              return next(null);
+            }
+
             Notification.create({
               masterId: topicAuthorId,
               userId: self.author.id,
@@ -120,6 +126,12 @@ module.exports = exports = function(schema) {
             function createNotification(comment, next) {
               var Notification = self.model('Notification'),
                 commentAuthorId = comment.author.id;
+
+              // 该评论作者自己回复评论则不发送提醒
+              if (commentAuthorId === self.author.id) {
+                return next(null);
+              }
+
               Notification.create({
                 masterId: commentAuthorId,
                 userId: self.author.id,

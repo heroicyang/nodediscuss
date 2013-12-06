@@ -74,7 +74,7 @@ exports.isCommentAuthor = function(req, res, next) {
   if (req.comment.author.id !== req.currentUser.id) {
     return res.format({
       html: function() {
-        res.redirect('/topic/' + req.comment.topicId);
+        res.redirect('/topic/' + req.comment.fkId);
       },
       json: function() {
         res.send(new NotAllowedError('你无权访问该页面。'));

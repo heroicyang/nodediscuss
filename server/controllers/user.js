@@ -151,7 +151,7 @@ exports.get = function(req, res, next) {
         });
         async.map(comments, function(comment, next) {
           api.topic.get({
-            id: comment.topicId
+            id: comment.fkId
           }, function(err, topic) {
             if (err) {
               return next(err);

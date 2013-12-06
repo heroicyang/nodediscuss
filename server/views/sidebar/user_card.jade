@@ -34,5 +34,5 @@ div#user-card.panel.panel-default.hidden-xs
         i.fa.fa-tint
         | &#32;#{currentUser.score || 0}
     a(href="/notifications").notification
-      span.count.badge 10
+      span.count.badge #{currentUser.unreadNotificationCount}
       span &#32;条未读提醒

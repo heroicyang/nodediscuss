@@ -66,3 +66,24 @@ exports.readAll = function(args, callback) {
       callback(err);
     });
 };
+
+/**
+ * 获取未读通知数量
+ * @param  {Object}   args
+ *  - userId     required    用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - count    未读通知数量
+ */
+exports.getUnreadCount = function(args, callback) {
+  if (typeof args === 'function') {
+    callback = args;
+    args = {};
+  }
+
+  var userId = (this.currentUser && this.currentUser.id) || args.userId;
+  Notification.count({
+    masterId: userId,
+    hasRead: false
+  }, callback);
+};

@@ -28,7 +28,7 @@ module.exports = exports = function(app) {
   app.all('/signin', auth.unLogin, user.signin);
   app.get('/active', user.activate);
   app.post('/logout', auth.isLogin, user.logout);
-  app.all('/forgot_pass', user.forgotPassword);
+  app.all('/forgot-pass', user.forgotPassword);
 
   app.all('/user/:username/:op?', user.load);
   app.get('/user/:username', user.get);

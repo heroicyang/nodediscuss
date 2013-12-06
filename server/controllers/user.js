@@ -99,7 +99,16 @@ exports.activate = function(req, res, next) {
 };
 
 exports.forgotPassword = function(req, res, next) {
+  var method = req.method.toLowerCase();
 
+  if ('get' === method) {
+    var locals = _.extend({}, req.flash('body'), {
+      err: req.flash('err'),
+      message: req.flash('message')
+    });
+    req.breadcrumbs('通过电子邮件重设密码');
+    return res.render('forgot_pass', locals);
+  }
 };
 
 exports.load = function(req, res, next) {

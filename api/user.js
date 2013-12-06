@@ -41,7 +41,7 @@ exports.create = function(userData, callback) {
     userData.avatar = util.format(avatarUrl, emailHashed, avatarSize);
   }
 
-  return User.create(userData, function(err, user) {
+  User.create(userData, function(err, user) {
     if (err) {
       return callback(err);
     }
@@ -51,6 +51,52 @@ exports.create = function(userData, callback) {
       callback(err, user);
     });
   });
+};
+
+/**
+ * 更改用户基本资料
+ * @param  {Object}   userData    用户对象
+ *  - id             required    用户 id
+ * @param  {Function} callback
+ *  - err
+ */
+exports.edit = function(userData, callback) {
+  User.edit(userData, callback);
+};
+
+/**
+ * 更改用户密码
+ * @param  {Object}   userData
+ *  - id             required   用户  id
+ *  - oldPassword    required   当前密码
+ *  - newPassword    required   新密码
+ * @param  {Function} callback
+ *  - err
+ */
+exports.changePassword = function(userData, callback) {
+  var userId = (this.currentUser && this.currentUser.id) ||
+        userData.id || userData._id,
+    oldPassword = userData.oldPassword,
+    newPassword = userData.newPassword;
+
+  async.waterfall([
+    function getUser(next) {
+      User.findById(userId, function(err, user) {
+        next(err, user);
+      });
+    },
+    function updatePassword(user, next) {
+      if (!user) {
+        return next(null, user);
+      }
+      if (!user.authenticate(oldPassword)) {
+        return next(new CentralizedError('请输入正确的当前密码', 'password'));
+      }
+      user.changePassword(newPassword, function(err) {
+        next(err);
+      });
+    }
+  ], callback);
 };
 
 /**

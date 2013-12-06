@@ -5,10 +5,7 @@ block content
       include breadcrumb
     div.panel-body
       include error_alert
-      if message
-        div.alert.alert-success.alert-dismissable
-          button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
-          p #{message}
+      include message_alert
       form(role="form", method="POST", action="/signup")#signup-form.form-horizontal
         div.form-group
           label(for="email").col-sm-3.control-label Email

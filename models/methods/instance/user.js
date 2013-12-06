@@ -63,3 +63,13 @@ exports.isFollowedBy = function(userId, callback) {
     callback(err, !!relation);
   });
 };
+
+/**
+ * 更改用户密码
+ * @param  {String}   newPassword    新密码
+ * @param  {Function} callback
+ */
+exports.changePassword = function(newPassword, callback) {
+  this.password = newPassword;
+  this.save(callback);
+};

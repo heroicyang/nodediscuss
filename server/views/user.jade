@@ -33,7 +33,7 @@ block content
     ul.list-group
       if user.website || user.location || user.twitter || user.github
         li.list-group-item
-          ul.list-unstyled
+          ul.list-unstyled.link
             if user.website
               li
                 i.fa.fa-home
@@ -41,7 +41,7 @@ block content
             if user.location
               li
                 i.fa.fa-map-marker
-                  span #{user.location}
+                span #{user.location}
       if user.bio
         li.list-group-item #{user.bio}
         

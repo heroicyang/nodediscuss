@@ -40,8 +40,9 @@ module.exports = exports = function(app) {
       api.requestHandler(api.relation.remove));
 
   // 用户设置
-  app.all('/settings/:op', auth.isLogin);
-  app.all('/settings/profile', settings.profile);
+  app.all('/settings/:op?', auth.isLogin);
+  app.get('/settings', settings.get);
+  app.post('/settings/profile', settings.profile);
   app.post('/settings/change_pass', settings.changePassword);
 
   // 提醒

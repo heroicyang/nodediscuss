@@ -2,44 +2,37 @@ extends layout
 block content
   div#notification-list.panel.panel-default
     div.panel-heading
-      button(type="button").btn.btn-default.btn-xs.pull-right 全部标记为已读
+      form(action="/notifications/read", method="POST")
+        input(type="hidden", name="_csrf", value="#{csrfToken}")
+        button(type="submit").btn.btn-default.btn-xs.pull-right 全部标记为已读
       include breadcrumb
     if notifications.length > 0
       ul.list-group
         each notification in notifications
-          li.list-group-item
+          li(class=notification.hasRead ? null : "unread").list-group-item
             div.media
-              div.pull-left.avatar-32
+              div.pull-left.avatar-48
                 a(href="/user/#{notification.user.username}")
                   img(src!="#{notification.user.avatar}",
                       alt="#{notification.user.nickname}").media-object.img-rounded.img-responsive
               div.media-body
-                if !notification.hasRead
-                  div.pull-right.unread
-                    i.fa.fa-flag
-                div.media-heading.title
+                div.pull-right
+                  span= moment(notification.createdAt).fromNow()
+                div.media-heading
                   a(href="/user/#{notification.user.username}") #{notification.user.nickname}
                   case notification.type
                     when constants.NOTIFICATION_TYPE.COMMENT
                       | &#32;评论了你创建的话题&#32;
-                      a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
                     when constants.NOTIFICATION_TYPE.REPLY_COMMENT
-                      | &#32;回复了你在&#32;
-                      a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
-                      | &#32;中的评论
+                      | &#32;回复了你的评论&#32;
                     when constants.NOTIFICATION_TYPE.FOLLOW
                       | &#32;关注了你
                     when constants.NOTIFICATION_TYPE.AT
-                      | &#32;在评论&#32;
-                      a(href="/topic/#{notification.topic._id}") #{notification.topic.title}
-                      | &#32;时提到了你
+                      | &#32;提到了你&#32;
                 if notification.type !== constants.NOTIFICATION_TYPE.FOLLOW
-                  div.panel.panel-default.content
-                    div.div.panel-body
-                      if notification.comment.deleted
-                        span 评论已被删除！
-                      else
-                        | !{notification.comment.contentHtml}
+                  p
+                    a(href="/topic/#{notification.topic._id}#comment-#{notification.comment.floor}")
+                      | #{notification.topic.title}
     else
       div.panel-body
         span 暂无提醒。

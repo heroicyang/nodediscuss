@@ -39,3 +39,30 @@ exports.query = function(options, callback) {
       });
     });
 };
+
+/**
+ * 将未读的通知全部标记为已读
+ * @param  {Object}   args
+ *  - userId     required    用户 id
+ * @param  {Function} callback
+ *  - err
+ */
+exports.readAll = function(args, callback) {
+  if (typeof args === 'function') {
+    callback = args;
+    args = {};
+  }
+
+  var userId = (this.currentUser && this.currentUser.id) || args.userId;
+  Notification
+    .update({
+      masterId: userId,
+      hasRead: false
+    }, {
+      hasRead: true
+    }, {
+      multi: true
+    }, function(err) {
+      callback(err);
+    });
+};

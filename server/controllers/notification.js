@@ -49,17 +49,6 @@ exports.list = function(req, res, next) {
                 next(err, topic);
               });
           },
-          masterComment: function(next) {
-            if (!notification.masterCommentId) {
-              return next(null, null);
-            }
-            api.comment
-              .get({
-                id: notification.masterCommentId
-              }, function(err, comment) {
-                next(err, comment);
-              });
-          },
           comment: function(next) {
             if (!notification.commentId) {
               return next(null, null);
@@ -95,5 +84,10 @@ exports.list = function(req, res, next) {
 
 /** 将未读提醒标记为已读 */
 exports.read = function(req, res, next) {
-
+  api.notification.readAll.call(req, function(err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/notifications');
+  });
 };

@@ -6,7 +6,7 @@ block content
       div.panel-body
         include error_alert
         include message_alert
-        form(role="form", method="POST", action="/forgot-pass")#forgot-pass-form.form-horizontal
+        form(role="form", method="POST", action="/forgot")#forgot-pass-form.form-horizontal
           div.form-group
             label(for="email").col-sm-3.control-label Email
             div.col-sm-6
@@ -20,6 +20,9 @@ block content
                      data-loading-text="正在提交...")#submit-btn.btn.btn-primary 继续
               span.help-block: small 24 小时内，至多可以重新设置密码 2 次。
 block sidebar
-  include ./sidebar/about
+  if isAuthenticated
+    include ./sidebar/user_card
+  else
+    include ./sidebar/about
   include ./sidebar/ad
 block script

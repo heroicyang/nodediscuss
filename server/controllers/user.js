@@ -9,6 +9,7 @@
 var _ = require('lodash'),
   async = require('async'),
   api = require('../../api'),
+  CentralizedError = require('../../utils/error').CentralizedError,
   NotFoundError = require('../../utils/error').NotFoundError;
 
 exports.signup = function(req, res, next) {
@@ -29,7 +30,7 @@ exports.signup = function(req, res, next) {
         return next(err);
       }
       req.flash('message', '注册成功，我们已经向你的电子邮箱发送了一封激活邮件，请前往查收并激活你的帐号。');
-      res.redirect('signup');
+      res.redirect('/signup');
     });
   }
 };
@@ -108,6 +109,85 @@ exports.forgotPassword = function(req, res, next) {
     });
     req.breadcrumbs('通过电子邮件重设密码');
     return res.render('forgot_pass', locals);
+  }
+
+  if ('post' === method) {
+    api.user.forgotPassword(req.body, function(err) {
+      if (err) {
+        return next(err);
+      }
+      req.flash('message', '我们已经向你的电子邮箱发送了一封密码重置邮件，请前往查收并重设你的密码。');
+      res.redirect('/forgot');
+    });
+  }
+};
+
+exports.resetPassword = function(req, res, next) {
+  var method = req.method.toLowerCase();
+
+  var token = req.query.token || req.session.token,
+    email = req.query.email || req.session.email;
+
+  if ('get' === method) {
+    var locals = _.extend({}, req.flash('body'), {
+      err: req.flash('err'),
+      message: req.flash('message')
+    });
+
+    if (!token || !email) {
+      req.session.redirectPath = '/';
+      return next(new CentralizedError('信息有误，不能继续重设密码操作。'));
+    }
+
+    api.user.getResetPassRecord({
+      email: email,
+      token: token
+    }, function(err, resetPass) {
+      if (err) {
+        req.session.redirectPath = '/';
+        return next(err);
+      }
+
+      req.session.token = req.session.token || token;
+      req.session.email = req.session.email || email;
+      req.breadcrumbs('重设密码');
+      return res.render('reset_pass', _.extend(locals, {
+        userId: resetPass.userId,
+        resetPassId: resetPass.id,
+        token: token
+      }));
+    });
+    return;
+  }
+
+  if ('post' === method) {
+    var newPassword = req.body.newPassword,
+      newPassword2 = req.body.newPassword2,
+      userId = req.body.userId,
+      resetPassId = req.body.resetPassId;
+
+    if (req.body.token !== token || !userId || !resetPassId) {
+      return next(new CentralizedError('信息有误，不能继续重设密码操作'));
+    }
+
+    if (newPassword !== newPassword2) {
+      return next(new CentralizedError('两次输入的密码不一致', 'newPassword'));
+    }
+
+    api.user.resetPassword({
+      userId: userId,
+      newPassword: newPassword,
+      resetPassId: resetPassId
+    }, function(err) {
+      if (err) {
+        return next(err);
+      }
+
+      delete req.session.token;
+      delete req.session.email;
+      req.flash('message', '密码重置成功，请使用新密码重新登录。');
+      res.redirect('/signin');
+    });
   }
 };
 

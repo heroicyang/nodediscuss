@@ -86,3 +86,32 @@ exports.list = function(req, res, next) {
     }));
   });
 };
+
+/** 用户发布的话题列表页面 */
+exports.queryByUser = function(req, res, next) {
+  var pageIndex = parseInt(req.query.pageIndex || 1, 10);
+  var pagination = {
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  };
+
+  api.topic.query({
+    query: {
+      'author.id': req.user.id
+    },
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  }, function(err, results) {
+    if (err) {
+      return next(err);
+    }
+
+    pagination.totalCount = results.totalCount;
+    
+    req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
+    req.breadcrumbs('全部话题');
+    res.render('user_topics', _.extend(results, {
+      pagination: pagination
+    }));
+  });
+};

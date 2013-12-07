@@ -8,6 +8,7 @@
  */
 var _ = require('lodash'),
   async = require('async'),
+  config = require('../../config'),
   api = require('../../api'),
   CentralizedError = require('../../utils/error').CentralizedError,
   NotFoundError = require('../../utils/error').NotFoundError;
@@ -214,14 +215,13 @@ exports.get = function(req, res, next) {
       api.topic.query({
         query: {
           'author.username': user.username
-        }
+        },
+        pageSize: config.pagination.pageSize
       }, function(err, results) {
         if (err) {
           return next(err);
         }
-        next(null, _.extend(results.topics, {
-          totalCount: results.totalCount
-        }));
+        next(null, results.topics);
       });
     },
     latestComments: function(next) {
@@ -229,16 +229,14 @@ exports.get = function(req, res, next) {
         query: {
           'author.username': user.username,
           deleted: false
-        }
+        },
+        pageSize: config.pagination.pageSize
       }, function(err, results) {
         if (err) {
           return next(err);
         }
 
-        var comments = _.extend(results.comments, {
-          totalCount: results.totalCount
-        });
-        async.map(comments, function(comment, next) {
+        async.map(results.comments, function(comment, next) {
           api.topic.get({
             id: comment.fkId
           }, function(err, topic) {
@@ -264,5 +262,55 @@ exports.get = function(req, res, next) {
     res.render('user', _.extend(results, {
       user: user
     }));
+  });
+};
+
+exports.comments = function(req, res, next) {
+  var pageIndex = parseInt(req.query.pageIndex || 1, 10);
+  var pagination = {
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  };
+
+  api.comment.query({
+    query: {
+      'author.username': req.user.username,
+      deleted: false
+    },
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  }, function(err, results) {
+    if (err) {
+      return next(err);
+    }
+
+    pagination.totalCount = results.totalCount;
+
+    async.map(results.comments, function(comment, next) {
+      api.topic.get({
+        id: comment.fkId
+      }, function(err, topic) {
+        if (err) {
+          return next(err);
+        }
+        _.extend(comment, {
+          topic: topic || {
+            deleted: true
+          }
+        });
+        next(null, comment);
+      });
+    }, function(err, comments) {
+      if (err) {
+        return next(err);
+      }
+
+      req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
+      req.breadcrumbs('全部评论');
+      res.render('user_comments', {
+        comments: comments,
+        pagination: pagination
+      });
+    });
   });
 };

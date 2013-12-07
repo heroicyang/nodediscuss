@@ -1,0 +1,29 @@
+extends layout
+block content
+  div.panel.panel-default
+    div.panel-heading
+      include breadcrumb
+    ul.list-group.user-comment-list
+      if pagination.totalCount > 0
+        each comment in comments
+          li.list-group-item
+            div.describe.row
+              div.comment-date.pull-right
+                span= moment(comment.createdAt).fromNow()
+              div.title
+                if comment.topic.deleted
+                  span 评论的该条话题已被删除。
+                else
+                  span 评论了 #{comment.topic.author.nickname} 创建的话题&#32;
+                  i.fa.fa-angle-right
+                  a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
+            div.content !{comment.contentHtml}
+        li.list-group-item.pager-item
+          include pagination
+      else
+        li.list-group-item: span 暂无评论。
+block sidebar
+  if isAuthenticated
+    include ./sidebar/user_card
+  else
+    include ./sidebar/about

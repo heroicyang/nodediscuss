@@ -5,6 +5,7 @@ block content
       include breadcrumb
     ul.list-group.topic-list
       if pagination.totalCount > 0
+        - var hiddenAvatar = true
         each topic in topics
           li.list-group-item
             include topic_list_item

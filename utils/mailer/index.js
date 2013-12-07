@@ -40,3 +40,22 @@ exports.sendActivationMail = function(user, callback) {
     }
   ], callback);
 };
+
+exports.sendResetPassMail = function(resetPass, callback) {
+  async.waterfall([
+    function renderMailTmpl(next) {
+      renderer.resetPassword(resetPass, function(err, html) {
+        next(err, html);
+      });
+    },
+    function sendMail(html, next) {
+      var mailOptions = {
+        from: util.format('%s <%s>', config.mailer.senderName, config.mailer.sender),
+        to: resetPass.email,
+        subject: config.name + '密码重置',
+        html: html
+      };
+      mailer.send(config.mailer.strategy, mailOptions, next);
+    }
+  ], callback);
+};

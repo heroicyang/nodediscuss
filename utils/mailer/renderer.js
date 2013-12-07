@@ -38,3 +38,15 @@ exports.accountActivation = function(user, callback) {
     activationUrl: activationUrl
   }, callback);
 };
+
+exports.resetPassword = function(resetPass, callback) {
+  var resetPassUrl = url.format(_.extend({
+    pathname: '/reset',
+    search: 'token=' + md5(resetPass.id + resetPass.email) + '&email=' + resetPass.email
+  }, urlObj));
+
+  jade.renderFile(getTemplate('reset_pass.jade'), {
+    site: site,
+    resetPassUrl: resetPassUrl
+  }, callback);
+};

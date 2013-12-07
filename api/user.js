@@ -9,12 +9,14 @@
 var url = require('url'),
   util = require('util'),
   async = require('async'),
+  moment = require('moment'),
   config = require('../config'),
   md5 = require('../utils/md5'),
   mailer = require('../utils/mailer'),
   CentralizedError = require('../utils/error').CentralizedError,
   models = require('../models'),
-  User = models.User;
+  User = models.User,
+  ResetPass = models.ResetPass;
 
 /**
  * 创建新用户
@@ -208,6 +210,104 @@ exports.activate = function(args, callback) {
     },
     function activateUser(user, next) {
       user.activate(next);
+    }
+  ], callback);
+};
+
+/**
+ * 申请密码重置
+ * @param  {Object}   userData
+ *  - email     required    注册时的电子邮箱
+ * @param  {Function} callback
+ *  - err
+ */
+exports.forgotPassword = function(userData, callback) {
+  var email = userData.email;
+  async.waterfall([
+    function createResetPass(next) {
+      ResetPass.create({
+        email: email
+      }, function(err, resetPass) {
+        next(err, resetPass);
+      });
+    },
+    function sendMail(resetPass, next) {
+      mailer.sendResetPassMail(resetPass, function(err) {
+        next(err);
+      });
+    }
+  ], callback);
+};
+
+/**
+ * 获取最近一次申请的重置密码记录
+ * @param  {Object}   args
+ *  - email      required
+ * @param  {Function} callback
+ *  - err
+ *  - resetPass     重置密码记录
+ */
+exports.getResetPassRecord = function(args, callback) {
+  var email = args.email,
+    token = args.token;
+
+  ResetPass
+    .findOne({
+      email: email
+    })
+    .sort({
+      createdAt: -1
+    })
+    .exec(function(err, resetPass) {
+      if (err) {
+        return callback(err);
+      }
+
+      if (!resetPass || md5(resetPass.id + resetPass.email) !== token) {
+        return callback(new CentralizedError('信息有误，不能继续重设密码操作'));
+      }
+
+      if (!resetPass.available) {
+        return callback(new CentralizedError('该密码重置链接已失效', 'available', 'warning'));
+      }
+
+      if (moment().add('hours', -24).toDate() > resetPass.createdAt) {
+        return callback(new CentralizedError('该密码重置链接已过期，请重新提交重置密码申请', 'expire', 'warning'));
+      }
+
+      callback(err, resetPass);
+    });
+};
+
+/**
+ * 重置密码
+ * @param  {Object}   args
+ *  - userId         required   用户 id
+ *  - newPassword    required   新密码
+ *  - resetPassId    required   密码重置记录 id
+ * @param  {Function} callback
+ *  - err
+ */
+exports.resetPassword = function(args, callback) {
+  var userId = args.userId,
+    newPassword = args.newPassword,
+    resetPassId = args.resetPassId;
+
+  async.waterfall([
+    function updatePassword(next) {
+      User.changePassword({
+        id: userId,
+        newPassword: newPassword
+      }, function(err) {
+        next(err);
+      });
+    },
+    function unavailableResetPass(next) {
+      ResetPass.findByIdAndUpdate(resetPassId, {
+        available: false
+      }, function(err) {
+        next(err);
+      });
     }
   ], callback);
 };

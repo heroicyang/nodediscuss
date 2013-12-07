@@ -19,12 +19,6 @@ var ResetPassSchema = new Schema({
     index: true
   },
   email: String,
-  token: {
-    type: String,
-    default: function() {
-      return Math.round((new Date().valueOf() * Math.random())) + '';
-    }
-  },
   available: {
     type: Boolean,
     default: true

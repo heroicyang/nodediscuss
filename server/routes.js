@@ -33,10 +33,8 @@ module.exports = exports = function(app) {
 
   app.all('/user/:username/:op?', user.load);
   app.get('/user/:username', user.get);
-  app.get('/user/:username/topics', topics.queryByUser);
+  app.get('/user/:username/topics', topics.byUser);
   app.get('/user/:username/comments', user.comments);
-  app.get('/user/:username/followings', function(req, res) {});
-  app.get('/user/:username/followers', function(req, res) {});
   app.post('/user/:username/:op', auth.isLogin);
   // 关注的相关操作直接调用 api
   app.post('/user/:username/follow',
@@ -60,6 +58,7 @@ module.exports = exports = function(app) {
   app.get('/topics/:type?', topics.list);
   app.get('/tag/:name', tag.load, tag.topics);
   app.get('/tag/:name/topics/:type?', tag.load, tag.topics);
+  app.get('/following/topics', auth.isLogin, topics.byFollowing);
 
   // 单个话题
   app.all('/topic/create', auth.isLogin, topic.create);

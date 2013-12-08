@@ -3,19 +3,19 @@ block content
   div.panel.panel-default
     div.panel-heading
       include breadcrumb
-    if currentUser.favoriteTopicCount <= 0
-      div.panel-body
-        span 你还没有收藏过话题。
-    else
-      ul.list-group.topic-list
+    ul.list-group.topic-list
+      if currentUser.favoriteTopicCount > 0
         each topic in topics
           li.list-group-item
             if topic.deleted
               span 该话题已被删除。
             else
               include topic_list_item
+        li.list-group-item
+          include pagination
+      else
+        li.list-group-item: span 暂无话题收藏。
 block sidebar
   include ./sidebar/user_card
-  include ./sidebar/top_tags
   include ./sidebar/related_site
   include ./sidebar/ad

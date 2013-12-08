@@ -4,7 +4,7 @@ module.exports = exports = {
   port: '8080',
   name: 'CNode',
   title: 'CNode: Node.js 中文技术社区',
-  description: 'CNode: Node.js 中文技术社区',
+  description: 'Node.js 专业中文技术社区',
 
   session: {
     secret: '',  // 留空时则会以 config/index.js 中生成的随机字串为准 (建议留空)

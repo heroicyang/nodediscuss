@@ -32,7 +32,7 @@ NC.Module.define('CommentList', [], function() {
             .done(function(data) {
               if (data.success) {
                 $commentItem.empty();
-                $commentItem.html('<p class="deleted">该评论已被删除。<span>#' + floor + '楼</span></p>');
+                $commentItem.html('<p class="deleted"><del>#' + floor + '楼评论已被删除。</del></p>');
               }
             });
         });

@@ -58,8 +58,7 @@ block content
           li(id="comment-#{comment.floor}").list-group-item
             if comment.deleted
               p.deleted
-                | 该评论已被删除。
-                span ##{comment.floor}楼
+                del ##{comment.floor}楼评论已被删除。
             else
               div.media
                 div.pull-left.avatar-48
@@ -86,6 +85,8 @@ block content
                     span= moment(comment.createdAt).fromNow()
                     span ##{comment.floor}楼
                   div.content !{comment.contentHtml}
+        li.list-group-item
+          include pagination
   else
     div.no-comment.panel.panel-default
       div.panel-body 目前尚无评论
@@ -112,7 +113,6 @@ block sidebar
     include ./sidebar/user_card
   else
     include ./sidebar/about
-  include ./sidebar/top_tags
   include ./sidebar/related_site
   include ./sidebar/ad
 block script

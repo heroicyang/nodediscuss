@@ -41,3 +41,45 @@ exports.remove = function(args, callback) {
     followId = (this.user && this.user.id) || args.followId;
   Relation.destroy(userId, followId, callback);
 };
+
+/**
+ * 获取关系链列表
+ * @param  {Object}   options
+ *  - query          optional   查询条件，默认查询全部
+ *  - pageIndex      optional   当前页数，默认 1
+ *  - pageSize       optional   返回的记录数，默认 20
+ *  - sort  {Object} optional   排序规则
+ * @param  {Function} callback
+ *  - err
+ *  - results
+ *    - totalCount    符合条件关系总数
+ *    - relations     关系列表
+ */
+exports.query = function(options, callback) {
+  options = options || {};
+  var conditions = options.query || {},
+    pageIndex = options.pageIndex,
+    pageSize = options.pageSize,
+    sort = options.sort;
+
+  var q = Relation.query(conditions);
+  if (sort) {
+    q.query = q.query.sort(sort);
+  }
+  // 代表不用分页
+  if (pageSize === Infinity) {
+    q.execQuery(function(err, relations) {
+      callback(err, {
+        relations: relations
+      });
+    });
+  } else {
+    q.paginate(pageIndex, pageSize)
+      .exec(function(err, count, relations) {
+        callback(err, {
+          totalCount: count,
+          relations: relations
+        });
+      });
+  }
+};

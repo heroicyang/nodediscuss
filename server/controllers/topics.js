@@ -88,7 +88,7 @@ exports.list = function(req, res, next) {
 };
 
 /** 用户发布的话题列表页面 */
-exports.queryByUser = function(req, res, next) {
+exports.byUser = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex || 1, 10);
   var pagination = {
     pageIndex: pageIndex,
@@ -111,7 +111,62 @@ exports.queryByUser = function(req, res, next) {
     req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
     req.breadcrumbs('全部话题');
     res.render('user_topics', _.extend(results, {
+      hiddenAvatar: true,
       pagination: pagination
     }));
+  });
+};
+
+/** 关注的用户发布的话题列表页面 */
+exports.byFollowing = function(req, res, next) {
+  var pageIndex = parseInt(req.query.pageIndex || 1, 10);
+  var pagination = {
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  };
+
+  async.waterfall([
+    function getFollowings(next) {
+      api.relation.query({
+        query: {
+          userId: req.currentUser.id
+        },
+        pageSize: Infinity
+      }, function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        var followingIds = _.pluck(results.relations, 'followId');
+        next(null, followingIds);
+      });
+    },
+    function getTopics(followingIds, next) {
+      api.topic.query({
+        query: {
+          'author.id': {
+            $in: followingIds
+          }
+        },
+        pageIndex: pageIndex,
+        pageSize: config.pagination.pageSize
+      }, function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        pagination.totalCount = results.totalCount;
+        next(null, results.topics);
+      });
+    }
+  ], function(err, topics) {
+    if (err) {
+      return next(err);
+    }
+
+    req.breadcrumbs('我关注的人发布的最新话题');
+    res.render('user_topics', {
+      hiddenAvatar: false,
+      topics: topics,
+      pagination: pagination
+    });
   });
 };

@@ -4,11 +4,13 @@
  */
 
 module.exports = exports = {
-  options: {
-    banner: '<%= banner %>',
-    keepSpecialComments: 0
-  },
-  files: {
-    '<%= dest %>/css/style.min.css': ['<%= dest %>/css/style.css']
+  min: {
+    options: {
+      banner: '<%= banner %>',
+      keepSpecialComments: 0
+    },
+    files: {
+      '<%= dest %>/css/style.min.css': ['<%= dest %>/css/style.css']
+    }
   }
 };

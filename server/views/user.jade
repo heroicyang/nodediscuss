@@ -24,7 +24,7 @@ block content
               i.fa.fa-clock-o
               | &#32;于&#32;
               span= moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')
-              | &#32;加入CNode
+              | &#32;加入#{page.name}
             ul.list-inline
               li 关注 #{user.followingCount}
               li 粉丝 #{user.followerCount}

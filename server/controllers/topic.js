@@ -8,6 +8,7 @@
  */
 var async = require('async'),
   _ = require('lodash'),
+  config = require('../../config'),
   api = require('../../api'),
   NotFoundError = require('../../utils/error').NotFoundError;
 
@@ -133,32 +134,43 @@ exports.load = function(req, res, next) {
 
 /** 话题详细页面 */
 exports.get = function(req, res, next) {
+  var pageIndex = parseInt(req.query.pageIndex || 1, 10);
+  var pagination = {
+    pageIndex: pageIndex,
+    pageSize: config.pagination.pageSize
+  };
+
   var error = _.extend(req.flash('err'), {
     global: true
   });
+
   async.parallel({
     comments: function(next) {
       api.comment.query({
         query: {
           fkId: req.topic.id
-        }
+        },
+        pageIndex: pageIndex,
+        pageSize: config.pagination.pageSize
       }, function(err, results) {
         if (err) {
           return next(err);
         }
-        next(null, _.extend(results.comments, {
-          totalCount: results.totalCount
-        }));
+
+        pagination.totalCount = results.totalCount;
+        next(null, results.comments);
       });
     }
   }, function(err, results) {
     if (err) {
       return next(err);
     }
+    
     req.breadcrumbs(req.topic.tag.name, '/tag/' + req.topic.tag.name);
     req.breadcrumbs('话题详情');
     res.render('topic', _.extend(results, {
       topic: req.topic,
+      pagination: pagination,
       err: error
     }));
   });

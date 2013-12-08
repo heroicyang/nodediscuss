@@ -64,8 +64,8 @@ block content
   div.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近评论的话题
-    ul.list-group.user-comment-list
-      if latestComments.length > 0
+    if latestComments.length > 0
+      ul.list-group.user-comment-list
         each comment in latestComments
           li.list-group-item
             div.describe.row
@@ -79,8 +79,8 @@ block content
                   i.fa.fa-angle-right
                   a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
             div.content !{comment.contentHtml}
-      else
-        li.list-group-item: span 暂无评论。
+    else
+      div.panel-body: span 暂无评论。
     if latestComments.length > 0
       div.panel-footer
         a(href="/user/#{user.username}/comments")

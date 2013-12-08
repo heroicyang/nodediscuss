@@ -3,9 +3,9 @@ html(lang="zh-CN")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
-    meta(name="description", content="#{page.name}: #{page.description}")
+    meta(name="description", content="#{site.name}: #{site.description}")
     link(type="image/x-icon", rel="icon", href="/img/favicon32.ico")
-    title= page.title
+    title= site.title
     //- 根据 grunt build 之后的结果引入 css 文件
     each file in assets.css
       link(href="/css/#{file}", rel="stylesheet")
@@ -74,7 +74,7 @@ html(lang="zh-CN")
               p &copy; 2012 - 2013
               p 由开源社区系统
                 a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") CNodeClub
-                | 强力驱动，版本: 0.0.1，欢迎贡献代码。
+                | 强力驱动，版本: #{version}，欢迎贡献代码。
               p Powered by 
                 a(href="http://expressjs.com/", target="_blank") Express
                 | &amp;

@@ -6,7 +6,9 @@ html(lang="zh-CN")
     meta(name="description", content="#{page.name}: #{page.description}")
     link(type="image/x-icon", rel="icon", href="/img/favicon32.ico")
     title= page.title
-    link(href="/css/style.css", rel="stylesheet")
+    //- 根据 grunt build 之后的结果引入 css 文件
+    each file in assets.css
+      link(href="/css/#{file}", rel="stylesheet")
   body#app
     div#container-wrap
       div(role="navigation").navbar.navbar-default.navbar-static-top
@@ -79,7 +81,7 @@ html(lang="zh-CN")
                 a(href="mongoosejs.com/", target="_blank") Mongoose
     
     //- 根据 grunt build 之后的结果引入 js 文件
-    each file in assets.files
+    each file in assets.js
       script(src="/js/#{file}")
     //- 设置 ajax 模式下的 csrf
     script(type="text/javascript").

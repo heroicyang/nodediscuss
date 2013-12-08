@@ -5,7 +5,7 @@ block content
       include breadcrumb
     if currentUser.favoriteTagCount <= 0
       div.panel-body
-        span 你还没有收藏过节点。
+        span 暂无节点收藏。
     else
       div.panel-body
         ul.list-inline.tags
@@ -16,6 +16,8 @@ block content
         each topic in topics
           li.list-group-item
             include topic_list_item
+        li.list-group-item
+          include pagination
 block sidebar
   include ./sidebar/user_card
   include ./sidebar/related_site

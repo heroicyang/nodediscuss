@@ -3,8 +3,20 @@ var glob = require('glob'),
   join = path.join;
 
 module.exports = function(grunt) {
+  var banner = (function() {/*
+       ___     __            _          ___  _         _     
+      / __\ /\ \ \ ___    __| |  ___   / __\| | _   _ | |__  
+     / /   /  \/ // _ \  / _` | / _ \ / /   | || | | || '_ \ 
+    / /___/ /\  /| (_) || (_| ||  __// /___ | || |_| || |_) |
+    \____/\_\ \/  \___/  \__,_| \___|\____/ |_| \__,_||_.__/ 
+*/}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+
   var config = {
-    pkg: grunt.file.readJSON('package.json')
+    pkg: grunt.file.readJSON('package.json'),
+    banner: '/*!' + banner + '\n' +
+        '* <%= pkg.name %> - v<%= pkg.version %> -\n' +
+        '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %> */\n'
   };
   grunt.util._.extend(config, loadConfig('./tasks/options/'));
   grunt.initConfig(config);

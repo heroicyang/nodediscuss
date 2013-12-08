@@ -6,23 +6,34 @@
  * @author heroic
  */
 
+var libs = [
+  'client/js/lib/jquery.js',
+  'client/js/lib/json2.js',
+  'client/js/lib/lodash.underscore.js',
+  'client/js/lib/backbone.js',
+  'client/js/lib/bootstrap.js',
+  'client/js/lib/marked.js',
+  'client/js/lib/highlight.js',
+  'client/js/lib/jquery.ui.widget.js',
+  'client/js/lib/jquery.iframe-transport.js',
+  'client/js/lib/jquery.fileupload.js',
+  'client/js/lib/require.js'
+];
+
 module.exports = exports = {
-  development: {
+  lib: {
     files: [{
-      src: [
-        'client/js/lib/jquery.js',
-        'client/js/lib/json2.js',
-        'client/js/lib/lodash.underscore.js',
-        'client/js/lib/backbone.js',
-        'client/js/lib/bootstrap.js',
-        'client/js/lib/marked.js',
-        'client/js/lib/highlight.js',
-        'client/js/lib/jquery.ui.widget.js',
-        'client/js/lib/jquery.iframe-transport.js',
-        'client/js/lib/jquery.fileupload.js',
-        'client/js/lib/require.js'
-      ],
+      src: libs,
       dest: '<%= dest %>/js/lib.js'
+    }]
+  },
+  app: {
+    files: [{
+      src: libs.concat([
+        'client/js/app.js',
+        'client/js/app/*.js'
+      ]),
+      dest: '<%= dest %>/js/app.js'
     }]
   }
 };

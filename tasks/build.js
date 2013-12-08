@@ -10,7 +10,8 @@ var path = require('path');
 
 module.exports = exports = function(grunt) {
   grunt.registerTask('build', function() {
-    var target = grunt.option('target'),
+    var assetsJson,
+      target = grunt.option('target'),
       dest = grunt.option('dest') || 'assets';
     dest = path.join(process.cwd(), dest);
 
@@ -21,34 +22,38 @@ module.exports = exports = function(grunt) {
     case 'pro':
     case 'production':
     case 'release':
-      grunt.log.writeln('Building client...');
+      assetsJson = {
+        js: ['app.min.js'],
+        css: ['style.min.css']
+      };
+      grunt.task.run('clean');
+      grunt.task.run('stylus:development');
+      grunt.task.run('cssmin');
+      grunt.task.run('concat:app');
+      grunt.task.run('uglify');
+      grunt.task.run(['copy:font', 'copy:img']);
       break;
     case 'dev':
     case 'development':
     default:
+      assetsJson = {
+        js: [
+          'lib.js',
+          'app.js',
+          'requirejs.config.js'
+        ],
+        css: ['style.css']
+      };
       grunt.task.run('stylus:development');
-      grunt.task.run('concat:development');
+      grunt.task.run('concat:lib');
       grunt.task.run('copy');
       grunt.task.run('watch:build');
       watching();
       break;
     }
 
-    generateAssetsJson(target);
-  });
-
-  function generateAssetsJson(target) {
-    // TODO: target=production
-    var assetsJson = {
-      files: [
-        'lib.js',
-        'app.js',
-        'requirejs.config.js'
-      ]
-    };
-
     grunt.file.write('assets.json', JSON.stringify(assetsJson, null, '\t'));
-  }
+  });
 
   function watching() {
     // 响应 `grunt-contrib-watch` 插件的 `watch` 事件，并根据...
@@ -63,7 +68,7 @@ module.exports = exports = function(grunt) {
       }
       if (filepath.indexOf('client/js') !== -1) {
         grunt.task.run('clean:js');
-        grunt.task.run('concat:development');
+        grunt.task.run('concat:lib');
         grunt.task.run('copy:js');
       }
       if (filepath.indexOf('client/img') !== -1) {

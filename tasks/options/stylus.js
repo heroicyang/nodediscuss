@@ -9,7 +9,6 @@
 module.exports = exports = {
   development: {
     options: {
-      compress: true,
       'include css': true
     },
     files: [{

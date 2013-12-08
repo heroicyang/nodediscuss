@@ -7,5 +7,6 @@
 module.exports = exports = {
   stylus: ['<%= dest %>/css'],
   js: ['<%= dest %>/js'],
-  img: ['<%= dest %>/img']
+  img: ['<%= dest %>/img'],
+  font: ['<%= dest %>/font']
 };

@@ -7,8 +7,10 @@ module.exports = exports = {
   title: 'CNode: Node.js 中文技术社区',
   description: 'Node.js 专业中文技术社区',
 
+  adminEmails: [],   //  管理员用户们的 email 列表
+
   session: {
-    secret: '',  // 留空时则会以 config/index.js 中生成的随机字串为准 (建议留空)
+    secret: '',
     maxAge: 6.048e+8  // ms, 7 x 24 x 60 x 60 x 1000
   },
 
@@ -59,6 +61,11 @@ module.exports = exports = {
   mailer: {
     // strategy 代表采用何种邮件发送策略
     // options 即该种发送策略需要的配置选项
+    strategy: 'log',
+    sender: 'no-reply@cnodejs.org',
+    senderName: 'CNode',
+    options: {}
+    /*  Examples:
     strategy: 'nodemailer',    // 使用 nodemailer 来发送邮件
     sender: 'no-reply@cnodejs.org',       // 发件人 Email
     senderName: 'CNode',   // 发件人名称
@@ -71,6 +78,7 @@ module.exports = exports = {
         pass: ''
       }
     }
+    */
   },
   // 文件上传服务
   uploader: {
@@ -84,6 +92,6 @@ module.exports = exports = {
       bucket: 'your bucket name',
       domain: 'http://{bucket}.u.qiniudn.com'
     }
-     */
+    */
   }
 };

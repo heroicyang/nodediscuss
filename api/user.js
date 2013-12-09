@@ -178,6 +178,10 @@ exports.check = function(userData, callback) {
       return callback(new CentralizedError('帐号未激活', 'activated'));
     }
 
+    if (user.state.blocked) {
+      return callback(new CentralizedError('帐号被锁定，请联系管理员解锁', 'blocked'));
+    }
+
     callback(null, user);
   });
 };

@@ -152,7 +152,7 @@ exports.limitedTopic = function(req, res, next) {
     }
 
     // 如果是普通用户，则必须间隔 10 分钟才能继续发布
-    if (!req.currentUser.verified ||
+    if (!req.currentUser.verified &&
           !_.contains(config.adminEmails, req.currentUser.email)) {
       if (moment().add('minutes', -10).toDate() < topic.createdAt) {
         return next(new CentralizedError('发布话题过于频繁，请稍后再试'));

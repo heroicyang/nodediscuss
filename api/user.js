@@ -9,6 +9,8 @@
 var url = require('url'),
   util = require('util'),
   async = require('async'),
+  _ = require('lodash'),
+  request = require('request'),
   moment = require('moment'),
   config = require('../config'),
   md5 = require('../utils/md5'),
@@ -324,11 +326,54 @@ exports.resetPassword = function(args, callback) {
  * @param  {Function} callback
  */
 exports.getLatestTopic = function(args, callback) {
-  var userId = args.id;
+  if (typeof args === 'function') {
+    callback = args;
+    args = {};
+  }
+
+  var userId = (this.currentUser && this.currentUser.id) || args.id;
   Topic
     .findOne({
       'author.id': userId
     })
     .sort({ createdAt: -1 })
     .exec(callback);
+};
+
+/**
+ * 获取用户在 GitHub 上的仓库列表
+ * @param  {Object}   args
+ *  - github    required   GitHub 用户名
+ * @param  {Function} callback
+ *  - err
+ *  - repos    仓库列表，按 star 数量降序
+ */
+exports.githubRepos = function(args, callback) {
+  if (typeof args === 'function') {
+    callback = args;
+    args = {};
+  }
+
+  var githubUsername = (this.currentUser && this.currentUser.github) || args.github;
+  if (!githubUsername) {
+    return callback(null);
+  }
+
+  var options = {
+    url: 'https://api.github.com/users/' + githubUsername + '/repos?type=owner',
+    headers: {
+      'User-Agent': githubUsername
+    }
+  };
+
+  request(options, function(err, rep, body) {
+    if (err || rep.statusCode !== 200) {
+      return callback(err || new Error('Ops!'));
+    }
+
+    var repos = JSON.parse(body);
+    callback(null, _.sortBy(repos, function(repo) {
+      return -repo['stargazers_count'];
+    }));
+  });
 };

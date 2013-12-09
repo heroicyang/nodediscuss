@@ -8,7 +8,6 @@
  */
 var _ = require('lodash'),
   async = require('async'),
-  request = require('request'),
   config = require('../../config'),
   api = require('../../api'),
   CentralizedError = require('../../utils/error').CentralizedError,
@@ -254,27 +253,6 @@ exports.get = function(req, res, next) {
         }, function(err, comments) {
           next(err, comments);
         });
-      });
-    },
-    githubRepos: function(next) {
-      if (!user.github) {
-        return next(null);
-      }
-      var options = {
-        url: 'https://api.github.com/users/' + user.github + '/repos?type=owner',
-        headers: {
-          'User-Agent': user.github
-        }
-      };
-
-      request(options, function(err, rep, body) {
-        if (err || rep.statusCode !== 200) {
-          return next(null);
-        }
-        var repos = JSON.parse(body);
-        next(null, _.sortBy(repos, function(repo) {
-          return -repo['stargazers_count'];
-        }));
       });
     }
   }, function(err, results) {

@@ -91,29 +91,47 @@ block sidebar
     div.panel-heading
       span #{user.nickname} 在 GitHub 上的代码仓库
     ul.list-group.repo-list
-      if githubRepos && githubRepos.length > 0
-        each repo in githubRepos
-          li.list-group-item
-            div.row
-              a(href="#{repo.html_url}", target="_blank").col-sm-6 #{repo.name}
-              div.status.col-sm-6
-                div.pull-right
-                  if repo.language
-                    span #{repo.language} &#8226;&#32;
-                  span #{repo.stargazers_count}&#32;
-                    i.fa.fa-star
-            div.description
-              span #{repo.description}
+      if user.github
+        li.list-group-item
+          span
+            i.fa.fa-spinner.fa-spin
+            | &#32;正在获取代码仓库数据...
       else
         li.list-group-item: span 暂无代码仓库数据。
 block script
+  script(type="text/javascript").
+    var moduleMapping = [];
   if isAuthenticated && user.id !== currentUser.id
     script(type="text/javascript").
-      var moduleMapping = {
+      moduleMapping.push({
         name: 'FollowButton',
         el: '#follow-btn',
         data: {
           followUsername: '#{user.username}',
           followed: #{user.isFollowed}
         }
-      };
+      });
+  if user.github
+    script(type="text/javascript").
+      moduleMapping.push({
+        name: 'UserRepoList',
+        el: '.repo-list',
+        data: {
+          username: '#{user.username}'
+        }
+      });
+  script(type="text/template", id="repo-list-tmpl")
+    | <% _.each(githubRepos, function(repo) { %>
+    li.list-group-item
+      div.row
+        a(href="<%= repo.html_url %>", target="_blank").col-sm-6 <%= repo.name %>
+        div.status.col-sm-6
+          div.pull-right
+            | <% if (repo.language) { %>
+            span <%= repo.language %> &#8226;&#32;
+            | <% } %>
+            span <%= repo.stargazers_count %>&#32;
+              i.fa.fa-star
+      div.description
+        span <%= repo.description %>
+    | <% }); %>

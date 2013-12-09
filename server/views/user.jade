@@ -94,12 +94,14 @@ block sidebar
       if githubRepos && githubRepos.length > 0
         each repo in githubRepos
           li.list-group-item
-            a(href="#{repo.html_url}", target="_blank") #{repo.name}
-            div.status.clearfix
-              div.pull-right
-                if repo.language
-                  span #{repo.language} &#8226;&#32;
-                span #{repo.stargazers_count}人关注
+            div.row
+              a(href="#{repo.html_url}", target="_blank").col-sm-6 #{repo.name}
+              div.status.col-sm-6
+                div.pull-right
+                  if repo.language
+                    span #{repo.language} &#8226;&#32;
+                  span #{repo.stargazers_count}&#32;
+                    i.fa.fa-star
             div.description
               span #{repo.description}
       else

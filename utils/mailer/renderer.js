@@ -14,8 +14,7 @@ var url = require('url'),
 
 var urlObj = {
   protocol: 'http',
-  hostname: config.host,
-  port: config.port
+  host: config.host
 },
 site = {
   name: config.name,

@@ -1,6 +1,7 @@
 module.exports = exports = {
   debug: false,
-  host: 'localhost',
+  proxy: false,  // 如果使用了 nginx 来做反向代理，需设置为 true
+  host: 'localhost:8080', // 注意是 host 而非 hostname
   port: '8080',
   name: 'CNode',
   title: 'CNode: Node.js 中文技术社区',
@@ -23,11 +24,11 @@ module.exports = exports = {
 
   // 前端 css 文件、js 文件等静态资源配置
   static: {
-    // 留空代表使用本地服务器，否则请填写静态文件服务器的地址
-    host: '',
-    // 如果 host 为空，则以下配置均是基于 `process.cwd()` 来进行 `path.join`，且
+    // 留空代表使用本地服务器，否则请填写静态文件服务器的地址(请加上 http[s]:// 前缀)
+    domain: '',
+    // 如果 domain 为空，则以下配置均是基于 `process.cwd()` 来进行 `path.join`，且
     // ...express.static 会配置为该目录。
-    // 如果有 host，则代表使用静态文件服务器,且不会配置 express.static
+    // 如果有 domain，则代表使用静态文件服务器,且不会配置 express.static
     cwd: '/assets'
   },
 
@@ -35,7 +36,7 @@ module.exports = exports = {
   // 注：当使用 amazon s3 或者 qiniu 云存储之类，此节点配置同样生效，将
   // ...会在云存储 bucket 下建立如下配置的文件夹信息
   media: {
-    host: '',
+    domain: '',  // Example: 'http://{bucket}.u.qiniudn.com'
     cwd: '/assets',
     uploadPath: '/uploads'  // 以 `media.cwd` 为基准进行 `path.join`
   },

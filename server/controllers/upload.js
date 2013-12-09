@@ -13,21 +13,19 @@ var path = require('path'),
   uploader = require('../../utils/uploader');
 
 var uploadURL;
-if (config.media.host) {
-  uploadURL = config.media.host +
+if (config.media.domain) {
+  uploadURL = config.media.domain +
       path.join(config.media.cwd, config.media.uploadPath);
 } else {
   // 因为在没有指定 host 的情况下，会将 media.cwd 配置为 express.static
   uploadURL = url.format({
     protocol: 'http',
-    hostname: config.host,
-    port: config.port,
+    host: config.host,
     pathname: config.media.uploadPath
   });
 }
 
 exports.uploadImage = function(req, res, next) {
-  console.dir(req.files);
   uploader.upload(req.files.images, function(err, uploadedFiles, failedFiles) {
     if (err) {
       return next(err);

@@ -55,10 +55,10 @@ module.exports = exports = function(app) {
     }));
     app.use(passport.session());
 
-    if (!config.static.host) {
+    if (!config.static.domain) {
       app.use(express.static(path.join(cwd, config.static.cwd)));
     }
-    if (!config.media.host) {
+    if (!config.media.domain) {
       app.use(express.static(path.join(cwd, config.media.cwd)));
     }
 
@@ -79,6 +79,9 @@ module.exports = exports = function(app) {
 
   app.configure('production', function() {
     app.use(express.logger());
+    if (config.proxy) {
+      app.enable('trust proxy');
+    }
   });
 
   app.use(app.router);

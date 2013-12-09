@@ -61,7 +61,9 @@ module.exports = exports = function(app) {
   app.get('/following/topics', auth.isLogin, topics.byFollowing);
 
   // 单个话题
-  app.all('/topic/create', auth.isLogin, topic.create);
+  app.all('/topic/create', auth.isLogin);
+  app.get('/topic/create', topic.create);
+  app.post('/topic/create', auth.limitedTopic, topic.create);
   app.get('/topic/:id', topic.load, topic.get);
   app.all('/topic/:id/:op', auth.isLogin, topic.load);
   app.all('/topic/:id/edit', auth.isTopicAuthor, topic.edit);

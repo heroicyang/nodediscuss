@@ -37,9 +37,14 @@ var UserSchema = new Schema({
   bio: String,
   website: String,
   location: String,
+  weibo: String,
   twitter: String,
   github: String,
 
+  verified: {
+    type: Boolean,
+    default: false
+  },
   state: {
     activated: {
       type: Boolean,
@@ -80,7 +85,10 @@ var UserSchema = new Schema({
     default: 0
   },
   number: Number,
-  score: Number,
+  score: {
+    type: Number,
+    default: 0
+  },
   level: String
 }, {
   collection: 'user'

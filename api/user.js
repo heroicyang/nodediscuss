@@ -16,7 +16,8 @@ var url = require('url'),
   CentralizedError = require('../utils/error').CentralizedError,
   models = require('../models'),
   User = models.User,
-  ResetPass = models.ResetPass;
+  ResetPass = models.ResetPass,
+  Topic = models.Topic;
 
 /**
  * 创建新用户
@@ -310,4 +311,20 @@ exports.resetPassword = function(args, callback) {
       });
     }
   ], callback);
+};
+
+/**
+ * 获取某个用户最近发布的一个话题
+ * @param  {Object}   args
+ *  - id      required   用户  id
+ * @param  {Function} callback
+ */
+exports.getLatestTopic = function(args, callback) {
+  var userId = args.id;
+  Topic
+    .findOne({
+      'author.id': userId
+    })
+    .sort({ createdAt: -1 })
+    .exec(callback);
 };

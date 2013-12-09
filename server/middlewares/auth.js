@@ -6,7 +6,12 @@
 /**
  * Module dependencies
  */
-var NotAllowedError = require('../../utils/error').NotAllowedError,
+var _ = require('lodash'),
+  moment = require('moment'),
+  api = require('../../api'),
+  config = require('../../config'),
+  CentralizedError = require('../../utils/error').CentralizedError,
+  NotAllowedError = require('../../utils/error').NotAllowedError,
   NotFoundError = require('../../utils/error').NotFoundError;
 
 /** 未登录状态才能访问 */
@@ -85,4 +90,76 @@ exports.isCommentAuthor = function(req, res, next) {
     });
   }
   next();
+};
+
+/** Wiki 编辑权限 */
+exports.isWikiEditor = function(req, res, next) {
+  if (req.currentUser.verified ||
+        _.contains(config.adminEmails, req.currentUser.email)) {
+    return next();
+  }
+
+  res.format({
+    html: function() {
+      res.redirect('/');
+    },
+    json: function() {
+      res.send(new NotAllowedError('你无权访问该页面。'));
+    },
+    text: function() {
+      res.send('你无权访问该页面。');
+    }
+  });
+};
+
+/** 管理员权限 */
+exports.isAdmin = function(req, res, next) {
+  if (_.contains(config.adminEmails, req.currentUser.email)) {
+    return next();
+  }
+
+  res.format({
+    html: function() {
+      res.redirect('/');
+    },
+    json: function() {
+      res.send(new NotAllowedError('你无权访问该页面。'));
+    },
+    text: function() {
+      res.send('你无权访问该页面。');
+    }
+  });
+};
+
+/** 发布话题的限制规则 */
+exports.limitedTopic = function(req, res, next) {
+  api.user.getLatestTopic({
+    id: req.currentUser.id
+  }, function(err, topic) {
+    if (err) {
+      return next(err);
+    }
+    if (!topic) {
+      return next();
+    }
+
+    // 如果当前用户注册未满一周，则必须间隔 1 小时才能继续发布
+    if (moment().add('days', -7).toDate() < req.currentUser.createdAt) {
+      if (moment().add('hours', -1).toDate() < topic.createdAt) {
+        return next(new CentralizedError('由于你是新注册用户，话题发布频率受限，必须间隔 1 小时'));
+      }
+      return next();
+    }
+
+    // 如果是普通用户，则必须间隔 10 分钟才能继续发布
+    if (!req.currentUser.verified ||
+          !_.contains(config.adminEmails, req.currentUser.email)) {
+      if (moment().add('minutes', -10).toDate() < topic.createdAt) {
+        return next(new CentralizedError('发布话题过于频繁，请稍后再试'));
+      }
+      return next();
+    }
+
+    next();
+  });
 };

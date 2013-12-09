@@ -145,6 +145,14 @@ exports.get = function(req, res, next) {
   });
 
   async.parallel({
+    incViewsCount: function(next) {
+      req.topic.incViewsCount(function(err, topic) {
+        if (err) {
+          return next(err);
+        }
+        next(null, topic.viewsCount);
+      });
+    },
     comments: function(next) {
       api.comment.query({
         query: {

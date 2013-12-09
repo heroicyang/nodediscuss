@@ -19,3 +19,15 @@ exports.isFavoritedBy = function(userId, callback) {
     callback(err, !!favoriteTopic);
   });
 };
+
+/**
+ * 增加该话题的阅读数量
+ * @param  {Function} callback
+ */
+exports.incViewsCount = function(callback) {
+  this.update({
+    $inc: {
+      viewsCount: 1
+    }
+  }, callback);
+};

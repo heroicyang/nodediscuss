@@ -102,17 +102,19 @@ exports.edit = function(pageData, callback) {
 /**
  * 获取某个页面信息
  * @param  {Object}   args
- *  - id     required    页面 id
+ *  - slug     required    页面地址
  * @param  {Function} callback
  *  - err
  *  - page
  */
 exports.get = function(args, callback) {
-  var id = args.id;
+  var slug = args.slug;
   
   async.waterfall([
     function getPage(next) {
-      Page.findById(id, function(err, page) {
+      Page.findOne({
+        slug: slug
+      }, function(err, page) {
         next(err, page);
       });
     },

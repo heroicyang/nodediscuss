@@ -95,4 +95,6 @@ module.exports = exports = function(app) {
 
   app.get('/wiki', pages.wikis);
   app.all('/wiki/create', auth.isLogin, auth.isWikiEditor, pages.createWiki);
+
+  app.get('/wiki/:slug', pages.get);
 };

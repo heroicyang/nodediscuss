@@ -1,0 +1,33 @@
+extends layout
+block content
+  div#page-panel.panel.panel-default
+    div.panel-heading
+      include breadcrumb
+    div.panel-body
+      div.header
+        h3 #{page.title}
+      div.content !{page.contentHtml}
+    if isWiki
+      div.panel-footer
+        div.pull-left.share
+          a(href="#", title="分享到新浪微博")
+            i.fa.fa-weibo
+          a(href="#", title="分享到Twitter")
+            i.fa.fa-twitter
+          a(href="#", title="分享到Facebook")
+            i.fa.fa-facebook
+          a(href="#", title="分享到Google+")
+            i.fa.fa-google-plus
+        
+        if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
+          div.pull-right
+            a(href="#{page.slug}/edit", title="编辑 Wiki")
+              i.fa.fa-pencil-square-o
+        div.clearfix
+block sidebar
+  if isAuthenticated
+    include ./sidebar/user_card
+  else
+    include ./sidebar/about
+  include ./sidebar/related_site
+  include ./sidebar/ad

@@ -7,7 +7,8 @@
  * Module dependencies
  */
 var config = require('../../config'),
-  api = require('../../api');
+  api = require('../../api'),
+  NotFoundError = require('../../utils/error').NotFoundError;
 
 /** Wiki 列表页面 */
 exports.wikis = function(req, res, next) {
@@ -57,4 +58,35 @@ exports.createWiki = function(req, res, next) {
       res.redirect('/wiki');
     });
   }
+};
+
+exports.get = function(req, res, next) {
+  var slug = req.params.slug,
+    path = req.path,
+    isWiki = false;
+
+  if (path.indexOf('/wiki/') !== -1) {
+    slug = '/wiki/' + slug;
+    isWiki = true;
+  }
+
+  api.page.get({
+    slug: slug
+  }, function(err, page) {
+    if (err) {
+      return next(err);
+    }
+    if (!page) {
+      return next(new NotFoundError('该页面不存在。'));
+    }
+
+    if (isWiki) {
+      req.breadcrumbs('Wiki', '/wiki');
+    }
+    req.breadcrumbs(page.title);
+    res.render('page', {
+      page: page,
+      isWiki: isWiki
+    });
+  });
 };

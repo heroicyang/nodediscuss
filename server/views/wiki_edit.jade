@@ -1,0 +1,37 @@
+extends layout
+block content
+  div.panel.panel-default
+    div.panel-heading
+      include breadcrumb
+    div.panel-body
+      include error_alert
+      - var url = '/wiki/create'
+      if wiki
+        url = '/wiki/' + wiki._id + '/edit'
+      form(role="form", method="POST", action="#{url}")#wiki-edit-form.form-horizontal
+        div.form-group
+          label(for="slug").col-sm-1.control-label 地址
+          div.col-sm-11.input-group
+            span.input-group-addon #{site.domain}/wiki/
+            input(type="text",
+                  name="slug",
+                  value=wiki ? wiki.slug : '')#slug.form-control
+        div.form-group
+          label(for="title").col-sm-1.control-label 标题
+          div.col-sm-11
+            input(type="text",
+                  name="title",
+                  value=wiki ? wiki.title : '')#title.form-control
+        div.form-group
+          label(for="content-editor").col-sm-1.control-label 内容
+          div.col-sm-11
+            textarea(name="content", rows="16")#content-editor.form-control
+              | !{wiki ? wiki.content : ''}
+        div.form-group
+          div.col-sm-offset-1.col-sm-11
+            input(type="hidden", name="_csrf", value="#{csrfToken}")
+            button(type="submit", data-loading-text="正在发布...")#create-btn.btn.btn-primary 发布
+block sidebar
+  if isAuthenticated
+    include ./sidebar/user_card
+  include ./sidebar/markdown_refer

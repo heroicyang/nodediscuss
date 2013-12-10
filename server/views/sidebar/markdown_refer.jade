@@ -1,0 +1,23 @@
+div#markdown-refer.panel.panel-default
+  div.panel-heading
+    strong Markdown 语法参考
+  div.panel-body
+    ui
+      li: strong 粗体: **粗体**
+      li: em 斜体: *斜体*
+      li 链接: [文字](url)
+      li 图片: ![alt描述](url)
+      li
+        :markdown
+          单行代码: ``` `hello world` ```
+      li
+        :markdown
+          多行代码: 指定 lang 以高亮代码
+          ````
+          ```[lang]
+          console.log('hello world');
+          ```
+          ````
+      li
+        span 支持&#32;
+        a(href="https://help.github.com/articles/github-flavored-markdown") GitHub Flavored Markdown

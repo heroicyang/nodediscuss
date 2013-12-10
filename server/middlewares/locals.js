@@ -24,6 +24,7 @@ module.exports = exports = function() {
     res.locals.breadcrumbs = req.breadcrumbs();
 
     res.locals.site = {};
+    res.locals.site.domain = 'http://' + config.host;
     res.locals.site.name = config.name;
     res.locals.site.title = config.title;
     res.locals.site.description = config.description;
@@ -33,6 +34,10 @@ module.exports = exports = function() {
 
     res.locals.isAuthenticated = req.isAuthenticated();
     if (req.isAuthenticated()) {
+      if (_.contains(config.adminEmails, req.currentUser.email)) {
+        req.currentUser.isAdmin = true;
+      }
+
       var currentUser = _.pick(req.currentUser, [
         '_id', 'username', 'nickname', 'avatar', 'topicCount',
         'wikiCount', 'followerCount', 'followingCount',

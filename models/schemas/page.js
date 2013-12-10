@@ -17,32 +17,28 @@ var mongoose = require('mongoose'),
 var PageSchema = new Schema({
   slug: {
     type: String,
-    required: true,
-    index: true
+    lowercase: true,
+    index: true,
+    unique: true
   },
   title: {
     type: String,
-    required: true,
     index: true
   },
-  content: {
-    type: String,
-    required: true
-  },
+  content: String,
   contentHtml: String,
-  authors: [{
-    id: {
-      type: String,
-      index: true,
-      required: true
-    },
-    username: String,
-    nickname: String,
-    avatar: String
-  }],
+  authorIds: [String],
+  canComment: {
+    type: Boolean,
+    default: true
+  },
   commentCount: {
     type: Number,
     default: 0
+  },
+  version: {
+    type: Number,
+    default: 1
   }
 }, {
   collection: 'page'

@@ -16,7 +16,8 @@ var api = require('../api'),
   topic = require('./controllers/topic'),
   comment = require('./controllers/comment'),
   favorite = require('./controllers/favorite'),
-  notification = require('./controllers/notification');
+  notification = require('./controllers/notification'),
+  pages = require('./controllers/pages');
 
 module.exports = exports = function(app) {
   // 文件上传
@@ -91,4 +92,7 @@ module.exports = exports = function(app) {
   // 删除评论直接调用 api
   app.post('/comment/:id/remove', auth.isLogin, comment.load,
       auth.isCommentAuthor, api.requestHandler(api.comment.remove));
+
+  app.get('/wiki', pages.wikis);
+  app.all('/wiki/create', auth.isLogin, auth.isWikiEditor, pages.createWiki);
 };

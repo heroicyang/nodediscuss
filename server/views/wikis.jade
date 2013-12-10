@@ -1,0 +1,24 @@
+extends layout
+block content
+  div.panel.panel-default
+    div.panel-heading
+      if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
+        a(href="/wiki/create",
+          title="创建 Wiki").btn.btn-default.btn-xs.pull-right 创建 Wiki
+      include breadcrumb
+    ul.list-group
+      if pagination.totalCount > 0
+        each wiki in wikis
+          li.list-group-item
+            span #{wiki.title}
+        li.list-group-item
+          include pagination
+      else
+        li.list-group-item: span 暂无 Wiki。
+block sidebar
+  if isAuthenticated
+    include ./sidebar/user_card
+  else
+    include ./sidebar/about
+  include ./sidebar/related_site
+  include ./sidebar/ad

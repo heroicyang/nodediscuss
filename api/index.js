@@ -18,7 +18,8 @@ module.exports = exports = {
   favoriteTopic: require('./favorite_topic'),
   favoriteTag: require('./favorite_tag'),
   relation: require('./relation'),
-  notification: require('./notification')
+  notification: require('./notification'),
+  page: require('./page')
 };
 
 /**

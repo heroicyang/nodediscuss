@@ -1,20 +1,22 @@
 extends layout
 block content
-  div.panel.panel-default
+  div#wiki-list-panel.panel.panel-default
     div.panel-heading
       if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
         a(href="/wiki/create",
           title="创建 Wiki").btn.btn-default.btn-xs.pull-right 创建 Wiki
       include breadcrumb
-    ul.list-group
+    div.panel-body
       if pagination.totalCount > 0
-        each wiki in wikis
-          li.list-group-item
-            a(href="#{wiki.slug}") #{wiki.title}
-        li.list-group-item
-          include pagination
+        ul.wiki-list
+          each wiki in wikis
+            li
+              a(href="#{wiki.slug}").title #{wiki.title}
       else
-        li.list-group-item: span 暂无 Wiki。
+        span 暂无 Wiki。
+    if pagination.totalCount > 0
+      div.panel-footer
+        include pagination
 block sidebar
   if isAuthenticated
     include ./sidebar/user_card

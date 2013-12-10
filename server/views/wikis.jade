@@ -10,7 +10,7 @@ block content
       if pagination.totalCount > 0
         each wiki in wikis
           li.list-group-item
-            span #{wiki.title}
+            a(href="#{wiki.slug}") #{wiki.title}
         li.list-group-item
           include pagination
       else

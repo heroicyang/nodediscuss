@@ -6,7 +6,7 @@
 module.exports = exports = function(schema) {
   schema.path('slug')
     .required(true, '页面地址不能为空!')
-    .match(/^[a-zA-Z0-9\-_]+$/, '无效的页面地址! 仅支持字母、数字、_ 以及 - 。')
+    .match(/^[a-zA-Z0-9\-_\/]+$/, '无效的页面地址! 仅支持字母、数字、_ 以及 - 。')
     .validate(function(slug, done) {
       var Page = this.model('Page'),
         self = this;

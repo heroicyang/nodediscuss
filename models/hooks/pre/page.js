@@ -21,7 +21,7 @@ module.exports = exports = function(schema) {
       // 每次编辑后版本号增加
       if (!this.isNew) {
         this.version = this.version + 1;
-        next();
       }
+      next();
     });
 };

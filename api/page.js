@@ -62,6 +62,7 @@ exports.create = function(pageData, callback) {
     },
     function createPage(contentHtml, next) {
       pageData.contentHtml = contentHtml;
+      pageData.authorIds = pageData.authorIds || [];
       pageData.authorIds.push(authorId);
       Page.create(pageData, function(err, page) {
         next(err, page);

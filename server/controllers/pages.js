@@ -45,4 +45,16 @@ exports.createWiki = function(req, res, next) {
     });
     return;
   }
+
+  if ('post' === method) {
+    var data = req.body;
+    data.slug = '/wiki/' + data.slug;
+    data.authorId = req.currentUser.id;
+    api.page.create(data, function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/wiki');
+    });
+  }
 };

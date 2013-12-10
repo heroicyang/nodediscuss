@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 block content
   div#community-topics.panel.panel-default
     div.panel-heading
@@ -12,7 +12,7 @@ block content
               a(href="#", title="取消收藏#{tag.name}节点")#favorite-tag-btn 取消收藏
             else
               a(href="#", title="收藏#{tag.name}节点")#favorite-tag-btn 收藏该节点
-        include breadcrumb
+        include ../shared/breadcrumb
         if isAuthenticated  
           div.row.tag-content
             div.col-xs-9.col-sm-10
@@ -27,7 +27,7 @@ block content
         if isAuthenticated
           a(href="/topic/create",
             title="发布新话题").btn.btn-default.btn-xs.pull-right 发布话题
-        include breadcrumb
+        include ../shared/breadcrumb
     div.panel-body
       div.row.sorts
         div.pull-right
@@ -45,20 +45,20 @@ block content
       if pagination.totalCount > 0
         each topic in topics
           li.list-group-item
-            include topic_list_item
+            include ../shared/topic_list_item
         li.list-group-item
-          include pagination
+          include ../shared/pagination
       else
         li.list-group-item
           span 暂无相关话题。
   include tag_nav
 block sidebar
   if isAuthenticated
-    include ./sidebar/user_card
+    include ../sidebar/user_card
   else
-    include ./sidebar/about
-  include ./sidebar/related_site
-  include ./sidebar/ad
+    include ../sidebar/about
+  include ../sidebar/related_site
+  include ../sidebar/ad
 block script
   if tag
     script(type="text/javascript").

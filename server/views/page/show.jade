@@ -1,8 +1,8 @@
-extends layout
+extends ../layout
 block content
   div#page-panel.panel.panel-default
     div.panel-heading
-      include breadcrumb
+      include ../shared/breadcrumb
     div.panel-body
       div.header
         h3 #{page.title}
@@ -26,8 +26,8 @@ block content
         div.clearfix
 block sidebar
   if isAuthenticated
-    include ./sidebar/user_card
+    include ../sidebar/user_card
   else
-    include ./sidebar/about
-  include ./sidebar/related_site
-  include ./sidebar/ad
+    include ../sidebar/about
+  include ../sidebar/related_site
+  include ../sidebar/ad

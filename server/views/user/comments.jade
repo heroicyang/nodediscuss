@@ -1,8 +1,8 @@
-extends layout
+extends ../layout
 block content
   div.panel.panel-default
     div.panel-heading
-      include breadcrumb
+      include ../shared/breadcrumb
     ul.list-group.user-comment-list
       if pagination.totalCount > 0
         each comment in comments
@@ -19,11 +19,11 @@ block content
                   a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
             div.content !{comment.contentHtml}
         li.list-group-item.pager-item
-          include pagination
+          include ../shared/pagination
       else
         li.list-group-item: span 暂无评论。
 block sidebar
   if isAuthenticated
-    include ./sidebar/user_card
+    include ../sidebar/user_card
   else
-    include ./sidebar/about
+    include ../sidebar/about

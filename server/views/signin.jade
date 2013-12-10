@@ -2,12 +2,12 @@ extends layout
 block content
     div.panel.panel-default
       div.panel-heading
-        include breadcrumb
+        include shared/breadcrumb
       div.panel-body
-        include error_alert
+        include shared/error_alert
           if err && _.has(err.errors, 'activated')
             p: a(href="#"): small 没有收到帐号激活邮件？
-        include message_alert
+        include shared/message_alert
         form(role="form", method="POST", action="/signin")#signin-form.form-horizontal
           div.form-group
             label(for="email").col-sm-3.control-label Email

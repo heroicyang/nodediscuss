@@ -6,7 +6,7 @@ block content
         form(action="/notifications/read", method="POST")
           input(type="hidden", name="_csrf", value="#{csrfToken}")
           button(type="submit").btn.btn-default.btn-xs.pull-right 全部标记为已读
-      include breadcrumb
+      include ./shared/breadcrumb
     ul.list-group
       if pagination.totalCount > 0
         each notification in notifications
@@ -35,7 +35,7 @@ block content
                     a(href="/topic/#{notification.topic._id}#comment-#{notification.comment.floor}")
                       | #{notification.topic.title}
         li.list-group-item
-          include pagination
+          include ./shared/pagination
       else
         li.list-group-item
           span 暂无提醒。

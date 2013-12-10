@@ -1,0 +1,7 @@
+script(type="text/template", id="alert-danger-tmpl")
+  div.alert.alert-danger.alert-dismissable
+    button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
+    ul
+      | <% _.each(errors, function(error) { %>
+      li <%= error %>
+      | <% }); %>

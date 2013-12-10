@@ -28,7 +28,7 @@ exports.topics = function(req, res, next) {
 
     pagination.totalCount = results.totalCount;
     req.breadcrumbs('话题收藏');
-    res.render('favorite_topics', {
+    res.render('favorite/topics', {
       topics: results.topics,
       pagination: pagination
     });
@@ -54,7 +54,7 @@ exports.tags = function(req, res, next) {
 
     pagination.totalCount = results.totalCount;
     req.breadcrumbs('节点收藏');
-    res.render('favorite_tags', {
+    res.render('favorite/tags', {
       topics: results.topics,
       tags: results.tags,
       pagination: pagination

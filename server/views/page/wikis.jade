@@ -1,11 +1,11 @@
-extends layout
+extends ../layout
 block content
   div#wiki-list-panel.panel.panel-default
     div.panel-heading
       if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
         a(href="/wiki/create",
           title="创建 Wiki").btn.btn-default.btn-xs.pull-right 创建 Wiki
-      include breadcrumb
+      include ../shared/breadcrumb
     div.panel-body
       if pagination.totalCount > 0
         ul.wiki-list
@@ -16,11 +16,11 @@ block content
         span 暂无 Wiki。
     if pagination.totalCount > 0
       div.panel-footer
-        include pagination
+        include ../shared/pagination
 block sidebar
   if isAuthenticated
-    include ./sidebar/user_card
+    include ../sidebar/user_card
   else
-    include ./sidebar/about
-  include ./sidebar/related_site
-  include ./sidebar/ad
+    include ../sidebar/about
+  include ../sidebar/related_site
+  include ../sidebar/ad

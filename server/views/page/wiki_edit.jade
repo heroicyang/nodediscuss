@@ -1,10 +1,10 @@
-extends layout
+extends ../layout
 block content
   div.panel.panel-default
     div.panel-heading
-      include breadcrumb
+      include ../shared/breadcrumb
     div.panel-body
-      include error_alert
+      include ../shared/error_alert
       - var url = '/wiki/create'
       if wiki
         url = '/wiki/' + wiki._id + '/edit'
@@ -33,8 +33,8 @@ block content
             button(type="submit", data-loading-text="正在发布...")#submit-btn.btn.btn-primary 发布
 block sidebar
   if isAuthenticated
-    include ./sidebar/user_card
-  include ./sidebar/markdown_refer
+    include ../sidebar/user_card
+  include ../sidebar/markdown_refer
 block script
   script(type="text/javascript").
     var moduleMapping = {

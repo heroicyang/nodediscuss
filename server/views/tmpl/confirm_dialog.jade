@@ -1,0 +1,14 @@
+script(type="text/template", id="confirm-dialog-tmpl")
+  div.modal.fade
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button(type="button",
+                 data-dismiss="modal",
+                 aria-hidden="true").close &times;
+          h4.modal-title
+        div.modal-body: p
+        div.modal-footer
+          button(type="button",
+                 data-dismiss="modal").btn.btn-default 取消
+          button(type="button")#confirm-btn.btn.btn-primary 确定

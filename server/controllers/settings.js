@@ -17,7 +17,7 @@ exports.get = function(req, res)  {
   }
 
   req.breadcrumbs('设置');
-  return res.render('settings', {
+  return res.render('settings/index', {
     type: settingType,
     err: req.flash('err'),
     message: req.flash('message')

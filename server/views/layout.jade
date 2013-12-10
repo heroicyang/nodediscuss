@@ -25,7 +25,8 @@ html(lang="zh-CN")
             ul.nav.navbar-nav.navbar-right
               li(class=(path === '/' || path === '/topics') ? "active" : "")
                 a(href="/") 社区
-              li: a(href="/wiki") Wiki
+              li(class=(path.indexOf('/wiki') !== -1) ? "active" : "")
+                a(href="/wiki") Wiki
               if isAuthenticated
                 li(class=(path === '/user/#{currentUser.username}') ? "active" : "")
                   a(href="/user/#{currentUser.username}") #{currentUser.nickname}
@@ -120,65 +121,10 @@ html(lang="zh-CN")
         });
       }());
     //- 编辑器模板
-    script(type="text/template", id="editor-wrap-tmpl")
-      div.panel.panel-default.editor
-        div.panel-body
-          ul.nav.nav-tabs
-            li.active: a(href="#write", data-toggle="tab") 编辑
-            li: a(href="#preview", data-toggle="tab") 预览
-          div.tab-content
-            div#write.tab-pane.fade.in.active
-              div.toolbar.form-control
-                span#et-upload-pic.btn.btn-link.btn-xs
-                  i.fa.fa-picture-o
-                  | &#32;上传图片
-                  input(type="file", id="fileupload", name="images", multiple)
-                span.btn-group.uploading
-                  i.fa.fa-spinner.fa-spin
-                  | &#32;正在上传图片...
-                div#et-insert-code.btn-group.dropup
-                  button(type="button",
-                         data-toggle="dropdown").btn.btn-link.btn-xs.dropdown-toogle
-                    i.fa.fa-code
-                    | &#32;插入代码
-                  ul(role="menu").dropdown-menu.lang-menu
-                    li: a(href="#", data-lang="javascript").lang JavaScript
-                    li: a(href="#", data-lang="xml").lang HTML
-                    li: a(href="#", data-lang="css").lang CSS
-                    li: a(href="#", data-lang="bash").lang Shell/Bash
-                span.btn-group.error
-                  i.fa.fa-exclamation-circle
-                  | &#32;
-                  a(href="#").failed-images
-                  span 图片上传失败，请稍后再试!
-            div#preview.tab-pane.fade
+    include tmpl/editor_wrap
     //- 全屏编辑器模板
-    script(type="text/template", id="zenarea-tmpl")
-      div.widearea-overlayLayer.light
-        textarea.widearea-fullscreen.widearea
-        div.widearea-controlPanel
-          a(href="#", title="退出禅模式", draggable="false").widearea-icon.close
-          a(href="#", title="切换主题", draggable="false").widearea-icon.changeTheme
+    include tmpl/zenarea
     //- 前端警告框模板
-    script(type="text/template", id="alert-danger-tmpl")
-      div.alert.alert-danger.alert-dismissable
-        button(type="button",data-dismiss="alert", aria-hidden="true").close &times;
-        ul
-          | <% _.each(errors, function(error) { %>
-          li <%= error %>
-          | <% }); %>
+    include tmpl/alert_danger
     //- 前端确认框模板
-    script(type="text/template", id="confirm-dialog-tmpl")
-      div.modal.fade
-        div.modal-dialog
-          div.modal-content
-            div.modal-header
-              button(type="button",
-                     data-dismiss="modal",
-                     aria-hidden="true").close &times;
-              h4.modal-title
-            div.modal-body: p
-            div.modal-footer
-              button(type="button",
-                     data-dismiss="modal").btn.btn-default 取消
-              button(type="button")#confirm-btn.btn.btn-primary 确定
+    include tmpl/confirm_dialog

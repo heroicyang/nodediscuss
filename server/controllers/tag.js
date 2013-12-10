@@ -79,7 +79,7 @@ exports.topics = function(req, res, next) {
     }
 
     req.breadcrumbs(name);
-    res.render('topics', _.extend(results, {
+    res.render('topic/topics', _.extend(results, {
       pagination: pagination,
       url: '/tag/' + req.tag.name + '/topics',
       filterType: filter,

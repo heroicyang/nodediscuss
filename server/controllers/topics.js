@@ -78,7 +78,7 @@ exports.list = function(req, res, next) {
     }
 
     req.breadcrumbs('社区');
-    res.render('topics', _.extend(results, {
+    res.render('topic/list', _.extend(results, {
       pagination: pagination,
       url: '/topics',
       filterType: filter,
@@ -110,7 +110,7 @@ exports.byUser = function(req, res, next) {
     
     req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
     req.breadcrumbs('全部话题');
-    res.render('user_topics', _.extend(results, {
+    res.render('user/topics', _.extend(results, {
       hiddenAvatar: true,
       pagination: pagination
     }));
@@ -163,7 +163,7 @@ exports.byFollowing = function(req, res, next) {
     }
 
     req.breadcrumbs('我关注的人发布的最新话题');
-    res.render('user_topics', {
+    res.render('user/topics', {
       hiddenAvatar: false,
       topics: topics,
       pagination: pagination

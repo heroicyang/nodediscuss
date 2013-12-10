@@ -2,10 +2,10 @@ extends layout
 block content
   div.panel.panel-default
     div.panel-heading
-      include breadcrumb
+      include shared/breadcrumb
     div.panel-body
-      include error_alert
-      include message_alert
+      include shared/error_alert
+      include shared/message_alert
       form(role="form", method="POST", action="/signup")#signup-form.form-horizontal
         div.form-group
           label(for="email").col-sm-3.control-label Email

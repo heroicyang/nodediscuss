@@ -1,11 +1,11 @@
-extends layout
+extends ../layout
 block content
     div.panel.panel-default
       div.panel-heading
-        include breadcrumb
+        include ../shared/breadcrumb
       div.panel-body
-        include error_alert
-        include message_alert
+        include ../shared/error_alert
+        include ../shared/message_alert
         form(role="form", method="POST", action="/forgot")#forgot-pass-form.form-horizontal
           div.form-group
             label(for="email").col-sm-3.control-label Email
@@ -21,8 +21,8 @@ block content
               span.help-block: small 24 小时内，至多可以重新设置密码 2 次。
 block sidebar
   if isAuthenticated
-    include ./sidebar/user_card
+    include ../sidebar/user_card
   else
-    include ./sidebar/about
-  include ./sidebar/ad
+    include ../sidebar/about
+  include ../sidebar/ad
 block script

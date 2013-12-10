@@ -1,0 +1,15 @@
+script(type="text/template", id="repo-list-tmpl")
+  | <% _.each(githubRepos, function(repo) { %>
+  li.list-group-item
+    div.row
+      a(href="<%= repo.html_url %>", target="_blank").col-sm-6 <%= repo.name %>
+      div.status.col-sm-6
+        div.pull-right
+          | <% if (repo.language) { %>
+          span <%= repo.language %> &#8226;&#32;
+          | <% } %>
+          span <%= repo.stargazers_count %>&#32;
+            i.fa.fa-star
+    div.description
+      span <%= repo.description %>
+  | <% }); %>

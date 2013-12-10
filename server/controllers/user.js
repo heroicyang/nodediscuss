@@ -109,7 +109,7 @@ exports.forgotPassword = function(req, res, next) {
       message: req.flash('message')
     });
     req.breadcrumbs('通过电子邮件重设密码');
-    return res.render('forgot_pass', locals);
+    return res.render('settings/forgot_pass', locals);
   }
 
   if ('post' === method) {
@@ -152,7 +152,7 @@ exports.resetPassword = function(req, res, next) {
       req.session.token = req.session.token || token;
       req.session.email = req.session.email || email;
       req.breadcrumbs('重设密码');
-      return res.render('reset_pass', _.extend(locals, {
+      return res.render('settings/reset_pass', _.extend(locals, {
         userId: resetPass.userId,
         resetPassId: resetPass.id,
         token: token
@@ -259,7 +259,7 @@ exports.get = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.render('user', _.extend(results, {
+    res.render('user/homepage', _.extend(results, {
       user: user
     }));
   });
@@ -307,7 +307,7 @@ exports.comments = function(req, res, next) {
 
       req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
       req.breadcrumbs('全部评论');
-      res.render('user_comments', {
+      res.render('user/comments', {
         comments: comments,
         pagination: pagination
       });

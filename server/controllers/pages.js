@@ -28,7 +28,7 @@ exports.wikis = function(req, res, next) {
     
     pagination.totalCount = results.totalCount;
     req.breadcrumbs('Wiki');
-    res.render('wikis', {
+    res.render('page/wikis', {
       wikis: results.pages,
       pagination: pagination
     });
@@ -41,7 +41,7 @@ exports.createWiki = function(req, res, next) {
   if ('get' === method) {
     req.breadcrumbs('Wiki', '/wiki');
     req.breadcrumbs('创建 Wiki');
-    res.render('wiki_edit', {
+    res.render('page/wiki_edit', {
       err: req.flash('err')
     });
     return;
@@ -84,7 +84,7 @@ exports.get = function(req, res, next) {
       req.breadcrumbs('Wiki', '/wiki');
     }
     req.breadcrumbs(page.title);
-    res.render('page', {
+    res.render('page/show', {
       page: page,
       isWiki: isWiki
     });

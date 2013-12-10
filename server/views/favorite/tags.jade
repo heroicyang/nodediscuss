@@ -1,8 +1,8 @@
-extends layout
+extends ../layout
 block content
   div#favorite-tags.panel.panel-default
     div.panel-heading
-      include breadcrumb
+      include ../shared/breadcrumb
     if currentUser.favoriteTagCount <= 0
       div.panel-body
         span 暂无节点收藏。
@@ -15,10 +15,10 @@ block content
       ul.list-group.topic-list
         each topic in topics
           li.list-group-item
-            include topic_list_item
+            include ../shared/topic_list_item
         li.list-group-item
-          include pagination
+          include ../shared/pagination
 block sidebar
-  include ./sidebar/user_card
-  include ./sidebar/related_site
-  include ./sidebar/ad
+  include ../sidebar/user_card
+  include ../sidebar/related_site
+  include ../sidebar/ad

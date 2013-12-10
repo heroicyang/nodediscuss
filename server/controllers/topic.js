@@ -47,7 +47,7 @@ exports.create = function(req, res, next) {
         return next(err);
       }
       req.breadcrumbs('发布新话题');
-      res.render('topic_edit', _.extend(results, {
+      res.render('topic/edit', _.extend(results, {
         err: req.flash('err')
       }));
     });
@@ -96,7 +96,7 @@ exports.edit = function(req, res, next) {
       }
       req.breadcrumbs('话题详情', '/topic/' + req.topic._id);
       req.breadcrumbs('编辑话题');
-      res.render('topic_edit', _.extend(results, {
+      res.render('topic/edit', _.extend(results, {
         topic: req.topic,
         err: req.flash('err')
       }));
@@ -176,7 +176,7 @@ exports.get = function(req, res, next) {
     
     req.breadcrumbs(req.topic.tag.name, '/tag/' + req.topic.tag.name);
     req.breadcrumbs('话题详情');
-    res.render('topic', _.extend(results, {
+    res.render('topic/show', _.extend(results, {
       topic: req.topic,
       pagination: pagination,
       err: error

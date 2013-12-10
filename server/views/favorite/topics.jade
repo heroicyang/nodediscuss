@@ -1,8 +1,8 @@
-extends layout
+extends ../layout
 block content
   div.panel.panel-default
     div.panel-heading
-      include breadcrumb
+      include ../shared/breadcrumb
     ul.list-group.topic-list
       if currentUser.favoriteTopicCount > 0
         each topic in topics
@@ -10,12 +10,12 @@ block content
             if topic.deleted
               span 该话题已被删除。
             else
-              include topic_list_item
+              include ../shared/topic_list_item
         li.list-group-item
-          include pagination
+          include ../shared/pagination
       else
         li.list-group-item: span 暂无话题收藏。
 block sidebar
-  include ./sidebar/user_card
-  include ./sidebar/related_site
-  include ./sidebar/ad
+  include ../sidebar/user_card
+  include ../sidebar/related_site
+  include ../sidebar/ad

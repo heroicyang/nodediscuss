@@ -1,12 +1,12 @@
-extends layout
+extends ../layout
 block content
   div.panel.panel-default
     div.panel-heading
-      include breadcrumb
+      include ../shared/breadcrumb
     div.panel-body
       if type === 'profile'
-        include error_alert
-        include message_alert
+        include ../shared/error_alert
+        include ../shared/message_alert
       form(role="form", method="POST", action="/settings/profile").form-horizontal
         div.form-group
           label.col-xs-3.col-sm-3.control-label 用户名
@@ -90,8 +90,8 @@ block content
       span 更改密码
     div.panel-body
       if type === 'changePass'
-        include error_alert
-        include message_alert
+        include ../shared/error_alert
+        include ../shared/message_alert
       form(role="form", method="POST", action="/settings/change_pass").form-horizontal
         div.form-group
           label(for="old-password").col-sm-3.control-label 当前密码
@@ -110,4 +110,4 @@ block content
             input(type="hidden", name="_csrf", value="#{csrfToken}")
             button(type="submit").btn.btn-primary 更改密码
 block sidebar
-  include ./sidebar/user_card
+  include ../sidebar/user_card

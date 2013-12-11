@@ -19,6 +19,8 @@ block content
                 each author, idx in page.authors
                   a(href="/user/#{author.username}",title="#{author.nickname}").username
                     | #{author.nickname}
+                  if page.authors.length > 1 && page.authors.length !== idx + 1
+                    span ，
       div.row.content !{page.contentHtml}
     if isWiki
       div.panel-footer
@@ -34,7 +36,7 @@ block content
         
         if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
           div.pull-right
-            a(href="#{page.slug}/edit", title="编辑 Wiki")
+            a(href="/#{page.slug}/edit", title="编辑 Wiki")
               i.fa.fa-pencil-square-o
         div.clearfix
 block sidebar

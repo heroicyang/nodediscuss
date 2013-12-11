@@ -35,6 +35,7 @@ exports.wikis = function(req, res, next) {
   });
 };
 
+/** 创建 wiki 页面 */
 exports.createWiki = function(req, res, next) {
   var method = req.method.toLowerCase();
 
@@ -60,6 +61,48 @@ exports.createWiki = function(req, res, next) {
   }
 };
 
+/** 编辑 wiki 页面 */
+exports.editWiki = function(req, res, next) {
+  var method = req.method.toLowerCase();
+
+  if ('get' === method) {
+    var slug = 'wiki/' + req.params.slug;
+    api.page.get({
+      slug: slug
+    }, function(err, wiki) {
+      if (err) {
+        return next(err);
+      }
+      if (!wiki) {
+        return next(new NotFoundError('该页面不存在。'));
+      }
+
+      req.breadcrumbs(wiki.title, '/' + wiki.slug);
+      req.breadcrumbs('编辑 Wiki');
+
+      wiki.slug = wiki.slug.replace('wiki/', '');
+      res.render('page/wiki_edit', {
+        wiki: wiki,
+        err: req.flash('err')
+      });
+    });
+    return;
+  }
+
+  if ('post' === method) {
+    var data = req.body;
+    data.editorId = req.currentUser.id;
+    data.slug = 'wiki/' + data.slug;
+    api.page.edit(data, function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/' + data.slug);
+    });
+  }
+};
+
+/** 页面详细信息 */
 exports.get = function(req, res, next) {
   var slug = req.params[0],
     isWiki = false;

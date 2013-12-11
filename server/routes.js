@@ -95,6 +95,7 @@ module.exports = exports = function(app) {
 
   app.get('/wiki', pages.wikis);
   app.all('/wiki/create', auth.isLogin, auth.isWikiEditor, pages.createWiki);
+  app.all('/wiki/:slug/edit', auth.isLogin, auth.isWikiEditor, pages.editWiki);
 
   app.get(/^\/([a-zA-Z0-9_\-\/]+)\/?/, pages.get);
 };

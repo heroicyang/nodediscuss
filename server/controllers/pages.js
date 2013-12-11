@@ -49,7 +49,7 @@ exports.createWiki = function(req, res, next) {
 
   if ('post' === method) {
     var data = req.body;
-    data.slug = '/wiki/' + data.slug;
+    data.slug = 'wiki/' + data.slug;
     data.authorId = req.currentUser.id;
     api.page.create(data, function(err) {
       if (err) {
@@ -61,12 +61,10 @@ exports.createWiki = function(req, res, next) {
 };
 
 exports.get = function(req, res, next) {
-  var slug = req.params.slug,
-    path = req.path,
+  var slug = req.params[0],
     isWiki = false;
 
-  if (path.indexOf('/wiki/') !== -1) {
-    slug = '/wiki/' + slug;
+  if (slug.indexOf('wiki/') !== -1) {
     isWiki = true;
   }
 

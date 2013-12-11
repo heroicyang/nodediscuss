@@ -149,3 +149,13 @@ exports.get = function(args, callback) {
     }
   ], callback);
 };
+
+/**
+ * 统计话题数量
+ * @param  {Function} callback
+ *  - err
+ *  - count
+ */
+exports.count = function(callback) {
+  Topic.count(callback);
+};

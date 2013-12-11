@@ -377,3 +377,13 @@ exports.githubRepos = function(args, callback) {
     }));
   });
 };
+
+/**
+ * 统计用户数量
+ * @param  {Function} callback
+ *  - err
+ *  - count
+ */
+exports.count = function(callback) {
+  User.count(callback);
+};

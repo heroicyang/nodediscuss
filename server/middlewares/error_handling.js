@@ -4,17 +4,16 @@
  */
 
 exports.error404 = function() {
-  return function(req, res, next) {
+  return function(req, res) {
     res.status(404);
     res.format({
       'text/html': function() {
-
+        res.render('404');
       },
       'application/json': function() {
         res.send({
           error: {
-            message: 'Page Not Found.',
-            code: 404
+            message: 'Page Not Found.'
           }
         });
       }
@@ -24,15 +23,39 @@ exports.error404 = function() {
 
 exports.error500 = function() {
   return function(err, req, res, next) {
+    if (err.status === 404) {
+      return next();
+    }
+
     if (err.name === 'ValidationError' || err.name === 'CentralizedError') {
-      var redirectPath = req.session.redirectPath || req.path;
-      if (req.session.redirectPath) {
-        delete req.session.redirectPath;
-      }
+      var redirectPath = req.flash('redirectPath') || req.path;
       req.flash('err', err);
       req.flash('body', req.body);
-      res.redirect(redirectPath);
+      return res.format({
+        'text/html': function() {
+          res.redirect(redirectPath);
+        },
+        'application/json': function() {
+          res.send({
+            success: false,
+            error: err
+          });
+        }
+      });
     }
-    console.log(err.stack);
+
+    res.status(err.status || 500);
+    res.format({
+      'text/html': function() {
+        res.render('500', {
+          error: err
+        });
+      },
+      'application/json': function() {
+        res.send({
+          error: err
+        });
+      }
+    });
   };
 };

@@ -1,0 +1,7 @@
+extends layout
+block container
+  div.error
+    if settings['verbose errors']
+      pre= error.stack
+    else
+      h3 出错啦！！！

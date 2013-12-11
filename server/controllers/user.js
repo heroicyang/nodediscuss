@@ -92,7 +92,7 @@ exports.activate = function(req, res, next) {
     email: email
   }, function(err) {
     if (err) {
-      req.session.redirectPath = '/';
+      req.flash('redirectPath', '/');
       return next(err);
     }
     req.flash('message', '帐号已激活，请登录。');
@@ -136,7 +136,7 @@ exports.resetPassword = function(req, res, next) {
     });
 
     if (!token || !email) {
-      req.session.redirectPath = '/';
+      req.flash('redirectPath', '/');
       return next(new CentralizedError('信息有误，不能继续重设密码操作。'));
     }
 
@@ -145,7 +145,7 @@ exports.resetPassword = function(req, res, next) {
       token: token
     }, function(err, resetPass) {
       if (err) {
-        req.session.redirectPath = '/';
+        req.flash('redirectPath', '/');
         return next(err);
       }
 

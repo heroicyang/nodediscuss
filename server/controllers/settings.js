@@ -52,7 +52,7 @@ exports.changePassword = function(req, res, next) {
 
   req.session.settingType = 'changePass';
   if (newPassword !== newPassword2) {
-    req.session.redirectPath = '/settings#change-password';
+    req.flash('redirectPath', '/settings#change-password');
     return next(new CentralizedError('两次输入的密码不一致', 'newPassword'));
   }
 
@@ -61,7 +61,7 @@ exports.changePassword = function(req, res, next) {
     newPassword: newPassword
   }, function(err) {
     if (err) {
-      req.session.redirectPath = '/settings#change-password';
+      req.flash('redirectPath', '/settings#change-password');
       return next(err);
     }
 

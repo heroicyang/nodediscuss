@@ -74,6 +74,7 @@ module.exports = exports = function(app) {
   });
 
   app.configure('development', function() {
+    app.enable('verbose errors');
     app.use(express.logger('dev'));
   });
 

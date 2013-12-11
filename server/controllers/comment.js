@@ -37,7 +37,7 @@ exports.create = function(req, res, next) {
 
   api.comment.create(data, function(err) {
     if (err) {
-      req.session.redirectPath = '/topic/' + topicId;
+      req.flash('redirectPath', '/topic/' + topicId);
       return next(err);
     }
     res.redirect('/topic/' + topicId);

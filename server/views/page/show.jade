@@ -1,12 +1,25 @@
 extends ../container
 block content
-  div#page-panel.panel.panel-default
+  div#page-panel.panel.panel-default.page-show
     div.panel-heading
       include ../shared/breadcrumb
     div.panel-body
       div.header
-        h3 #{page.title}
-      div.content !{page.contentHtml}
+        div.media
+          div.media-body
+            div.media-heading.title
+              h3 #{page.title}
+            div.meta
+              div.pull-right
+                a(href="#") #{page.commentCount} 条评论
+                span ，版本 #{page.version}，最后更新于&#32;
+                span=moment(page.updatedAt).fromNow()
+              div
+                span 本页贡献者：&#32;
+                each author, idx in page.authors
+                  a(href="/user/#{author.username}",title="#{author.nickname}").username
+                    | #{author.nickname}
+      div.row.content !{page.contentHtml}
     if isWiki
       div.panel-footer
         div.pull-left.share

@@ -61,7 +61,7 @@ exports.list = function(req, res, next) {
     },
     tags: function(next) {
       api.tag.query({
-        pageSize: Infinity
+        notPaged: true
       }, function(err, results) {
         if (err) {
           return next(err);
@@ -131,7 +131,7 @@ exports.byFollowing = function(req, res, next) {
         query: {
           userId: req.currentUser.id
         },
-        pageSize: Infinity
+        notPaged: true
       }, function(err, results) {
         if (err) {
           return next(err);

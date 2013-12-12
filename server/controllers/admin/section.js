@@ -11,7 +11,7 @@ var async = require('async'),
 
 exports.index = function(req, res, next) {
   api.section.query({
-    pageSize: Infinity,
+    notPaged: true,
     sort: {
       order: -1,
       createdAt: -1

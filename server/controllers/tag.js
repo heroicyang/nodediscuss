@@ -62,7 +62,7 @@ exports.topics = function(req, res, next) {
     },
     tags: function(next) {
       api.tag.query({
-        pageSize: Infinity
+        notPaged: true
       }, function(err, results) {
         if (err) {
           return next(err);

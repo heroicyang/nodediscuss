@@ -20,7 +20,7 @@ exports.create = function(req, res, next) {
     async.parallel({
       tags: function(next) {
         api.tag.query({
-          pageSize: Infinity
+          notPaged: true
         }, function(err, results) {
           if (err) {
             return next(err);
@@ -79,7 +79,7 @@ exports.edit = function(req, res, next) {
     async.parallel({
       tags: function(next) {
         api.tag.query({
-          pageSize: Infinity
+          notPaged: true
         }, function(err, results) {
           if (err) {
             return next(err);

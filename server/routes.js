@@ -19,6 +19,9 @@ var api = require('../api'),
   notification = require('./controllers/notification'),
   pages = require('./controllers/pages');
 
+var admin = {};
+admin.dashboard = require('./controllers/admin/dashboard');
+
 module.exports = exports = function(app) {
   // 文件上传
   app.all('/upload/:type', auth.isLogin);
@@ -96,6 +99,9 @@ module.exports = exports = function(app) {
   app.get('/wiki', pages.wikis);
   app.all('/wiki/create', auth.isLogin, auth.isWikiEditor, pages.createWiki);
   app.all('/wiki/:slug/edit', auth.isLogin, auth.isWikiEditor, pages.editWiki);
+
+  // 后台管理
+  app.get('/admin', auth.isLogin, auth.isAdmin, admin.dashboard.index);
 
   app.get(/^\/([a-zA-Z0-9_\-\/]+)\/?/, pages.get);
 };

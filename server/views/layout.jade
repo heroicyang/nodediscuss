@@ -20,7 +20,7 @@ html(lang="zh-CN")
               span.icon-bar
               sapn.icon-bar
             a(href="/").navbar-brand.logo
-              img(src="/img/logo.png", title="Node.js 中文社区").img-responsive
+              img(src="/img/logo.png", title="#{site.title}").img-responsive
           div.navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
               li(class=(path === '/' || path === '/topics') ? "active" : "")
@@ -32,7 +32,9 @@ html(lang="zh-CN")
                   a(href="/user/#{currentUser.username}") #{currentUser.nickname}
                 li(class=(path === '/settings') ? "active" : "")
                   a(href="/settings") 设置
-                li: a(href="#")#logout 退出
+                if currentUser.isAdmin
+                  li: a(href="/admin") 后台管理
+                li: a(href="#", rel="nofollow")#logout 退出
               else
                 li(class=(path === '/signup') ? "active" : "")
                   a(href="/signup") 注册

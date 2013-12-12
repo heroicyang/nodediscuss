@@ -1,0 +1,25 @@
+extends layout
+block container
+  div.panel.panel-default
+    div.panel-heading
+      span 最近发布的话题
+    ul.list-group
+      if recentTopics.length > 0
+        each topic in recentTopics
+          li.list-group-item
+            a(href="#") #{topic.title}
+      else
+        li.list-group-item 暂无话题。
+  div.panel.panel-default
+    div.panel-heading
+      span 社区数据统计
+    div.panel-body
+      ul
+        li 用户总数：
+          strong #{userCount} 人
+        li 话题总数：
+          strong #{topicCount} 个
+        li 评论总数：
+          strong #{commentCount} 条
+        li 页面总数：
+          strong #{pageCount} 个

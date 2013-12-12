@@ -134,3 +134,13 @@ exports.get = function(args, callback) {
     }
   ], callback);
 };
+
+/**
+ * 统计页面数量
+ * @param  {Function} callback
+ *  - err
+ *  - count
+ */
+exports.count = function(callback) {
+  Page.count(callback);
+};

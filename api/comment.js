@@ -94,3 +94,13 @@ exports.remove = function(args, callback) {
     });
   }
 };
+
+/**
+ * 统计评论数量
+ * @param  {Function} callback
+ *  - err
+ *  - count
+ */
+exports.count = function(callback) {
+  Comment.count({ deleted: false }, callback);
+};

@@ -12,6 +12,7 @@ var _ = require('lodash'),
 /** 导出各种 api ，方便控制层调用 */
 module.exports = exports = {
   user: require('./user'),
+  section: require('./section'),
   tag: require('./tag'),
   topic: require('./topic'),
   comment: require('./comment'),

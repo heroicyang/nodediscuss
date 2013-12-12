@@ -96,3 +96,18 @@ exports.get = function(tagData, callback) {
     }
   ], callback);
 };
+
+/**
+ * 根据条件统计节点数量
+ * @param  {Object}   conditions 筛选条件
+ * @param  {Function} callback
+ *  - err
+ *  - count
+ */
+exports.count = function(conditions, callback) {
+  if (typeof conditions === 'function') {
+    callback = conditions;
+    conditions = {};
+  }
+  Tag.count(conditions, callback);
+};

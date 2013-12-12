@@ -23,17 +23,17 @@ html(lang="zh-CN")
           div.navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
               li(class=(path === '/admin') ? "active" : "")
-                a(href="/") DashBoard
+                a(href="/admin") DashBoard
               li(class=(path === '/admin/sections') ? "active" : "")
-                a(href="/sections") 节点组管理
+                a(href="/admin/sections") 节点组管理
               li(class=(path === '/admin/tags') ? "active" : "")
-                a(href="/tags") 节点管理
+                a(href="/admin/tags") 节点管理
               li(class=(path === '/admin/users') ? "active" : "")
-                a(href="/users") 用户管理
+                a(href="/admin/users") 用户管理
               li(class=(path === '/admin/topics') ? "active" : "")
-                a(href="/topics") 话题管理
+                a(href="/admin/topics") 话题管理
               li(class=(path === '/admin/wikis') ? "active" : "")
-                a(href="/wikis") Wiki 管理
+                a(href="/admin/wikis") Wiki 管理
               li: a(href="#{site.domain}") 前往社区
       div.container
         block container

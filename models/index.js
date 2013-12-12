@@ -16,7 +16,9 @@ var fs = require('fs'),
 
 // Declares a global plugin executed on all Schemas
 mongoose.plugin(timestampPlugin());
-mongoose.plugin(paginationPlugin());
+mongoose.plugin(paginationPlugin({
+  defaultSort: { createdAt: -1 }
+}));
 
 if (!mongoose.modelNames().length) {
   registerModels();

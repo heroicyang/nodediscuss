@@ -45,3 +45,80 @@ exports.query = function(options, callback) {
     });
   });
 };
+
+/**
+ * 根据条件获取单个节点组
+ * @param  {Object}   conditions 查询条件
+ * @param  {Function} callback
+ *  - err
+ *  - section
+ */
+exports.get = function(conditions, callback) {
+  Section.findOne(conditions, callback);
+};
+
+/**
+ * 创建节点组
+ * @param  {Object}   sectionData  节点组对象
+ * @param  {Function} callback
+ *  - err
+ *  - section
+ */
+exports.create = function(sectionData, callback) {
+  Section.create(sectionData, callback);
+};
+
+/**
+ * 根据主键编辑节点组
+ * @param  {Object}   sectionData  节点组对象
+ *  - _id|id   required    节点组 id
+ * @param  {Function} callback
+ *  - err
+ *  - section
+ */
+exports.edit = function(sectionData, callback) {
+  var id = sectionData.id || sectionData._id;
+  sectionData = _.omit(sectionData, '_id');
+
+  async.waterfall([
+    function getSection(next) {
+      Section.findById(id, function(err, section) {
+        next(err, section);
+      });
+    },
+    function updateSection(section, next) {
+      if (!section) {
+        return next(null, section);
+      }
+      _.extend(section, sectionData);
+      section.save(function(err, section) {
+        next(err, section);
+      });
+    }
+  ], callback);
+};
+
+/**
+ * 根据主键删除节点组
+ * @param  {String}   id       节点组 id
+ * @param  {Function} callback
+ *  - err
+ *  - section
+ */
+exports.remove = function(id, callback) {
+  async.waterfall([
+    function getSection(next) {
+      Section.findById(id, function(err, section) {
+        next(err, section);
+      });
+    },
+    function removeSection(section, next) {
+      if (!section) {
+        return next(null, section);
+      }
+      section.remove(function(err, section) {
+        next(err, section);
+      });
+    }
+  ], callback);
+};

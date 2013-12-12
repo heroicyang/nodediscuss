@@ -15,42 +15,35 @@ var async = require('async'),
  * 获取节点列表
  * @param  {Object}   options
  *  - query          optional   查询条件，默认查询全部
+ *  - notPaged       optional   不分页则传入 true，默认 false
  *  - pageIndex      optional   当前页数，默认 1
  *  - pageSize       optional   返回的记录数，默认 20
- *  - sort  {Object} optional   排序规则
+ *  - sort  {Object} optional   排序规则，默认按创建时间倒序
  * @param  {Function} callback
  *  - err
  *  - results
- *    - totalCount    符合查询条件节点记录总数
+ *    - totalCount  符合查询条件的节点记录总数
  *    - tags        节点列表
  */
 exports.query = function(options, callback) {
   options = options || {};
-  var conditions = options.query || {},
-    pageIndex = options.pageIndex,
-    pageSize = options.pageSize,
-    sort = options.sort;
+  var conditions = options.query || options.conditions || {};
 
-  var q = Tag.query(conditions);
-  if (sort) {
-    q.query = q.query.sort(sort);
-  }
-  // 代表不用分页
-  if (pageSize === Infinity) {
-    q.execQuery(function(err, tags) {
-      callback(err, {
-        tags: tags
-      });
+  Tag.paginate(conditions, options, function(err, count, tags) {
+    if (err) {
+      return callback(err);
+    }
+
+    // `notPaged === true` 的情况
+    if (typeof tags === 'undefined') {
+      return callback(null, { tags: count });
+    }
+
+    callback(null, {
+      totalCount: count,
+      tags: tags
     });
-  } else {
-    q.paginate(pageIndex, pageSize)
-      .exec(function(err, count, tags) {
-        callback(err, {
-          totalCount: count,
-          tags: tags
-        });
-      });
-  }
+  });
 };
 
 /**

@@ -46,9 +46,10 @@ exports.remove = function(args, callback) {
  * 获取关系链列表
  * @param  {Object}   options
  *  - query          optional   查询条件，默认查询全部
+ *  - notPaged       optional   不分页则传入 true，默认 false
  *  - pageIndex      optional   当前页数，默认 1
  *  - pageSize       optional   返回的记录数，默认 20
- *  - sort  {Object} optional   排序规则
+ *  - sort  {Object} optional   排序规则，默认按创建时间倒序
  * @param  {Function} callback
  *  - err
  *  - results
@@ -57,29 +58,21 @@ exports.remove = function(args, callback) {
  */
 exports.query = function(options, callback) {
   options = options || {};
-  var conditions = options.query || {},
-    pageIndex = options.pageIndex,
-    pageSize = options.pageSize,
-    sort = options.sort;
+  var conditions = options.query || options.conditions || {};
 
-  var q = Relation.query(conditions);
-  if (sort) {
-    q.query = q.query.sort(sort);
-  }
-  // 代表不用分页
-  if (pageSize === Infinity) {
-    q.execQuery(function(err, relations) {
-      callback(err, {
-        relations: relations
-      });
+  Relation.paginate(conditions, options, function(err, count, relations) {
+    if (err) {
+      return callback(err);
+    }
+
+    // `notPaged === true` 的情况
+    if (typeof relations === 'undefined') {
+      return callback(null, { relations: count });
+    }
+
+    callback(null, {
+      totalCount: count,
+      relations: relations
     });
-  } else {
-    q.paginate(pageIndex, pageSize)
-      .exec(function(err, count, relations) {
-        callback(err, {
-          totalCount: count,
-          relations: relations
-        });
-      });
-  }
+  });
 };

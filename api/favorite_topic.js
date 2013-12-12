@@ -15,6 +15,7 @@ var async = require('async'),
  * 获取用户收藏的话题
  * @param  {Object}   options
  *  - userId         required   需要获取其话题收藏的用户 id
+ *  - notPaged       optional   不分页则传入 true，默认 false
  *  - pageIndex      optional   当前页数，默认 1
  *  - pageSize       optional   返回的记录数，默认 20
  *  - sort  {Object} optional   排序规则，默认按创建时间倒序
@@ -26,21 +27,23 @@ var async = require('async'),
  */
 exports.query = function(options, callback) {
   options = options || {};
-  var userId = options.userId,
-    pageIndex = options.pageIndex,
-    pageSize = options.pageSize,
-    sort = options.sort || { createdAt: -1 };
-
-  var q = FavoriteTopic.query({
-    userId: userId
-  });
-  q.query = q.query.sort(sort);
-  q.paginate(pageIndex, pageSize);
+  var userId = options.userId;
   
   async.waterfall([
     function execQuery(next) {
-      q.exec(function(err, count, favoriteTopics) {
-        next(err, count, favoriteTopics);
+      FavoriteTopic.paginate({
+        userId: userId
+      }, options, function(err, count, favoriteTopics) {
+        if (err) {
+          return next(err);
+        }
+
+        // `notPaged === true` 的情况
+        if (typeof favoriteTopics === 'undefined') {
+          return next(null, favoriteTopics.length, favoriteTopics);
+        }
+
+        next(null, count, favoriteTopics);
       });
     },
     function populateTopics(count, favoriteTopics, next) {

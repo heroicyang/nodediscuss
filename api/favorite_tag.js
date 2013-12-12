@@ -17,7 +17,8 @@ var async = require('async'),
  * @param  {Object}   options
  *  - userId         required   需要获取其节点收藏的用户 id
  *  - includeTopics  optional   是否一并返回所收藏的节点下面的话题，默认 true
- *  如果需要一并返回收藏节点下面的话题列表，则可选以下三个选项
+ *  如果需要一并返回收藏节点下面的话题列表，则可选以下四个选项
+ *  - notPaged       optional   不分页则传入 true，默认 false
  *  - pageIndex      optional   当前页数，默认 1
  *  - pageSize       optional   返回的记录数，默认 20
  *  - sort  {Object} optional   排序规则，默认按创建时间倒序
@@ -32,37 +33,44 @@ exports.query = function(options, callback) {
   options = options || {};
   var userId = options.userId,
     includeTopics = typeof options.includeTopics !== 'undefined' ?
-        options.includeTopics : true,
-    pageIndex = options.pageIndex,
-    pageSize = options.pageSize,
-    sort = options.sort || { createdAt: -1 };
+        options.includeTopics : true;
 
   async.waterfall([
-    function queryAllFavoriteTags(next) {
+    function getAllFavoriteTags(next) {
       FavoriteTag.find({
         userId: userId
       }, function(err, favoriteTags) {
         next(err, _.pluck(favoriteTags, 'tag'));
       });
     },
-    function queryTopicsOnTags(favoriteTags, next) {
+    function populateTopicsOfTag(favoriteTags, next) {
       if (!includeTopics) {
         return next(null, {
           tags: favoriteTags
         });
       }
-      var q = Topic.query({
+
+      Topic.paginate({
         'tag.id': { $in: _.pluck(favoriteTags, 'id') }
-      });
-      q.query = q.query.sort(sort);
-      q.paginate(pageIndex, pageSize)
-        .exec(function(err, count, topics) {
-          next(err, {
-            totalCount: count,
+      }, options, function(err, count, topics) {
+        if (err) {
+          return callback(err);
+        }
+
+        // `notPaged === true` 的情况
+        if (typeof topics === 'undefined') {
+          return callback(null, {
             tags: favoriteTags,
-            topics: topics
+            topics: count
           });
+        }
+
+        callback(null, {
+          totalCount: count,
+          tags: favoriteTags,
+          topics: topics
         });
+      });
     }
   ], callback);
 };

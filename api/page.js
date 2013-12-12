@@ -16,6 +16,7 @@ var async = require('async'),
  * 获取页面列表
  * @param  {Object}   options
  *  - query          optional   查询条件，默认查询全部
+ *  - notPaged       optional   不分页则传入 true，默认 false
  *  - pageIndex      optional   当前页数，默认 1
  *  - pageSize       optional   返回的记录数，默认 20
  *  - sort  {Object} optional   排序规则，默认按创建时间倒序
@@ -27,20 +28,23 @@ var async = require('async'),
  */
 exports.query = function(options, callback) {
   options = options || {};
-  var conditions = options.query || {},
-    pageIndex = options.pageIndex,
-    pageSize = options.pageSize,
-    sort = options.sort || { createdAt: -1 };
+  var conditions = options.query || options.conditions || {};
 
-  var q = Page.query(conditions);
-  q.query = q.query.sort(sort);
-  q.paginate(pageIndex, pageSize)
-    .exec(function(err, count, pages) {
-      callback(err, {
-        totalCount: count,
-        pages: pages
-      });
+  Page.paginate(conditions, options, function(err, count, pages) {
+    if (err) {
+      return callback(err);
+    }
+
+    // `notPaged === true` 的情况
+    if (typeof pages === 'undefined') {
+      return callback(null, { pages: count });
+    }
+
+    callback(null, {
+      totalCount: count,
+      pages: pages
     });
+  });
 };
 
 /**

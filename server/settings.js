@@ -65,9 +65,20 @@ module.exports = exports = function(app) {
     app.use(flash());
 
     // 初始化面包屑导航中间件
-    app.use(breadcrumb.init({
-      homeTitle: '主页'
-    }));
+    app.use(function(req, res, next) {
+      var bdc;
+      if (req.path.indexOf('/admin') !== -1) {
+        bdc = breadcrumb.init({
+          homeTitle: 'DashBoard',
+          homeUrl: '/admin'
+        });
+      } else {
+        bdc = breadcrumb.init({
+          homeTitle: '主页'
+        });
+      }
+      bdc.apply(this, arguments);
+    });
 
     // 引入本地变量中间件
     app.use(locals());

@@ -2,24 +2,12 @@ extends ../layout
 block container
   div.panel.panel-default
     div.panel-heading
-      span 节点组列表
-    div.panel-body
-      form(method="POST", action="/admin/sections/create", role="form").form-inline
-        div.form-group
-          label(for="name").sr-only 节点组名称
-          input(type="text", name="name", placeholder="节点组名称", required)#name.form-control
-        | &#32;
-        div.form-group
-          label(for="sort").sr-only 节点组序号
-          input(type="number", name="sort", placeholder="节点组序号", value="0")#sort.form-control
-        | &#32;
-        div.form-group
-          button(type="submit").btn.btn-primary 创建节点组
+      include ../../shared/breadcrumb
     table.table.table-bordered.table-striped
       thead
         tr
           th 节点组名称
-          th 节点组序号
+          th 节点组排序
           th 节点数量
           th
       tbody
@@ -31,4 +19,8 @@ block container
             td
               div.btn-group
                 a(href="/admin/sections/#{section.name}/edit").btn.btn-default.btn-xs 编辑
-                a(href="#", data-id="#{section._id}").btn.btn-danger.btn-xs 删除
+                form(method='POST', action="/admin/sections/#{section.name}/remove").btn-group
+                  input(type="hidden", name="_csrf", value="#{csrfToken}")
+                  button(type="submit").btn.btn-danger.btn-xs 删除
+    div.panel-footer
+      include form

@@ -9,6 +9,7 @@
 var async = require('async'),
   api = require('../../../api');
 
+/** 节点组管理首页 */
 exports.index = function(req, res, next) {
   api.section.query({
     notPaged: true,
@@ -34,9 +35,20 @@ exports.index = function(req, res, next) {
       if (err) {
         return next(err);
       }
+      req.breadcrumbs('节点组列表');
       res.render('admin/section/index', {
         sections: sections
       });
     });
+  });
+};
+
+/** 创建节点组 */
+exports.create = function(req, res, next) {
+  api.section.create(req.body, function(err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/admin/sections');
   });
 };

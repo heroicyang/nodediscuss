@@ -108,6 +108,7 @@ module.exports = exports = function(app) {
   app.all('/admin/:cate?', auth.isLogin, auth.isAdmin);
   app.get('/admin', admin.dashboard.index);
   app.get('/admin/sections', admin.section.index);
+  app.post('/admin/sections/create', admin.section.create);
   app.get('/admin/tags', admin.tag.index);
   app.get('/admin/users', admin.user.index);
   app.get('/admin/topics', admin.topic.index);

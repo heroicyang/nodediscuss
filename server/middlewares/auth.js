@@ -46,6 +46,20 @@ exports.isLogin = function(req, res, next) {
         res.send('未登录状态下你无权访问该页面。');
       }
     });
+  } else {
+    if (req.currentUser.state.blocked) {
+      return res.format({
+        html: function() {
+          res.redirect('/signin');
+        },
+        json: function() {
+          res.send(new NotAllowedError('你的帐号已被锁定无权访问该页面。'));
+        },
+        text: function() {
+          res.send('你的帐号已被锁定无权访问该页面。');
+        }
+      });
+    }
   }
   next();
 };

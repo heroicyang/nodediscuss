@@ -1,0 +1,37 @@
+extends ../layout
+block container
+  div.panel.panel-default
+    div.panel-heading
+      span 用户列表
+    table.table.table-bordered.table-striped
+      thead
+        tr
+          th 用户名
+          th 电子邮箱
+          th 昵称
+          th 状态
+          th 是否信任用户
+          th 话题数量
+          th 粉丝数量
+          th
+      tbody
+        each user in users
+          tr
+            td #{user.username}
+            td #{user.email}
+            td #{user.nickname}
+            td
+              if user.state.activated
+                | 已激活
+              if user.state.blocked
+                | 已锁定
+            td #{user.verified ? "是" : "否"}
+            td #{user.topicCount}
+            td #{user.followerCount}
+            td
+              div.btn-group
+                a(href="/admin/users/#{user.username}/edit").btn.btn-default.btn-xs 编辑
+                a(href="#", data-id="#{user._id}").btn.btn-primary.btn-xs 设为信任用户
+                a(href="#", data-id="#{user._id}").btn.btn-danger.btn-xs 删除
+    div.panel-footer
+      include ../../shared/pagination

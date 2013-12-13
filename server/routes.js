@@ -23,6 +23,7 @@ var admin = {};
 admin.dashboard = require('./controllers/admin/dashboard');
 admin.section = require('./controllers/admin/section');
 admin.tag = require('./controllers/admin/tag');
+admin.user = require('./controllers/admin/user');
 
 module.exports = exports = function(app) {
   // 文件上传
@@ -107,6 +108,7 @@ module.exports = exports = function(app) {
   app.get('/admin', admin.dashboard.index);
   app.get('/admin/sections', admin.section.index);
   app.get('/admin/tags', admin.tag.index);
+  app.get('/admin/users', admin.user.index);
 
   app.get(/^\/([a-zA-Z0-9_\-\/]+)\/?/, pages.get);
 };

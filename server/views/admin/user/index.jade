@@ -31,7 +31,9 @@ block container
             td
               div.btn-group
                 a(href="/admin/users/#{user.username}/edit").btn.btn-default.btn-xs 编辑
-                a(href="#", data-id="#{user._id}").btn.btn-primary.btn-xs 设为信任用户
-                a(href="#", data-id="#{user._id}").btn.btn-danger.btn-xs 删除
+                a(href="#", data-id="#{user._id}",
+                  title="设置为信任用户").btn.btn-primary.btn-xs 信任
+                a(href="#", data-id="#{user._id}",
+                  title="锁定该用户不让其登录").btn.btn-warning.btn-xs 锁定
     div.panel-footer
       include ../../shared/pagination

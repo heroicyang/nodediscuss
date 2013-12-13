@@ -1,0 +1,29 @@
+extends ../layout
+block container
+  div.panel.panel-default
+    div.panel-heading
+      span 话题列表
+    table.table.table-bordered.table-striped
+      thead
+        tr
+          th 标题
+          th 所在节点
+          th 作者
+          th 评论数量
+          th 发布时间
+          th
+      tbody
+        each topic in topics
+          tr
+            td #{topic.title}
+            td #{topic.tag.name}
+            td #{topic.author.username}
+            td #{topic.commentCount}
+            td=moment(topic.createdAt).format('YYYY-MM-DD HH:mm')
+            td
+              div.btn-group
+                a(href="/admin/users/#{topic._id}/edit").btn.btn-default.btn-xs 编辑
+                a(href="#", data-id="#{topic._id}", title="设置为优质话题").btn.btn-primary.btn-xs 设优
+                a(href="#", data-id="#{topic._id}").btn.btn-danger.btn-xs 删除
+    div.panel-footer
+      include ../../shared/pagination

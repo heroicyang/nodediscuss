@@ -64,10 +64,6 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  wikiCount: {
-    type: Number,
-    default: 0
-  },
   favoriteTopicCount: {
     type: Number,
     default: 0

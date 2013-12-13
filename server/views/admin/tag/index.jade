@@ -1,0 +1,28 @@
+extends ../layout
+block container
+  div.panel.panel-default
+    div.panel-heading
+      span 节点列表
+    table.table.table-bordered.table-striped
+      thead
+        tr
+          th 节点名称
+          th 节点描述
+          th 所属节点组
+          th 话题数量
+          th 被收藏次数
+          th
+      tbody
+        each tag in tags
+          tr
+            td #{tag.name}
+            td #{tag.describe}
+            td #{tag.section.name}
+            td #{tag.topicCount}
+            td #{tag.favoriteCount}
+            td
+              div.btn-group
+                a(href="/admin/tags/#{tag.name}/edit").btn.btn-default.btn-xs 编辑
+                a(href="#", data-id="#{tag._id}").btn.btn-danger.btn-xs 删除
+    div.panel-footer
+      include form

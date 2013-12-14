@@ -30,7 +30,7 @@ block container
             select(name="section[id]", required)#section.form-control
               option(value="") 请选择节点组
               each section in sections
-                if tag && tag.section.id === section._id
+                if tag && tag.section.id === section._id.toString()
                   option(value="#{section._id}", selected) #{section.name}
                 else
                   option(value="#{section._id}") #{section.name}

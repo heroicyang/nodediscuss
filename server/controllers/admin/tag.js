@@ -9,7 +9,8 @@
 var async = require('async'),
   _ = require('lodash'),
   api = require('../../../api'),
-  config = require('../../../config');
+  config = require('../../../config'),
+  NotFoundError = require('../../../utils/error').NotFoundError;
 
 /** 节点管理列表界面 */
 exports.index = function(req, res, next) {
@@ -36,6 +37,7 @@ exports.index = function(req, res, next) {
   });
 };
 
+/** 创建节点界面以及数据提交 */
 exports.create = function(req, res, next) {
   var method = req.method.toLowerCase();
 
@@ -56,6 +58,56 @@ exports.create = function(req, res, next) {
     });
   } else if ('post' === method) {
     api.tag.create(req.body, function(err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/admin/tags');
+    });
+  }
+};
+
+exports.edit = function(req, res, next) {
+  var method = req.method.toLowerCase();
+
+  if ('get' === method) {
+    async.parallel({
+      tag: function(next) {
+        var name = req.params.name;
+        api.tag.get({
+          name: name
+        }, function(err, tag) {
+          if (err) {
+            return next(err);
+          }
+          if (!tag) {
+            return next(new NotFoundError('该节点不存在!'));
+          }
+          next(null, tag);
+        });
+      },
+      sections: function(next) {
+        api.section.query({
+          notPaged: true
+        }, function(err, results) {
+          if (err) {
+            return next(err);
+          }
+          next(null, results.sections);
+        });
+      }
+    }, function(err, results) {
+      if (err) {
+        return next(err);
+      }
+
+      req.breadcrumbs('节点列表', '/admin/tags');
+      req.breadcrumbs('编辑节点');
+      res.render('admin/tag/edit', _.extend(results, {
+        err: req.flash('err')
+      }, req.flash('body')));
+    });
+  } else if ('post' === method) {
+    api.tag.edit(req.body, function(err) {
       if (err) {
         return next(err);
       }

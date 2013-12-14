@@ -28,6 +28,8 @@ module.exports = exports = function(schema) {
         'section.id': this.id
       }, {
         'section.name': this.name
+      }, {
+        multi: true
       }, next);
     });
 

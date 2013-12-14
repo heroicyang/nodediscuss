@@ -6,10 +6,35 @@
 /**
  * Module dependencies
  */
-var async = require('async');
+var async = require('async'),
+  sanitize = require('validator').sanitize;
 
 /** Exports hooks */
 module.exports = exports = function(schema) {
+  schema
+    .pre('save', function(next) {
+      this.name = sanitize(this.name).xss();
+      if (this.describe) {
+        this.describe = sanitize(this.describe).xss();
+      }
+      next();
+    })
+    .pre('save', function(next) {
+      if (this.isNew || !this.isModified('name')) {
+        return next();
+      }
+
+      // 更新节点名后同步更新到相应的话题
+      var Topic = this.model('Topic');
+      Topic.update({
+        'tag.id': this.id
+      }, {
+        'tag.name': this.name
+      }, {
+        multi: true
+      }, next);
+    });
+
   schema
     .pre('remove', function(next) {
       // 删除一个节点时清空该节点下面的所有话题

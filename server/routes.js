@@ -105,10 +105,11 @@ module.exports = exports = function(app) {
   app.all('/wiki/:slug/edit', auth.isLogin, auth.isWikiEditor, pages.editWiki);
 
   // 后台管理
-  app.all('/admin/:cate?', auth.isLogin, auth.isAdmin);
+  app.all('/admin/:cate?/:op?', auth.isLogin, auth.isAdmin);
   app.get('/admin', admin.dashboard.index);
   app.get('/admin/sections', admin.section.index);
-  app.post('/admin/sections/create', admin.section.create);
+  app.all('/admin/sections/create', admin.section.create);
+  app.all('/admin/sections/:name/edit', admin.section.edit);
   app.get('/admin/tags', admin.tag.index);
   app.get('/admin/users', admin.user.index);
   app.get('/admin/topics', admin.topic.index);

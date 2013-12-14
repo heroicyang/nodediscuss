@@ -1,0 +1,31 @@
+extends ../layout
+block container
+  div.panel.panel-default
+    div.panel-heading
+      include ../../shared/breadcrumb
+    div.panel-body
+      - var url = '/admin/sections/create'
+      if section
+        - url = '/admin/sections/' + section.name + '/edit'
+      form(role="form",
+           method="POST",
+           action=url).form-horizontal
+        div.form-group
+          label(for="name").control-label.col-sm-2 节点组名称
+          div.col-sm-6
+            input(type="text",
+                  name="name",
+                  value=section ? section.name : "",
+                  required)#name.form-control
+        div.form-group
+          label(for="sort").control-label.col-sm-2 节点排序
+          div.col-sm-6
+            input(type="number",
+                  name="sort",
+                  value=section ? section.sort : "0")#sort.form-control
+        div.form-group
+          div.col-sm-offset-2.col-sm-6
+            input(type="hidden", name="_csrf", value="#{csrfToken}")
+            if section
+              input(type="hidden", name="id", value="#{section._id}")
+            button(type="submit").btn.btn-primary=section ? '保存' : '创建'

@@ -2,8 +2,10 @@ extends ../layout
 block container
   div.panel.panel-default
     div.panel-heading
+      div.pull-right
+        a(href="/admin/sections/create").btn.btn-default.btn-xs 创建节点组
       include ../../shared/breadcrumb
-    table.table.table-bordered.table-striped
+    table.table.table-bordered
       thead
         tr
           th 节点组名称
@@ -23,4 +25,4 @@ block container
                   input(type="hidden", name="_csrf", value="#{csrfToken}")
                   button(type="submit").btn.btn-danger.btn-xs 删除
     div.panel-footer
-      include form
+      include ../../shared/pagination

@@ -111,6 +111,7 @@ module.exports = exports = function(app) {
   app.all('/admin/sections/create', admin.section.create);
   app.all('/admin/sections/:name/edit', admin.section.edit);
   app.get('/admin/tags', admin.tag.index);
+  app.all('/admin/tags/create', admin.tag.create);
   app.get('/admin/users', admin.user.index);
   app.get('/admin/topics', admin.topic.index);
 

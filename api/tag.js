@@ -104,3 +104,44 @@ exports.count = function(conditions, callback) {
   }
   Tag.count(conditions, callback);
 };
+
+/**
+ * 创建节点
+ * @param  {Object}   tagData    节点对象
+ * @param  {Function} callback
+ *  - err
+ *  - tag
+ */
+exports.create = function(tagData, callback) {
+  Tag.create(tagData, callback);
+};
+
+/**
+ * 根据主键编辑节点
+ * @param  {Object}   tagData   节点对象
+ *  - id|_id    required    节点 id
+ * @param  {Function} callback
+ *  - err
+ *  - tag
+ */
+exports.edit = function(tagData, callback) {
+  var id = tagData.id || tagData._id;
+  tagData._id && delete tagData._id;
+
+  async.waterfall([
+    function getTag(next) {
+      Tag.findById(id, function(err, tag) {
+        next(err, tag);
+      });
+    },
+    function updateTag(tag, next) {
+      if (!tag) {
+        return next(null, tag);
+      }
+      _.extend(tag, tagData);
+      tag.save(function(err, tag) {
+        next(err, tag);
+      });
+    }
+  ], callback);
+};

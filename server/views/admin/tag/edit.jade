@@ -2,6 +2,41 @@ extends ../layout
 block container
   div.panel.panel-default
     div.panel-heading
-      span 节点编辑
+      include ../../shared/breadcrumb
     div.panel-body
-      include form
+      - var url = '/admin/tags/create'
+      if tag
+        - url = '/admin/tags/' + tag.name + '/edit'
+      form(role="form",
+           method="POST",
+           action=url).form-horizontal
+        div.form-group
+          label(for="name").control-label.col-sm-2 节点名称
+          div.col-sm-6
+            input(type="text",
+                  name="name",
+                  value=tag ? tag.name : "",
+                  required)#name.form-control
+        div.form-group
+          label(for="describe").control-label.col-sm-2 节点描述
+          div.col-sm-6
+            input(type="text",
+                  name="describe",
+                  value=tag ? tag.describe : "")#describe.form-control
+            span.help-block 请尽量填写节点描述，可以帮助社区成员在发布话题时选择正确的节点。
+        div.form-group
+          label(for="section").control-label.col-sm-2 所属节点组
+          div.col-sm-6
+            select(name="section[id]", required)#section.form-control
+              option(value="") 请选择节点组
+              each section in sections
+                if tag && tag.section.id === section._id
+                  option(value="#{section._id}", selected) #{section.name}
+                else
+                  option(value="#{section._id}") #{section.name}
+        div.form-group
+          div.col-sm-offset-2.col-sm-6
+            input(type="hidden", name="_csrf", value="#{csrfToken}")
+            if tag
+              input(type="hidden", name="id", value="#{tag._id}")
+            button(type="submit").btn.btn-primary=tag ? '保存' : '创建'

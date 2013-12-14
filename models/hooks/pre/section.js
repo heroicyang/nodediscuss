@@ -6,10 +6,31 @@
 /**
  * Module dependencies
  */
-var async = require('async');
+var async = require('async'),
+  sanitize = require('validator').sanitize;
 
 /** Exports hooks */
 module.exports = exports = function(schema) {
+  schema
+    .pre('save', function(next) {
+      this.name = sanitize(this.name).xss();
+      this.sort = parseInt(this.sort, 10);
+      next();
+    })
+    .pre('save', function(next) {
+      if (this.isNew || !this.isModified('name')) {
+        return next();
+      }
+
+      // 更新节点组之后同步更新到相应节点
+      var Tag = this.model('Tag');
+      Tag.update({
+        'section.id': this.id
+      }, {
+        'section.name': this.name
+      }, next);
+    });
+
   schema
     .pre('remove', function(next) {
       // 删除一个节点组时清空该节点组下面的所有节点

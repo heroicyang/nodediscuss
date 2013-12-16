@@ -4,12 +4,19 @@ block container
     div.panel-heading
       include ../../shared/breadcrumb
     div.panel-body
+      include ../../shared/error_alert
       - var url = '/admin/tags/create'
       if tag
-        - url = '/admin/tags/' + tag.name + '/edit'
+        - url = '/admin/tags/' + tag.slug + '/edit'
       form(role="form",
            method="POST",
            action=url).form-horizontal
+        div.form-group
+          label(for="slug").control-label.col-sm-2 节点链接
+          div.col-sm-6
+            input(type="text",
+                  name="slug",
+                  value=tag ? tag.slug : "")#slug.form-control
         div.form-group
           label(for="name").control-label.col-sm-2 节点名称
           div.col-sm-6

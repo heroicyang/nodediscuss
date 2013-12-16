@@ -8,6 +8,7 @@ block container
     table.table.table-bordered
       thead
         tr
+          th 节点链接
           th 节点名称
           th 节点描述
           th 所属节点组
@@ -17,6 +18,7 @@ block container
       tbody
         each tag in tags
           tr
+            td #{tag.slug}
             td #{tag.name}
             td #{tag.describe}
             td #{tag.section.name}
@@ -24,7 +26,7 @@ block container
             td #{tag.favoriteCount}
             td
               div.btn-group
-                a(href="/admin/tags/#{tag.name}/edit").btn.btn-default.btn-xs 编辑
+                a(href="/admin/tags/#{tag.slug}/edit").btn.btn-default.btn-xs 编辑
                 a(href="#", data-id="#{tag._id}").btn.btn-danger.btn-xs 删除
     div.panel-footer
       include ../../shared/pagination

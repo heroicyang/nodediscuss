@@ -72,9 +72,9 @@ exports.edit = function(req, res, next) {
   if ('get' === method) {
     async.parallel({
       tag: function(next) {
-        var name = req.params.name;
+        var slug = req.params.slug;
         api.tag.get({
-          name: name
+          slug: slug
         }, function(err, tag) {
           if (err) {
             return next(err);

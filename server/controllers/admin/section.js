@@ -81,9 +81,9 @@ exports.edit = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    var name = req.params.name;
+    var id = req.params.id;
     api.section.get({
-      name: name
+      _id: id
     }, function(err, section) {
       if (err) {
         return next(err);

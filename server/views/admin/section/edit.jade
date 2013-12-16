@@ -6,7 +6,7 @@ block container
     div.panel-body
       - var url = '/admin/sections/create'
       if section
-        - url = '/admin/sections/' + section.name + '/edit'
+        - url = '/admin/sections/' + section._id + '/edit'
       form(role="form",
            method="POST",
            action=url).form-horizontal

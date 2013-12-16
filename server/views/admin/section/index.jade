@@ -20,8 +20,8 @@ block container
             td #{section.tagCount}
             td
               div.btn-group
-                a(href="/admin/sections/#{section.name}/edit").btn.btn-default.btn-xs 编辑
-                form(method='POST', action="/admin/sections/#{section.name}/remove").btn-group
+                a(href="/admin/sections/#{section._id}/edit").btn.btn-default.btn-xs 编辑
+                form(method='POST', action="/admin/sections/#{section._id}/remove").btn-group
                   input(type="hidden", name="_csrf", value="#{csrfToken}")
                   button(type="submit").btn.btn-danger.btn-xs 删除
     div.panel-footer

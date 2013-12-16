@@ -12,7 +12,7 @@ div.media
       div.media-heading.title
           a(href="/topic/#{topic._id}") #{topic.title}
       p.meta
-        a(href="/tag/#{topic.tag.name}").tag
+        a(href="/tag/#{topic.tag.slug}").tag
           span.label.label-default #{topic.tag.name}
         | &#32;&#8226;&#32;
         a(href="/user/#{topic.author.username}").username #{topic.author.nickname}

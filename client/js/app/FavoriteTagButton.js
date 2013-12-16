@@ -8,9 +8,9 @@ NC.Module.define('FavoriteTagButton', [], function() {
       var self = this,
         url;
       if (this.data.isFavorited) {
-        url = '/tag/' + this.data.name + '/unfavorite';
+        url = '/tag/' + this.data.slug + '/unfavorite';
       } else {
-        url = '/tag/' + this.data.name + '/favorite';
+        url = '/tag/' + this.data.slug + '/favorite';
       }
 
       $.post(url)

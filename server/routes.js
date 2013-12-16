@@ -66,8 +66,8 @@ module.exports = exports = function(app) {
   // 话题列表
   app.get('/', topics.list);
   app.get('/topics/:type?', topics.list);
-  app.get('/tag/:name', tag.load, tag.topics);
-  app.get('/tag/:name/topics/:type?', tag.load, tag.topics);
+  app.get('/tag/:slug', tag.load, tag.topics);
+  app.get('/tag/:slug/topics/:type?', tag.load, tag.topics);
   app.get('/following/topics', auth.isLogin, topics.byFollowing);
 
   // 单个话题
@@ -84,10 +84,10 @@ module.exports = exports = function(app) {
       api.requestHandler(api.favoriteTopic.create));
   app.post('/topic/:id/unfavorite',
       api.requestHandler(api.favoriteTopic.remove));
-  app.post('/tag/:name/:op', auth.isLogin, tag.load);
-  app.post('/tag/:name/favorite',
+  app.post('/tag/:slug/:op', auth.isLogin, tag.load);
+  app.post('/tag/:slug/favorite',
       api.requestHandler(api.favoriteTag.create));
-  app.post('/tag/:name/unfavorite',
+  app.post('/tag/:slug/unfavorite',
       api.requestHandler(api.favoriteTag.remove));
   // 收藏列表
   app.get('/favorite/:type', auth.isLogin);
@@ -105,14 +105,14 @@ module.exports = exports = function(app) {
   app.all('/wiki/:slug/edit', auth.isLogin, auth.isWikiEditor, pages.editWiki);
 
   // 后台管理
-  app.all('/admin/:cate?/:name?/:op?', auth.isLogin, auth.isAdmin);
+  app.all('/admin/:cate?/*/:op?', auth.isLogin, auth.isAdmin);
   app.get('/admin', admin.dashboard.index);
   app.get('/admin/sections', admin.section.index);
   app.all('/admin/sections/create', admin.section.create);
-  app.all('/admin/sections/:name/edit', admin.section.edit);
+  app.all('/admin/sections/:id/edit', admin.section.edit);
   app.get('/admin/tags', admin.tag.index);
   app.all('/admin/tags/create', admin.tag.create);
-  app.all('/admin/tags/:name/edit', admin.tag.edit);
+  app.all('/admin/tags/:slug/edit', admin.tag.edit);
   app.get('/admin/users', admin.user.index);
   app.get('/admin/topics', admin.topic.index);
 

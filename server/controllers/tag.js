@@ -14,7 +14,7 @@ var async = require('async'),
 
 /** 节点下面的话题列表 */
 exports.topics = function(req, res, next) {
-  var name = req.params.name,
+  var slug = req.params.slug,
     filter = req.params.type,
     pageIndex = parseInt(req.query.pageIndex || 1, 10);
 
@@ -25,7 +25,7 @@ exports.topics = function(req, res, next) {
 
   var sort,
     conditions = {
-      'tag.name': name
+      'tag.slug': slug
     };
   switch(filter) {
   case 'excellent':
@@ -78,10 +78,10 @@ exports.topics = function(req, res, next) {
       return next(err);
     }
 
-    req.breadcrumbs(name);
+    req.breadcrumbs(req.tag.name);
     res.render('topic/list', _.extend(results, {
       pagination: pagination,
-      url: '/tag/' + req.tag.name + '/topics',
+      url: '/tag/' + req.tag.slug + '/topics',
       filterType: filter,
       tag: req.tag
     }));
@@ -90,9 +90,9 @@ exports.topics = function(req, res, next) {
 
 /** 根据节点名获取节点 */
 exports.load = function(req, res, next) {
-  var name = req.params.name;
+  var slug = req.params.slug;
   api.tag.get.call(req, {
-    name: name
+    slug: slug
   }, function(err, tag) {
     if (err) {
       return next(err);

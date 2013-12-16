@@ -58,6 +58,7 @@ exports.query = function(options, callback) {
 exports.get = function(tagData, callback) {
   var id = tagData.id,
     name = tagData.name,
+    slug = tagData.slug,
     userId = this.currentUser && this.currentUser.id;
 
   async.waterfall([
@@ -66,9 +67,13 @@ exports.get = function(tagData, callback) {
         Tag.findById(id, function(err, tag) {
           next(err, tag);
         });
-      } else if (name) {
+      } else if (name || slug) {
         Tag.findOne({
-          name: name
+          $or: [{
+            name: name
+          }, {
+            slug: slug
+          }]
         }, function(err, tag) {
           next(err, tag);
         });

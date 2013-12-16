@@ -18,7 +18,7 @@ block content
             div.col-xs-9.col-sm-10
               p #{tag.describe}
             div.col-xs-3.col-sm-2
-              a(href="/topic/create?tag=#{tag.name}",
+              a(href="/topic/create?tag=#{tag.slug}",
                 title="发布新话题").btn.btn-default.btn-xs.pull-right 发布话题
         else
           div.tag-content
@@ -66,8 +66,8 @@ block script
         name: 'FavoriteTagButton',
         el: '#favorite-tag-btn',
         data: {
-          id: '#{tag._id}',
           name: '#{tag.name}',
+          slug: '#{tag.slug}',
           isFavorited: #{tag.isFavorited}
         }
       };

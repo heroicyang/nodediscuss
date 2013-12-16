@@ -10,7 +10,7 @@ block content
       div.panel-body
         ul.list-inline.tags
           each tag in tags
-            li: a(href="/tag/#{tag.name}")
+            li: a(href="/tag/#{tag.slug}")
               span.label.label-default #{tag.name}
       ul.list-group.topic-list
         each topic in topics

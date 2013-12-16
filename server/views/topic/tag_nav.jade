@@ -10,4 +10,4 @@ div#tags-nav.panel.panel-default
             div.col-xs-8.col-sm-10
               ul.list-inline
                 each tag in tagList
-                  li.item: a(href="/tag/#{tag.name}") #{tag.name}
+                  li.item: a(href="/tag/#{tag.slug}") #{tag.name}

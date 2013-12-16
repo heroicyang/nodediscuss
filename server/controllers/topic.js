@@ -32,12 +32,12 @@ exports.create = function(req, res, next) {
         });
       },
       currentTag: function(next) {
-        var tagName = req.query.tag;
-        if (!tagName) {
+        var tagSlug = req.query.tag;
+        if (!tagSlug) {
           return next(null);
         }
         api.tag.get({
-          name: tagName
+          slug: tagSlug
         }, function(err, tag) {
           next(err, tag);
         });

@@ -110,9 +110,13 @@ module.exports = exports = function(app) {
   app.get('/admin/sections', admin.section.index);
   app.all('/admin/sections/create', admin.section.create);
   app.all('/admin/sections/:id/edit', admin.section.edit);
+  app.post('/admin/sections/:id/remove',
+      api.requestHandler(api.section.remove));
   app.get('/admin/tags', admin.tag.index);
   app.all('/admin/tags/create', admin.tag.create);
   app.all('/admin/tags/:slug/edit', admin.tag.edit);
+  app.post('/admin/tags/:id/remove',
+      api.requestHandler(api.tag.remove));
   app.get('/admin/users', admin.user.index);
   app.get('/admin/topics', admin.topic.index);
 

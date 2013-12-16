@@ -100,12 +100,14 @@ exports.edit = function(sectionData, callback) {
 
 /**
  * 根据主键删除节点组
- * @param  {String}   id       节点组 id
+ * @param  {Object}   args
+ *  - id     required   节点组 id
  * @param  {Function} callback
  *  - err
  *  - section
  */
-exports.remove = function(id, callback) {
+exports.remove = function(args, callback) {
+  var id = args.id;
   async.waterfall([
     function getSection(next) {
       Section.findById(id, function(err, section) {

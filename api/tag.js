@@ -150,3 +150,30 @@ exports.edit = function(tagData, callback) {
     }
   ], callback);
 };
+
+/**
+ * 根据主键删除节点
+ * @param  {Object}   args
+ *  - id     required   节点 id
+ * @param  {Function} callback
+ *  - err
+ *  - section
+ */
+exports.remove = function(args, callback) {
+  var id = args.id;
+  async.waterfall([
+    function getSection(next) {
+      Tag.findById(id, function(err, section) {
+        next(err, section);
+      });
+    },
+    function removeSection(section, next) {
+      if (!section) {
+        return next(null, section);
+      }
+      section.remove(function(err, section) {
+        next(err, section);
+      });
+    }
+  ], callback);
+};

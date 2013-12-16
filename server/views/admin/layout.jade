@@ -9,58 +9,33 @@ html(lang="zh-CN")
     each file in assets.css
       link(href="/css/#{file}", rel="stylesheet")
   body#app
-    div#container-wrap
-      div(role="navigation").navbar.navbar-default.navbar-static-top
-        div.container
-          div.navbar-header
-            button(type="button", data-toggle="collapse",
-                   data-target=".navbar-collapse").navbar-toggle
-              span.icon-bar
-              span.icon-bar
-              sapn.icon-bar
-            a(href="/").navbar-brand.logo
-              img(src="/img/logo.png", title="#{site.title}").img-responsive
-          div.navbar-collapse.collapse
-            ul.nav.navbar-nav.navbar-right
-              li(class=(path === '/admin') ? "active" : "")
-                a(href="/admin") DashBoard
-              li(class=(path === '/admin/sections') ? "active" : "")
-                a(href="/admin/sections") 节点组管理
-              li(class=(path === '/admin/tags') ? "active" : "")
-                a(href="/admin/tags") 节点管理
-              li(class=(path === '/admin/users') ? "active" : "")
-                a(href="/admin/users") 用户管理
-              li(class=(path === '/admin/topics') ? "active" : "")
-                a(href="/admin/topics") 话题管理
-              li(class=(path === '/admin/wikis') ? "active" : "")
-                a(href="/admin/wikis") Wiki 管理
-              li: a(href="#{site.domain}") 前往社区
+    div(role="navigation").navbar.navbar-default.navbar-static-top
       div.container
-        block container
-    footer
-      div.container
-        div.media
-          div.pull-left
-            img(src="/img/logo-light.png").media-object.img-responsive.logo
-          div.media-body.content
-            nav
-              ul.list-inline
-                li: a(href="https://github.com/heroicyang/cnodeclub/blob/master/README.md") 关于
-                li.delimiter &#32;&#8226;&#32;
-                li: a(href="#") FAQ
-                li.delimiter &#32;&#8226;&#32;
-                li: a(href="#") RSS
-                li.delimiter &#32;&#8226;&#32;
-                li: a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") Github
-            div.copyright
-              p &copy; 2012 - 2013
-              p 由开源社区系统
-                a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") CNodeClub
-                | 强力驱动，版本: #{version}，欢迎贡献代码。
-              p Powered by 
-                a(href="http://expressjs.com/", target="_blank") Express
-                | &amp;
-                a(href="http://mongoosejs.com/", target="_blank") Mongoose
+        div.navbar-header
+          button(type="button", data-toggle="collapse",
+                 data-target=".navbar-collapse").navbar-toggle
+            span.icon-bar
+            span.icon-bar
+            sapn.icon-bar
+          a(href="/").navbar-brand.logo
+            img(src="/img/logo.png", title="#{site.title}").img-responsive
+        div.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right
+            li(class=(path === '/admin') ? "active" : "")
+              a(href="/admin") DashBoard
+            li(class=(path === '/admin/sections') ? "active" : "")
+              a(href="/admin/sections") 节点组管理
+            li(class=(path === '/admin/tags') ? "active" : "")
+              a(href="/admin/tags") 节点管理
+            li(class=(path === '/admin/users') ? "active" : "")
+              a(href="/admin/users") 用户管理
+            li(class=(path === '/admin/topics') ? "active" : "")
+              a(href="/admin/topics") 话题管理
+            li(class=(path === '/admin/wikis') ? "active" : "")
+              a(href="/admin/wikis") Wiki 管理
+            li: a(href="#{site.domain}") 前往社区
+    div.container
+      block container
 
     //- 根据 grunt build 之后的结果引入 js 文件
     each file in assets.js
@@ -70,3 +45,4 @@ html(lang="zh-CN")
       $(document).ajaxSend(function(e, xhr) {
         xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
       });
+    block script

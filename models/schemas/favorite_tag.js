@@ -20,6 +20,7 @@ var FavoriteTagSchema = new Schema({
   },
   tag: {
     id: String,
+    slug: String,
     name: String
   }
 }, {

@@ -60,7 +60,8 @@ function addTagValidators(schema) {
         }
 
         _.extend(self.tag, {
-          name: tag.name
+          name: tag.name,
+          slug: tag.slug
         });
         done(true);
       });

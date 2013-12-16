@@ -15,6 +15,25 @@ var ObjectId = require('mongoose').Types.ObjectId,
  * @return {Function}
  */
 module.exports = exports = function(schema) {
+  schema.path('slug')
+    .required(true, '节点的链接地址不能为空!')
+    .match(/^[a-z0-9\-_]+$/, '节点的链接地址只能为字母、数字、横线和下划线。')
+    .validate(function(slug, done) {
+      var Tag = this.model('Tag'),
+        self = this;
+      Tag.findOne({
+        slug: slug
+      }, function(err, tag) {
+        if (err) {
+          return done(false);
+        }
+        if (tag) {
+          return done(tag.id === self.id);
+        }
+        done(true);
+      });
+    }, '该节点的链接地址已被使用。');
+
   addNameValidators(schema);
   addSectionValidators(schema);
 };

@@ -12,27 +12,59 @@ var async = require('async'),
 /** Exports hooks */
 module.exports = exports = function(schema) {
   schema
-    .pre('save', function(next) {
+    .pre('validate', function(next) {
       this.name = sanitize(this.name).xss();
+      if (!this.slug) {
+        this.slug = this.name
+          .replace(/\-+/g, ' ')
+          .replace(/^\s+|\s+$/g, '')
+          .replace(/^\-|\-$/g, '')
+          .toLowerCase()
+          .replace(/[^a-z0-9\u4e00-\u9fa5 \-_]/g, ' ')
+          .replace(/\s+/g, '-');
+      }
       if (this.describe) {
         this.describe = sanitize(this.describe).xss();
       }
       next();
-    })
-    .pre('save', function(next) {
-      if (this.isNew || !this.isModified('name')) {
-        return next();
+    });
+
+  schema
+    .pre('save', true, function(next, done) {
+      next();
+      if (this.isNew ||
+            (!this.isModified('name') && !this.isModified('slug'))) {
+        return done();
       }
 
-      // 更新节点名后同步更新到相应的话题
+      // 更新节点后同步更新到相应的话题
       var Topic = this.model('Topic');
       Topic.update({
         'tag.id': this.id
       }, {
-        'tag.name': this.name
+        'tag.name': this.name,
+        'tag.slug': this.slug,
       }, {
         multi: true
-      }, next);
+      }, done);
+    })
+    .pre('save', true, function(next, done) {
+      next();
+      if (this.isNew ||
+            (!this.isModified('name') && !this.isModified('slug'))) {
+        return done();
+      }
+
+      // 更新节点后同步更新到相应的节点收藏
+      var FavoriteTag = this.model('FavoriteTag');
+      FavoriteTag.update({
+        'tag.id': this.id
+      }, {
+        'tag.name': this.name,
+        'tag.slug': this.slug,
+      }, {
+        multi: true
+      }, done);
     });
 
   schema

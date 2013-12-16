@@ -16,6 +16,12 @@ var mongoose = require('mongoose'),
  * @type {Schema}
  */
 var TagSchema = new Schema({
+  slug: {
+    type: String,
+    lowercase: true,
+    index: true,
+    unique: true
+  },
   name: {
     type: String,
     index: true,

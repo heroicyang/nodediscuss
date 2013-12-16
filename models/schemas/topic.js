@@ -25,6 +25,7 @@ var TopicSchema = new Schema({
       type: String,
       index: true
     },
+    slug: String,
     name: String
   },
   author: {

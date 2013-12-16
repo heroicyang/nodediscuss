@@ -156,10 +156,44 @@ exports.get = function(args, callback) {
 
 /**
  * 统计话题数量
+ * @param  {Object}   conditions  过滤条件
  * @param  {Function} callback
  *  - err
  *  - count
  */
-exports.count = function(callback) {
-  Topic.count(callback);
+exports.count = function(conditions, callback) {
+  Topic.count(conditions, callback);
+};
+
+/**
+ * 切换优质话题状态
+ * @param  {Object}   args
+ *  - id   required   话题 id
+ * @param  {Function} callback
+ *  - err
+ *  - topic
+ */
+exports.toggleExcellent = function(args, callback) {
+  var id = args.id;
+  Topic.findById(id, function(err, topic) {
+    if (err) {
+      return callback(err);
+    }
+    if (!topic) {
+      return callback(null, topic);
+    }
+    topic.update({
+      excellent: !topic.excellent
+    }, callback);
+  });
+};
+
+/**
+ * 删除话题
+ * @param  {Object}   args
+ *  - id   required   话题 id
+ * @param  {Function} callback
+ */
+exports.remove = function(args, callback) {
+  Topic.destroy(args.id, callback);
 };

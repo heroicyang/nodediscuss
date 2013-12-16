@@ -2,7 +2,7 @@ extends ../layout
 block container
   div.panel.panel-default
     div.panel-heading
-      span 话题列表
+      include ../../shared/breadcrumb
     table.table.table-bordered.table-striped
       thead
         tr
@@ -10,6 +10,7 @@ block container
           th 所在节点
           th 作者
           th 评论数量
+          th 优质话题
           th 发布时间
           th
       tbody
@@ -19,11 +20,53 @@ block container
             td #{topic.tag.name}
             td #{topic.author.username}
             td #{topic.commentCount}
+            td=topic.excellent ? "是" : "否"
             td=moment(topic.createdAt).format('YYYY-MM-DD HH:mm')
             td
               div.btn-group
-                a(href="/admin/users/#{topic._id}/edit").btn.btn-default.btn-xs 编辑
-                a(href="#", data-id="#{topic._id}", title="设置为优质话题").btn.btn-primary.btn-xs 设优
-                a(href="#", data-id="#{topic._id}").btn.btn-danger.btn-xs 删除
+                a(href="/admin/topics/#{topic._id}/edit").btn.btn-default.btn-xs
+                  i.fa.fa-pencil
+                  | &#32;编辑
+                button(type="button",
+                       title=topic.excellent ? "取消优质话题" : "设置为优质话题",
+                       data-id="#{topic._id}",
+                       data-excellent="#{topic.excellent}").excellent-btn.btn.btn-default.btn-xs
+                  i(class=topic.excellent ? "fa-star" : "fa-star-o").fa
+                  | &#32;
+                  =topic.excellent ? "取消优质" : "设为优质"
+                button(type="button",
+                       data-id="#{topic._id}").remove-btn.btn.btn-danger.btn-xs
+                  i.fa.fa-trash-o
+                  | &#32;删除
     div.panel-footer
       include ../../shared/pagination
+block script
+  script(type="text/javascript").
+    $('.excellent-btn').on('click', function(e) {
+      var excellent = $(this).data('excellent'),
+        title= '确定要将该话题设置为优质话题？';
+      if (excellent) {
+        title = '确定要取消该优质话题？';
+      }
+      
+      if (confirm(title)) {
+        var id = $(this).data('id');
+        $.post('/admin/topics/' + id + '/excellent')
+          .done(function(res) {
+            if (res.success) {
+              window.location.reload();
+            }
+          });
+      }
+    });
+    $('.remove-btn').on('click', function(e) {
+      if (confirm('确定要删除该话题？删除后不可恢复。')) {
+        var id = $(this).data('id');
+        $.post('/admin/topics/' + id + '/remove')
+          .done(function(res) {
+            if (res.success) {
+              window.location.reload();
+            }
+          });
+      }
+    });

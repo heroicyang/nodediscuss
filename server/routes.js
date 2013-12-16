@@ -123,6 +123,10 @@ module.exports = exports = function(app) {
   app.post('/admin/users/:id/block',
       api.requestHandler(api.user.toggleBlocked));
   app.get('/admin/topics', admin.topic.index);
+  app.post('/admin/topics/:id/excellent',
+      api.requestHandler(api.topic.toggleExcellent));
+  app.post('/admin/topics/:id/remove',
+      api.requestHandler(api.topic.remove));
 
   app.get(/^\/([a-zA-Z0-9_\-\/]+)\/?/, pages.get);
 };

@@ -25,6 +25,7 @@ exports.index = function(req, res, next) {
     }
 
     pagination.totalCount = results.totalCount;
+    req.breadcrumbs('话题列表');
     res.render('admin/topic/index', {
       topics: results.topics,
       pagination: pagination

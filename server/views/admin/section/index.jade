@@ -20,9 +20,13 @@ block container
             td #{section.tagCount}
             td
               div.btn-group
-                a(href="/admin/sections/#{section._id}/edit").btn.btn-default.btn-xs 编辑
+                a(href="/admin/sections/#{section._id}/edit").btn.btn-default.btn-xs
+                  i.fa.fa-pencil
+                  | &#32;编辑
                 button(type="button",
-                       data-id="#{section._id}").remove-btn.btn.btn-danger.btn-xs 删除
+                       data-id="#{section._id}").remove-btn.btn.btn-danger.btn-xs
+                  i.fa.fa-trash-o
+                  | &#32;删除
     div.panel-footer
       include ../../shared/pagination
 block script

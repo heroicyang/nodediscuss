@@ -415,10 +415,59 @@ exports.githubRepos = function(args, callback) {
 
 /**
  * 统计用户数量
+ * @param  {Object}   conditions  过滤条件
  * @param  {Function} callback
  *  - err
  *  - count
  */
-exports.count = function(callback) {
-  User.count(callback);
+exports.count = function(conditions, callback) {
+  User.count(conditions, callback);
+};
+
+/**
+ * 切换用户的认证状态
+ * @param  {Object}   args
+ * - id    required    用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - user
+ */
+exports.toggleVerified = function(args, callback) {
+  var id = args.id;
+  User.findById(id, function(err, user) {
+    if (err) {
+      return callback(err);
+    }
+    if (!user) {
+      return callback(null, user);
+    }
+
+    user.update({
+      verified: !user.verified
+    }, callback);
+  });
+};
+
+/**
+ * 切换用户的锁定状态
+ * @param  {Object}   args
+ * - id    required    用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - user
+ */
+exports.toggleBlocked = function(args, callback) {
+  var id = args.id;
+  User.findById(id, function(err, user) {
+    if (err) {
+      return callback(err);
+    }
+    if (!user) {
+      return callback(null, user);
+    }
+
+    user.update({
+      'state.blocked': !user.state.blocked
+    }, callback);
+  });
 };

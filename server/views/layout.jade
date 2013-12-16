@@ -79,6 +79,9 @@ html(lang="zh-CN")
       script(src="/js/#{file}")
     //- 设置 ajax 模式下的 csrf
     script(type="text/javascript").
+      $.ajaxSetup({
+        dataType: 'json'
+      });
       $(document).ajaxSend(function(e, xhr) {
         xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
       });

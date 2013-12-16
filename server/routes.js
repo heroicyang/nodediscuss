@@ -118,6 +118,10 @@ module.exports = exports = function(app) {
   app.post('/admin/tags/:id/remove',
       api.requestHandler(api.tag.remove));
   app.get('/admin/users', admin.user.index);
+  app.post('/admin/users/:id/verify',
+      api.requestHandler(api.user.toggleVerified));
+  app.post('/admin/users/:id/block',
+      api.requestHandler(api.user.toggleBlocked));
   app.get('/admin/topics', admin.topic.index);
 
   app.get(/^\/([a-zA-Z0-9_\-\/]+)\/?/, pages.get);

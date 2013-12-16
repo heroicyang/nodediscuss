@@ -47,7 +47,7 @@ exports.isLogin = function(req, res, next) {
       }
     });
   } else {
-    if (req.currentUser.state.blocked) {
+    if (req.currentUser.state.blocked && req.path !== '/logout') {
       return res.format({
         html: function() {
           res.redirect('/signin');

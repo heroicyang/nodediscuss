@@ -2,7 +2,7 @@ extends ../layout
 block container
   div.panel.panel-default
     div.panel-heading
-      span 用户列表
+      include ../../shared/breadcrumb
     table.table.table-bordered.table-striped
       thead
         tr
@@ -21,33 +21,64 @@ block container
             td #{user.email}
             td #{user.nickname}
             td
-              if user.state.activated
-                | 已激活
               if user.state.blocked
                 | 已锁定
+              else if user.state.activated
+                | 已激活
             td #{user.verified ? "是" : "否"}
             td #{user.topicCount}
             td #{user.followerCount}
             td
               div.btn-group
-                a(href="/admin/users/#{user.username}/edit").btn.btn-default.btn-xs
-                  i.fa.fa-pencil
-                  | &#32;编辑
-                if user.verified
-                  a(href="#", title="设置为非信任用户").btn.btn-primary.btn-xs
-                    i.fa.fa-level-down
-                    | &#32;取消信任
-                else
-                  a(href="#", title="设置为信任用户").btn.btn-primary.btn-xs
-                    i.fa.fa-level-up
-                    | &#32;信任
-                if user.state.blocked
-                  a(href="#", title="锁定该用户").btn.btn-warning.btn-xs
-                    i.fa.fa-unlock
-                    | &#32;解除锁定
-                else
-                  a(href="#", title="锁定该用户").btn.btn-warning.btn-xs
-                    i.fa.fa-lock
-                    | &#32;锁定
+                button(type="button",
+                       title=user.verified ? "设置为非信任用户" : "设置为信任用户",
+                       data-verified="#{user.verified}",
+                       data-id="#{user._id}").verify-btn.btn.btn-primary.btn-xs
+                  i(class=user.verified ? "fa-level-down" : "fa-level-up").fa
+                  | &#32;
+                  =user.verified ? "取消信任" : "信任"
+                button(type="button",
+                       title=user.state.blocked ? "解除锁定该用户" : "锁定该用户",
+                       data-id="#{user._id}",
+                       data-locked="#{user.state.blocked}").block-btn.btn.btn-warning.btn-xs
+                  i(class=user.state.blocked ? "fa-unlock" : "fa-lock").fa
+                  | &#32;
+                  =user.state.blocked ? "解除锁定" : "锁定"
     div.panel-footer
       include ../../shared/pagination
+block script
+  script(type="text/javascript").
+    $('.verify-btn').on('click', function(e) {
+      var verified = $(this).data('verified'),
+        title= '确定要设置该用户为信任用户？';
+      if (verified) {
+        title = '确定要取消对该用户的信任？';
+      }
+      
+      if (confirm(title)) {
+        var id = $(this).data('id');
+        $.post('/admin/users/' + id + '/verify')
+          .done(function(res) {
+            if (res.success) {
+              window.location.reload();
+            }
+          });
+      }
+    });
+    $('.block-btn').on('click', function(e) {
+      var locked = $(this).data('locked'),
+        title= '确定要锁定该用户？';
+      if (locked) {
+        title = '确定要解除该用户的锁定？';
+      }
+      
+      if (confirm(title)) {
+        var id = $(this).data('id');
+        $.post('/admin/users/' + id + '/block')
+          .done(function(res) {
+            if (res.success) {
+              window.location.reload();
+            }
+          });
+      }
+    });

@@ -1,6 +1,6 @@
 {
   "name": "cnodeclub",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "基于 Node.js 的社区系统",
   "main": "server/server.js",
   "scripts": {

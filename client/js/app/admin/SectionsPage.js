@@ -1,4 +1,4 @@
-NC.Module.define('SectionPage', [], function() {
+NC.Module.define('SectionsPage', [], function() {
   return NC.Module.extend({
     events: {
       'click .remove-btn': 'onRemoveClick'

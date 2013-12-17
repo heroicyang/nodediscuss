@@ -1,6 +1,6 @@
 extends ../layout
 block container
-  div#section-page.panel.panel-default
+  div#sections-page.panel.panel-default
     div.panel-heading
       div.pull-right
         a(href="/admin/sections/create").btn.btn-default.btn-xs 创建节点组
@@ -32,6 +32,6 @@ block container
 block script
   script(type="text/javascript").
     NC.moduleMapping.push({
-      name: 'SectionPage',
-      el: '#section-page'
+      name: 'SectionsPage',
+      el: '#sections-page'
     });

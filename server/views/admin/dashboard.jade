@@ -7,7 +7,7 @@ block container
       if recentTopics.length > 0
         each topic in recentTopics
           li.list-group-item
-            a(href="#") #{topic.title}
+            a(href="/admin/topics/#{topic._id}/edit") #{topic.title}
       else
         li.list-group-item 暂无话题。
   div.panel.panel-default

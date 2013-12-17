@@ -33,7 +33,7 @@ html(lang="zh-CN")
                 li(class=(path === '/settings') ? "active" : "")
                   a(href="/settings") 设置
                 if currentUser.isAdmin
-                  li: a(href="/admin") 后台管理
+                  li: a(href="/admin", target="_blank") 后台管理
                 li: a(href="#", rel="nofollow")#logout 退出
               else
                 li(class=(path === '/signup') ? "active" : "")

@@ -24,12 +24,17 @@ module.exports = exports = function(grunt) {
     case 'release':
       assetsJson = {
         js: ['app.min.js'],
+        adminjs: [
+          'app.min.js',
+          'admin.min.js'
+        ],
         css: ['style.min.css']
       };
       grunt.task.run('clean');
       grunt.task.run('stylus:development');
       grunt.task.run('cssmin');
       grunt.task.run('concat:app');
+      grunt.task.run('concat:admin');
       grunt.task.run('uglify');
       grunt.task.run(['copy:font', 'copy:img']);
       break;
@@ -38,14 +43,14 @@ module.exports = exports = function(grunt) {
     default:
       assetsJson = {
         js: [
-          'lib.js',
+          'vendor.js',
           'app.js',
           'requirejs.config.js'
         ],
         css: ['style.css']
       };
       grunt.task.run('stylus:development');
-      grunt.task.run('concat:lib');
+      grunt.task.run('concat:vendor');
       grunt.task.run('copy');
       grunt.task.run('watch:build');
       watching();
@@ -68,7 +73,7 @@ module.exports = exports = function(grunt) {
       }
       if (filepath.indexOf('client/js') !== -1) {
         grunt.task.run('clean:js');
-        grunt.task.run('concat:lib');
+        grunt.task.run('concat:vendor');
         grunt.task.run('copy:js');
       }
       if (filepath.indexOf('client/img') !== -1) {

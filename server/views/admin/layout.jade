@@ -38,11 +38,25 @@ html(lang="zh-CN")
       block container
 
     //- 根据 grunt build 之后的结果引入 js 文件
-    each file in assets.js
+    each file in (assets.adminjs || assets.js)
       script(src="/js/#{file}")
     //- 设置 ajax 模式下的 csrf
     script(type="text/javascript").
+      $.ajaxSetup({
+        dataType: 'json'
+      });
       $(document).ajaxSend(function(e, xhr) {
         xhr.setRequestHeader('X-CSRF-Token', '#{csrfToken}');
       });
     block script
+    //- 初始化前端模块
+    script(type="text/javascript").
+      ;(function() {
+        NC.loadModule({
+          name: 'App',
+          el: '#app',
+          children: NC.moduleMapping
+        }, function(module) {
+          NC.app = module;
+        });
+      }());

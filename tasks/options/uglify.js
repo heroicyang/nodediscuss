@@ -8,7 +8,12 @@ module.exports = exports = {
     banner: '<%= banner %>'
   },
   dist: {
-    src: '<%= dest %>/js/app.js',
-    dest: '<%= dest %>/js/app.min.js'
+    files: [{
+      src: '<%= dest %>/js/app.js',
+      dest: '<%= dest %>/js/app.min.js'
+    }, {
+      src: '<%= dest %>/js/admin.js',
+      dest: '<%= dest %>/js/admin.min.js'
+    }]
   }
 };

@@ -15,16 +15,21 @@ module.exports = exports = {
     }, {
       expand: true,
       cwd: 'client/js/app',
-      src: ['**'],
+      src: ['*.js'],
+      dest: '<%= dest %>/js/app/'
+    }, {
+      expand: true,
+      cwd: 'client/js/app/admin',
+      src: ['*.js'],
       dest: '<%= dest %>/js/app/'
     }]
   },
   font: {
     files: [{
       expand: true,
-      cwd: 'client/font/',
+      cwd: 'client/fonts/',
       src: ['*'],
-      dest: '<%= dest %>/font/'
+      dest: '<%= dest %>/fonts/'
     }]
   },
   img: {

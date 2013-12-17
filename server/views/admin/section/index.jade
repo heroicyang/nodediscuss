@@ -1,6 +1,6 @@
 extends ../layout
 block container
-  div.panel.panel-default
+  div#section-page.panel.panel-default
     div.panel-heading
       div.pull-right
         a(href="/admin/sections/create").btn.btn-default.btn-xs 创建节点组
@@ -31,14 +31,7 @@ block container
       include ../../shared/pagination
 block script
   script(type="text/javascript").
-    $('.remove-btn').on('click', function(e) {
-      if (confirm('确定要删除该节点组？删除后不可恢复。')) {
-        var id = $(this).data('id');
-        $.post('/admin/sections/' + id + '/remove')
-          .done(function(res) {
-            if (res.success) {
-              window.location.reload();
-            }
-          });
-      }
+    NC.moduleMapping.push({
+      name: 'SectionPage',
+      el: '#section-page'
     });

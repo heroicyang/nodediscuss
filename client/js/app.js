@@ -6,6 +6,7 @@
 var _ = window._;
 var NC = window.NC = {
   NOOP: function() {},
+  moduleMapping: [],
   /** 非 Backbone.View 模块的定义，请使用 Loader.define */
   Loader: {
     require: require,

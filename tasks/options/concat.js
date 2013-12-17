@@ -7,24 +7,24 @@
  */
 
 var libs = [
-  'client/js/lib/jquery.js',
-  'client/js/lib/json2.js',
-  'client/js/lib/lodash.underscore.js',
-  'client/js/lib/backbone.js',
-  'client/js/lib/bootstrap.js',
-  'client/js/lib/marked.js',
-  'client/js/lib/highlight.js',
-  'client/js/lib/jquery.ui.widget.js',
-  'client/js/lib/jquery.iframe-transport.js',
-  'client/js/lib/jquery.fileupload.js',
-  'client/js/lib/require.js'
+  'client/js/vendor/jquery.js',
+  'client/js/vendor/json2.js',
+  'client/js/vendor/lodash.underscore.js',
+  'client/js/vendor/backbone.js',
+  'client/js/vendor/bootstrap.js',
+  'client/js/vendor/marked.js',
+  'client/js/vendor/highlight.js',
+  'client/js/vendor/jquery.ui.widget.js',
+  'client/js/vendor/jquery.iframe-transport.js',
+  'client/js/vendor/jquery.fileupload.js',
+  'client/js/vendor/require.js'
 ];
 
 module.exports = exports = {
-  lib: {
+  vendor: {
     files: [{
       src: libs,
-      dest: '<%= dest %>/js/lib.js'
+      dest: '<%= dest %>/js/vendor.js'
     }]
   },
   app: {
@@ -34,6 +34,12 @@ module.exports = exports = {
         'client/js/app/*.js'
       ]),
       dest: '<%= dest %>/js/app.js'
+    }]
+  },
+  admin: {
+    files: [{
+      src: ['client/js/app/admin/*.js'],
+      dest: '<%= dest %>/js/admin.js'
     }]
   }
 };

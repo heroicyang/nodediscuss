@@ -19,12 +19,14 @@ var api = require('../api'),
   notification = require('./controllers/notification'),
   pages = require('./controllers/pages');
 
-var admin = {};
-admin.dashboard = require('./controllers/admin/dashboard');
-admin.section = require('./controllers/admin/section');
-admin.tag = require('./controllers/admin/tag');
-admin.user = require('./controllers/admin/user');
-admin.topic = require('./controllers/admin/topic');
+var admin = {
+  dashboard: require('./controllers/admin/dashboard'),
+  section: require('./controllers/admin/section'),
+  tag: require('./controllers/admin/tag'),
+  user: require('./controllers/admin/user'),
+  topic: require('./controllers/admin/topic'),
+  page: require('./controllers/admin/page')
+};
 
 module.exports = exports = function(app) {
   // 文件上传
@@ -128,6 +130,11 @@ module.exports = exports = function(app) {
       api.requestHandler(api.topic.toggleExcellent));
   app.post('/admin/topics/:id/remove',
       api.requestHandler(api.topic.remove));
+  app.get('/admin/pages', admin.page.index);
+  app.all('/admin/pages/create', admin.page.create);
+  app.all('/admin/pages/:id/edit', admin.page.edit);
+  app.post('/admin/pages/:id/remove',
+      api.requestHandler(api.page.remove));
 
   app.get(/^\/([a-zA-Z0-9_\-\/]+)\/?/, pages.get);
 };

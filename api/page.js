@@ -93,7 +93,7 @@ exports.edit = function(pageData, callback) {
         next(err, contentHtml);
       });
     },
-    function createPage(contentHtml, next) {
+    function updatePage(contentHtml, next) {
       pageData.contentHtml = contentHtml;
       pageData.editorId = editorId;
       Page.edit(pageData, function(err, page) {
@@ -105,20 +105,15 @@ exports.edit = function(pageData, callback) {
 
 /**
  * 获取某个页面信息
- * @param  {Object}   args
- *  - slug     required    页面地址
+ * @param  {Object}   conditions
  * @param  {Function} callback
  *  - err
  *  - page
  */
-exports.get = function(args, callback) {
-  var slug = args.slug;
-  
+exports.get = function(conditions, callback) {
   async.waterfall([
     function getPage(next) {
-      Page.findOne({
-        slug: slug
-      }, function(err, page) {
+      Page.findOne(conditions, function(err, page) {
         next(err, page);
       });
     },
@@ -141,10 +136,31 @@ exports.get = function(args, callback) {
 
 /**
  * 统计页面数量
+ * @param  {Object} conditions   过滤条件
  * @param  {Function} callback
  *  - err
  *  - count
  */
-exports.count = function(callback) {
-  Page.count(callback);
+exports.count = function(conditions, callback) {
+  Page.count(conditions, callback);
+};
+
+/**
+ * 根据主键删除页面
+ * @param  {Object}   args
+ *  - id   required   页面 id
+ * @param  {Function} callback
+ */
+exports.remove = function(args, callback) {
+  var id = args.id;
+  Page.findById(id, function(err, page) {
+    if (err) {
+      return callback(err);
+    }
+    if (!page) {
+      return callback(null, page);
+    }
+
+    page.remove(callback);
+  });
 };

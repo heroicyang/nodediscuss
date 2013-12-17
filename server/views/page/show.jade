@@ -16,11 +16,10 @@ block content
                 span=moment(page.updatedAt).fromNow()
               div
                 span 本页贡献者：&#32;
-                each author, idx in page.authors
-                  a(href="/user/#{author.username}",title="#{author.nickname}").username
-                    | #{author.nickname}
-                  if page.authors.length > 1 && page.authors.length !== idx + 1
-                    span ，
+                  - var authors = _.map(page.authors, function(author) {
+                  -    return '<a href="/user/"' + author.username + ' class="username">' + author.nickname + '</a>';
+                  -  }).join(', ')
+                  !{authors}
       div.row.content !{page.contentHtml}
     if isWiki
       div.panel-footer

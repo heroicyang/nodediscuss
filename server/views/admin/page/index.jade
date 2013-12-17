@@ -1,0 +1,41 @@
+extends ../layout
+block container
+  div#pages-page.panel.panel-default
+    div.panel-heading
+      div.pull-right
+        a(href="/admin/pages/create").btn.btn-default.btn-xs 创建页面
+      include ../../shared/breadcrumb
+    table.table.table-bordered.table-striped
+      thead
+        tr
+          th 页面地址
+          th 标题
+          th 编辑者
+          th 版本
+          th 最后编辑时间
+          th
+      tbody
+        each page in pages
+          tr
+            td #{page.slug}
+            td #{page.title}
+            td=_.pluck(page.authors, 'username').join(', ')
+            td #{page.version}
+            td=moment(page.updatedAt).format('YYYY-MM-DD HH:mm')
+            td
+              div.btn-group
+                a(href="/admin/pages/#{page._id}/edit").btn.btn-default.btn-xs
+                  i.fa.fa-pencil
+                  | &#32;编辑
+                button(type="button",
+                       data-id="#{page._id}").remove-btn.btn.btn-danger.btn-xs
+                  i.fa.fa-trash-o
+                  | &#32;删除
+    div.panel-footer
+      include ../../shared/pagination
+block script
+  script(type="text/javascript").
+    NC.moduleMapping.push({
+      name: 'PagesPage',
+      el: '#pages-page'
+    });

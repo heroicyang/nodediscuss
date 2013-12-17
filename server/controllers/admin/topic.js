@@ -75,6 +75,7 @@ exports.edit = function(req, res, next) {
       req.breadcrumbs('话题列表', '/admin/topics');
       req.breadcrumbs('编辑话题');
       res.render('admin/topic/edit', _.extend(results, {
+        topic: req.flash('body'),
         err: req.flash('err')
       }));
     });

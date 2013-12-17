@@ -123,6 +123,7 @@ module.exports = exports = function(app) {
   app.post('/admin/users/:id/block',
       api.requestHandler(api.user.toggleBlocked));
   app.get('/admin/topics', admin.topic.index);
+  app.all('/admin/topics/:id/edit', admin.topic.edit);
   app.post('/admin/topics/:id/excellent',
       api.requestHandler(api.topic.toggleExcellent));
   app.post('/admin/topics/:id/remove',

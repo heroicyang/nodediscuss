@@ -1,0 +1,57 @@
+extends ../layout
+block container
+  div.panel.panel-default
+    div.panel-heading
+      include ../../shared/breadcrumb
+    div.panel-body
+      include ../../shared/error_alert
+      form(role="form",
+           method="POST",
+           action="/admin/topics/" + topic._id + '/edit')#topic-edit-form.form-horizontal
+        div.form-group
+          div.col-xs-12.col-sm-3
+            select(name="tag[id]").form-control
+              option(value="") 请选择节点
+              each tagList, sectionName in tags
+                optgroup(label="#{sectionName}")
+                  each tag in tagList
+                    if currentTag && currentTag._id.toString() == tag._id.toString()
+                      option(value="#{tag._id}", selected) #{tag.name}
+                    else if topic && topic.tag.id === tag._id.toString()
+                      option(value="#{tag._id}", selected) #{tag.name}
+                    else
+                      option(value="#{tag._id}") #{tag.name}
+          div.col-xs-12.visible-xs.mobile-sep &#32;
+          div.col-xs-12.col-sm-9
+            input(type="text", name="title", 
+              maxlength="100", placeholder="请输入标题，字数在10到100个之间", 
+              value=topic ? topic.title : '',
+              required)#title.form-control
+        div.form-group
+          div.col-sm-12
+            textarea(name="content", rows="16")#content-editor.form-control
+              !{topic ? topic.content : ''}
+        div.form-group
+          div.col-sm-12
+            input(type="hidden", name="_csrf", value="#{csrfToken}")
+            if topic
+              input(type="hidden", name="id", value="#{topic._id}")
+            button(type="submit",
+                   data-loading-text="正在发布...")#submit-topic-btn.btn.btn-primary 发布
+block script
+  script(type="text/javascript").
+    NC.moduleMapping.push({
+      name: 'TopicEditForm',
+      el: '#topic-edit-form',
+      children: [
+        {
+          name: 'Editor',
+          el: '#content-editor'
+        },
+        {
+          name: 'ButtonBase',
+          el: '#submit-topic-btn',
+          id: 'submitTopicButton'
+        }
+      ]
+    });

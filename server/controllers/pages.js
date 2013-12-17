@@ -19,6 +19,12 @@ exports.wikis = function(req, res, next) {
   };
 
   api.page.query({
+    query: {
+      slug: {
+        $regex: 'wiki\/',
+        $options: 'i'
+      }
+    },
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
   }, function(err, results) {

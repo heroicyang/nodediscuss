@@ -109,3 +109,43 @@ exports.isUserExist = function(conditions, callback) {
     callback(null, !!user);
   });
 };
+
+/**
+ * 改变用户状态
+ * @param  {Object}   options
+ *  - id     required    用户 id
+ *  - state  required    变更状态
+ * @param  {Function} callback
+ *  - err
+ *  - user
+ */
+exports.changeState = function(options, callback) {
+  options = options || {};
+  var id = options.id,
+    state = options.state;
+  this.findByIdAndUpdate(id, {
+    state: state
+  }, function(err, user) {
+    callback(err, user);
+  });
+};
+
+/**
+ * 设置用户的认证状态
+ * @param {Object}   options
+ *  - id         required    用户 id
+ *  - verified   required    认证状态。true 代表设置为认证用户，false 则代表非认证
+ * @param {Function} callback
+ *  - err
+ *  - user
+ */
+exports.setVerified = function(options, callback) {
+  options = options || {};
+  var id = options.id,
+    verified = options.verified;
+  this.findByIdAndUpdate(id, {
+    verified: verified
+  }, function(err, user) {
+    callback(err, user);
+  });
+};

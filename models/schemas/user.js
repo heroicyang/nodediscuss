@@ -6,8 +6,10 @@
 /**
  * Module dependencies
  */
+var crypto = require('crypto');
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
+var constants = require('../constants');
 
 /**
  * Collection name in the database is `user`
@@ -18,8 +20,13 @@ var UserSchema = new Schema({
     type: String,
     index: true,
     unique: true,
-    lowercase: true
+    lowercase: true,
+    set: function(val) {
+      this.emailHash = crypto.createHash('md5').update(val).digest('hex');
+      return val;
+    }
   },
+  emailHash: String,
   username: {
     type: String,
     index: true,
@@ -35,7 +42,14 @@ var UserSchema = new Schema({
   avatar: String,
   tagline: String,
   bio: String,
-  website: String,
+  website: {
+    type: String,
+    set: function(val) {
+      if (val && !/(https?|s?ftp|git)/i.test(val)) {
+        return 'http://' + val;
+      }
+    }
+  },
   location: String,
   weibo: String,
   twitter: String,
@@ -46,18 +60,8 @@ var UserSchema = new Schema({
     default: false
   },
   state: {
-    activated: {
-      type: Boolean,
-      default: false
-    },
-    migrated: {
-      type: Boolean,
-      default: false
-    },
-    blocked: {
-      type: Boolean,
-      default: false
-    }
+    type: String,
+    default: constants.USER_STATE.DEFAULT
   },
 
   topicCount: {
@@ -80,12 +84,10 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  number: Number,
   score: {
     type: Number,
     default: 0
-  },
-  level: String
+  }
 }, {
   collection: 'user'
 });

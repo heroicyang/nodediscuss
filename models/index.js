@@ -32,12 +32,6 @@ module.exports = exports = mongoose.models;
  */
 exports.constants = require('./constants');
 
-/**
- * 将定义常量的方法也暴露出去
- * @type {Function}
- */
-exports.defineConstant = exports.constants.define;
-
 function registerModels() {
   var schemaPath = getFullPath('./schemas/');
 

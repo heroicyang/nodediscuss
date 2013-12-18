@@ -24,14 +24,14 @@ var TagSchema = new Schema({
   },
   name: {
     type: String,
-    index: true,
-    unique: true
+    index: true
   },
   section: {
     id: {
       type: String,
       index: true
     },
+    sort: Number,
     name: String
   },
   describe: String,
@@ -42,6 +42,10 @@ var TagSchema = new Schema({
   favoriteCount: {
     type: Number,
     default: 0
+  },
+  favoriteUsers: {
+    type: Array,
+    default: []
   }
 }, {
   collection: 'tag'

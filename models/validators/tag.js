@@ -9,15 +9,11 @@
 var ObjectId = require('mongoose').Types.ObjectId,
    _ = require('lodash');
 
-/**
- * Bootstrap
- * @param {Mongoose.Schema} schema
- * @return {Function}
- */
 module.exports = exports = function(schema) {
+  // 验证节点地址的有效性
   schema.path('slug')
-    .required(true, '节点的链接地址不能为空!')
-    .match(/^[a-z0-9\-_]+$/, '节点的链接地址只能为字母、数字、横线和下划线。')
+    .required(true, '节点地址不能为空!')
+    .match(/^[a-z0-9\-_]+$/, '节点地址只能为字母、数字、横线和下划线。')
     .validate(function(slug, done) {
       var Tag = this.model('Tag'),
         self = this;
@@ -32,28 +28,15 @@ module.exports = exports = function(schema) {
         }
         done(true);
       });
-    }, '该节点的链接地址已被使用。');
+    }, '该节点地址已被使用。');
 
-  addNameValidators(schema);
-  addSectionValidators(schema);
-};
-
-/**
- * Adds validators on `name` path
- * @param {Mongoose.Schema} schema
- */
-function addNameValidators(schema) {
+  // 验证节点名称
   schema.path('name')
     .required(true, '节点名称必填!');
-}
 
-/**
- * Adds validators on `section.id` path
- * @param {Mongoose.Schema} schema
- */
-function addSectionValidators(schema) {
+  // 验证节点所属的节点组
   schema.path('section.id')
-    .required(true, '必须提供节点组 id!')
+    .required(true, '必须选择所属节点组!')
     .validate(function(sectionId) {
       try {
         sectionId = new ObjectId(sectionId);
@@ -61,7 +44,7 @@ function addSectionValidators(schema) {
         return false;
       }
       return true;
-    }, '不是有效的节点组 id!')
+    }, 'Invalid section id.')    // 外键检查，不会直接显示给用户
     .validate(function(sectionId, done) {
       var Section = this.model('Section'),
         self = this;
@@ -71,10 +54,12 @@ function addSectionValidators(schema) {
           return done(false);
         }
 
+        // 将节点组副本信息保存到该节点，加快查询操作
         _.extend(self.section, {
-          name: section.name
+          name: section.name,
+          sort: section.sort
         });
         done(true);
       });
-    }, '该节点组不存在。');
-}
+    }, '所选择的节点组不存在。');
+};

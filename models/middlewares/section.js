@@ -21,8 +21,9 @@ module.exports = exports = function(schema) {
   schema
     .pre('save', true, function(next, done) {
       next();
-      // 如果更新了节点组的名称，则同步更新其节点的 section 副本信息
-      if (this.isNew || !this.isModified('name')) {
+      // 如果更新了节点组的名称和排序，则同步更新其节点的 section 副本信息
+      if (this.isNew) { return done(); }
+      if (!this.isModified('name') && !this.isModified('sort')) {
         return done();
       }
 
@@ -30,7 +31,8 @@ module.exports = exports = function(schema) {
       Tag.update({
         'section.id': this.id
       }, {
-        'section.name': this.name
+        'section.name': this.name,
+        'section.sort': this.sort
       }, {
         multi: true
       }, done);

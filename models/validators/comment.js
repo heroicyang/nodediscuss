@@ -36,17 +36,9 @@ module.exports = exports = function(schema) {
           return done(false);
         }
 
-        var repeated = false;
-        if (comments.length) {
-          _.each(comments, function(comment) {
-            if (comment.content === content) {
-              repeated = true;
-              return;
-            }
-          });
-        }
-
-        done(!repeated);
+        done(!_.find(comments, function(comment) {
+          return comment.content === content;
+        }));
       });
     }, '不能发表重复评论!');
 

@@ -35,7 +35,7 @@ var TopicSchema = new Schema({
     },
     username: String,
     nickname: String,
-    avatar: String
+    emailHash: String
   },
   lastCommentUser: {
     username: String,
@@ -43,7 +43,7 @@ var TopicSchema = new Schema({
   },
   lastCommentedAt: Date,
 
-  viewsCount: {
+  views: {
     type: Number,
     default: 0
   },
@@ -58,6 +58,10 @@ var TopicSchema = new Schema({
   favoriteCount: {
     type: Number,
     default: 0
+  },
+  favoriteUsers: {
+    type: Array,
+    default: []
   },
 
   excellent: {

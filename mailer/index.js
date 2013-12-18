@@ -1,17 +1,17 @@
 /**
- * 配置邮件发送策略，以及发送各种邮件
+ * 配置邮件发送策略，以及发送各种邮件的方法
  * @author heroic
  */
 
 /**
  * Module dependencies
  */
-var util = require('util'),
-  async = require('async'),
-  Mailer = require('../../plugins/mailer'),
+var util = require('util');
+var async = require('async');
+var Mailer = require('../plugins/mailer'),
   mailer = new Mailer(),
-  NodeMailerStrategy = require('../../plugins/nodemailer'),
-  config = require('../../config'),
+  NodeMailerStrategy = require('../plugins/nodemailer'),
+  config = require('../config'),
   renderer = require('./renderer');
 
 // 如果是生成环境，则禁用掉打印邮件内容的插件
@@ -20,8 +20,16 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // 加载 `NodeMailerStrategy` 插件
-mailer.use(new NodeMailerStrategy(config.mailer.options));
+if (config.mailer.strategy === 'nodemailer') {
+  mailer.use(new NodeMailerStrategy(config.mailer.options));
+}
 
+/**
+ * 发送帐号激活邮件
+ * @param  {Object}   user     用户对象
+ * @param  {Function} callback
+ *  - err
+ */
 exports.sendActivationMail = function(user, callback) {
   async.waterfall([
     function renderMailTmpl(next) {
@@ -41,6 +49,12 @@ exports.sendActivationMail = function(user, callback) {
   ], callback);
 };
 
+/**
+ * 发送密码重置邮件
+ * @param  {Object}   resetPass  密码重置记录
+ * @param  {Function} callback
+ *  - err
+ */
 exports.sendResetPassMail = function(resetPass, callback) {
   async.waterfall([
     function renderMailTmpl(next) {

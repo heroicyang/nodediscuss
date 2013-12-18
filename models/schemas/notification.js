@@ -16,7 +16,6 @@ var mongoose = require('mongoose'),
 var NotificationSchema = new Schema({
   masterId: {
     type: String,
-    required: true,
     index: true
   },
   userId: String,
@@ -24,7 +23,7 @@ var NotificationSchema = new Schema({
   topicId: String,
   masterCommentId: String,
   commentId: String,
-  hasRead: {
+  read: {
     type: Boolean,
     default: false
   }

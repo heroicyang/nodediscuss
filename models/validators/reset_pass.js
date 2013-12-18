@@ -9,10 +9,6 @@
 var moment = require('moment'),
   validate = require('../validate');
 
-/**
- * Bootstrap
- * @param  {Mongoose.Schema} schema
- */
 module.exports = exports = function(schema) {
   schema.path('email')
     .required(true, '电子邮件地址必填!')
@@ -22,7 +18,9 @@ module.exports = exports = function(schema) {
     .validate(function(email, done) {
       var User = this.model('User'),
         self = this;
-      User.findOneByEmail(email, function(err, user) {
+      User.findOne({
+        email: email
+      }, function(err, user) {
         if (err) {
           return done(false);
         }
@@ -33,10 +31,9 @@ module.exports = exports = function(schema) {
         self.userId = user.id;
         done(true);
       });
-    }, '没有该电子邮件地址注册的帐号。')
+    }, '不存在使用该电子邮件地址注册的帐号。')
     .validate(function(email, done) {
       var ResetPass = this.model('ResetPass');
-
       // 找到一天之内的重置记录
       ResetPass.find({ email: email })
         .where('createdAt').lte(new Date()).gte(moment().add('hours', -24).toDate())

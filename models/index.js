@@ -44,8 +44,12 @@ function registerModels() {
           validatorPath = getFullPath('./validators/' + schemaFile),
           instanceMethodPath = getFullPath('./methods/instance/' + schemaFile),
           classMethodPath = getFullPath('./methods/class/' + schemaFile),
-          preHookPath = getFullPath('./hooks/pre/' + schemaFile),
-          postHookPath = getFullPath('./hooks/post/' + schemaFile);
+          middlewarePath = getFullPath('./middlewares/' + schemaFile);
+
+        // Adds middlewares
+        if (fs.existsSync(middlewarePath)) {
+          require(middlewarePath)(schema);
+        }
 
         // Adds validators
         if (fs.existsSync(validatorPath)) {
@@ -60,16 +64,6 @@ function registerModels() {
         // Adds class methods
         if (fs.existsSync(classMethodPath)) {
           schema.static(require(classMethodPath));
-        }
-
-        // Adds pre hooks
-        if (fs.existsSync(preHookPath)) {
-          require(preHookPath)(schema);
-        }
-
-        // Adds post hooks
-        if (fs.existsSync(postHookPath)) {
-          require(postHookPath)(schema);
         }
 
         // Registers mongoose model

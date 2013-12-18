@@ -61,9 +61,9 @@ exports.readAll = function(args, callback) {
   Notification
     .update({
       masterId: userId,
-      hasRead: false
+      read: false
     }, {
-      hasRead: true
+      read: true
     }, {
       multi: true
     }, function(err) {
@@ -88,6 +88,6 @@ exports.getUnreadCount = function(args, callback) {
   var userId = (this.currentUser && this.currentUser.id) || args.userId;
   Notification.count({
     masterId: userId,
-    hasRead: false
+    read: false
   }, callback);
 };

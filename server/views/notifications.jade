@@ -10,7 +10,7 @@ block content
     ul.list-group
       if pagination.totalCount > 0
         each notification in notifications
-          li(class=notification.hasRead ? null : "unread").list-group-item.item
+          li(class=notification.read ? null : "unread").list-group-item.item
             div.media
               div.pull-left.avatar-48
                 a(href="/user/#{notification.user.username}")

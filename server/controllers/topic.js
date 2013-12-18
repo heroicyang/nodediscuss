@@ -156,7 +156,7 @@ exports.get = function(req, res, next) {
     comments: function(next) {
       api.comment.query({
         query: {
-          fkId: req.topic.id
+          refId: req.topic.id
         },
         pageIndex: pageIndex,
         pageSize: config.pagination.pageSize

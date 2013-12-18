@@ -24,8 +24,8 @@ describe('Model#Comment', function() {
   afterEach(shared.removeNotifications);
 
   describe('Validators', function() {
-    describe('Comment#fkId', function() {
-      it('fkId is required', function(done) {
+    describe('Comment#refId', function() {
+      it('refId is required', function(done) {
         var comment = new Comment({
           content: 'this is a test comment...',
           author: {
@@ -39,9 +39,9 @@ describe('Model#Comment', function() {
         });
       });
 
-      it('fkId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('refId must be a Mongoose.Schema.ObjectId value to string', function(done) {
         var comment = new Comment({
-          fkId: '1234',
+          refId: '1234',
           content: 'this is a test comment...',
           author: {
             id: this.user.id
@@ -58,7 +58,7 @@ describe('Model#Comment', function() {
     describe('Comment#content', function() {
       it('comment content can not be empty', function(done) {
         var comment = new Comment({
-          fkId: this.topic.id,
+          refId: this.topic.id,
           author: {
             id: this.user.id
           }
@@ -72,7 +72,7 @@ describe('Model#Comment', function() {
 
       it('comment can not be repeated', function(done) {
         var comment = new Comment({
-          fkId: this.topic.id,
+          refId: this.topic.id,
           content: this.comment.content,
           author: {
             id: this.user.id
@@ -89,7 +89,7 @@ describe('Model#Comment', function() {
     describe('Comment#author.id', function() {
       it('`author.id` is required', function(done) {
         var comment = new Comment({
-          fkId: this.topic.id,
+          refId: this.topic.id,
           content: 'this is a test comment...'
         });
         comment.validate(function(err) {
@@ -101,7 +101,7 @@ describe('Model#Comment', function() {
 
       it('`author.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
         var comment = new Comment({
-          fkId: this.topic.id,
+          refId: this.topic.id,
           content: 'this is a test comment...',
           author: {
             id: '1234'
@@ -116,7 +116,7 @@ describe('Model#Comment', function() {
 
       it('`author.id` record must exist in the database', function(done) {
         var comment = new Topic({
-          fkId: this.topic.id,
+          refId: this.topic.id,
           content: 'this is a test comment...',
           author: {
             id: '123456789012345678901234'
@@ -135,7 +135,7 @@ describe('Model#Comment', function() {
     describe('pre/comment.js', function() {
       it('xss sanitize before validation', function(done) {
         var comment = new Comment({
-          fkId: this.topic.id,
+          refId: this.topic.id,
           content: '<script>alert(\'xss\');</script>',
           author: {
             id: this.user.id
@@ -198,7 +198,7 @@ describe('Model#Comment', function() {
         async.waterfall([
           function replyComment(next) {
             Comment.create({
-              fkId: self.topic.id,
+              refId: self.topic.id,
               commentIds: [self.comment.id],
               content: 'this is a reply comment...',
               author: {

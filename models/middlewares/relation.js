@@ -1,20 +1,19 @@
 /**
- * 定义 RelationSchema 的 pre-hooks
+ * RelationSchema middlewares
  * @author heroic
  */
 
 /**
  * Module dependencies
  */
-var constants = require('../../constants');
+var constants = require('../constants');
 
-/** Exports hooks */
 module.exports = exports = function(schema) {
-  // 添加关注时
+  // 执行数据保存前
   schema
     .pre('save', true, function(next, done) {
       next();
-      // 更新用户的关注数
+      // 当 follow 某个用户时更新自己的关注数量
       var User = this.model('User');
       User.findByIdAndUpdate(this.userId, {
         $inc: {
@@ -24,7 +23,7 @@ module.exports = exports = function(schema) {
     })
     .pre('save', true, function(next, done) {
       next();
-      // 更新被关注用户的粉丝数
+      // 当 follow 某个用户时更新该用户的粉丝数量
       var User = this.model('User');
       User.findByIdAndUpdate(this.followId, {
         $inc: {
@@ -34,7 +33,7 @@ module.exports = exports = function(schema) {
     })
     .pre('save', true, function(next, done) {
       next();
-      // 给被关注用户发送提醒
+      // 当 follow 某个用户时给该用户发送提醒
       var Notification = this.model('Notification');
       Notification.create({
         masterId: this.followId,
@@ -43,11 +42,11 @@ module.exports = exports = function(schema) {
       }, done);
     });
 
-  // 取消关注时
+  // 执行数据删除前
   schema
     .pre('remove', true, function(next, done) {
       next();
-      // 更新用户的关注数
+      // 当取消 follow 某个用户时更新自己的关注数量
       var User = this.model('User');
       User.findByIdAndUpdate(this.userId, {
         $inc: {
@@ -57,7 +56,7 @@ module.exports = exports = function(schema) {
     })
     .pre('remove', true, function(next, done) {
       next();
-      // 更新被关注用户的粉丝数
+      // 当取消 follow 某个用户时更新该用户的粉丝数量
       var User = this.model('User');
       User.findByIdAndUpdate(this.followId, {
         $inc: {

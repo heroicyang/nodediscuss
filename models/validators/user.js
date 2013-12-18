@@ -6,25 +6,12 @@
 /**
  * Module dependencies
  */
-var validate = require('../validate');
+var _ = require('lodash');
+var validate = require('../validate'),
+  constants = require('../constants');
 
-/**
- * Bootstrap
- * @param {Mongoose.Schema} schema
- * @return {Function}
- */
 module.exports = exports = function(schema) {
-  addEmailValidators(schema);
-  addUsernameValidators(schema);
-  addPasswordValidators(schema);
-  addWebsiteValidators(schema);
-};
-
-/**
- * Adds validators on `email` path
- * @param {Mongoose.Schema} schema
- */
-function addEmailValidators(schema) {
+  // 验证电子邮件地址是否有效
   schema.path('email')
     .required('true', '电子邮件地址必填!')
     .validate(function(email) {
@@ -32,8 +19,10 @@ function addEmailValidators(schema) {
     }, '不像是有效的电子邮件地址。')
     .validate(function(email, done) {
       var self = this,
-        User = this.model(this.constructor.modelName);
-      User.findOneByEmail(email, function(err, user) {
+        User = this.model('User');
+      User.findOne({
+        email: email
+      }, function(err, user) {
         if (err) {
           return done(false);
         }
@@ -43,13 +32,8 @@ function addEmailValidators(schema) {
         done(true);
       });
     }, '该邮件地址已被注册。');
-}
 
-/**
- * Adds validators on `username` path
- * @param {Mongoose.Schema} schema
- */
-function addUsernameValidators(schema) {
+  // 验证用户名是否有效
   schema.path('username')
     .required('true', '用户名不能为空!')
     .validate(function(username) {
@@ -58,11 +42,13 @@ function addUsernameValidators(schema) {
     .validate(function(username) {
       return username.length <= 16;
     }, '用户名最多为16位。')
-    .match(/^[a-zA-Z0-9\-_]+$/, '用户名无效! 仅支持字母与数字。')
+    .match(/^[a-zA-Z0-9\-_]+$/, '用户名无效! 仅支持字母、数字和下划线。')
     .validate(function(username, done) {
       var self = this,
-        User = this.model(this.constructor.modelName);
-      User.findOneByUsername(username, function(err, user) {
+        User = this.model('User');
+      User.findOne({
+        username: username
+      }, function(err, user) {
         if (err) {
           return done(false);
         }
@@ -72,13 +58,8 @@ function addUsernameValidators(schema) {
         done(true);
       });
     }, '该用户名已被注册。');
-}
-
-/**
- * Adds validators on `passwordHashed` path
- * @param {Mongoose.Schema} schema
- */
-function addPasswordValidators(schema) {
+  
+  // 验证用户密码
   schema.path('passwordHashed')
     .validate(function() {
       if (this.isNew) {
@@ -98,13 +79,8 @@ function addPasswordValidators(schema) {
       }
       return this.password.length <= 31;
     }, '密码最多为31位');
-}
-
-/**
- * Adds validators on `website` path
- * @param {Mongoose.Schema} schema
- */
-function addWebsiteValidators(schema) {
+  
+  // 如果有填写用户的个人主页，则验证是否是有效的网址
   schema.path('website')
     .validate(function(website) {
       if (website) {
@@ -112,4 +88,10 @@ function addWebsiteValidators(schema) {
       }
       return true;
     }, '不像是有效的网站地址。');
-}
+
+  // 非用户输入性验证，所以没有自定义错误提示信息
+  // 用户状态检查
+  schema.path('state')
+    .required(true)
+    .enum(_.values(constants.USER_STATE));
+};

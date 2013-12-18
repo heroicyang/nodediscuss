@@ -14,16 +14,17 @@ var mongoose = require('mongoose'),
  * @type {Schema}
  */
 var CommentSchema = new Schema({
-  // 所关联到的外键 id，即 Topic 或 Page 的 id
-  fkId: {
+  // 对应的 Topic 或 Page 的 id
+  refId: {
     type: String,
     index: true
   },
-  // 当评论 Page 时设为 true
+  // 当设置为 true 时代表评论 Page
   onPage: {
     type: Boolean,
     default: false
   },
+  // 被回复评论的 id
   commentIds: [String],
   content: String,
   contentHtml: String,
@@ -34,7 +35,7 @@ var CommentSchema = new Schema({
     },
     username: String,
     nickname: String,
-    avatar: String
+    emailHash: String
   },
   floor: {
     type: Number,
@@ -44,7 +45,7 @@ var CommentSchema = new Schema({
     type: Number,
     default: 0
   },
-  // 评论只做软删除，以便应对回复楼层的上下文
+  // 评论只做软删除，以便界面上显示连续的评论楼层
   deleted: {
     type: Boolean,
     default: false

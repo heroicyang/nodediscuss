@@ -21,7 +21,10 @@ var SectionSchema = new Schema({
   },
   sort: {
     type: Number,
-    default: 0
+    default: 0,
+    set: function(val) {
+      return parseInt(val, 10);
+    }
   }
 }, {
   collection: 'section'

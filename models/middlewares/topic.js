@@ -1,31 +1,27 @@
 /**
- * 定义 TopicSchema 的 pre-hooks
+ * TopicSchema middlewares
  * @author heroic
  */
 
 /**
-* Module dependencies
-*/
-var sanitize = require('validator').sanitize;
+ * Module dependencies
+ */
+var sanitize = require('../sanitize');
 
-/** Exports hooks */
 module.exports = exports = function(schema) {
-  // 验证之前先处理输入的数据
+  // 执行数据验证之前
   schema
     .pre('validate', function(next) {
-      this.title = sanitize(this.title).xss();
-      this.content = sanitize(this.content).xss();
+      sanitize(this, ['title', 'content']);
       next();
     });
 
-  // 创建话题时需要做以下操作
+  // 执行数据保存之前
   schema
     .pre('save', true, function(next, done) {
       next();
-      // 增加更新对应用户的话题数量，只在创建时更新
-      if (!this.isNew) {
-        return done();
-      }
+      // 创建话题时更新其作者的话题数量属性
+      if (!this.isNew) { return done(); }
 
       var User = this.model('User');
       User.findByIdAndUpdate(this.author.id, {
@@ -36,11 +32,9 @@ module.exports = exports = function(schema) {
     })
     .pre('save', true, function(next, done) {
       next();
-      // 增加对应节点的话题数量，只在创建时更新
-      if (!this.isNew) {
-        return done();
-      }
-      
+      // 创建话题时更新其所属节点的话题数量属性
+      if (!this.isNew) { return done(); }
+
       var Tag = this.model('Tag');
       Tag.findByIdAndUpdate(this.tag.id, {
         $inc: {
@@ -49,11 +43,11 @@ module.exports = exports = function(schema) {
       }, done);
     });
 
-  // 删除话题时需要做以下操作
+  // 执行数据删除之前
   schema
     .pre('remove', true, function(next, done) {
       next();
-      // 减少对应用户的话题数量
+      // 删除话题时更新其作者的话题数量属性
       var User = this.model('User');
       User.findByIdAndUpdate(this.author.id, {
         $inc: {
@@ -63,7 +57,7 @@ module.exports = exports = function(schema) {
     })
     .pre('remove', true, function(next, done) {
       next();
-      // 减少对应节点的话题数量
+      // 删除话题时更新其所属节点的话题数量属性
       var Tag = this.model('Tag');
       Tag.findByIdAndUpdate(this.tag.id, {
         $inc: {

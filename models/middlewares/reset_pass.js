@@ -1,15 +1,14 @@
 /**
- * ResetPassSchema pre-hooks
+ * ResetPassSchema middlewares
  * @author heroic
  */
 
-/** Exports hooks */
 module.exports = exports = function(schema) {
+  // 执行数据保存之前
   schema
     .pre('save', true, function(next, done) {
       next();
-
-      // 将之前的重置记录都作废掉
+      // 在创建新的密码找回记录时将之前的重置记录都作废掉
       var ResetPass = this.model('ResetPass');
       ResetPass.update({
         userId: this.userId,

@@ -9,51 +9,26 @@
 var ObjectId = require('mongoose').Types.ObjectId,
   _ = require('lodash');
 
-/**
- * Bootstrap
- * @param {Mongoose.Schema} schema
- * @return {Function}
- */
 module.exports = exports = function(schema) {
-  addFKIdValidators(schema);
-  addContentValidators(schema);
-  addAuthorValidators(schema);
-};
-
-/**
- * Adds validators on `fkId` path
- * @param {Mongoose.Schema} schema
- */
-function addFKIdValidators(schema) {
-  schema.path('fkId')
-    .required(true, '必须提供话题 id!')
-    .validate(function(fkId) {
+  // 对关联的话题或页面 id 进行约束性检查
+  schema.path('refId')
+    .required(true)
+    .validate(function(refId) {
       try {
-        fkId = new ObjectId(fkId);
+        refId = new ObjectId(refId);
       } catch (e) {
         return false;
       }
       return true;
-    }, '不是有效的话题 id!');
-}
+    }, 'Invalid ref id.');
 
-/**
- * Adds validators on `content` path
- * @param {Mongoose.Schema} schema
- */
-function addContentValidators(schema) {
+  // 验证评论内容的有效性
   schema.path('content')
     .required(true, '评论内容不能为空!')
     .validate(function(content, done) {
-      // 如果触发本次验证是对 comment 进行软删除，那就直接跳过
-      if (this.deleted) {
-        return done(true);
-      }
-
       var Comment = this.model('Comment');
-
       Comment.find({
-        fkId: this.fkId,
+        refId: this.refId,
         'author.id': this.author.id,
         deleted: false
       }, function(err, comments) {
@@ -61,28 +36,15 @@ function addContentValidators(schema) {
           return done(false);
         }
 
-        var repeated = false;
-        if (comments.length) {
-          _.each(comments, function(comment) {
-            if (comment.content === content) {
-              repeated = true;
-              return;
-            }
-          });
-        }
-
-        done(!repeated);
+        done(!_.find(comments, function(comment) {
+          return comment.content === content;
+        }));
       });
     }, '不能发表重复评论!');
-}
 
-/**
- * Adds validators on `author.id` path
- * @param {Mongoose.Schema} schema
- */
-function addAuthorValidators(schema) {
+  // 对评论的 `author.id` 进行约束性检查，以及拷贝用户信息副本到评论对象
   schema.path('author.id')
-    .required(true, '必须提供评论用户 id!')
+    .required(true)
     .validate(function(authorId) {
       try {
         authorId = new ObjectId(authorId);
@@ -90,7 +52,7 @@ function addAuthorValidators(schema) {
         return false;
       }
       return true;
-    }, '不是有效的用户 id!')
+    }, 'Invalid author id.')
     .validate(function(authorId, done) {
       var User = this.model('User'),
         self = this;
@@ -99,13 +61,13 @@ function addAuthorValidators(schema) {
         if (err || !user) {
           return done(false);
         }
-
+        // 将用户信息拷贝到评论的 author 副本中
         _.extend(self.author, {
           username: user.username,
           nickname: user.nickname,
-          avatar: user.avatar
+          emailHash: user.emailHash
         });
         done(true);
       });
-    }, '评论用户不存在。');
-}
+    }, 'The comment user does not exist!');
+};

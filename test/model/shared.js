@@ -141,7 +141,7 @@ exports.removeTopics = function(callback) {
 exports.createComment = function(callback) {
   var self = this;
   Comment.create({
-    fkId: this.topic.id,
+    refId: this.topic.id,
     content: 'this is a test comment',
     author: {
       id: this.user.id

@@ -18,7 +18,7 @@ exports.create = function(req, res, next) {
   var data = req.body,
     topicId = data.topicId;
   _.extend(data, {
-    fkId: topicId,
+    refId: topicId,
     author: {
       id: req.currentUser.id
     }

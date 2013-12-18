@@ -8,14 +8,14 @@ CNode Club 是 Node.js 中文技术社区系统 [Node Club] 的重写版本，�
 
 目前 Node Club 所依赖的库版本均比较滞后，而且在信息结构上也不是很完善，所以我这个所谓的重写版本其实是全新的项目，与 Node Club 可能有着很大的出入。不过这个项目的初衷主要是验证我的一个架构构想（基于 [Express] + [Mongoose] ），但是我会尽最大力度来保证现有 Node Club 数据的可移植性，争取在将来可以更新到现有的 [CNode] 社区。
 
-正在努力的开发中，欢迎反馈建议！
+目前最小可用版本为`0.1.2`分支，欢迎试用或提出建议！
 
 ##安装部署
 
 ```bash
 # install node npm mongodb grunt-cli, and run mongod
 
-$ git clone https://github.com/heroicyang/cnodeclub.git
+$ git clone -b 0.1.2 https://github.com/heroicyang/cnodeclub.git
 $ cd cnodeclub
 $ npm install
 $ grunt                  # 查看详细的命令提示

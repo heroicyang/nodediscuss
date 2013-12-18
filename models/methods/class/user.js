@@ -114,7 +114,7 @@ exports.isUserExist = function(conditions, callback) {
  * 改变用户状态
  * @param  {Object}   options
  *  - id     required    用户 id
- *  - state  required    变更状态
+ *  - state  required    变更的状态。状态值参见`constants.USER_STATE`
  * @param  {Function} callback
  *  - err
  *  - user

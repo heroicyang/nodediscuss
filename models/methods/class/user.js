@@ -111,6 +111,36 @@ exports.isUserExist = function(conditions, callback) {
 };
 
 /**
+ * 检查用户密码是否正确
+ * @param  {Object}   userData
+ *  - email      required    电子邮箱
+ *  - password   required    密码
+ * @param  {Function} callback
+ *  - err
+ *  - result      用户不存在则返回 null
+ *    - user      用户对象
+ *    - passed    密码正确则返回 true
+ */
+exports.check = function(userData, callback) {
+  var email = userData.email,
+    password = userData.password;
+  this.get({
+    email: email
+  }, function(err, user) {
+    if (err) {
+      return callback(err);
+    }
+    if (!user) {
+      return callback(null, null);
+    }
+    callback(null, {
+      user: user,
+      passed: user.authenticate(password)
+    });
+  });
+};
+
+/**
  * 改变用户状态
  * @param  {Object}   options
  *  - id     required    用户 id

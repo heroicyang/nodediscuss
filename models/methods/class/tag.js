@@ -105,3 +105,27 @@ exports.destroy = function(conditions, callback) {
     tag.remove(callback);
   });
 };
+
+/**
+ * 检查用户是否收藏了该节点
+ * @param  {Object}   options
+ *  - userId    required    用户 id
+ *  - tagId     required    节点 id
+ * @param  {Function} callback
+ *  - err
+ *  - favorited
+ */
+exports.isFavoritedBy = function(options, callback) {
+  options = options || {};
+  var userId = options.userId,
+    tagId = options.tagId;
+  this.findOne({
+    _id: tagId,
+    favoriteUsers: userId
+  }, function(err, tag) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, !!tag);
+  });
+};

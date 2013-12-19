@@ -27,8 +27,11 @@ var PageSchema = new Schema({
   },
   content: String,
   contentHtml: String,
-  authorIds: [String],
-  canComment: {
+  contributors: {
+    type: Array,
+    default: []
+  },
+  commentEnabled: {
     type: Boolean,
     default: true
   },

@@ -19,7 +19,7 @@ var _ = require('lodash');
  * @param  {Function} callback
  *  - err
  *  - count  记录总数
- *  - tags  节点数据
+ *  - tags   节点数据
  */
 exports.query = function(options, callback) {
   options = options || {};
@@ -41,7 +41,7 @@ exports.add = function(tagData, callback) {
 
 /**
  * 修改节点信息
- * @param  {Object}   userData   节点数据
+ * @param  {Object}   tagData   节点数据
  *  - id     required   节点 id
  * @param  {Function} callback
  *  - err

@@ -8,7 +8,7 @@
  */
 var _ = require('lodash'),
   async = require('async');
-var marked = require('../../../lib/marked');
+var marked = require('../../../libs/marked');
 
 /**
  * 获取页面数据

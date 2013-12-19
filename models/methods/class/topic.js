@@ -8,7 +8,7 @@
  */
 var _ = require('lodash'),
   async = require('async');
-var marked = require('../../../lib/marked');
+var marked = require('../../../libs/marked');
 
 /**
  * 转换内容中的 `@username` 为链接形式

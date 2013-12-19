@@ -9,58 +9,98 @@
 var _ = require('lodash');
 
 /**
- * 查找所有的节点并按照节点组分组
- * @param  {Function} callback  回调函数
- *  - err    MongooseError
- *  - tags  按节点组分组后的节点对象，对象的 key 为节点组名称
- * @return {null}
+ * 获取节点数据
+ * @param  {Object}   options
+ *  - query          optional   查询条件，默认查询全部
+ *  - notPaged       optional   不分页则传入 true，默认 false
+ *  - pageIndex      optional   当前页数，默认 1
+ *  - pageSize       optional   返回的记录数，默认 20
+ *  - sort  {Object} optional   排序规则，默认按创建时间倒序
+ * @param  {Function} callback
+ *  - err
+ *  - count  记录总数
+ *  - tags  节点数据
  */
-exports.findAllGroupedBySection = function(callback) {
-  this.find()
-    .exec(function(err, tags) {
-      if (err) {
-        return callback(err);
-      }
-      tags = _.groupBy(tags, function(tag) {
-        return tag.section.name;
-      });
-      callback(null, tags);
-    });
+exports.query = function(options, callback) {
+  options = options || {};
+  var conditions = options.query || options.conditions || {};
+  options = _.omit(options, ['query', 'conditions']);
+  this.paginate(conditions, options, callback);
 };
 
 /**
- * 获取最热门的节点
- * @param  {Number|Function}   limit    要取得的节点数量或者回调函数
- * @param  {Function} callback          回调函数
- *  - err         MongooseError
- *  - tags  节点列表
- * @return {null}
+ * 增加新节点
+ * @param {Object}   tagData    节点数据
+ * @param {Function} callback
+ *  - err
+ *  - tag
  */
-exports.findTops = function(limit, callback) {
-  if (typeof limit === 'function') {
-    callback = limit;
-    limit = 5;
-  }
-
-  this.find()
-    .sort({
-      topicCount: -1
-    })
-    .limit(limit)
-    .exec(callback);
+exports.add = function(tagData, callback) {
+  this.create(tagData, callback);
 };
 
 /**
- * 删除节点
- * @param  {String}   id       节点 id
- * @param  {Function} callback 回调函数
- *  - err    MongooseError
- * @return {null}
+ * 修改节点信息
+ * @param  {Object}   userData   节点数据
+ *  - id     required   节点 id
+ * @param  {Function} callback
+ *  - err
+ *  - tag
  */
-exports.destroy = function(id, callback) {
+exports.edit = function(tagData, callback) {
+  var id = tagData.id || tagData._id;
+  tagData = _.omit(tagData, ['_id, id']);
+
   this.findById(id, function(err, tag) {
     if (err) {
       return callback(err);
+    }
+
+    if (!tag || _.isEmpty(tagData)) {
+      return callback(null, tag);
+    }
+
+    _.extend(tag, tagData);
+    tag.save(callback);
+  });
+};
+
+/**
+ * 根据条件查询单一节点
+ * @param  {Object}   conditions   查询条件
+ * @param  {Function} callback
+ *  - err
+ *  - tag
+ */
+exports.get = function(conditions, callback) {
+  this.findOne(conditions, callback);
+};
+
+/**
+ * 根据条件统计节点数量
+ * @param  {Object}   conditions   查询条件
+ * @param  {Function} callback
+ *  - err
+ *  - count
+ */
+exports.count = function(conditions, callback) {
+  this.count(conditions, callback);
+};
+
+/**
+ * 根据条件查询单个节点并删除该节点
+ * @param  {Object}   conditions   查询条件
+ * @param  {Function} callback
+ *  - err
+ *  - tag
+ */
+exports.destroy = function(conditions, callback) {
+  this.get(conditions, function(err, tag) {
+    if (err) {
+      return callback(err);
+    }
+    if (!tag) {
+      return callback(null, tag);
     }
     tag.remove(callback);
   });

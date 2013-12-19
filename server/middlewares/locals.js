@@ -7,49 +7,49 @@
  * Module dependencies
  */
 var _ = require('lodash'),
-  moment = require('moment'),
-  config = require('../../config'),
+  moment = require('moment');
+var config = require('../../config'),
+  constants = require('../api').constants,
   assets = require('../../assets.json'),
-  constants = require('../../models').constants,
   version = require('../../package.json').version;
 
 module.exports = exports = function() {
   return function(req, res, next) {
     res.locals = res.locals || {};
+    // helper
+    res.locals._ = _;
+    res.locals.moment = moment;
+
     res.locals.path = req.path;
     res.locals.csrfToken = req.csrfToken && req.csrfToken();
     res.locals.version = version;
-
     // 设置 breadcrumbs 数据
     res.locals.breadcrumbs = req.breadcrumbs();
-
-    res.locals.site = {};
-    res.locals.site.domain = 'http://' + config.host;
-    res.locals.site.name = config.name;
-    res.locals.site.title = config.title;
-    res.locals.site.description = config.description;
-    res.locals.assets = assets;
-
     res.locals.constants = constants;
+
+    res.locals.site = {
+      domain: 'http://' + config.host,
+      name: config.name,
+      title: config.title,
+      description: config.description
+    };
+    res.locals.assets = assets;
 
     res.locals.isAuthenticated = req.isAuthenticated();
     if (req.isAuthenticated()) {
       if (_.contains(config.adminEmails, req.currentUser.email)) {
         req.currentUser.isAdmin = true;
       }
+      res.locals.currentUser = req.currentUser;
 
       var currentUser = _.pick(req.currentUser, [
-        '_id', 'username', 'nickname', 'avatar', 'topicCount',
-        'wikiCount', 'followerCount', 'followingCount',
-        'favoriteTopicCount', 'favoriteTagCount'
+        '_id', 'username', 'nickname', 'emailHash', 'topicCount',
+        'followerCount', 'followingCount', 'favoriteTopicCount', 'favoriteTagCount'
       ]);
       currentUser.id = req.currentUser.id;
-      res.locals.currentUser = req.currentUser;
       res.locals.currentUserJson = JSON.stringify(currentUser);
     }
-    
-    res.locals._ = _;
-    res.locals.moment = moment;
+
     next();
   };
 };

@@ -27,7 +27,9 @@ exports.error500 = function() {
       return next();
     }
 
-    if (err.name === 'ValidationError' || err.name === 'CentralizedError') {
+    if (err.name === 'ValidationError' ||
+          err.name === 'NotAllowedError' ||
+          err.name === 'CentralizedError') {
       var redirectPath = req.flash('redirectPath') || req.path;
       req.flash('err', err);
       req.flash('body', req.body);

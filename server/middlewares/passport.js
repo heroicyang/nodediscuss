@@ -1,6 +1,6 @@
 var async = require('async'),
   passport = require('passport'),
-  api = require('../../api');
+  api = require('../api');
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -9,18 +9,17 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (id, done) {
   async.waterfall([
     function getUser(next) {
-      api.user.get({
-        id: id
-      }, function (err, user) {
-        next(err, user);
-      });
+      api.User.get({
+        _id: id
+      }, next);
     },
     function getUnreadNotifyCount(user, next) {
       if (!user) {
         return next(null, user);
       }
-      api.notification.getUnreadCount({
-        userId: user.id
+      api.Notification.getCount({
+        userId: user.id,
+        read: false
       }, function(err, count) {
         if (err) {
           return next(err);

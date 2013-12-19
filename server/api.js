@@ -11,6 +11,9 @@ var models = require('../models');
 
 module.exports = exports = models.api;
 
+/** 暴露 model 层的常量 */
+exports.constants = models.constants;
+
 /**
  * 使用 api 中的方法响应 http 请求
  * @param  {Function} apiMethod  需要调用的 api 方法

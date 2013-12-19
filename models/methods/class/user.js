@@ -121,7 +121,7 @@ exports.isUserExist = function(conditions, callback) {
  */
 exports.changeState = function(options, callback) {
   options = options || {};
-  var id = options.id,
+  var id = options.id || options._id,
     state = options.state;
   this.findByIdAndUpdate(id, {
     state: state
@@ -141,8 +141,8 @@ exports.changeState = function(options, callback) {
  */
 exports.setVerified = function(options, callback) {
   options = options || {};
-  var id = options.id,
-    verified = options.verified;
+  var id = options.id || options._id,
+    verified = _.isUndefined(options.verified) ? false : options.verified;
   this.findByIdAndUpdate(id, {
     verified: verified
   }, function(err, user) {

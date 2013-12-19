@@ -101,13 +101,13 @@ exports.edit = function(topicData, callback) {
 
 /**
  * 根据条件查询单一话题
- * @param  {Object}   conditions   查询条件
+ * @param  {Object}   conditions  查询条件
  * @param  {Function} callback
  *  - err
  *  - topic
  */
 exports.get = function(conditions, callback) {
-  this.findOne(conditions, callback);
+  this.findOne(conditions, null, { createdAt: -1 }, callback);
 };
 
 /**

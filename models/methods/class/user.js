@@ -90,7 +90,7 @@ exports.get = function(conditions, callback) {
  *  - err
  *  - count
  */
-exports.count = function(conditions, callback) {
+exports.getCount = function(conditions, callback) {
   this.count(conditions, callback);
 };
 

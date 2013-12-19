@@ -6,7 +6,7 @@
 /**
  * Module dependencies
  */
-var api = require('../api'),
+var api = require('./api'),
   auth = require('./middlewares/auth'),
   upload = require('./controllers/upload'),
   user = require('./controllers/user'),
@@ -30,14 +30,14 @@ var admin = {
 
 module.exports = exports = function(app) {
   // 文件上传
-  app.all('/upload/:type', auth.isLogin);
+  app.all('/upload/:type', auth.loginRequired);
   app.post('/upload/image', upload.uploadImage);
 
   // 用户
-  app.all('/signup', auth.unLogin, user.signup);
-  app.all('/signin', auth.unLogin, user.signin);
+  app.all('/signup', auth.loginNotAllowed, user.signup);
+  app.all('/signin', auth.loginNotAllowed, user.signin);
   app.get('/active', user.activate);
-  app.post('/logout', auth.isLogin, user.logout);
+  app.post('/logout', auth.loginRequired, user.logout);
   app.all('/forgot', user.forgotPassword);
   app.all('/reset', user.resetPassword);
 
@@ -45,23 +45,24 @@ module.exports = exports = function(app) {
   app.get('/user/:username', user.get);
   app.get('/user/:username/topics', topics.byUser);
   app.get('/user/:username/comments', user.comments);
-  app.post('/user/:username/:op', auth.isLogin);
+  app.post('/user/:username/:op', auth.loginRequired);
   // 关注的相关操作直接调用 api
   app.post('/user/:username/follow',
-      api.requestHandler(api.relation.create));
+      api.requestHandler(api.Relation.create));
   app.post('/user/:username/unfollow',
-      api.requestHandler(api.relation.remove));
+      api.requestHandler(api.Relation.remove));
+  /*
   app.get('/user/:username/repos',
-      api.requestHandler(api.user.githubRepos));
+      api.requestHandler(api.User.githubRepos));*/
 
   // 用户设置
-  app.all('/settings/:op?', auth.isLogin);
+  app.all('/settings/:op?', auth.loginRequired);
   app.get('/settings', settings.get);
   app.post('/settings/profile', settings.profile);
   app.post('/settings/change_pass', settings.changePassword);
 
   // 提醒
-  app.all('/notifications/:op?', auth.isLogin);
+  app.all('/notifications/:op?', auth.loginRequired);
   app.get('/notifications', notification.list);
   app.post('/notifications/read', notification.read);
 
@@ -70,71 +71,72 @@ module.exports = exports = function(app) {
   app.get('/topics/:type?', topics.list);
   app.get('/tag/:slug', tag.load, tag.topics);
   app.get('/tag/:slug/topics/:type?', tag.load, tag.topics);
-  app.get('/following/topics', auth.isLogin, topics.byFollowing);
+  app.get('/following/topics', auth.loginRequired, topics.byFollowing);
 
   // 单个话题
-  app.all('/topic/create', auth.isLogin);
+  app.all('/topic/create', auth.loginRequired);
   app.get('/topic/create', topic.create);
-  app.post('/topic/create', auth.limitedTopic, topic.create);
+  app.post('/topic/create', auth.topicThrottling, topic.create);
   app.get('/topic/:id', topic.load, topic.get);
-  app.all('/topic/:id/:op', auth.isLogin, topic.load);
-  app.all('/topic/:id/edit', auth.isTopicAuthor, topic.edit);
-  app.post('/topic/:id/remove', auth.isTopicAuthor, topic.remove);
+  app.all('/topic/:id/:op', auth.loginRequired, topic.load);
+  app.all('/topic/:id/edit', auth.topicAuthorRequired, topic.edit);
+  app.post('/topic/:id/remove', auth.topicAuthorRequired, topic.remove);
 
   // 收藏相关操作直接调用 api
+  /*
   app.post('/topic/:id/favorite',
       api.requestHandler(api.favoriteTopic.create));
   app.post('/topic/:id/unfavorite',
       api.requestHandler(api.favoriteTopic.remove));
-  app.post('/tag/:slug/:op', auth.isLogin, tag.load);
+  app.post('/tag/:slug/:op', auth.loginRequired, tag.load);
   app.post('/tag/:slug/favorite',
       api.requestHandler(api.favoriteTag.create));
   app.post('/tag/:slug/unfavorite',
-      api.requestHandler(api.favoriteTag.remove));
+      api.requestHandler(api.favoriteTag.remove));*/
   // 收藏列表
-  app.get('/favorite/:type', auth.isLogin);
+  app.get('/favorite/:type', auth.loginRequired);
   app.get('/favorite/topics', favorite.topics);
   app.get('/favorite/tags', favorite.tags);
 
   // 评论
-  app.post('/comment/create', auth.isLogin, comment.create);
+  app.post('/comment/create', auth.loginRequired, comment.create);
   // 删除评论直接调用 api
-  app.post('/comment/:id/remove', auth.isLogin, comment.load,
-      auth.isCommentAuthor, api.requestHandler(api.comment.remove));
+  app.post('/comment/:id/remove', auth.loginRequired, comment.load,
+      auth.commentAuthorRequired, api.requestHandler(api.Comment.destroy));
 
   app.get('/wiki', pages.wikis);
-  app.all('/wiki/create', auth.isLogin, auth.isWikiEditor, pages.createWiki);
-  app.all('/wiki/:slug/edit', auth.isLogin, auth.isWikiEditor, pages.editWiki);
+  app.all('/wiki/create', auth.loginRequired, auth.wikiEditorRequired, pages.createWiki);
+  app.all('/wiki/:slug/edit', auth.loginRequired, auth.wikiEditorRequired, pages.editWiki);
 
   // 后台管理
-  app.all('/admin/:cate?/*/:op?', auth.isLogin, auth.isAdmin);
+  app.all('/admin/:cate?/*/:op?', auth.loginRequired, auth.adminRequired);
   app.get('/admin', admin.dashboard.index);
   app.get('/admin/sections', admin.section.index);
   app.all('/admin/sections/create', admin.section.create);
   app.all('/admin/sections/:id/edit', admin.section.edit);
   app.post('/admin/sections/:id/remove',
-      api.requestHandler(api.section.remove));
+      api.requestHandler(api.Section.destroy));
   app.get('/admin/tags', admin.tag.index);
   app.all('/admin/tags/create', admin.tag.create);
   app.all('/admin/tags/:slug/edit', admin.tag.edit);
   app.post('/admin/tags/:id/remove',
-      api.requestHandler(api.tag.remove));
+      api.requestHandler(api.Tag.destroy));
   app.get('/admin/users', admin.user.index);
   app.post('/admin/users/:id/verify',
-      api.requestHandler(api.user.toggleVerified));
+      api.requestHandler(api.User.setVerified));
   app.post('/admin/users/:id/block',
-      api.requestHandler(api.user.toggleBlocked));
+      api.requestHandler(api.User.changeState));
   app.get('/admin/topics', admin.topic.index);
   app.all('/admin/topics/:id/edit', admin.topic.edit);
   app.post('/admin/topics/:id/excellent',
-      api.requestHandler(api.topic.toggleExcellent));
+      api.requestHandler(api.Topic.setExcellent));
   app.post('/admin/topics/:id/remove',
-      api.requestHandler(api.topic.remove));
+      api.requestHandler(api.Topic.destroy));
   app.get('/admin/pages', admin.page.index);
   app.all('/admin/pages/create', admin.page.create);
   app.all('/admin/pages/:id/edit', admin.page.edit);
   app.post('/admin/pages/:id/remove',
-      api.requestHandler(api.page.remove));
+      api.requestHandler(api.Page.destroy));
 
   app.get(/^\/([a-zA-Z0-9_\-\/]+)\/?/, pages.get);
 };

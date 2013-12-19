@@ -8,25 +8,45 @@
  */
 var _ = require('lodash'),
   async = require('async'),
-  config = require('../../config'),
-  api = require('../../api'),
-  CentralizedError = require('../../utils/error').CentralizedError,
-  NotFoundError = require('../../utils/error').NotFoundError;
+  moment = require('moment');
+var config = require('../../config'),
+  md5 = require('../../utils/md5'),
+  api = require('../api'),
+  constants = api.constants;
+var error = require('../../utils/error'),
+  CentralizedError = error.CentralizedError,
+  NotFoundError = error.NotFoundError;
 
+/** 获取用户的路由中间件 */
+exports.load = function(req, res, next) {
+  var username = req.params.username;
+  api.User.get({
+    username: username
+  }, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(new NotFoundError('该用户不存在。'));
+    }
+    req.user = user;
+    next();
+  });
+};
+
+/** 用户注册 */
 exports.signup = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    var locals = _.extend({}, req.flash('body'), {
+    req.breadcrumbs('注册');
+    res.render('signup', {
+      user: req.flash('body'),
       err: req.flash('err'),
       message: req.flash('message')
     });
-    req.breadcrumbs('注册');
-    return res.render('signup', locals);
-  }
-
-  if ('post' === method) {
-    api.user.create(req.body, function(err) {
+  } else if ('post' === method) {
+    api.User.add(req.body, function(err) {
       if (err) {
         return next(err);
       }
@@ -36,32 +56,46 @@ exports.signup = function(req, res, next) {
   }
 };
 
+/** 用户登录 */
 exports.signin = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    var locals = _.extend({}, req.flash('body'), {
+    req.breadcrumbs('登录');
+    res.render('signin', {
+      user: req.flash('body'),
       err: req.flash('err'),
       message: req.flash('message')
     });
-    req.breadcrumbs('登录');
-    return res.render('signin', locals);
-  }
-
-  if ('post' === method) {
+  } else if ('post' === method) {
     var data = req.body,
       email = data.email,
       password = data.password,
       remember = data.remember;
 
-    api.user.check({
+    api.User.check({
       email: email,
       password: password
-    }, function(err, user) {
+    }, function(err, result) {
       if (err) {
         return next(err);
       }
-      req.login(user, function(err) {
+
+      if (!result) {
+        return next(new CentralizedError('用户不存在。' ,'email'));
+      }
+
+      if (!result.passed) {
+        return next(new CentralizedError('密码不正确。', 'password'));
+      }
+
+      if (result.user.state === constants.USER_STATE.BLOCKED) {
+        return next(new CentralizedError('帐号被锁定，请联系管理员解锁', 'state'));
+      } else if (result.user.state !== constants.USER_STATE.ACTIVATED) {
+        return next(new CentralizedError('帐号未激活', 'state'));
+      }
+
+      req.login(result.user, function(err) {
         if (err) {
           return next(err);
         }
@@ -74,7 +108,8 @@ exports.signin = function(req, res, next) {
   }
 };
 
-exports.logout = function(req, res, next) {
+/** 用户登出 */
+exports.logout = function(req, res) {
   req.logout();
   req.session.destroy();
   res.send({
@@ -82,15 +117,31 @@ exports.logout = function(req, res, next) {
   });
 };
 
+/** 用户激活 */
 exports.activate = function(req, res, next) {
   var data = req.query,
     token = data.token,
     email = data.email;
 
-  api.user.activate({
-    token: token,
-    email: email
-  }, function(err) {
+  async.waterfall([
+    function getUser(next) {
+      api.User.get({
+        email: email
+      }, next);
+    },
+    function activate(user, next) {
+      if (!user || md5(user.salt + user.email) !== token) {
+        return next(new CentralizedError('信息有误，帐号无法激活。', 'activated'));
+      }
+      if (user.state === constants.USER_STATE.ACTIVATED) {
+        return next(new CentralizedError('帐号已经是激活状态。', 'activated', 'warning'));
+      }
+      api.User.changeState({
+        id: user.id,
+        state: constants.USER_STATE.ACTIVATED
+      }, next);
+    }
+  ], function(err) {
     if (err) {
       req.flash('redirectPath', '/');
       return next(err);
@@ -100,20 +151,19 @@ exports.activate = function(req, res, next) {
   });
 };
 
-exports.forgotPassword = function(req, res, next) {
+/** 申请重置用户密码 */
+exports.forgot = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    var locals = _.extend({}, req.flash('body'), {
+    req.breadcrumbs('通过电子邮件重设密码');
+    res.render('settings/forgot_pass', {
+      user: req.flash('body'),
       err: req.flash('err'),
       message: req.flash('message')
     });
-    req.breadcrumbs('通过电子邮件重设密码');
-    return res.render('settings/forgot_pass', locals);
-  }
-
-  if ('post' === method) {
-    api.user.forgotPassword(req.body, function(err) {
+  } else if ('post' === method) {
+    api.ResetPass.add(req.body, function(err) {
       if (err) {
         return next(err);
       }
@@ -123,89 +173,96 @@ exports.forgotPassword = function(req, res, next) {
   }
 };
 
+/** 重置用户密码 */
 exports.resetPassword = function(req, res, next) {
   var method = req.method.toLowerCase();
-
-  var token = req.query.token || req.session.token,
-    email = req.query.email || req.session.email;
+  var onError = function() {
+    delete req.session.resetPass;
+    req.flash('redirectPath', '/');
+  };
 
   if ('get' === method) {
-    var locals = _.extend({}, req.flash('body'), {
-      err: req.flash('err'),
-      message: req.flash('message')
-    });
-
-    if (!token || !email) {
+    var token = req.query.token,
+      email = req.query.email;
+    if (!req.session.resetPass && (!token || !email)) {
       req.flash('redirectPath', '/');
       return next(new CentralizedError('信息有误，不能继续重设密码操作。'));
     }
 
-    api.user.getResetPassRecord({
-      email: email,
-      token: token
+    api.ResetPass.get({
+      email: email
     }, function(err, resetPass) {
       if (err) {
-        req.flash('redirectPath', '/');
         return next(err);
       }
 
-      req.session.token = req.session.token || token;
-      req.session.email = req.session.email || email;
+      if (!resetPass || md5(resetPass.id + resetPass.email) !== token) {
+        onError();
+        return next(new CentralizedError('信息有误，不能继续重设密码操作'));
+      }
+      if (!resetPass.available) {
+        onError();
+        return next(new CentralizedError('该密码重置链接已失效', 'available', 'warning'));
+      }
+      if (moment().add('hours', -24).toDate() > resetPass.createdAt) {
+        onError();
+        return next(new CentralizedError('该密码重置链接已过期，请重新提交密码重置申请', 'expire', 'warning'));
+      }
+
+      if (!req.session.resetPass) {
+        req.session.resetPass = {
+          token: token,
+          userId: resetPass.userId,
+          id: resetPass.id
+        };
+      }
       req.breadcrumbs('重设密码');
-      return res.render('settings/reset_pass', _.extend(locals, {
-        userId: resetPass.userId,
-        resetPassId: resetPass.id,
-        token: token
-      }));
+      res.render('settings/reset_pass', {
+        token: token,
+        err: req.flash('err'),
+        message: req.flash('message')
+      });
     });
-    return;
-  }
+  } else if ('post' === method) {
+    var data = req.body,
+      newPassword = data.newPassword,
+      newPassword2 = data.newPassword2;
 
-  if ('post' === method) {
-    var newPassword = req.body.newPassword,
-      newPassword2 = req.body.newPassword2,
-      userId = req.body.userId,
-      resetPassId = req.body.resetPassId;
-
-    if (req.body.token !== token || !userId || !resetPassId) {
+    if (data.token !== req.session.resetPass.token) {
+      onError();
       return next(new CentralizedError('信息有误，不能继续重设密码操作'));
     }
-
     if (newPassword !== newPassword2) {
       return next(new CentralizedError('两次输入的密码不一致', 'newPassword'));
     }
 
-    api.user.resetPassword({
-      userId: userId,
-      newPassword: newPassword,
-      resetPassId: resetPassId
-    }, function(err) {
+    async.waterfall([
+      function updatePassword(next) {
+        api.User.edit({
+          id: req.session.resetPass.userId,
+          password: newPassword
+        }, next);
+      },
+      function updateResetPass(user, next) {
+        if (!user) {
+          onError();
+          return next(new CentralizedError('信息有误，不能继续重设密码操作'));
+        }
+        api.ResetPass.setAvailable({
+          id: req.session.resetPass.id,
+          available: false
+        }, next);
+      }
+    ], function(err) {
       if (err) {
         return next(err);
       }
-
-      delete req.session.token;
-      delete req.session.email;
+      
+      delete req.session.resetPass;
       req.flash('message', '密码重置成功，请使用新密码重新登录。');
       res.redirect('/signin');
     });
   }
-};
-
-exports.load = function(req, res, next) {
-  var username = req.params.username;
-  api.user.get.call(req, {
-    username: username
-  }, function(err, user) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return next(new NotFoundError('该用户不存在。'));
-    }
-    req.user = user;
-    next();
-  });
 };
 
 exports.get = function(req, res, next) {

@@ -18,8 +18,6 @@ block content
           div.form-group
             div.col-sm-offset-3.col-sm-6
               input(type="hidden", name="_csrf", value="#{csrfToken}")
-              input(type="hidden", name="userId", value="#{userId}")
-              input(type="hidden", name="resetPassId", value='#{resetPassId}')
               input(type="hidden", name="token", value="#{token}")
               button(type="submit",
                      data-loading-text="正在提交...")#submit-btn.btn.btn-primary 提交

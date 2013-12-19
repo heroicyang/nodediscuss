@@ -1,5 +1,5 @@
 /**
- * 话题列表相关的控制逻辑
+ * 话题相关的控制逻辑
  * @author heroic
  */
 
@@ -7,12 +7,12 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash'),
-  config = require('../../config'),
-  api = require('../../api');
+  _ = require('lodash');
+var config = require('../../config'),
+  api = require('../api');
 
-/** 话题列表页面 */
-exports.list = function(req, res, next) {
+/** 社区页面话题列表 */
+exports.home = function(req, res, next) {
   var filter = req.params.type,
     pageIndex = parseInt(req.query.pageIndex || 1, 10);
 
@@ -46,27 +46,26 @@ exports.list = function(req, res, next) {
 
   async.parallel({
     topics: function(next) {
-      api.topic.query({
-        query: conditions,
+      api.Topic.query({
+        conditions: conditions,
         sort: sort,
         pageIndex: pageIndex,
         pageSize: config.pagination.pageSize
-      }, function(err, results) {
+      }, function(err, count, topics) {
         if (err) {
           return next(err);
         }
-        pagination.totalCount = results.totalCount;
-        next(err, results.topics);
+        pagination.totalCount = count;
+        next(err, topics);
       });
     },
     tags: function(next) {
-      api.tag.query({
+      api.Tag.query({
         notPaged: true
-      }, function(err, results) {
+      }, function(err, tags) {
         if (err) {
           return next(err);
         }
-        var tags = results.tags;
         next(null, _.groupBy(tags, function(tag) {
           return tag.section.name;
         }));
@@ -87,38 +86,39 @@ exports.list = function(req, res, next) {
   });
 };
 
-/** 用户发布的话题列表页面 */
-exports.byUser = function(req, res, next) {
+/** 用户发布的话题列表 */
+exports.createdByUser = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex || 1, 10);
   var pagination = {
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
   };
 
-  api.topic.query({
-    query: {
+  api.Topic.query({
+    conditions: {
       'author.id': req.user.id
     },
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
-  }, function(err, results) {
+  }, function(err, count, topics) {
     if (err) {
       return next(err);
     }
 
-    pagination.totalCount = results.totalCount;
+    pagination.totalCount = count;
     
     req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
     req.breadcrumbs('全部话题');
-    res.render('user/topics', _.extend(results, {
+    res.render('user/topics', _.extend({
       hiddenAvatar: true,
+      topics: topics,
       pagination: pagination
     }));
   });
 };
 
-/** 关注的用户发布的话题列表页面 */
-exports.byFollowing = function(req, res, next) {
+/** 关注的用户所发布的话题列表 */
+exports.createdByFriends = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex || 1, 10);
   var pagination = {
     pageIndex: pageIndex,
@@ -126,35 +126,31 @@ exports.byFollowing = function(req, res, next) {
   };
 
   async.waterfall([
-    function getFollowings(next) {
-      api.relation.query({
-        query: {
+    function queryFriendIds(next) {
+      api.Relation.query({
+        conditions: {
           userId: req.currentUser.id
         },
         notPaged: true
-      }, function(err, results) {
-        if (err) {
-          return next(err);
-        }
-        var followingIds = _.pluck(results.relations, 'followId');
-        next(null, followingIds);
+      }, function(err, count, friendIds) {
+        next(err, friendIds);
       });
     },
-    function getTopics(followingIds, next) {
-      api.topic.query({
-        query: {
+    function queryTopics(friendIds, next) {
+      api.Topic.query({
+        conditions: {
           'author.id': {
-            $in: followingIds
+            $in: friendIds
           }
         },
         pageIndex: pageIndex,
         pageSize: config.pagination.pageSize
-      }, function(err, results) {
+      }, function(err, count, topics) {
         if (err) {
           return next(err);
         }
-        pagination.totalCount = results.totalCount;
-        next(null, results.topics);
+        pagination.totalCount = count;
+        next(null, topics);
       });
     }
   ], function(err, topics) {
@@ -164,7 +160,6 @@ exports.byFollowing = function(req, res, next) {
 
     req.breadcrumbs('我关注的人发布的最新话题');
     res.render('user/topics', {
-      hiddenAvatar: false,
       topics: topics,
       pagination: pagination
     });

@@ -43,7 +43,7 @@ module.exports = exports = function(app) {
 
   app.all('/user/:username/:op?', user.load);
   app.get('/user/:username', user.get);
-  app.get('/user/:username/topics', topics.byUser);
+  app.get('/user/:username/topics', topics.createdByUser);
   app.get('/user/:username/comments', user.comments);
   app.post('/user/:username/:op', auth.loginRequired);
   // 关注的相关操作直接调用 api
@@ -67,11 +67,11 @@ module.exports = exports = function(app) {
   app.post('/notifications/read', notification.read);
 
   // 话题列表
-  app.get('/', topics.list);
-  app.get('/topics/:type?', topics.list);
+  app.get('/', topics.home);
+  app.get('/topics/:type?', topics.home);
   app.get('/tag/:slug', tag.load, tag.topics);
   app.get('/tag/:slug/topics/:type?', tag.load, tag.topics);
-  app.get('/following/topics', auth.loginRequired, topics.byFollowing);
+  app.get('/following/topics', auth.loginRequired, topics.createdByFriends);
 
   // 单个话题
   app.all('/topic/create', auth.loginRequired);

@@ -1,6 +1,6 @@
 var async = require('async'),
-  passport = require('passport'),
-  api = require('../api');
+  passport = require('passport');
+var api = require('../api');
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -18,7 +18,7 @@ passport.deserializeUser(function (id, done) {
         return next(null, user);
       }
       api.Notification.getCount({
-        userId: user.id,
+        masterId: user.id,
         read: false
       }, function(err, count) {
         if (err) {

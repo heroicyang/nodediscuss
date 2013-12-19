@@ -107,7 +107,7 @@ exports.destroy = function(conditions, callback) {
 };
 
 /**
- * 检查用户是否收藏了该节点
+ * 获取节点的收藏状态
  * @param  {Object}   options
  *  - userId    required    用户 id
  *  - tagId     required    节点 id
@@ -115,7 +115,7 @@ exports.destroy = function(conditions, callback) {
  *  - err
  *  - favorited
  */
-exports.isFavoritedBy = function(options, callback) {
+exports.getFavoritedState = function(options, callback) {
   options = options || {};
   var userId = options.userId,
     tagId = options.tagId;

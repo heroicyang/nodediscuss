@@ -19,7 +19,7 @@ var RelationSchema = new Schema({
     required: true,
     index: true
   },
-  followId: {
+  friendId: {
     type: String,
     required: true,
     index: true

@@ -199,7 +199,7 @@ exports.incViews = function(conditions, callback) {
 };
 
 /**
- * 检查用户是否收藏了该话题
+ * 获取话题的收藏状态
  * @param  {Object}   options
  *  - userId      required    用户 id
  *  - topicId     required    话题 id
@@ -207,7 +207,7 @@ exports.incViews = function(conditions, callback) {
  *  - err
  *  - favorited
  */
-exports.isFavoritedBy = function(options, callback) {
+exports.getFavoritedState = function(options, callback) {
   options = options || {};
   var userId = options.userId,
     topicId = options.topicId;

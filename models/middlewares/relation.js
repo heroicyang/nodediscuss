@@ -25,7 +25,7 @@ module.exports = exports = function(schema) {
       next();
       // 当 follow 某个用户时更新该用户的粉丝数量
       var User = this.model('User');
-      User.findByIdAndUpdate(this.followId, {
+      User.findByIdAndUpdate(this.friendId, {
         $inc: {
           followerCount: 1
         }
@@ -36,7 +36,7 @@ module.exports = exports = function(schema) {
       // 当 follow 某个用户时给该用户发送提醒
       var Notification = this.model('Notification');
       Notification.create({
-        masterId: this.followId,
+        masterId: this.friendId,
         userId: this.userId,
         type: constants.NOTIFICATION_TYPE.FOLLOW
       }, done);
@@ -58,7 +58,7 @@ module.exports = exports = function(schema) {
       next();
       // 当取消 follow 某个用户时更新该用户的粉丝数量
       var User = this.model('User');
-      User.findByIdAndUpdate(this.followId, {
+      User.findByIdAndUpdate(this.friendId, {
         $inc: {
           followerCount: -1
         }

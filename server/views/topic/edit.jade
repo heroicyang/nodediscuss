@@ -18,7 +18,7 @@ block content
                   each tag in tagList
                     if currentTag && currentTag._id.toString() == tag._id.toString()
                       option(value="#{tag._id}", selected) #{tag.name}
-                    else if topic && topic.tag.id === tag._id.toString()
+                    else if topic && topic.tag && topic.tag.id === tag._id.toString()
                       option(value="#{tag._id}", selected) #{tag.name}
                     else
                       option(value="#{tag._id}") #{tag.name}

@@ -14,7 +14,7 @@ var api = require('./api'),
   topics = require('./controllers/topics'),
   tag = require('./controllers/tag'),
   topic = require('./controllers/topic'),
-  comment = require('./controllers/comment'),
+  comments = require('./controllers/comments'),
   favorite = require('./controllers/favorite'),
   notification = require('./controllers/notification'),
   pages = require('./controllers/pages');
@@ -38,22 +38,20 @@ module.exports = exports = function(app) {
   app.all('/signin', auth.loginNotAllowed, user.signin);
   app.get('/active', user.activate);
   app.post('/logout', auth.loginRequired, user.logout);
-  app.all('/forgot', user.forgotPassword);
+  app.all('/forgot', user.forgot);
   app.all('/reset', user.resetPassword);
 
   app.all('/user/:username/:op?', user.load);
   app.get('/user/:username', user.get);
   app.get('/user/:username/topics', topics.createdByUser);
-  app.get('/user/:username/comments', user.comments);
+  app.get('/user/:username/comments', comments.createdByUser);
   app.post('/user/:username/:op', auth.loginRequired);
   // 关注的相关操作直接调用 api
   app.post('/user/:username/follow',
       api.requestHandler(api.Relation.create));
   app.post('/user/:username/unfollow',
       api.requestHandler(api.Relation.remove));
-  /*
-  app.get('/user/:username/repos',
-      api.requestHandler(api.User.githubRepos));*/
+  app.get('/user/:username/repos', user.repos);
 
   // 用户设置
   app.all('/settings/:op?', auth.loginRequired);
@@ -99,9 +97,9 @@ module.exports = exports = function(app) {
   app.get('/favorite/tags', favorite.tags);
 
   // 评论
-  app.post('/comment/create', auth.loginRequired, comment.create);
+  app.post('/comments/create', auth.loginRequired, comments.create);
   // 删除评论直接调用 api
-  app.post('/comment/:id/remove', auth.loginRequired, comment.load,
+  app.post('/comments/:id/remove', auth.loginRequired, comments.load,
       auth.commentAuthorRequired, api.requestHandler(api.Comment.destroy));
 
   app.get('/wiki', pages.wikis);

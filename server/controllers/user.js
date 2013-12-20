@@ -8,7 +8,8 @@
  */
 var _ = require('lodash'),
   async = require('async'),
-  moment = require('moment');
+  moment = require('moment'),
+  request = require('request');
 var config = require('../../config'),
   md5 = require('../../utils/md5'),
   api = require('../api'),
@@ -265,46 +266,49 @@ exports.resetPassword = function(req, res, next) {
   }
 };
 
+/** 用户个人首页 */
 exports.get = function(req, res, next) {
   var user = req.user;
   async.parallel({
-    latestTopics: function(next) {
-      api.topic.query({
-        query: {
-          'author.username': user.username
+    isFollowed: function(next) {
+      if (!req.isAuthenticated() || req.currentUser.id === user.id) {
+        return next(null);
+      }
+      api.Relation.check({
+        userId: req.currentUser.id,
+        targetId: user.id
+      }, next);
+    },
+    recentTopics: function(next) {
+      api.Topic.query({
+        conditions: {
+          'author.id': user._id
         },
         pageSize: config.pagination.pageSize
-      }, function(err, results) {
-        if (err) {
-          return next(err);
-        }
-        next(null, results.topics);
+      }, function(err, count, topics) {
+        next(err, topics);
       });
     },
-    latestComments: function(next) {
-      api.comment.query({
-        query: {
-          'author.username': user.username,
+    recentComments: function(next) {
+      api.Comment.query({
+        conditions: {
+          'author.id': user._id,
           deleted: false
         },
         pageSize: config.pagination.pageSize
-      }, function(err, results) {
+      }, function(err, count, comments) {
         if (err) {
           return next(err);
         }
-
-        async.map(results.comments, function(comment, next) {
-          api.topic.get({
-            id: comment.refId
+        // 获取评论所对应的话题
+        async.map(comments, function(comment, next) {
+          api.Topic.get({
+            _id: comment.refId
           }, function(err, topic) {
             if (err) {
               return next(err);
             }
-            _.extend(comment, {
-              topic: topic || {
-                deleted: true
-              }
-            });
+            comment.topic = topic || { deleted: true };
             next(null, comment);
           });
         }, function(err, comments) {
@@ -322,52 +326,34 @@ exports.get = function(req, res, next) {
   });
 };
 
-exports.comments = function(req, res, next) {
-  var pageIndex = parseInt(req.query.pageIndex || 1, 10);
-  var pagination = {
-    pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
-  };
+/** 获取用户的 GitHub repos */
+exports.repos = function(req, res, next) {
+  if (!req.user.github) {
+    return res.send({
+      success: true,
+      response: null
+    });
+  }
 
-  api.comment.query({
-    query: {
-      'author.username': req.user.username,
-      deleted: false
-    },
-    pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
-  }, function(err, results) {
-    if (err) {
-      return next(err);
+  var opts = {
+    url: 'https://api.github.com/users/' + req.user.github + '/repos?type=owner',
+    headers: {
+      'User-Agent': req.user.github
+    }
+  };
+  request(opts, function(err, rep, body) {
+    if (err || rep.statusCode !== 200) {
+      return next(err || new Error('Ops!'));
     }
 
-    pagination.totalCount = results.totalCount;
-
-    async.map(results.comments, function(comment, next) {
-      api.topic.get({
-        id: comment.refId
-      }, function(err, topic) {
-        if (err) {
-          return next(err);
-        }
-        _.extend(comment, {
-          topic: topic || {
-            deleted: true
-          }
-        });
-        next(null, comment);
-      });
-    }, function(err, comments) {
-      if (err) {
-        return next(err);
+    var repos = _.sortBy(JSON.parse(body), function(repo) {
+      return -repo.stargazers_count;
+    });
+    res.send({
+      success: true,
+      response: {
+        data: repos
       }
-
-      req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
-      req.breadcrumbs('全部评论');
-      res.render('user/comments', {
-        comments: comments,
-        pagination: pagination
-      });
     });
   });
 };

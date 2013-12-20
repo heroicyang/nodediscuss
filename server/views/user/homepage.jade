@@ -9,7 +9,7 @@ block content
                 alt="#{user.nickname}").media-object.img-rounded.img-responsive
         div.media-body
           if isAuthenticated && user.id !== currentUser.id
-            if user.isFollowed
+            if isFollowed
               button(type="button",
                      data-loading-text="取消关注...")#follow-btn.btn.btn-default.btn-sm.pull-right 取消关注
             else
@@ -51,7 +51,7 @@ block content
     ul.list-group.topic-list
       if user.topicCount > 0
         - var hiddenAvatar = true
-        each topic in latestTopics
+        each topic in recentTopics
           li.list-group-item
             include ../shared/topic_list_item
       else
@@ -64,9 +64,9 @@ block content
   div.panel.panel-default
     div.panel-heading
       span #{user.nickname} 最近评论的话题
-    if latestComments.length > 0
+    if recentComments.length > 0
       ul.list-group.user-comment-list
-        each comment in latestComments
+        each comment in recentComments
           li.list-group-item
             div.describe.row
               div.comment-date.pull-right
@@ -81,7 +81,7 @@ block content
             div.content !{comment.contentHtml}
     else
       div.panel-body: span 暂无评论。
-    if latestComments.length > 0
+    if recentComments.length > 0
       div.panel-footer
         a(href="/user/#{user.username}/comments")
           i.fa.fa-angle-double-right
@@ -108,7 +108,7 @@ block script
         el: '#follow-btn',
         data: {
           followUsername: '#{user.username}',
-          followed: #{user.isFollowed}
+          followed: #{isFollowed}
         }
       });
   if user.github

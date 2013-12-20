@@ -7,10 +7,10 @@ NC.Module.define('UserRepoList', [], function() {
     render: function() {
       var self = this;
       $.get('/user/' + this.data.username + '/repos')
-        .done(function(rep) {
+        .done(function(result) {
           var repos = [];
-          if (rep.success) {
-            repos = rep.data;
+          if (result.success) {
+            repos = result.response && result.response.data;
             self.$el.html(self.template({ githubRepos: repos }));
           }
         });

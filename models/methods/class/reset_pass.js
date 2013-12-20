@@ -7,7 +7,7 @@
 * Module dependencies
 */
 var _ = require('lodash');
-var mailer = require('../../../mailer');
+var mailers = require('../../../mailers');
 
 /**
  * 新增一条密码重置记录，并向用户发送密码重置邮件
@@ -23,7 +23,7 @@ exports.add = function(userData, callback) {
     if (err) {
       return callback(err);
     }
-    mailer.sendResetPassMail(resetPass, function(err) {
+    mailers.sendResetPassMail(resetPass, function(err) {
       callback(err);
     });
   });

@@ -7,7 +7,7 @@
  * Module dependencies
  */
 var _ = require('lodash');
-var mailer = require('../../../mailer');
+var mailers = require('../../../mailers');
 
 /**
  * 获取用户数据
@@ -40,7 +40,7 @@ exports.add = function(userData, callback) {
   this.create(userData, function(err, user) {
     if (err) { return callback(err); }
 
-    mailer.sendActivationMail(user, function(err) {
+    mailers.sendActivationMail(user, function(err) {
       callback(err, user);
     });
   });

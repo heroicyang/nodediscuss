@@ -6,7 +6,7 @@
 /**
  * Module dependencies
  */
-var api = require('../../api');
+var api = require('../api');
 var error = require('../../utils/error'),
   NotFoundError = error.NotFoundError;
 

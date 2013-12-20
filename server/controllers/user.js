@@ -41,7 +41,7 @@ exports.signup = function(req, res, next) {
 
   if ('get' === method) {
     req.breadcrumbs('注册');
-    res.render('signup', {
+    res.render('user/signup', {
       user: req.flash('body'),
       err: req.flash('err'),
       message: req.flash('message')
@@ -63,7 +63,7 @@ exports.signin = function(req, res, next) {
 
   if ('get' === method) {
     req.breadcrumbs('登录');
-    res.render('signin', {
+    res.render('user/signin', {
       user: req.flash('body'),
       err: req.flash('err'),
       message: req.flash('message')
@@ -158,7 +158,7 @@ exports.forgot = function(req, res, next) {
 
   if ('get' === method) {
     req.breadcrumbs('通过电子邮件重设密码');
-    res.render('settings/forgot_pass', {
+    res.render('user/forgot_pass', {
       user: req.flash('body'),
       err: req.flash('err'),
       message: req.flash('message')
@@ -218,7 +218,7 @@ exports.resetPassword = function(req, res, next) {
         };
       }
       req.breadcrumbs('重设密码');
-      res.render('settings/reset_pass', {
+      res.render('user/reset_pass', {
         token: token,
         err: req.flash('err'),
         message: req.flash('message')
@@ -229,7 +229,8 @@ exports.resetPassword = function(req, res, next) {
       newPassword = data.newPassword,
       newPassword2 = data.newPassword2;
 
-    if (data.token !== req.session.resetPass.token) {
+    if (!req.session.resetPass ||
+          data.token !== req.session.resetPass.token) {
       onError();
       return next(new CentralizedError('信息有误，不能继续重设密码操作'));
     }
@@ -364,7 +365,7 @@ exports.settings = function(req, res, next) {
 
   if ('get' === method) {
     req.breadcrumbs('设置');
-    res.render('settings/index', {
+    res.render('user/settings', {
       type: req.flash('settingType'),
       err: req.flash('err'),
       message: req.flash('message')

@@ -50,7 +50,7 @@ exports.createWiki = function(req, res, next) {
   if ('get' === method) {
     req.breadcrumbs('Wiki', '/wiki');
     req.breadcrumbs('创建 Wiki');
-    res.render('page/wiki_edit', {
+    res.render('page/edit_wiki', {
       wiki: req.flash('body'),
       err: req.flash('err')
     });

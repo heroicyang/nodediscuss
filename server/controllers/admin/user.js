@@ -7,7 +7,7 @@
  * Module dependencies
  */
 var config = require('../../../config'),
-  api = require('../../../api');
+  api = require('../../api');
 
 exports.index = function(req, res, next) {
   var pageIndex = req.query.pageIndex;
@@ -16,18 +16,18 @@ exports.index = function(req, res, next) {
     pageSize: config.pagination.pageSize
   };
 
-  api.user.query({
+  api.User.query({
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
-  }, function(err, results) {
+  }, function(err, count, users) {
     if (err) {
       return next(err);
     }
 
     req.breadcrumbs('用户列表');
-    pagination.totalCount = results.totalCount;
+    pagination.totalCount = count;
     res.render('admin/user/index', {
-      users: results.users,
+      users: users,
       pagination: pagination
     });
   });

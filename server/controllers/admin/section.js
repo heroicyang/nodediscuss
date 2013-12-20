@@ -7,10 +7,10 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash'),
-  api = require('../../../api'),
+  _ = require('lodash');
+var api = require('../../api'),
   config = require('../../../config'),
-  NotFoundError = require('../../../utils/error').NotFoundError;
+  NotFoundError = require('../../utils/error').NotFoundError;
 
 /** 节点组管理首页 */
 exports.index = function(req, res, next) {
@@ -20,21 +20,21 @@ exports.index = function(req, res, next) {
     pageSize: config.pagination.pageSize
   };
 
-  api.section.query({
+  api.Section.query({
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize,
     sort: {
       order: -1,
       createdAt: -1
     }
-  }, function(err, results) {
+  }, function(err, count, sections) {
     if (err) {
       return next(err);
     }
 
-    pagination.totalCount = results.totalCount;
-    async.map(results.sections, function(section, next) {
-      api.tag.count({
+    pagination.totalCount = count;
+    async.map(sections, function(section, next) {
+      api.Tag.getCount({
         'section.id': section._id
       }, function(err, count) {
         if (err) {
@@ -63,11 +63,12 @@ exports.create = function(req, res, next) {
   if ('get' === method) {
     req.breadcrumbs('节点组列表', '/admin/sections');
     req.breadcrumbs('创建节点组');
-    res.render('admin/section/edit', _.extend({
+    res.render('admin/section/edit', {
+      section: req.flash('body'),
       err: req.flash('err')
-    }, req.flash('body')));
+    });
   } else if ('post' === method) {
-    api.section.create(req.body, function(err) {
+    api.Section.add(req.body, function(err) {
       if (err) {
         return next(err);
       }
@@ -82,7 +83,7 @@ exports.edit = function(req, res, next) {
 
   if ('get' === method) {
     var id = req.params.id;
-    api.section.get({
+    api.Section.get({
       _id: id
     }, function(err, section) {
       if (err) {
@@ -96,11 +97,11 @@ exports.edit = function(req, res, next) {
       req.breadcrumbs('编辑节点组');
       res.render('admin/section/edit', {
         err: req.flash('err'),
-        section: section
+        section: _.extend(section, req.flash('body'))
       });
     });
   } else if ('post' === method) {
-    api.section.edit(req.body, function(err) {
+    api.Section.edit(req.body, function(err) {
       if (err) {
         return next(err);
       }

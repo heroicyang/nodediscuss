@@ -6,41 +6,33 @@
 /**
  * Module dependencies
  */
-var async = require('async'),
-  config = require('../../../config'),
-  api = require('../../../api');
+var async = require('async');
+var config = require('../../../config'),
+  api = require('../../api');
 
 exports.index = function(req, res, next) {
   async.parallel({
     recentTopics: function(next) {
-      api.topic.query({
+      api.Topic.query({
         pageSize: config.pagination.pageSize
-      }, function(err, results) {
+      }, function(err, count, topics) {
         if (err) {
           return next(err);
         }
-        next(null, results.topics);
+        next(null, topics);
       });
     },
     userCount: function(next) {
-      api.user.count(function(err, count) {
-        next(err, count);
-      });
+      api.User.getCount(next);
     },
     topicCount: function(next) {
-      api.topic.count(function(err, count) {
-        next(err, count);
-      });
+      api.Topic.getCount(next);
     },
     commentCount: function(next) {
-      api.comment.count(function(err, count) {
-        next(err, count);
-      });
+      api.Comment.getCount(next);
     },
     pageCount: function(next) {
-      api.page.count(function(err, count) {
-        next(err, count);
-      });
+      api.Page.getCount(next);
     }
   }, function(err, results) {
     if (err) {

@@ -7,10 +7,10 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash'),
-  api = require('../../../api'),
+  _ = require('lodash');
+var api = require('../../api'),
   config = require('../../../config'),
-  NotFoundError = require('../../../utils/error').NotFoundError;
+  NotFoundError = require('../../utils/error').NotFoundError;
 
 /** 节点管理列表界面 */
 exports.index = function(req, res, next) {
@@ -20,18 +20,18 @@ exports.index = function(req, res, next) {
     pageSize: config.pagination.pageSize
   };
 
-  api.tag.query({
+  api.Tag.query({
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
-  }, function(err, results) {
+  }, function(err, count, tags) {
     if (err) {
       return next(err);
     }
     
-    pagination.totalCount = results.totalCount;
+    pagination.totalCount = count;
     req.breadcrumbs('节点列表');
     res.render('admin/tag/index', {
-      tags: results.tags,
+      tags: tags,
       pagination: pagination
     });
   });
@@ -42,22 +42,23 @@ exports.create = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    api.section.query({
+    api.Section.query({
       notPaged: true
-    }, function(err, results) {
+    }, function(err, sections) {
       if (err) {
         return next(err);
       }
 
       req.breadcrumbs('节点列表', '/admin/tags');
       req.breadcrumbs('创建节点');
-      res.render('admin/tag/edit', _.extend({
-        sections: results.sections,
+      res.render('admin/tag/edit', {
+        sections: sections,
+        tag: req.flash('body'),
         err: req.flash('err')
-      }, req.flash('body')));
+      });
     });
   } else if ('post' === method) {
-    api.tag.create(req.body, function(err) {
+    api.Tag.add(req.body, function(err) {
       if (err) {
         return next(err);
       }
@@ -73,7 +74,7 @@ exports.edit = function(req, res, next) {
     async.parallel({
       tag: function(next) {
         var slug = req.params.slug;
-        api.tag.get({
+        api.Tag.get({
           slug: slug
         }, function(err, tag) {
           if (err) {
@@ -86,14 +87,9 @@ exports.edit = function(req, res, next) {
         });
       },
       sections: function(next) {
-        api.section.query({
+        api.Section.query({
           notPaged: true
-        }, function(err, results) {
-          if (err) {
-            return next(err);
-          }
-          next(null, results.sections);
-        });
+        }, next);
       }
     }, function(err, results) {
       if (err) {
@@ -102,12 +98,14 @@ exports.edit = function(req, res, next) {
 
       req.breadcrumbs('节点列表', '/admin/tags');
       req.breadcrumbs('编辑节点');
-      res.render('admin/tag/edit', _.extend(results, {
+      res.render('admin/tag/edit', {
+        tag: _.extend(results.tag, req.flash('body')),
+        sections: results.sections,
         err: req.flash('err')
-      }, req.flash('body')));
+      });
     });
   } else if ('post' === method) {
-    api.tag.edit(req.body, function(err) {
+    api.Tag.edit(req.body, function(err) {
       if (err) {
         return next(err);
       }

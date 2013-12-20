@@ -7,10 +7,10 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash'),
-  config = require('../../../config'),
-  api = require('../../../api'),
-  NotFoundError = require('../../../utils/error').NotFoundError;
+  _ = require('lodash');
+var config = require('../../../config'),
+  api = require('../../api'),
+  NotFoundError = require('../../utils/error').NotFoundError;
 
 /** 话题管理列表界面 */
 exports.index = function(req, res, next) {
@@ -20,18 +20,18 @@ exports.index = function(req, res, next) {
     pageSize: config.pagination.pageSize
   };
 
-  api.topic.query({
+  api.Topic.query({
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
-  }, function(err, results) {
+  }, function(err, count, topics) {
     if (err) {
       return next(err);
     }
 
-    pagination.totalCount = results.totalCount;
+    pagination.totalCount = count;
     req.breadcrumbs('话题列表');
     res.render('admin/topic/index', {
-      topics: results.topics,
+      topics: topics,
       pagination: pagination
     });
   });
@@ -43,8 +43,8 @@ exports.edit = function(req, res, next) {
   if ('get' === method) {
     async.parallel({
       topic: function(next) {
-        api.topic.get({
-          id: req.params.id
+        api.Topic.get({
+          _id: req.params.id
         }, function(err, topic) {
           if (err) {
             return next(err);
@@ -56,13 +56,12 @@ exports.edit = function(req, res, next) {
         });
       },
       tags: function(next) {
-        api.tag.query({
+        api.Tag.query({
           notPaged: true
-        }, function(err, results) {
+        }, function(err, tags) {
           if (err) {
             return next(err);
           }
-          var tags = results.tags;
           next(null, _.groupBy(tags, function(tag) {
             return tag.section.name;
           }));
@@ -81,7 +80,7 @@ exports.edit = function(req, res, next) {
       });
     });
   } else if ('post' === method) {
-    api.topic.edit(req.body, function(err) {
+    api.Topic.edit(req.body, function(err) {
       if (err) {
         return next(err);
       }

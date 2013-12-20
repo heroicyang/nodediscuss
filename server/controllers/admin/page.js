@@ -7,10 +7,10 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash'),
-  config = require('../../../config'),
-  api = require('../../../api'),
-  NotFoundError = require('../../../utils/error').NotFoundError;
+  _ = require('lodash');
+var config = require('../../../config'),
+  api = require('../../api'),
+  NotFoundError = require('../../utils/error').NotFoundError;
 
 /** 页面列表界面 */
 exports.index = function(req, res, next) {
@@ -20,25 +20,25 @@ exports.index = function(req, res, next) {
     pageSize: config.pagination.pageSize
   };
 
-  api.page.query({
+  api.Page.query({
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
-  }, function(err, results) {
+  }, function(err, count, pages) {
     if (err) {
       return next(err);
     }
 
-    pagination.totalCount = results.totalCount;
-    async.map(results.pages, function(page, next) {
-      api.user.query({
+    pagination.totalCount = count;
+    async.map(pages, function(page, next) {
+      api.User.query({
         _id: {
-          $in: page.authorIds
+          $in: page.contributors
         }
-      }, function(err, results) {
+      }, function(err, count, users) {
         if (err) {
           return next(err);
         }
-        page.authors = results.users;
+        page.contributors = users;
         next(null, page);
       });
     }, function(err, pages) {
@@ -68,8 +68,8 @@ exports.create = function(req, res, next) {
     }));
   } else if ('post' === method) {
     var data = req.body;
-    data.authorId = req.currentUser.id;
-    api.page.create(data, function(err) {
+    data.creatorId = req.currentUser.id;
+    api.Page.add(data, function(err) {
       if (err) {
         return next(err);
       }
@@ -83,7 +83,7 @@ exports.edit = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    api.page.get({
+    api.Page.get({
       _id: req.params.id
     }, function(err, page) {
       if (err) {
@@ -103,7 +103,7 @@ exports.edit = function(req, res, next) {
   } else if ('post' === method) {
     var data = req.body;
     data.editorId = req.currentUser.id;
-    api.page.edit(data, function(err) {
+    api.Page.edit(data, function(err) {
       if (err) {
         return next(err);
       }

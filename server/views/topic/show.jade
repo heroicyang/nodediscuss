@@ -21,7 +21,7 @@ block content
                   a(href="/user/#{topic.author.username}").username #{topic.author.nickname}
                 span &#32;&#8226;&#32;发表于
                 span= moment(topic.createdAt).fromNow()
-                span &#32;&#8226;&#32;#{topic.viewsCount}次阅读
+                span &#32;&#8226;&#32;#{topic.views}次阅读
       if topic.content
         div.row.content !{topic.contentHtml}
     div.panel-footer
@@ -39,7 +39,7 @@ block content
           if currentUser.id === topic.author.id
             a(href="/topic/#{topic._id}/edit", title="编辑话题")
               i.fa.fa-pencil-square-o
-          else if topic.isFavorited
+          else if isFavorited
             a(href="#", title="取消收藏该话题").favorite-btn
               i.fa.fa-bookmark
           else
@@ -123,7 +123,7 @@ block script
         el: '#topic-panel',
         data: {
           id: '#{topic._id}',
-          isFavorited: #{topic.isFavorited}
+          isFavorited: #{isFavorited}
         }
       },
       {

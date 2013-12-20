@@ -8,7 +8,7 @@ block content
             strong #{tag.topicCount}
           if isAuthenticated
             | &#32;&#8226;&#32;
-            if tag.isFavorited
+            if isFavoritedTag
               a(href="#", title="取消收藏#{tag.name}节点")#favorite-tag-btn 取消收藏
             else
               a(href="#", title="收藏#{tag.name}节点")#favorite-tag-btn 收藏该节点
@@ -68,6 +68,6 @@ block script
         data: {
           name: '#{tag.name}',
           slug: '#{tag.slug}',
-          isFavorited: #{tag.isFavorited}
+          isFavorited: #{isFavoritedTag}
         }
       };

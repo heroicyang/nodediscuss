@@ -12,8 +12,7 @@ var api = require('./api'),
   user = require('./controllers/user'),
   settings = require('./controllers/settings'),
   topics = require('./controllers/topics'),
-  tag = require('./controllers/tag'),
-  topic = require('./controllers/topic'),
+  tags = require('./controllers/tags'),
   comments = require('./controllers/comments'),
   favorite = require('./controllers/favorite'),
   notification = require('./controllers/notification'),
@@ -67,18 +66,17 @@ module.exports = exports = function(app) {
   // 话题列表
   app.get('/', topics.home);
   app.get('/topics/:type?', topics.home);
-  app.get('/tag/:slug', tag.load, tag.topics);
-  app.get('/tag/:slug/topics/:type?', tag.load, tag.topics);
+  app.get('/tag/:slug', tags.load, topics.belongsTag);
+  app.get('/tag/:slug/topics/:type?', tags.load, topics.belongsTag);
   app.get('/following/topics', auth.loginRequired, topics.createdByFriends);
 
   // 单个话题
   app.all('/topic/create', auth.loginRequired);
-  app.get('/topic/create', topic.create);
-  app.post('/topic/create', auth.topicThrottling, topic.create);
-  app.get('/topic/:id', topic.load, topic.get);
-  app.all('/topic/:id/:op', auth.loginRequired, topic.load);
-  app.all('/topic/:id/edit', auth.topicAuthorRequired, topic.edit);
-  app.post('/topic/:id/remove', auth.topicAuthorRequired, topic.remove);
+  app.get('/topic/create', topics.create);
+  app.post('/topic/create', auth.topicThrottling, topics.create);
+  app.get('/topic/:id', topics.load, topics.show);
+  app.all('/topic/:id/:op', auth.loginRequired, topics.load);
+  app.all('/topic/:id/edit', auth.topicAuthorRequired, topics.edit);
 
   // 收藏相关操作直接调用 api
   /*

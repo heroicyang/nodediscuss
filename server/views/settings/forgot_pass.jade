@@ -11,7 +11,7 @@ block content
             label(for="email").col-sm-3.control-label Email
             div.col-sm-6
               input(type="email", name="email",
-                    value="#{email || ''}", required)#email.form-control
+                    value=user ? user.email : "", required)#email.form-control
               span.help-block 请填写注册时使用的电子邮件地址
           div.form-group
             div.col-sm-offset-3.col-sm-6

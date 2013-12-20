@@ -10,14 +10,18 @@ block content
         div.form-group
           label(for="email").col-sm-3.control-label Email
           div.col-sm-6
-            input(type="email", name="email",
-                  value="#{email || ''}", required)#email.form-control
+            input(type="email",
+                  name="email",
+                  value=user ? user.email : "",
+                  required)#email.form-control
             span.help-block 请使用真实电子邮箱注册，注册后不可修改
         div.form-group
           label(for="username").col-sm-3.control-label 用户名
           div.col-sm-6
-            input(type="text", name="username",
-                  value="#{username || ''}", maxlength="16",
+            input(type="text",
+                  name="username",
+                  value=user ? user.username : "",
+                  maxlength="16",
                   required)#username.form-control
             span.help-block 请使用长度为 6-16 的字母 a-z 或数字 0-9 ，注册后不可修改
         div.form-group

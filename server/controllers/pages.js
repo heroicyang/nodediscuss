@@ -6,9 +6,11 @@
 /**
  * Module dependencies
  */
+var _ = require('lodash');
 var config = require('../../config'),
-  api = require('../../api'),
-  NotFoundError = require('../../utils/error').NotFoundError;
+  api = require('../api');
+var error = require('../../utils/error'),
+  NotFoundError = error.NotFoundError;
 
 /** Wiki 列表页面 */
 exports.wikis = function(req, res, next) {
@@ -18,8 +20,8 @@ exports.wikis = function(req, res, next) {
     pageSize: config.pagination.pageSize
   };
 
-  api.page.query({
-    query: {
+  api.Page.query({
+    conditions: {
       slug: {
         $regex: 'wiki\/',
         $options: 'i'
@@ -27,21 +29,21 @@ exports.wikis = function(req, res, next) {
     },
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
-  }, function(err, results) {
+  }, function(err, count, pages) {
     if (err) {
       return next(err);
     }
     
-    pagination.totalCount = results.totalCount;
+    pagination.totalCount = count;
     req.breadcrumbs('Wiki');
     res.render('page/wikis', {
-      wikis: results.pages,
+      wikis: pages,
       pagination: pagination
     });
   });
 };
 
-/** 创建 wiki 页面 */
+/** 创建新 wiki */
 exports.createWiki = function(req, res, next) {
   var method = req.method.toLowerCase();
 
@@ -49,16 +51,14 @@ exports.createWiki = function(req, res, next) {
     req.breadcrumbs('Wiki', '/wiki');
     req.breadcrumbs('创建 Wiki');
     res.render('page/wiki_edit', {
+      wiki: req.flash('body'),
       err: req.flash('err')
     });
-    return;
-  }
-
-  if ('post' === method) {
-    var data = req.body;
+  } else if ('post' === method) {
+    var data = _.clone(req.body);
     data.slug = 'wiki/' + data.slug;
-    data.authorId = req.currentUser.id;
-    api.page.create(data, function(err) {
+    data.creatorId = req.currentUser.id;
+    api.Page.add(data, function(err) {
       if (err) {
         return next(err);
       }
@@ -67,39 +67,35 @@ exports.createWiki = function(req, res, next) {
   }
 };
 
-/** 编辑 wiki 页面 */
+/** 编辑 wiki */
 exports.editWiki = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
     var slug = 'wiki/' + req.params.slug;
-    api.page.get({
+    api.Page.get({
       slug: slug
-    }, function(err, wiki) {
+    }, function(err, page) {
       if (err) {
         return next(err);
       }
-      if (!wiki) {
+      if (!page) {
         return next(new NotFoundError('该页面不存在。'));
       }
 
-      req.breadcrumbs(wiki.title, '/' + wiki.slug);
+      page.slug = page.slug.replace('wiki/', '');
+      req.breadcrumbs(page.title, '/' + page.slug);
       req.breadcrumbs('编辑 Wiki');
-
-      wiki.slug = wiki.slug.replace('wiki/', '');
       res.render('page/wiki_edit', {
-        wiki: wiki,
+        wiki: _.extend(page, req.flash('body')),
         err: req.flash('err')
       });
     });
-    return;
-  }
-
-  if ('post' === method) {
-    var data = req.body;
+  } else if ('post' === method) {
+    var data = _.clone(req.body);
     data.editorId = req.currentUser.id;
     data.slug = 'wiki/' + data.slug;
-    api.page.edit(data, function(err) {
+    api.Page.edit(data, function(err) {
       if (err) {
         return next(err);
       }
@@ -112,12 +108,11 @@ exports.editWiki = function(req, res, next) {
 exports.get = function(req, res, next) {
   var slug = req.params[0],
     isWiki = false;
-
   if (slug.indexOf('wiki/') !== -1) {
     isWiki = true;
   }
 
-  api.page.get({
+  api.Page.get({
     slug: slug
   }, function(err, page) {
     if (err) {

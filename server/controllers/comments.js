@@ -6,8 +6,7 @@
 /**
  * Module dependencies
  */
-var async = require('async'),
-  _ = require('lodash');
+var async = require('async');
 var api = require('../api'),
   config = require('../../config');
 var NotFoundError = require('../../utils/error').NotFoundError;
@@ -58,44 +57,27 @@ exports.createdByUser = function(req, res, next) {
   });
 };
 
-/**
- * 发表评论
- */
+/** 发表评论 */
 exports.create = function(req, res, next) {
-  var data = req.body,
-    topicId = data.topicId;
-  _.extend(data, {
-    refId: topicId,
-    author: {
-      id: req.currentUser.id
-    }
-  });
+  var data = req.body;
+  data.refId = data.topicId;
+  data.author = {
+    id: req.currentUser.id
+  };
 
-  data.content = data.content.replace(/#(\d+)楼\s?/g, function(group, p1) {
-    return _.template('[#<%= floor %>楼](/topic/<%= topicId %>#comment-<%= floor %>) ', {
-      floor: p1,
-      topicId: topicId
-    });
-  }).replace(/@([a-zA-Z0-9\-_]+\s?)/g, function(group, p1) {
-    return _.template('[@<%= username %>](/user/<%= username %>) ', {
-      username: p1
-    });
-  });
-
-  api.comment.create(data, function(err) {
+  api.Comment.add(data, function(err) {
     if (err) {
-      req.flash('redirectPath', '/topic/' + topicId);
+      req.flash('redirectPath', '/topic/' + data.topicId);
       return next(err);
     }
-    res.redirect('/topic/' + topicId);
+    res.redirect('/topic/' + data.topicId);
   });
 };
 
-/** 获取评论 */
+/** 获取单个评论数据的路由中间件 */
 exports.load = function(req, res, next) {
-  var id = req.params.id;
-  api.comment.get({
-    id: id
+  api.Comment.get({
+    _id: req.params.id
   }, function(err, comment) {
     if (err) {
       return next(err);

@@ -7,15 +7,14 @@
  * Module dependencies
  */
 var api = require('./api'),
-  auth = require('./middlewares/auth'),
-  upload = require('./controllers/upload'),
+  auth = require('./middlewares/auth');
+var upload = require('./controllers/upload'),
   user = require('./controllers/user'),
-  settings = require('./controllers/settings'),
-  topics = require('./controllers/topics'),
   tags = require('./controllers/tags'),
+  topics = require('./controllers/topics'),
   comments = require('./controllers/comments'),
-  favorite = require('./controllers/favorite'),
-  notification = require('./controllers/notification'),
+  favorites = require('./controllers/favorites'),
+  notifications = require('./controllers/notifications'),
   pages = require('./controllers/pages');
 
 var admin = {
@@ -54,14 +53,14 @@ module.exports = exports = function(app) {
 
   // 用户设置
   app.all('/settings/:op?', auth.loginRequired);
-  app.get('/settings', settings.get);
-  app.post('/settings/profile', settings.profile);
-  app.post('/settings/change_pass', settings.changePassword);
+  app.get('/settings', user.settings);
+  app.post('/settings/profile', user.settings);
+  app.post('/settings/change_pass', user.changePass);
 
   // 提醒
   app.all('/notifications/:op?', auth.loginRequired);
-  app.get('/notifications', notification.list);
-  app.post('/notifications/read', notification.read);
+  app.get('/notifications', notifications.index);
+  app.post('/notifications/read', notifications.read);
 
   // 话题列表
   app.get('/', topics.home);
@@ -91,8 +90,8 @@ module.exports = exports = function(app) {
       api.requestHandler(api.favoriteTag.remove));*/
   // 收藏列表
   app.get('/favorite/:type', auth.loginRequired);
-  app.get('/favorite/topics', favorite.topics);
-  app.get('/favorite/tags', favorite.tags);
+  app.get('/favorite/topics', favorites.topics);
+  app.get('/favorite/tags', favorites.tags);
 
   // 评论
   app.post('/comments/create', auth.loginRequired, comments.create);

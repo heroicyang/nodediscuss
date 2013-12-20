@@ -7,13 +7,13 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash'),
-  config = require('../../config'),
-  api = require('../../api');
+  _ = require('lodash');
+var config = require('../../config'),
+  api = require('../api');
 
-/** 通知中心页面 */
-exports.list = function(req, res, next) {
-  var pageIndex = parseInt(req.query.pageIndex || 1, 10);
+/** 通知中心提醒列表 */
+exports.index = function(req, res, next) {
+  var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
     pageSize: config.pagination.pageSize
@@ -21,52 +21,43 @@ exports.list = function(req, res, next) {
 
   async.waterfall([
     function queryNotifications(next) {
-      api.notification.query({
-        query: {
+      api.Notification.query({
+        conditions: {
           masterId: req.currentUser.id
         },
         pageIndex: pageIndex,
         pageSize: config.pagination.pageSize
-      }, function(err, results) {
+      }, function(err, count, notifications) {
         if (err) {
           return next(err);
         }
-        pagination.totalCount = results.totalCount;
-        next(null, results.notifications);
+        pagination.totalCount = count;
+        next(null, notifications);
       });
     },
     function populateRelated(notifications, next) {
       async.map(notifications, function(notification, next) {
         async.parallel({
           user: function(next) {
-            api.user
-              .get({
-                id: notification.userId
-              }, function(err, user) {
-                next(err, user);
-              });
+            api.User.get({
+              _id: notification.userId
+            }, next);
           },
           topic: function(next) {
             if (!notification.topicId) {
               return next(null, null);
             }
-            api.topic
-              .get({
-                id: notification.topicId
-              }, function(err, topic) {
-                next(err, topic);
-              });
+            api.Topic.get({
+              _id: notification.topicId
+            }, next);
           },
           comment: function(next) {
             if (!notification.commentId) {
               return next(null, null);
             }
-            api.comment
-              .get({
-                id: notification.commentId
-              }, function(err, comment) {
-                next(err, comment);
-              });
+            api.Comment.get({
+              _id: notification.commentId
+            }, next);
           }
         }, function(err, results) {
           if (err) {
@@ -75,9 +66,7 @@ exports.list = function(req, res, next) {
           _.extend(notification, results);
           next(null, notification);
         });
-      }, function(err, notifications) {
-        next(err, notifications);
-      });
+      }, next);
     }
   ], function(err, notifications) {
     if (err) {
@@ -91,9 +80,12 @@ exports.list = function(req, res, next) {
   });
 };
 
-/** 将未读提醒标记为已读 */
+/** 将未读提醒全部标记为已读 */
 exports.read = function(req, res, next) {
-  api.notification.readAll.call(req, function(err) {
+  api.Notification.read({
+    masterId: req.currentUser.id,
+    read: false
+  }, function(err) {
     if (err) {
       return next(err);
     }

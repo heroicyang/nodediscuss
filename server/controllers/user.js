@@ -357,3 +357,58 @@ exports.repos = function(req, res, next) {
     });
   });
 };
+
+/** 用户个人设置 */
+exports.settings = function(req, res, next) {
+  var method = req.method.toLowerCase();
+
+  if ('get' === method) {
+    req.breadcrumbs('设置');
+    res.render('settings/index', {
+      type: req.flash('settingType'),
+      err: req.flash('err'),
+      message: req.flash('message')
+    });
+  } else if ('post' === method) {
+    var userData = req.body;
+    userData.id = req.currentUser.id;
+    api.User.edit(userData, function(err) {
+      req.flash('settingType', 'profile');
+      if (err) {
+        return next(err);
+      }
+      req.flash('message', '个人资料更新成功');
+      res.redirect('/settings');
+    });
+  }
+};
+
+/** 更改用户密码 */
+exports.changePass = function(req, res, next) {
+  var data = req.body,
+    oldPassword = data.oldPassword,
+    newPassword = data.newPassword,
+    newPassword2 = data.newPassword2;
+  // 全部留空则代表不更改密码
+  if (!oldPassword && !newPassword && !newPassword2) {
+    return res.redirect('/settings');
+  }
+
+  req.flash('settingType', 'changePass');
+  if (newPassword !== newPassword2) {
+    req.flash('redirectPath', '/settings#change-password');
+    return next(new CentralizedError('两次输入的密码不一致', 'newPassword'));
+  }
+
+  api.User.edit({
+    id: req.currentUser.id,
+    password: newPassword
+  }, function(err) {
+    if (err) {
+      req.flash('redirectPath', '/settings#change-password');
+      return next(err);
+    }
+    req.flash('message', '密码更改成功');
+    res.redirect('/settings#change-password');
+  });
+};

@@ -14,7 +14,7 @@ block content
             div.media
               div.pull-left.avatar-48
                 a(href="/user/#{notification.user.username}")
-                  img(src!="#{notification.user.avatar}",
+                  img(src!=gravatar(notification.user.emailHash),
                       alt="#{notification.user.nickname}").media-object.img-rounded.img-responsive
               div.media-body
                 div.pull-right

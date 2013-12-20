@@ -3,7 +3,8 @@ div#user-card.panel.panel-default.hidden-xs
     div.media
       div.pull-left.avatar-48
         a(href="/user/#{currentUser.username}")
-          img(src="#{currentUser.avatar}", alt="").media-object.img-rounded.img-responsive
+          img(src!=gravatar(currentUser.emailHash),
+              alt="#{currentUser.nickname}").media-object.img-rounded.img-responsive
       div.media-body
         div.media-heading
           a(href="/user/#{currentUser.username}").username #{currentUser.nickname}

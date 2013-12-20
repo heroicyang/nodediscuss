@@ -6,6 +6,8 @@
 /**
  * Module dependencies
  */
+var url = require('url'),
+  util = require('util');
 var _ = require('lodash'),
   moment = require('moment');
 var config = require('../../config'),
@@ -19,6 +21,11 @@ module.exports = exports = function() {
     // helper
     res.locals._ = _;
     res.locals.moment = moment;
+    res.locals.gravatar = function(emailHash) {
+      var provider = url.format(config.avatarProvider),
+        avatarSize = config.avatarProvider.size;
+      return util.format(provider, emailHash, avatarSize);
+    };
 
     res.locals.path = req.path;
     res.locals.csrfToken = req.csrfToken && req.csrfToken();

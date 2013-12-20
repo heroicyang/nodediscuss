@@ -5,7 +5,7 @@ block content
       div.media
         div.pull-left.avatar-80
           a(href="/user/#{user.username}")
-            img(src!="#{user.avatar}",
+            img(src!=gravatar(user.emailHash),
                 alt="#{user.nickname}").media-object.img-rounded.img-responsive
         div.media-body
           if isAuthenticated && user.id !== currentUser.id

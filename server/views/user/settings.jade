@@ -69,11 +69,11 @@ block content
         div.form-group
           label.col-sm-3.control-label 当前头像
           div.col-sm-6.current
-            img(src!="#{currentUser.avatar}",
+            img(src!=gravatar(currentUser.emailHash),
                 alt="#{currentUser.nickname}").avatar-80.img-rounded.img-responsive.pull-left
-            img(src!="#{currentUser.avatar}",
+            img(src!=gravatar(currentUser.emailHash),
                 alt="#{currentUser.nickname}").avatar-64.img-rounded.img-responsive.pull-left
-            img(src!="#{currentUser.avatar}",
+            img(src!=gravatar(currentUser.emailHash),
                 alt="#{currentUser.nickname}").avatar-48.img-rounded.img-responsive.pull-left
       div.row.intro
         span #{site.name} 使用 

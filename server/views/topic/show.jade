@@ -10,7 +10,7 @@ block content
         div.media
           div.pull-right.avatar-64
             a(href="/user/#{topic.author.username}")
-              img(src!="#{topic.author.avatar}",
+              img(src!=gravatar(topic.author.emailHash),
                   alt="#{topic.author.nickname}").media-object.img-rounded.img-responsive
           div.media-body
             div.info
@@ -63,7 +63,7 @@ block content
               div.media
                 div.pull-left.avatar-48
                     a(href="/user/#{comment.author.username}")
-                      img(src!="#{comment.author.avatar}",
+                      img(src!=gravatar(comment.author.emailHash),
                           alt="#{comment.author.nickname}").media-object.img-rounded.img-responsive
                 div.media-body
                   if isAuthenticated
@@ -95,7 +95,7 @@ block content
       div.media
         div.pull-left.avatar-48.hidden-xs
           a(href="/user/#{currentUser.username}")
-            img(src!="#{currentUser.avatar}",
+            img(src!=gravatar(currentUser.emailHash),
                 alt="#{currentUser.nickname}").media-object.img-rounded.img-responsive
         div.media-body
           form(role="form", method="POST", action="/comment/create")#comment-form.form-horizontal

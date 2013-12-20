@@ -26,12 +26,17 @@ if (marked.Renderer) {
   var r = new marked.Renderer();
 
   // 使用 `highlight.js` 库来解析代码块
-  r.blockcode = function(code, lang) {
+  r.code = function(code, lang) {
+    var out = '<pre>';
     if (lang) {
-      return hljs.highlight(lang, code).value;
+      out += '<code class="lang-' + lang + '">' +
+          hljs.highlight(lang, code).value;
     } else {
-      return hljs.highlightAuto(code).value;
+      out += '<code>' +
+          hljs.highlightAuto(code).value;
     }
+    out += '\n</code></pre>';
+    return out;
   };
 
   // 对外部链接加上 `target="_blank"` 的特性

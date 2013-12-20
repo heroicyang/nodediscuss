@@ -8,16 +8,16 @@ div#markdown-refer.panel.panel-default
       li 链接: [文字](url)
       li 图片: ![alt描述](url)
       li
-        :markdown
-          单行代码: ``` `hello world` ```
+        单行代码: 
+        code
+          | `hello world`
       li
-        :markdown
-          多行代码: 指定 lang 以高亮代码
-          ````
-          ```[lang]
-          console.log('hello world');
-          ```
-          ````
+        多行代码: 指定 lang 以高亮代码
+        pre
+          code.string
+            | ```[lang]
+            | console.log('hello world');
+            | ```
       li
         span 支持&#32;
         a(href="https://help.github.com/articles/github-flavored-markdown") GitHub Flavored Markdown

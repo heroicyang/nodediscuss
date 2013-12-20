@@ -9,7 +9,7 @@
 var _ = require('lodash');
 var config = require('../../config'),
   api = require('../api');
-var error = require('../../utils/error'),
+var error = require('../utils/error'),
   NotFoundError = error.NotFoundError;
 
 /** Wiki 列表页面 */

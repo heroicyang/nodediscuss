@@ -10,7 +10,7 @@ var _ = require('lodash'),
   moment = require('moment');
 var api = require('../api'),
   config = require('../../config');
-var error = require('../../utils/error'),
+var error = require('../utils/error'),
   CentralizedError = error.CentralizedError,
   NotAllowedError = error.NotAllowedError;
 

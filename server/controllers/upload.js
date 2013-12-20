@@ -7,10 +7,10 @@
  * Module dependencies
  */
 var path = require('path'),
-  url = require('url'),
-  _ = require('lodash'),
-  config = require('../../config'),
-  uploader = require('../../utils/uploader');
+  url = require('url');
+var _ = require('lodash');
+var config = require('../../config'),
+  uploader = require('../uploader');
 
 var uploadURL;
 if (config.media.domain) {

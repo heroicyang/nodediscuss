@@ -11,10 +11,10 @@ var _ = require('lodash'),
   moment = require('moment'),
   request = require('request');
 var config = require('../../config'),
-  md5 = require('../../utils/md5'),
   api = require('../api'),
   constants = api.constants;
-var error = require('../../utils/error'),
+var md5 = require('../utils/md5');
+var error = require('../utils/error'),
   CentralizedError = error.CentralizedError,
   NotFoundError = error.NotFoundError;
 

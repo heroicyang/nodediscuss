@@ -7,7 +7,7 @@
  * Module dependencies
  */
 var api = require('../api');
-var error = require('../../utils/error'),
+var error = require('../utils/error'),
   NotFoundError = error.NotFoundError;
 
 /** 获取单个节点数据的路由中间件 */

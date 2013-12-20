@@ -10,7 +10,7 @@ var async = require('async'),
   _ = require('lodash');
 var config = require('../../config'),
   api = require('../api');
-var error = require('../../utils/error'),
+var error = require('../utils/error'),
   NotFoundError = error.NotFoundError;
 
 /** 社区页面话题列表 */

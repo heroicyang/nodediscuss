@@ -9,7 +9,7 @@
 var async = require('async');
 var api = require('../api'),
   config = require('../../config');
-var NotFoundError = require('../../utils/error').NotFoundError;
+var NotFoundError = require('../utils/error').NotFoundError;
 
 /** 用户发表的评论列表 */
 exports.createdByUser = function(req, res, next) {

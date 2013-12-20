@@ -26,7 +26,7 @@ if (marked.Renderer) {
   var r = new marked.Renderer();
 
   // 使用 `highlight.js` 库来解析代码块
-  r.code = function(code, lang) {
+  r.blockcode = function(code, lang) {
     if (lang) {
       return hljs.highlight(lang, code).value;
     } else {

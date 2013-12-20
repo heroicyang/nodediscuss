@@ -69,7 +69,7 @@ exports.add = function(commentData, callback) {
   async.waterfall([
     function renderMarkdown(next) {
       var content = transformMention(commentData.content);
-      content = transformFloor(content);
+      content = transformFloor(commentData.id, content);
       marked(content, next);
     },
     function saveCommentData(contentHtml, next) {

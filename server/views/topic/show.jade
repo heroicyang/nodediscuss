@@ -98,7 +98,7 @@ block content
             img(src!=gravatar(currentUser.emailHash),
                 alt="#{currentUser.nickname}").media-object.img-rounded.img-responsive
         div.media-body
-          form(role="form", method="POST", action="/comment/create")#comment-form.form-horizontal
+          form(role="form", method="POST", action="/comments/create")#comment-form.form-horizontal
             div.form-group
               div.col-sm-12
                 textarea(name="content", rows="5", required)#comment-editor.form-control

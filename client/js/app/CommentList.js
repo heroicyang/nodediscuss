@@ -26,7 +26,7 @@ NC.Module.define('CommentList', [], function() {
           var $el = $(e.currentTarget),
             id = $el.data('comment-id'),
             floor = $el.data('floor'),
-            url = '/comment/' + id + '/remove',
+            url = '/comments/' + id + '/remove',
             $commentItem = $el.closest('li.list-group-item');
           $.post(url)
             .done(function(data) {

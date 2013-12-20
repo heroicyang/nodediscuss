@@ -6,10 +6,10 @@
 /**
  * Module dependencies
  */
-var util = require('util'),
-  path = require('path'),
-  qn = require('qn'),
-  Strategy = require('../uploader').Strategy;
+var path = require('path');
+var qn = require('qn');
+var extend = require('../extend'),
+  UploaderStrategy = extend.UploaderStrategy;
 
 /**
  * QiniuStrategy constructor
@@ -22,14 +22,14 @@ var util = require('util'),
  */
 function QiniuStrategy(options) {
   options = options || {};
-  Strategy.call(this);
+  UploaderStrategy.call(this);
   this.name = 'qiniu';
   this.uploadPath = options.uploadPath;
   this.options = options;
 }
 
 /** 从 Strategy 继承 */
-util.inherits(QiniuStrategy, Strategy);
+extend(QiniuStrategy, UploaderStrategy);
 
 /**
  * 实现 upload 方法

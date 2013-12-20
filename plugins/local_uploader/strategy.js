@@ -7,9 +7,9 @@
  * Module dependencies
  */
 var fs = require('fs'),
-  util = require('util'),
-  path = require('path'),
-  Strategy = require('../uploader').Strategy;
+  path = require('path');
+var extend = require('../extend'),
+  UploaderStrategy = extend.UploaderStrategy;
 
 /**
  * LocalStrategy constructor
@@ -18,13 +18,13 @@ var fs = require('fs'),
  */
 function LocalStrategy(options) {
   options = options || {};
-  Strategy.call(this);
+  UploaderStrategy.call(this);
   this.name = 'local';
   this.uploadPath = options.uploadPath;
 }
 
 /** 从 Strategy 继承 */
-util.inherits(LocalStrategy, Strategy);
+extend(LocalStrategy, UploaderStrategy);
 
 /**
  * 实现 upload 方法

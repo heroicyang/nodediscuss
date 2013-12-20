@@ -7,7 +7,7 @@
  * Module dependencies
  */
 var path = require('path'),
-  Uploader = require('../plugins/uploader'),
+  Uploader = require('../libs/uploader'),
   uploader = new Uploader(),
   LocalStrategy = require('../plugins/local_uploader'),
   QiniuStrategy = require('../plugins/qiniu_uploader'),

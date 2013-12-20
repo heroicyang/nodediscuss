@@ -8,7 +8,7 @@
  */
 var util = require('util');
 var async = require('async');
-var Mailer = require('../plugins/mailer'),
+var Mailer = require('../libs/mailer'),
   mailer = new Mailer(),
   NodeMailerStrategy = require('../plugins/nodemailer'),
   config = require('../config'),

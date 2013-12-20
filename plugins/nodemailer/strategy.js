@@ -9,16 +9,16 @@
 /**
  * Module dependencies
  */
-var util = require('util'),
-  Strategy = require('../mailer').Strategy,
-  nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer');
+var extend = require('../extend'),
+  MailerStrategy = extend.MailerStrategy;
 
 /**
  * NodeMailerStrategy constructor
  * @param {Object} options NodeMailer 创建 transport 时需要的选项
  */
 function NodeMailerStrategy(options) {
-  Strategy.call(this);
+  MailerStrategy.call(this);
   this.name = 'nodemailer';
   this.transport = nodemailer.createTransport("SMTP", options);
 }
@@ -26,7 +26,7 @@ function NodeMailerStrategy(options) {
 /**
  * 从 `Strategy` 继承
  */
-util.inherits(NodeMailerStrategy, Strategy);
+extend(NodeMailerStrategy, MailerStrategy);
 
 /**
  * 实现 send 方法

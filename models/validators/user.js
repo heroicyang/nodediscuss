@@ -93,5 +93,5 @@ module.exports = exports = function(schema) {
   // 用户状态检查
   schema.path('state')
     .required(true)
-    .enum(_.values(constants.USER_STATE));
+    .enum({ values: _.values(constants.USER_STATE) });
 };

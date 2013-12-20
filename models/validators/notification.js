@@ -35,7 +35,7 @@ module.exports = exports = function(schema) {
   
   schema.path('type')
     .required(true)
-    .enum(_.values(constants.NOTIFICATION_TYPE));
+    .enum({ values: _.values(constants.NOTIFICATION_TYPE) });
   
   schema.path('topicId')
     .validate(function(topicId) {

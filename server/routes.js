@@ -78,16 +78,15 @@ module.exports = exports = function(app) {
   app.all('/topic/:id/edit', auth.topicAuthorRequired, topics.edit);
 
   // 收藏相关操作直接调用 api
-  /*
   app.post('/topic/:id/favorite',
-      api.requestHandler(api.favoriteTopic.create));
+      api.requestHandler(api.User.favoriteTopic));
   app.post('/topic/:id/unfavorite',
-      api.requestHandler(api.favoriteTopic.remove));
-  app.post('/tag/:slug/:op', auth.loginRequired, tag.load);
+      api.requestHandler(api.User.unfavoriteTopic));
+  app.post('/tag/:slug/:op', auth.loginRequired, tags.load);
   app.post('/tag/:slug/favorite',
-      api.requestHandler(api.favoriteTag.create));
+      api.requestHandler(api.User.favoriteTag));
   app.post('/tag/:slug/unfavorite',
-      api.requestHandler(api.favoriteTag.remove));*/
+      api.requestHandler(api.User.unfavoriteTag));
   // 收藏列表
   app.get('/favorite/:type', auth.loginRequired);
   app.get('/favorite/topics', favorites.topics);

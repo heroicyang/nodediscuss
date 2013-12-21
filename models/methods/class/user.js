@@ -6,7 +6,8 @@
 /**
  * Module dependencies
  */
-var _ = require('lodash');
+var _ = require('lodash'),
+  async = require('async');
 var mailers = require('../../../mailers');
 
 /**
@@ -178,4 +179,204 @@ exports.setVerified = function(options, callback) {
   }, function(err, user) {
     callback(err, user);
   });
+};
+
+/**
+ * 收藏某个话题
+ * @param  {Object}   options
+ *  - id        required    话题 id
+ *  - userId    required    用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - result
+ *    - user    执行该操作的用户
+ *    - topic   所对应的话题数据
+ */
+exports.favoriteTopic = function(options, callback) {
+  options = options || {};
+  var id = options.id || options._id,
+    userId = options.userId;
+  var Topic = this.base.models.Topic,
+    self = this;
+
+  async.waterfall([
+    function addToFavoriteUsers(next) {
+      Topic.findByIdAndUpdate(id, {
+        favoriteUsers: {
+          $push: userId
+        },
+        $inc: {
+          favoriteCount: 1
+        }
+      }, function(err, topic) {
+        next(err, topic);
+      });
+    },
+    function updateUserFavoriteCount(topic, next) {
+      if (!topic) {
+        return next(null);
+      }
+      self.findByIdAndUpdate(userId, {
+        $inc: {
+          favoriteTopicCount: 1
+        }
+      }, function(err, user) {
+        next(err, {
+          user: user,
+          topic: topic
+        });
+      });
+    }
+  ], callback);
+};
+
+/**
+ * 取消收藏某个话题
+ * @param  {Object}   options
+ *  - id        required    话题 id
+ *  - userId    required    用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - result
+ *    - user    执行该操作的用户
+ *    - topic   所对应的话题数据
+ */
+exports.unfavoriteTopic = function(options, callback) {
+  options = options || {};
+  var id = options.id || options._id,
+    userId = options.userId;
+  var Topic = this.base.models.Topic,
+    self = this;
+
+  async.waterfall([
+    function addToFavoriteUsers(next) {
+      Topic.findByIdAndUpdate(id, {
+        $addToSet: {
+          favoriteUsers: userId
+        },
+        $inc: {
+          favoriteCount: -1
+        }
+      }, function(err, topic) {
+        next(err, topic);
+      });
+    },
+    function updateUserFavoriteCount(topic, next) {
+      if (!topic) {
+        return next(null);
+      }
+      self.findByIdAndUpdate(userId, {
+        $inc: {
+          favoriteTopicCount: -1
+        }
+      }, function(err, user) {
+        next(err, {
+          user: user,
+          topic: topic
+        });
+      });
+    }
+  ], callback);
+};
+
+/**
+ * 收藏某个节点
+ * @param  {Object}   options
+ *  - slug      required    节点地址
+ *  - userId    required    用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - result
+ *    - user  执行该操作的用户
+ *    - tag   所对应的节点数据
+ */
+exports.favoriteTag = function(options, callback) {
+  options = options || {};
+  var slug = options.slug,
+    userId = options.userId;
+  var Tag = this.base.models.Tag,
+    self = this;
+
+  async.waterfall([
+    function addToFavoriteUsers(next) {
+      Tag.findOneAndUpdate({
+        slug: slug
+      }, {
+        $addToSet: {
+          favoriteUsers: userId
+        },
+        $inc: {
+          favoriteCount: 1
+        }
+      }, function(err, tag) {
+        next(err, tag);
+      });
+    },
+    function updateUserFavoriteCount(tag, next) {
+      if (!tag) {
+        return next(null);
+      }
+      self.findByIdAndUpdate(userId, {
+        $inc: {
+          favoriteTagCount: 1
+        }
+      }, function(err, user) {
+        next(err, {
+          user: user,
+          tag: tag
+        });
+      });
+    }
+  ], callback);
+};
+
+/**
+ * 取消收藏某个节点
+ * @param  {Object}   options
+ *  - slug      required    节点地址
+ *  - userId    required    用户 id
+ * @param  {Function} callback
+ *  - err
+ *  - result
+ *    - user  执行该操作的用户
+ *    - tag   所对应的节点数据
+ */
+exports.unfavoriteTag = function(options, callback) {
+  options = options || {};
+  var slug = options.slug,
+    userId = options.userId;
+  var Tag = this.base.models.Tag,
+    self = this;
+
+  async.waterfall([
+    function addToFavoriteUsers(next) {
+      Tag.findOneAndUpdate({
+        slug: slug
+      }, {
+        favoriteUsers: {
+          $pull: userId
+        },
+        $inc: {
+          favoriteCount: -1
+        }
+      }, function(err, tag) {
+        next(err, tag);
+      });
+    },
+    function updateUserFavoriteCount(tag, next) {
+      if (!tag) {
+        return next(null);
+      }
+      self.findByIdAndUpdate(userId, {
+        $inc: {
+          favoriteTagCount: -1
+        }
+      }, function(err, user) {
+        next(err, {
+          user: user,
+          tag: tag
+        });
+      });
+    }
+  ], callback);
 };

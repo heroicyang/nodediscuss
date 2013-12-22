@@ -29,7 +29,7 @@ if (marked.Renderer) {
   r.code = function(code, lang) {
     var out = '<pre>';
     if (lang) {
-      out += '<code class="lang-' + lang + '">' +
+      out += '<code class="' + lang + '">' +
           hljs.highlight(lang, code).value;
     } else {
       out += '<code>' +

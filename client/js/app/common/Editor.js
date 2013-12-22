@@ -2,30 +2,20 @@
  * 编辑器模块
  * @author heroic
  */
-NC.Module.define('Editor', [], function() {
-  marked.setOptions({
-    gfm: true,
-    highlight: function(code, lang) {
-      if (lang) {
-        return hljs.highlight(lang, code).value;
-      } else {
-        return hljs.highlightAuto(code).value;
-      }
-    },
-    tables: true,
-    breaks: true,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: false,
-    langPrefix: 'lang-'
-  });
-
+NC.Module.define('Editor', ['Marked'], function(Marked) {
   return NC.Module.extend({
     events: {
       'show.bs.tab .nav-tabs a[data-toggle="tab"]': 'onTabShow',
       'click .fullscreen': 'onZenButtonClick',
       'click #et-insert-code .lang': 'onCodeInsertClick'
+    },
+    /**
+     * 在 markdown 渲染内容之前调用，可以对内容进行自定义处理
+     * @param  {String} val  编辑器内容
+     * @return {String}  内容
+     */
+    beforeRender: function(val) {
+      return val;
     },
     /** 
      * 重写 Backbone.View 生成 $el 的方法，把界面上本身该是 $el 的元素给替换掉
@@ -39,17 +29,21 @@ NC.Module.define('Editor', [], function() {
 
       $textarea = $textarea.detach();
 
-      $el.find('#write').prepend($textarea.attr('data-widearea', 'enable'));
+      $el.find('#write').prepend($textarea);
       $parent.html($el);
       $textarea = null;
 
       this.setElement($el, false);
     },
-    initialize: function() {
+    initialize: function(options) {
+      if (options.beforeRender) {
+        this.beforeRender = options.beforeRender;
+      }
+      
       this.$textarea = this.$('textarea');
-      _.bindAll(this);
       this.setupZenArea();
       this.setupFileupload();
+      _.bindAll(this);
     },
     setupZenArea: function() {
       var $zenButton = $('<a>')
@@ -80,10 +74,8 @@ NC.Module.define('Editor', [], function() {
     onTabShow: function(e) {
       var val = this.$textarea.val();
       if ($(e.target).attr('href') === '#preview') {
-        if (this.processValue) {
-          val = this.processValue(val);
-        }
-        $('#preview').html(marked(val));
+        val = this.beforeRender(val);
+        $('#preview').html(Marked.render(val));
       }
     },
     onZenButtonClick: function(e) {
@@ -142,12 +134,14 @@ NC.Module.define('Editor', [], function() {
       this.$('.uploading').show();
       this.$('.toolbar .error').hide();
     },
-    onImageUploaded: function(e, data) {
-      var res = data.result,
+    onImageUploaded: function(e, res) {
+      var data = res.result,
         failedImgs = [],
         self = this;
-      if (res.success) {
-        _.each(res.files, function(file) {
+      if (data.error) {
+        this.onImageUploadError();
+      } else {
+        _.each(data, function(file) {
           if (file.error) {
             failedImgs.push(file.originalFilename);
             return;
@@ -166,8 +160,6 @@ NC.Module.define('Editor', [], function() {
           $failedImgs.html('<strong>部分</strong>');
           this.$('.toolbar .error').show();
         }
-      } else {
-        this.onImageUploadError();
       }
     },
     onImageUploadError: function() {

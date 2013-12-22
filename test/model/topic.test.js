@@ -7,8 +7,7 @@ var should = require('should'),
   models = db.models;
 var User = models.User,
   Tag = models.Tag,
-  Topic = models.Topic,
-  Comment = models.Comment;
+  Topic = models.Topic;
 var shared = require('./shared');
 
 describe('Model#Topic', function() {
@@ -25,6 +24,7 @@ describe('Model#Topic', function() {
     describe('Topic#title', function() {
       it('title is required', function(done) {
         var topic = new Topic({
+          title: '',
           content: 'this is a test topic...',
           tag: {
             id: this.tag.id
@@ -40,8 +40,8 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('length is too short or too long should throw an error', function(done) {
-        var titles = ['test', (new Array(100)).join('test')],
+      it('length must be in the specified range', function(done) {
+        var titles = ['', (new Array(100)).join('test')],
           self = this,
           topic;
         async.each(titles, function(title, next) {
@@ -79,7 +79,7 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('`tag.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('`tag.id` must be a valid `ObjectId` string', function(done) {
         var topic = new Topic({
           title: 'this is a test topic...',
           content: 'this is a test topic...',
@@ -132,7 +132,7 @@ describe('Model#Topic', function() {
         });
       });
 
-      it('`author.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('`author.id` must be a valid `ObjectId` string', function(done) {
         var topic = new Topic({
           title: 'this is a test topic...',
           content: 'this is a test topic...',
@@ -170,68 +170,66 @@ describe('Model#Topic', function() {
     });
   });
 
-  describe('Hooks', function() {
-    describe('pre/topic.js', function() {
-      it('xss sanitize before validation', function(done) {
-        var topic = new Topic({
-          title: '<script>alert(\'xss\');</script>',
-          content: '<p>asdsadsa</p><img src="asd.jpg">',
-          tag: {
-            id: this.tag.id
-          },
-          author: {
-            id: this.user.id
-          }
-        });
-        topic.validate(function() {
-          topic.title.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
-          done();
-        });
+  describe('middlewares', function() {
+    it('xss sanitize before validation', function(done) {
+      var topic = new Topic({
+        title: '<script>alert(\'xss\');</script>',
+        content: '<p>asdsadsa</p><img src="asd.jpg">',
+        tag: {
+          id: this.tag.id
+        },
+        author: {
+          id: this.user.id
+        }
       });
+      topic.validate(function() {
+        topic.title.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
+        done();
+      });
+    });
 
-      it('should increase `topicCount` of author when create new topic', function(done) {
-        var topicCountBefore = this.user.topicCount;
-        User.findById(this.user.id, function(err, user) {
+    it('should increase `topicCount` of author when create', function(done) {
+      var topicCountBefore = this.user.topicCount;
+      User.findById(this.user.id, function(err, user) {
+        should.exist(user);
+        user.topicCount.should.eql(topicCountBefore + 1);
+        done();
+      });
+    });
+
+    it('should increase `topicCount` of tag when create', function(done) {
+      var topicCountBefore = this.tag.topicCount;
+      Tag.findById(this.tag.id, function(err, tag) {
+        should.exist(tag);
+        tag.topicCount.should.eql(topicCountBefore + 1);
+        done();
+      });
+    });
+
+    it('should decrease `topicCount` of author when remove', function(done) {
+      var self = this;
+      Topic.destroy(this.topic.id, function(err) {
+        if (err) {
+          return done(err);
+        }
+        User.findById(self.user.id, function(err, user) {
           should.exist(user);
-          user.topicCount.should.eql(topicCountBefore + 1);
+          user.topicCount.should.eql(0);
           done();
         });
       });
+    });
 
-      it('should increase `topicCount` of tag when create new topic', function(done) {
-        var topicCountBefore = this.tag.topicCount;
-        Tag.findById(this.tag.id, function(err, tag) {
+    it('should decrease `topicCount` of tag when remove', function(done) {
+      var self = this;
+      Topic.destroy(this.topic.id, function(err) {
+        if (err) {
+          return done(err);
+        }
+        Tag.findById(self.tag.id, function(err, tag) {
           should.exist(tag);
-          tag.topicCount.should.eql(topicCountBefore + 1);
+          tag.topicCount.should.eql(0);
           done();
-        });
-      });
-
-      it('should decrease `topicCount` of author when remove topic', function(done) {
-        var self = this;
-        Topic.destroy(this.topic.id, function(err) {
-          if (err) {
-            return done(err);
-          }
-          User.findById(self.user.id, function(err, user) {
-            should.exist(user);
-            user.topicCount.should.eql(0);
-            done();
-          });
-        });
-      });
-
-      it('should decrease `topicCount` of tag when remove topic', function(done) {
-        var self = this;
-        Topic.destroy(this.topic.id, function(err) {
-          if (err) {
-            return done(err);
-          }
-          Tag.findById(self.tag.id, function(err, tag) {
-            should.exist(tag);
-            tag.topicCount.should.eql(0);
-            done();
-          });
         });
       });
     });

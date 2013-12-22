@@ -39,7 +39,7 @@ describe('Model#Comment', function() {
         });
       });
 
-      it('refId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('refId must be a valid `ObjectId` string', function(done) {
         var comment = new Comment({
           refId: '1234',
           content: 'this is a test comment...',
@@ -56,7 +56,7 @@ describe('Model#Comment', function() {
     });
 
     describe('Comment#content', function() {
-      it('comment content can not be empty', function(done) {
+      it('content is required', function(done) {
         var comment = new Comment({
           refId: this.topic.id,
           author: {
@@ -70,12 +70,12 @@ describe('Model#Comment', function() {
         });
       });
 
-      it('comment can not be repeated', function(done) {
+      it('content can not be repeated', function(done) {
         var comment = new Comment({
           refId: this.topic.id,
           content: this.comment.content,
           author: {
-            id: this.user.id
+            id: this.anotherUser.id
           }
         });
         comment.validate(function(err) {
@@ -99,7 +99,7 @@ describe('Model#Comment', function() {
         });
       });
 
-      it('`author.id` must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('`author.id` must be a valid `ObjectId` string', function(done) {
         var comment = new Comment({
           refId: this.topic.id,
           content: 'this is a test comment...',
@@ -115,7 +115,7 @@ describe('Model#Comment', function() {
       });
 
       it('`author.id` record must exist in the database', function(done) {
-        var comment = new Topic({
+        var comment = new Comment({
           refId: this.topic.id,
           content: 'this is a test comment...',
           author: {
@@ -131,97 +131,90 @@ describe('Model#Comment', function() {
     });
   });
 
-  describe('Hooks', function() {
-    describe('pre/comment.js', function() {
-      it('xss sanitize before validation', function(done) {
-        var comment = new Comment({
-          refId: this.topic.id,
-          content: '<script>alert(\'xss\');</script>',
-          author: {
-            id: this.user.id
-          }
-        });
-        comment.validate(function() {
-          comment.content.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
-          done();
-        });
+  describe('middlewares', function() {
+    it('xss sanitize before validation', function(done) {
+      var comment = new Comment({
+        refId: this.topic.id,
+        content: '<script>alert(\'xss\');</script>',
+        author: {
+          id: this.user.id
+        }
       });
-
-      it('`floor` of comment should equals `commentCount` of topic', function(done) {
-        var self = this;
-        Topic.findById(this.topic.id, function(err, topic) {
-          should.exist(topic);
-          self.comment.floor.should.eql(topic.commentCount);
-          done();
-        });
-      });
-
-      it('should increase `commentCount` of topic when comment on topic', function(done) {
-        Topic.findById(this.topic.id, function(err, topic) {
-          should.exist(topic);
-          topic.commentCount.should.eql(1);
-          done();
-        });
-      });
-
-      it('should update `lastCommentUser` of topic when comment on topic', function(done) {
-        var self = this;
-        Topic.findById(this.topic.id, function(err, topic) {
-          should.exist(topic);
-          should.exist(topic.lastCommentUser);
-          topic.lastCommentUser.username.should.eql(self.user.username);
-          topic.lastCommentedAt.should.eql(self.comment.createdAt);
-          done();
-        });
-      });
-
-      it('should increase `commentCount` of page when comment on page', function(done) {
-        // TODO
+      comment.validate(function() {
+        comment.content.should.eql('[removed]alert&#40;\'xss\'&#41;;[removed]');
         done();
       });
+    });
 
-      it('should notify topic author when comment on topic', function(done) {
-        Notification.findOne({
-          masterId: this.user.id,
-          topicId: this.topic.id
-        }, function(err, notification) {
-          if (err) {
-            return done(err);
-          }
-          should.exist(notification);
-          done();
-        });
+    it('comment floor should equals the `commentCount` of topic', function(done) {
+      var self = this;
+      Topic.findById(this.topic.id, function(err, topic) {
+        should.exist(topic);
+        self.comment.floor.should.eql(topic.commentCount);
+        done();
       });
+    });
 
-      it('should notify comment author when reply comment', function(done) {
-        var self = this;
-        async.waterfall([
-          function replyComment(next) {
-            Comment.create({
-              refId: self.topic.id,
-              commentIds: [self.comment.id],
-              content: 'this is a reply comment...',
-              author: {
-                id: self.user.id
-              }
-            }, function(err) {
-              next(err);
-            });
-          },
-          function findNotification(next) {
-            Notification.findOne({
-              masterId: self.user.id,
-              masterCommentId: self.comment.id
-            }, function(err, notification) {
-              if (err) {
-                return next(err);
-              }
-              should.exist(notification);
-              done();
-            });
-          }
-        ], done);
+    it('should increase `commentCount` of topic when create', function(done) {
+      Topic.findById(this.topic.id, function(err, topic) {
+        should.exist(topic);
+        topic.commentCount.should.eql(1);
+        done();
       });
+    });
+
+    it('should update `lastCommentUser` of topic when create', function(done) {
+      var self = this;
+      Topic.findById(this.topic.id, function(err, topic) {
+        should.exist(topic);
+        should.exist(topic.lastCommentUser);
+        topic.lastCommentUser.username.should.eql(self.anotherUser.username);
+        topic.lastCommentedAt.should.eql(self.comment.createdAt);
+        done();
+      });
+    });
+
+    it('should notify topic author when create comment', function(done) {
+      Notification.findOne({
+        masterId: this.user.id,
+        topicId: this.topic.id
+      }, function(err, notification) {
+        if (err) {
+          return done(err);
+        }
+        should.exist(notification);
+        done();
+      });
+    });
+
+    it('should notify comment author when reply comment', function(done) {
+      var self = this;
+      async.waterfall([
+        function replyComment(next) {
+          Comment.create({
+            refId: self.topic.id,
+            commentIds: [self.comment.id],
+            content: 'this is a reply comment...',
+            author: {
+              id: self.user.id
+            }
+          }, function(err) {
+            next(err);
+          });
+        },
+        function findNotification(next) {
+          Notification.findOne({
+            masterId: self.anotherUser.id,
+            masterCommentId: self.comment.id
+          }, function(err, notification) {
+            if (err) {
+              return next(err);
+            }
+            should.exist(notification);
+            done();
+          });
+        }
+      ], done);
     });
   });
 

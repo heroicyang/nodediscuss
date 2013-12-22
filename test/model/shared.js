@@ -8,8 +8,6 @@ var User = models.User,
   Tag = models.Tag,
   Topic = models.Topic,
   Comment = models.Comment,
-  FavoriteTag = models.FavoriteTag,
-  FavoriteTopic = models.FavoriteTopic,
   Notification = models.Notification;
 
 exports.createUser = function(callback) {
@@ -18,11 +16,16 @@ exports.createUser = function(callback) {
     email: 'me@heroicyang.com',
     username: 'heroic',
     password: '111111'
-  }, function(err, user) {
+  }, {
+    email: 'heroicyang@qq.com',
+    username: 'heroicyang',
+    password: '111111'
+  }, function(err, user, anotherUser) {
     if (err) {
       return callback(err);
     }
     self.user = user;
+    self.anotherUser = anotherUser;
     callback();
   });
 };
@@ -55,6 +58,7 @@ exports.removeSections = function(callback) {
 exports.createTag = function(callback) {
   var self = this;
   Tag.create({
+    slug: 'express',
     name: 'Express',
     section: {
       id: this.sections[0].id,
@@ -72,30 +76,35 @@ exports.createTag = function(callback) {
 exports.createTags = function(callback) {
   var self = this;
   Tag.create([{
+    slug: 'connect',
     name: 'Connect',
     section: {
       id: this.sections[0].id,
       name: this.sections[0].name
     }
   }, {
+    slug: 'mongoose',
     name: 'Mongoose',
     section: {
       id: this.sections[0].id,
       name: this.sections[0].name
     }
   }, {
+    slug: 'mongodb',
     name: 'Mongodb',
     section: {
       id: this.sections[1].id,
       name: this.sections[1].name
     }
   }, {
+    slug: 'redis',
     name: 'Redis',
     section: {
       id: this.sections[1].id,
       name: this.sections[1].name
     }
   }, {
+    slug: 'jingjs',
     name: '京 JS',
     section: {
       id: this.sections[2].id,
@@ -144,7 +153,7 @@ exports.createComment = function(callback) {
     refId: this.topic.id,
     content: 'this is a test comment',
     author: {
-      id: this.user.id
+      id: this.anotherUser.id
     }
   }, function(err, comment) {
     if (err) {
@@ -157,31 +166,6 @@ exports.createComment = function(callback) {
 
 exports.removeComments = function(callback) {
   Comment.remove(callback);
-};
-
-exports.createFavoriteTag = function(callback) {
-  FavoriteTag.create({
-    userId: this.user.id,
-    tag: {
-      id: this.tag.id,
-      name: this.tag.name
-    }
-  }, callback);
-};
-
-exports.removeFavoriteTags = function(callback) {
-  FavoriteTag.remove(callback);
-};
-
-exports.createFavoriteTopic = function(callback) {
-  FavoriteTopic.create({
-    userId: this.user.id,
-    topicId: this.topic.id
-  }, callback);
-};
-
-exports.removeFavoriteTopics = function(callback) {
-  FavoriteTopic.remove(callback);
 };
 
 exports.removeNotifications = function(callback) {

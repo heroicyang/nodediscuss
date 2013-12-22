@@ -45,9 +45,10 @@ var UserSchema = new Schema({
   website: {
     type: String,
     set: function(val) {
-      if (val && !/(https?|s?ftp|git)/i.test(val)) {
+      if (val && !/^(https?|s?ftp|git)/i.test(val)) {
         return 'http://' + val;
       }
+      return val;
     }
   },
   location: String,

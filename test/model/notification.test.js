@@ -27,7 +27,7 @@ describe('Model#Notification', function() {
         });
       });
 
-      it('masterId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('masterId must be a valid `ObjectId` string', function(done) {
         var comment = new Notification({
           masterId: '1234',
           userId: this.user.id,
@@ -54,7 +54,7 @@ describe('Model#Notification', function() {
         });
       });
 
-      it('userId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('userId must be a valid `ObjectId` string', function(done) {
         var comment = new Notification({
           masterId: this.user.id,
           userId: '1234',
@@ -108,7 +108,7 @@ describe('Model#Notification', function() {
     });
 
     describe('Notification#topicId', function() {
-      it('topicId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('topicId must be a valid `ObjectId` string', function(done) {
         var comment = new Notification({
           masterId: this.user.id,
           userId: this.user.id,
@@ -124,7 +124,7 @@ describe('Model#Notification', function() {
     });
 
     describe('Notification#masterCommentId', function() {
-      it('masterCommentId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('masterCommentId must be a valid `ObjectId` string', function(done) {
         var comment = new Notification({
           masterId: this.user.id,
           userId: this.user.id,
@@ -140,7 +140,7 @@ describe('Model#Notification', function() {
     });
 
     describe('Notification#commentId', function() {
-      it('commentId must be a Mongoose.Schema.ObjectId value to string', function(done) {
+      it('commentId must be a valid `ObjectId` string', function(done) {
         var comment = new Notification({
           masterId: this.user.id,
           userId: this.user.id,

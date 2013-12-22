@@ -6,7 +6,6 @@
 var _ = window._;
 var NC = window.NC = {
   NOOP: function() {},
-  moduleMapping: [],
   /** 非 Backbone.View 模块的定义，请使用 Loader.define */
   Loader: {
     require: require,
@@ -49,7 +48,6 @@ NC.Module = Backbone.View.extend({
     this._build(options);
   },
   initialize: NC.NOOP,
-  onBuildComplete: NC.NOOP,
   onReady: NC.NOOP,
   /**
    * 依次去构建该模块下面的子模块，模块结构的最终形态和 DOM 树结构类似
@@ -74,21 +72,24 @@ NC.Module = Backbone.View.extend({
 
     var self = this,
       children = options.children,
-      childCount = children && children.length;
+      childCount = (children && children.length) || 0;
 
-    _.each(children, function(child) {
-      var $el = $(child.el, self.$el);
-      NC.loadModule(_.defaults({
-        el: $el,
-        parent: self
-      }, child), function(module) {
-        module.onReady();
-        childCount -= 1;
-        if (childCount === 0) {
-          self.onBuildComplete();
-        }
+    if (childCount === 0) {
+      this.onReady();
+    } else {
+      _.each(children, function(child) {
+        var $el = $(child.el, self.$el);
+        NC.loadModule(_.defaults({
+          el: $el,
+          parent: self
+        }, child), function(module) {
+          childCount -= 1;
+          if (childCount === 0) {
+            self.onReady();
+          }
+        });
       });
-    });
+    }
   },
   /**
    * 根据 moduleMapping 配置中提供的 id 项来获取相应的子模块对象
@@ -208,3 +209,20 @@ NC.User = Backbone.Model.extend({
 
 /** 当前访问的用户对象 */
 NC.currentUser = new NC.User();
+
+/** 模块树管理对象 */
+NC.moduleTree = (function() {
+  var tree = [];
+  return {
+    push: function(module) {
+      if (_.isArray(module)) {
+        tree = tree.concat(module);
+      } else {
+        tree.push(module);
+      }
+    },
+    get: function() {
+      return tree;
+    }
+  };
+}());

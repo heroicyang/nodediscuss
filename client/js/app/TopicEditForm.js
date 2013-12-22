@@ -1,11 +1,14 @@
 NC.Module.define('TopicEditForm',
-  ['Form', 'Validator'],
-  function(Form, Validator) {
+  ['Form', 'Validator', 'Editor'],
+  function(Form, Validator, Editor) {
     return NC.Module.extend({
       initialize: function() {
         this.setupForm();
         this.listenTo(this.form, 'invalidated', this.onFormInvalidated);
         this.listenTo(this.form, 'validated', this.onFormValidated);
+        this.editor = new Editor({
+          el: '#content-editor'
+        });
       },
       setupForm: function() {
         this.$form = this.$el;

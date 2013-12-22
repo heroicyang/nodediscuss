@@ -1,16 +1,15 @@
 NC.Module.define('CommentForm',
-  ['Form', 'Validator'],
-  function(Form, Validator) {
+  ['Form', 'Validator', 'Editor'],
+  function(Form, Validator, Editor) {
     return NC.Module.extend({
       initialize: function() {
         this.setupForm();
         this.listenTo(this.form, 'validated', this.onFormValidated);
-        _.bindAll(this);
+        this.setupEditor();
         this.commentIds = [];
+        _.bindAll(this);
       },
-      onBuildComplete: function() {
-        this.editor = this.getChildById('contentEditor');
-        this.editor.processValue = this.parseFloorAndAt;
+      onReady: function() {
         this.listenTo(NC.pubsub, 'editor:insert', this.insertTextToEditor);
         this.listenTo(NC.pubsub, 'comment:reply', this.replyComment);
       },
@@ -22,6 +21,25 @@ NC.Module.define('CommentForm',
           ]
         }, {
           isErrMsgOnHelpBlock: false
+        });
+      },
+      setupEditor: function() {
+        var self = this;
+        this.editor = new Editor({
+          el: '#comment-editor',
+          beforeRender: function(val) {
+            return val
+              .replace(/#(\d+)楼\s?/g, function(group, p1) {
+                return _.template('[#<%= floor %>楼](/topic/<%= topicId %>#comment-<%= floor %>) ', {
+                  floor: p1,
+                  topicId: self.data.id
+                });
+              }).replace(/@([a-zA-Z0-9\-_]+)\s?/g, function(group, p1) {
+                return _.template('[@<%= username %>](/user/<%= username %>) ', {
+                  username: p1
+                });
+              });
+          }
         });
       },
       onFormValidated: function() {
@@ -38,20 +56,6 @@ NC.Module.define('CommentForm',
 
         this.$form.off('submit');
         this.$form.submit();
-      },
-      parseFloorAndAt: function(data) {
-        var self = this;
-        data = data.replace(/#(\d+)楼/g, function(group, p1) {
-          return _.template('[#<%= floor %>楼](/topic/<%= topicId %>#comment-<%= floor %>) ', {
-            floor: p1,
-            topicId: self.data.id
-          });
-        }).replace(/@([a-zA-Z0-9\-_]+)/g, function(group, p1) {
-          return _.template('[@<%= username %>](/user/<%= username %>) ', {
-            username: p1
-          });
-        });
-        return data;
       },
       insertTextToEditor: function(data) {
         this.editor.insert(data);

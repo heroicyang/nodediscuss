@@ -4,36 +4,31 @@
 
 ##介绍
 
-CNode Club 是 Node.js 中文技术社区系统 [Node Club] 的重写版本，是我自己折腾的一个兴趣型项目。  
+CNode Club 起初是计划基于 Node.js 中文技术社区系统 [Node Club] 的一个重写版本。  
 
-目前 Node Club 所依赖的库版本均比较滞后，而且在信息结构上也不是很完善，所以我这个所谓的重写版本其实是全新的项目，与 Node Club 可能有着很大的出入。不过这个项目的初衷主要是验证我的一个架构构想（基于 [Express] + [Mongoose] ），但是我会尽最大力度来保证现有 Node Club 数据的可移植性，争取在将来可以更新到现有的 [CNode] 社区。
+但由于 Node Club 使用的依赖库版本都比较滞后，且在信息结构上也不是很完善，因此就丢掉了 Node Club 的历史包袱，是一个从零开始的全新项目，也与 Node Club 可能有着很大的出入。
 
-目前最小可用版本为`0.1.2`分支，欢迎试用或提出建议！
+当然我折腾这个项目的初衷主要是实践下自己思考的一个项目结构（基于 [Express] + [Mongoose] ），所以界面以及数据模型上来说还是参照 Node Club 或者是 V2EX、Ruby-China 等社区而来。不过我打算继续维护完善好这个项目，希望能成为好用的、基于 node 的社区系统之一。
 
-##安装部署
+目前已经发布了一个最小可用版本，欢迎试用或提出建议，我会不断的完善改进！同时也欢迎贡献代码！
+
+##在开发环境中安装
 
 ```bash
 # install node npm mongodb grunt-cli, and run mongod
 
-$ git clone -b 0.1.2 https://github.com/heroicyang/cnodeclub.git
+$ git clone https://github.com/heroicyang/cnodeclub.git
 $ cd cnodeclub
 $ npm install
-$ grunt                  # 查看详细的命令提示
-$ grunt createConfig     # 创建 `development` 环境的配置
-# 或者创建指定环境的配置文件
-$ grunt createConfig --env=test
+# 创建 `development` 环境的配置
+$ grunt createConfig
 # 然后在 config 目录下找到刚刚创建的配置文件，修改相应配置
 
-# 然后你可以运行单元测试，或者可以运行指定的测试 (model|api|controller)
-$ grunt test             # or grunt test --target=model
-
-# 然后构建前端然后运行网站
+# 构建前端
 $ grunt build
-# 可以指定构建目录，不过默认就是 assets
-$ grunt build --dest=assets  # 如果自定义构建目录，同时请在配置文件中修改 static 配置
 
-# 如果你运行了 grunt build，那就等 build 完之后 ctrl + c 或者单开一个 bash 来启动服务
-$ node server/server.js  # 启动服务器
+# 开启另外一个 bash 窗口来启动服务
+$ node server/server.js
 ```
 
 ##License

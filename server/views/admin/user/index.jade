@@ -38,12 +38,12 @@ block container
                   | &#32;
                   =user.verified ? "取消信任" : "信任"
                 button(type="button",
-                       title=user.state.blocked ? "解除锁定该用户" : "锁定该用户",
+                       title=user.state === constants.USER_STATE.BLOCKED ? "解除锁定该用户" : "锁定该用户",
                        data-id="#{user._id}",
-                       data-locked="#{user.state.blocked}").block-btn.btn.btn-warning.btn-xs
-                  i(class=user.state.blocked ? "fa-unlock" : "fa-lock").fa
+                       data-locked="#{user.state}").block-btn.btn.btn-warning.btn-xs
+                  i(class=user.state  === constants.USER_STATE.BLOCKED ? "fa-unlock" : "fa-lock").fa
                   | &#32;
-                  =user.state.blocked ? "解除锁定" : "锁定"
+                  =user.state  === constants.USER_STATE.BLOCKED ? "解除锁定" : "锁定"
     div.panel-footer
       include ../../shared/pagination
 block script

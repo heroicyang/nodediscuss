@@ -14,9 +14,12 @@ NC.Module.define('UsersPage', [], function() {
       
       if (window.confirm(title)) {
         var id = $btn.data('id');
-        $.post('/admin/users/' + id + '/verify')
+        $.post('/admin/users/' + id + '/verify', {
+          _id: id,
+          verified: !verified
+        })
           .done(function(res) {
-            if (res.success) {
+            if (!res.error) {
               window.location.reload();
             }
           });
@@ -24,7 +27,7 @@ NC.Module.define('UsersPage', [], function() {
     },
     onBlockClick: function(e) {
       var $btn = $(e.currentTarget),
-        locked = $btn.data('locked'),
+        locked = $btn.data('locked') === 2,
         title= '确定要锁定该用户？';
       if (locked) {
         title = '确定要解除锁定该用户？';
@@ -32,9 +35,12 @@ NC.Module.define('UsersPage', [], function() {
       
       if (window.confirm(title)) {
         var id = $btn.data('id');
-        $.post('/admin/users/' + id + '/block')
+        $.post('/admin/users/' + id + '/block', {
+          _id: id,
+          state: locked ? '1' : '2'
+        })
           .done(function(res) {
-            if (res.success) {
+            if (!res.error) {
               window.location.reload();
             }
           });

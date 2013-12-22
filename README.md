@@ -12,6 +12,8 @@ CNode Club 起初是计划基于 Node.js 中文技术社区系统 [Node Club] �
 
 目前已经发布了一个最小可用版本，欢迎试用或提出建议，我会不断的完善改进！同时也欢迎贡献代码！
 
+DEMO 请戳这里：http://nodediscuss.com/ （还是使用的 [CNode] 的 logo 呢...）
+
 ##在开发环境中安装
 
 ```bash

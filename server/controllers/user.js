@@ -350,12 +350,7 @@ exports.repos = function(req, res, next) {
     var repos = _.sortBy(JSON.parse(body), function(repo) {
       return -repo.stargazers_count;
     });
-    res.send({
-      success: true,
-      response: {
-        data: repos
-      }
-    });
+    res.send(repos);
   });
 };
 

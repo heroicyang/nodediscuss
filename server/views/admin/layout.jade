@@ -56,7 +56,7 @@ html(lang="zh-CN")
         NC.loadModule({
           name: 'App',
           el: '#app',
-          children: NC.moduleMapping
+          children: NC.moduleTree.get()
         }, function(module) {
           NC.app = module;
         });

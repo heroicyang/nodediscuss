@@ -21,12 +21,9 @@ exports.constants = models.constants;
  */
 exports.requestHandler = function(apiMethod) {
   return function(req, res, next) {
-    var options = _.extend(req.body, req.query, req.params);
+    var options = req.body || {};
     if (req.isAuthenticated()) {
       options.userId = req.currentUser.id;
-    }
-    if (options.id) {
-      options._id = options.id;
     }
     
     apiMethod.call(null, options, function(err) {

@@ -40,14 +40,10 @@ block container
                    data-loading-text="正在发布...")#submit-topic-btn.btn.btn-primary 发布
 block script
   script(type="text/javascript").
-    NC.moduleMapping.push({
+    NC.moduleTree.push({
       name: 'TopicEditForm',
       el: '#topic-edit-form',
       children: [
-        {
-          name: 'Editor',
-          el: '#content-editor'
-        },
         {
           name: 'ButtonBase',
           el: '#submit-topic-btn',

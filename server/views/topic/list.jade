@@ -62,7 +62,7 @@ block sidebar
 block script
   if tag
     script(type="text/javascript").
-      var moduleMapping = {
+      NC.moduleTree.push({
         name: 'FavoriteTagButton',
         el: '#favorite-tag-btn',
         data: {
@@ -70,4 +70,4 @@ block script
           slug: '#{tag.slug}',
           isFavorited: #{isFavoritedTag}
         }
-      };
+      });

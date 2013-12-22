@@ -117,7 +117,7 @@ block sidebar
   include ../sidebar/ad
 block script
   script(type="text/javascript").
-    var moduleMapping = [
+    NC.moduleTree.push([
       {
         name: 'TopicPanel',
         el: '#topic-panel',
@@ -133,20 +133,15 @@ block script
           id: '#{topic._id}'
         }
       }
-    ];
+    ]);
     if (NC.currentUser.isAuthenticated()) {
-      moduleMapping.push({
+      NC.moduleTree.push({
         name: 'CommentForm',
         el: '#comment-form',
         data: {
           id: '#{topic._id}'
         },
         children: [
-          {
-            name: 'Editor',
-            el: '#comment-editor',
-            id: 'contentEditor'
-          },
           {
             name: 'ButtonBase',
             el: '#comment-btn',

@@ -14,6 +14,11 @@ module.exports = exports = {
       dest: '<%= dest %>/js/'
     }, {
       expand: true,
+      cwd: 'client/js/app/common',
+      src: ['*.js'],
+      dest: '<%= dest %>/js/app/'
+    }, {
+      expand: true,
       cwd: 'client/js/app',
       src: ['*.js'],
       dest: '<%= dest %>/js/app/'

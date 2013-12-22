@@ -39,7 +39,6 @@ exports.error500 = function() {
         },
         'application/json': function() {
           res.send({
-            success: false,
             error: err
           });
         }

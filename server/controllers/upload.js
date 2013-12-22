@@ -46,9 +46,6 @@ exports.uploadImage = function(req, res, next) {
       ]);
     });
 
-    res.send(JSON.stringify({
-      success: true,
-      files: results
-    }));
+    res.send(JSON.stringify(results));
   });
 };

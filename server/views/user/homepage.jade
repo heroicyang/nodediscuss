@@ -99,11 +99,9 @@ block sidebar
       else
         li.list-group-item: span 暂无代码仓库数据。
 block script
-  script(type="text/javascript").
-    var moduleMapping = [];
   if isAuthenticated && user.id !== currentUser.id
     script(type="text/javascript").
-      moduleMapping.push({
+      NC.moduleTree.push({
         name: 'FollowButton',
         el: '#follow-btn',
         data: {
@@ -113,7 +111,7 @@ block script
       });
   if user.github
     script(type="text/javascript").
-      moduleMapping.push({
+      NC.moduleTree.push({
         name: 'UserRepoList',
         el: '.repo-list',
         data: {

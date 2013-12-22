@@ -39,7 +39,7 @@ block sidebar
   include ../sidebar/markdown_refer
 block script
   script(type="text/javascript").
-    var moduleMapping = {
+    NC.moduleTree.push({
       name: 'WikiEditForm',
       el: '#wiki-edit-form',
       children: [
@@ -49,4 +49,4 @@ block script
           id: 'submitButton'
         }
       ]
-    };
+    });

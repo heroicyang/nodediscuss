@@ -91,18 +91,11 @@ html(lang="zh-CN")
         NC.currentUser.set(!{currentUserJson});
     //- 继承 layout 模板的其它页面可以通过这个块来插入 js 代码
     block script
-    //- 用自执行函数来初始化前端模块，因为里面还会用到一些临时变量，防止其污染全局
+    //- 初始化前端模块
     script(type="text/javascript").
       ;(function() {
-        var moduleChildren = [];
-        if (typeof moduleMapping !== 'undefined') {
-          if (!_.isArray(moduleMapping)) {
-            moduleMapping = [moduleMapping];
-          }
-          moduleChildren = moduleMapping;
-        }
         if (NC.currentUser.isAuthenticated()) {
-          moduleChildren.push({
+          NC.moduleTree.push({
             name: 'LogoutButton',
             el: '#logout'
           });
@@ -111,7 +104,7 @@ html(lang="zh-CN")
         NC.loadModule({
           name: 'App',
           el: '#app',
-          children: moduleChildren
+          children: NC.moduleTree.get()
         }, function(module) {
           NC.app = module;
         });

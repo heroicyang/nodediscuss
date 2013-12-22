@@ -31,6 +31,7 @@ module.exports = exports = {
     files: [{
       src: libs.concat([
         'client/js/app.js',
+        'client/js/common/*.js',
         'client/js/app/*.js'
       ]),
       dest: '<%= dest %>/js/app.js'

@@ -13,9 +13,11 @@ NC.Module.define('FavoriteTagButton', [], function() {
         url = '/tag/' + this.data.slug + '/favorite';
       }
 
-      $.post(url)
-        .done(function(data) {
-          if (data.success) {
+      $.post(url, {
+        slug: this.data.slug
+      })
+        .done(function(res) {
+          if (!res.error) {
             self.data.isFavorited = !self.data.isFavorited;
             if (self.data.isFavorited) {
               self.$el.attr('title', '取消收藏' + self.data.name + '节点');

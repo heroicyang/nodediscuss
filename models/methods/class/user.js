@@ -202,8 +202,8 @@ exports.favoriteTopic = function(options, callback) {
   async.waterfall([
     function addToFavoriteUsers(next) {
       Topic.findByIdAndUpdate(id, {
-        favoriteUsers: {
-          $push: userId
+        $addToSet: {
+          favoriteUsers: userId
         },
         $inc: {
           favoriteCount: 1
@@ -221,9 +221,12 @@ exports.favoriteTopic = function(options, callback) {
           favoriteTopicCount: 1
         }
       }, function(err, user) {
-        next(err, {
-          user: user,
-          topic: topic
+        if (err) {
+          return next(err);
+        }
+        next(null, {
+          user: _.pick(user, ['_id', 'username', 'nickname']),
+          topic: _.pick(topic, ['_id', 'title'])
         });
       });
     }
@@ -251,7 +254,7 @@ exports.unfavoriteTopic = function(options, callback) {
   async.waterfall([
     function addToFavoriteUsers(next) {
       Topic.findByIdAndUpdate(id, {
-        $addToSet: {
+        $pull: {
           favoriteUsers: userId
         },
         $inc: {
@@ -270,9 +273,12 @@ exports.unfavoriteTopic = function(options, callback) {
           favoriteTopicCount: -1
         }
       }, function(err, user) {
-        next(err, {
-          user: user,
-          topic: topic
+        if (err) {
+          return next(err);
+        }
+        next(null, {
+          user: _.pick(user, ['_id', 'username', 'nickname']),
+          topic: _.pick(topic, ['_id', 'title'])
         });
       });
     }
@@ -321,9 +327,12 @@ exports.favoriteTag = function(options, callback) {
           favoriteTagCount: 1
         }
       }, function(err, user) {
-        next(err, {
-          user: user,
-          tag: tag
+        if (err) {
+          return next(err);
+        }
+        next(null, {
+          user: _.pick(user, ['_id', 'username', 'nickname']),
+          tag: _.pick(tag, ['_id', 'name'])
         });
       });
     }
@@ -353,8 +362,8 @@ exports.unfavoriteTag = function(options, callback) {
       Tag.findOneAndUpdate({
         slug: slug
       }, {
-        favoriteUsers: {
-          $pull: userId
+        $pull: {
+          favoriteUsers: userId
         },
         $inc: {
           favoriteCount: -1
@@ -372,9 +381,12 @@ exports.unfavoriteTag = function(options, callback) {
           favoriteTagCount: -1
         }
       }, function(err, user) {
-        next(err, {
-          user: user,
-          tag: tag
+        if (err) {
+          return next(err);
+        }
+        next(null, {
+          user: _.pick(user, ['_id', 'username', 'nickname']),
+          tag: _.pick(tag, ['_id', 'name'])
         });
       });
     }

@@ -17,12 +17,13 @@ exports.constants = models.constants;
 /**
  * 使用 api 中的方法响应 http 请求
  * @param  {Function} apiMethod  需要调用的 api 方法
+ * @param  {Boolean}  passUserId 是否传入当前用户的 id
  * @return {Function}    request handler
  */
-exports.requestHandler = function(apiMethod) {
+exports.requestHandler = function(apiMethod, passUserId) {
   return function(req, res, next) {
     var options = req.body || {};
-    if (req.isAuthenticated()) {
+    if (passUserId && req.isAuthenticated()) {
       options.userId = req.currentUser.id;
     }
     

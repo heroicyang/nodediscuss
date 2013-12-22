@@ -46,9 +46,9 @@ module.exports = exports = function(app) {
   app.post('/user/:username/:op', auth.loginRequired);
   // 关注的相关操作直接调用 api
   app.post('/user/:username/follow',
-      api.requestHandler(api.Relation.create));
+      api.requestHandler(api.Relation.add, true));
   app.post('/user/:username/unfollow',
-      api.requestHandler(api.Relation.remove));
+      api.requestHandler(api.Relation.destroy, true));
   app.get('/user/:username/repos', user.repos);
 
   // 用户设置
@@ -79,14 +79,14 @@ module.exports = exports = function(app) {
 
   // 收藏相关操作直接调用 api
   app.post('/topic/:id/favorite',
-      api.requestHandler(api.User.favoriteTopic));
+      api.requestHandler(api.User.favoriteTopic, true));
   app.post('/topic/:id/unfavorite',
-      api.requestHandler(api.User.unfavoriteTopic));
+      api.requestHandler(api.User.unfavoriteTopic, true));
   app.post('/tag/:slug/:op', auth.loginRequired, tags.load);
   app.post('/tag/:slug/favorite',
-      api.requestHandler(api.User.favoriteTag));
+      api.requestHandler(api.User.favoriteTag, true));
   app.post('/tag/:slug/unfavorite',
-      api.requestHandler(api.User.unfavoriteTag));
+      api.requestHandler(api.User.unfavoriteTag, true));
   // 收藏列表
   app.get('/favorite/:type', auth.loginRequired);
   app.get('/favorite/topics', favorites.topics);

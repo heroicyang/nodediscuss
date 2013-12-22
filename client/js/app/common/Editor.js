@@ -40,10 +40,10 @@ NC.Module.define('Editor', ['Marked'], function(Marked) {
         this.beforeRender = options.beforeRender;
       }
       
+      _.bindAll(this);
       this.$textarea = this.$('textarea');
       this.setupZenArea();
       this.setupFileupload();
-      _.bindAll(this);
     },
     setupZenArea: function() {
       var $zenButton = $('<a>')

@@ -10,15 +10,15 @@ NC.Module.define('FollowButton',
         var self = this,
           url;
         if (this.data.followed) {
-          url = '/user/' + this.data.followUsername + '/unfollow';
+          url = '/user/' + this.data.username + '/unfollow';
         } else {
-          url = '/user/' + this.data.followUsername + '/follow';
+          url = '/user/' + this.data.username + '/follow';
         }
 
-        $.post(url)
-          .done(function(data) {
+        $.post(url, { targetId: this.data.id })
+          .done(function(res) {
             self.hideLoading();
-            if (data.success) {
+            if (!res.error) {
               self.data.followed = !self.data.followed;
               if (self.data.followed) {
                 self.$el.attr('data-loading-text', '取消关注...');

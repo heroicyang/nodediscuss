@@ -26,6 +26,7 @@ exports.error500 = function() {
     if (err.status === 404) {
       return next();
     }
+    console.log(err.stack);
 
     if (err.name === 'ValidationError' ||
           err.name === 'NotAllowedError' ||

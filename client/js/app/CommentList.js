@@ -28,9 +28,9 @@ NC.Module.define('CommentList', [], function() {
             floor = $el.data('floor'),
             url = '/comments/' + id + '/remove',
             $commentItem = $el.closest('li.list-group-item');
-          $.post(url)
-            .done(function(data) {
-              if (data.success) {
+          $.post(url, { _id: id })
+            .done(function(res) {
+              if (!res.error) {
                 $commentItem.empty();
                 $commentItem.html('<p class="deleted"><del>#' + floor + '楼评论已被删除。</del></p>');
               }

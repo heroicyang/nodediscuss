@@ -105,7 +105,8 @@ block script
         name: 'FollowButton',
         el: '#follow-btn',
         data: {
-          followUsername: '#{user.username}',
+          id: '#{user._id}',
+          username: '#{user.username}',
           followed: #{isFollowed}
         }
       });

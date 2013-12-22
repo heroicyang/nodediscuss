@@ -3,11 +3,11 @@ NC.Module.define('CommentForm',
   function(Form, Validator, Editor) {
     return NC.Module.extend({
       initialize: function() {
+        _.bindAll(this);
         this.setupForm();
         this.listenTo(this.form, 'validated', this.onFormValidated);
         this.setupEditor();
         this.commentIds = [];
-        _.bindAll(this);
       },
       onReady: function() {
         this.listenTo(NC.pubsub, 'editor:insert', this.insertTextToEditor);

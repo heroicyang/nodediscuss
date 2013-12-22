@@ -8,8 +8,8 @@
  */
 var api = require('./api'),
   auth = require('./middlewares/auth');
-var upload = require('./controllers/upload'),
-  user = require('./controllers/user'),
+var uploader = require('./uploader');
+var user = require('./controllers/user'),
   tags = require('./controllers/tags'),
   topics = require('./controllers/topics'),
   comments = require('./controllers/comments'),
@@ -29,7 +29,7 @@ var admin = {
 module.exports = exports = function(app) {
   // 文件上传
   app.all('/upload/:type', auth.loginRequired);
-  app.post('/upload/image', upload.uploadImage);
+  app.post('/upload/image', uploader.uploadImageHandler());
 
   // 用户
   app.all('/signup', auth.loginNotAllowed, user.signup);

@@ -1,28 +1,28 @@
-#CNode Club
+#NodeDiscuss
 
 基于 [Express] + [Mongoose] 的社区系统。
 
 ##介绍
 
-CNode Club 起初是计划基于 Node.js 中文技术社区系统 [Node Club] 的一个重写版本。  
+NodeDiscuss 起初是计划基于 Node.js 中文技术社区系统 [NodeClub] 的一个重写版本。  
 
-但由于 Node Club 使用的依赖库版本都比较滞后，且在信息结构上也不是很完善，因此就丢掉了 Node Club 的历史包袱，是一个从零开始的全新项目，也与 Node Club 可能有着很大的出入。
+但由于 NodeClub 所使用依赖库的版本都比较滞后，且在信息结构上也不是很完善，因此就丢掉历史包袱从零开始构建一个全新项目，于是可能与 NodeClub 有着很大的出入。界面以及数据模型上来说还是参照 NodeClub，确切的说是 V2EX、Ruby-China 等社区的。
 
-当然我折腾这个项目的初衷主要是实践下自己思考的一个项目结构（基于 [Express] + [Mongoose] ），所以界面以及数据模型上来说还是参照 Node Club 或者是 V2EX、Ruby-China 等社区而来。不过我打算继续维护完善好这个项目，希望能成为好用的、基于 node 的社区系统之一。
+当然我折腾这个项目的初衷主要是实践下自己思考的一个项目结构（基于 [Express] + [Mongoose] ），不过我打算继续维护完善好这个项目，希望能成为好用的、基于 node 的社区系统之一！同时力争在做好之后提供数据移植的工具。
 
 目前已经发布了一个最小可用版本，欢迎试用或提出建议，我会不断的完善改进！同时也欢迎贡献代码！
 
-DEMO 请戳这里：http://nodediscuss.com/ （还是使用的 [CNode] 的 logo 呢...）
+DEMO 请戳这里：http://nodediscuss.com/ （PS: 还是使用的 [CNode] 的 logo 呢...）
 
-关于项目结构的简要介绍请戳这里：https://github.com/heroicyang/cnodeclub/wiki
+关于项目结构的简要介绍请戳这里：https://github.com/heroicyang/nodediscuss/wiki
 
 ##在开发环境中安装
 
 ```bash
 # install node npm mongodb grunt-cli, and run mongod
 
-$ git clone https://github.com/heroicyang/cnodeclub.git
-$ cd cnodeclub
+$ git clone https://github.com/heroicyang/nodediscuss.git
+$ cd nodediscuss
 $ npm install
 # 创建 `development` 环境的配置
 $ grunt createConfig
@@ -59,7 +59,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [CNode]: http://cnodejs.org/
-[Node Club]: https://github.com/cnodejs/nodeclub
+[NodeClub]: https://github.com/cnodejs/nodeclub
 [Express]: http://expressjs.com/
 [Mongoose]: http://mongoosejs.com/
 [CNode]: http://cnodejs.org/

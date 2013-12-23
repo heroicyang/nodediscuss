@@ -1,5 +1,5 @@
 {
-  "name": "cnodeclub",
+  "name": "nodediscuss",
   "version": "0.1.4",
   "description": "基于 Node.js 的开源社区系统",
   "main": "server/server.js",
@@ -7,10 +7,10 @@
     "test": "grunt test"
   },
   "title": "NodeDiscuss",
-  "homepage": "https://github.com/heroicyang/cnodeclub",
+  "homepage": "https://github.com/heroicyang/nodediscuss",
   "repository": {
     "type": "git",
-    "url": "git://github.com/heroicyang/cnodeclub.git"
+    "url": "git://github.com/heroicyang/nodediscuss.git"
   },
   "dependencies": {
     "glob": "~3.2.6",
@@ -46,9 +46,11 @@
     "grunt-contrib-cssmin": "~0.7.0"
   },
   "keywords": [
-    "cnodejs",
+    "nodediscuss",
     "nodeclub",
-    "cnodeclub"
+    "cnodeclub",
+    "community",
+    "discussion"
   ],
   "author": {
     "name": "Heroic Yang",

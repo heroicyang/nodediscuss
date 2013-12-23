@@ -14,6 +14,8 @@ CNode Club 起初是计划基于 Node.js 中文技术社区系统 [Node Club] �
 
 DEMO 请戳这里：http://nodediscuss.com/ （还是使用的 [CNode] 的 logo 呢...）
 
+关于项目结构的简要介绍请戳这里：https://github.com/heroicyang/cnodeclub/wiki
+
 ##在开发环境中安装
 
 ```bash

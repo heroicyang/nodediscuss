@@ -1,11 +1,12 @@
 {
   "name": "cnodeclub",
   "version": "0.1.4",
-  "description": "基于 Node.js 的社区系统",
+  "description": "基于 Node.js 的开源社区系统",
   "main": "server/server.js",
   "scripts": {
     "test": "grunt test"
   },
+  "title": "NodeDiscuss",
   "homepage": "https://github.com/heroicyang/cnodeclub",
   "repository": {
     "type": "git",

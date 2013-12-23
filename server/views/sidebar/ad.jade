@@ -1,5 +1,13 @@
-div.panel.panel-default.hidden-xs
-  div.panel-heading
-    strong 友情社区 &#448; 赞助商
-  div.panel-body
-    p 这里会放广告吧
+if site.ads && site.ads.length
+  div.panel.panel-default.hidden-xs
+    div.panel-heading
+      strong 友情社区 &#448; 赞助商
+    div.panel-body
+      ul.list-unstyled
+        each ad in site.ads
+          li
+            a(href="#{ad.url}", target="_blank")
+              if ad.image
+                img(src!="#{ad.image}").img-responsive
+              else
+                | #{ad.text}

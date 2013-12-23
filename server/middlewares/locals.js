@@ -13,7 +13,7 @@ var _ = require('lodash'),
 var config = require('../../config'),
   constants = require('../api').constants,
   assets = require('../../assets.json'),
-  version = require('../../package.json').version;
+  pkg = require('../../package.json');
 
 module.exports = exports = function() {
   return function(req, res, next) {
@@ -29,18 +29,28 @@ module.exports = exports = function() {
 
     res.locals.path = req.path;
     res.locals.csrfToken = req.csrfToken && req.csrfToken();
-    res.locals.version = version;
     // 设置 breadcrumbs 数据
     res.locals.breadcrumbs = req.breadcrumbs();
     res.locals.constants = constants;
 
+    res.locals.pkg = {
+      title: pkg.title,
+      homepage: pkg.homepage,
+      version: pkg.version
+    };
     res.locals.site = {
       domain: 'http://' + config.host,
+      logo: config.logo,
       name: config.name,
       title: config.title,
-      description: config.description
+      description: config.description,
+      headers: config.headers,
+      footerNavs: config.footerNavs,
+      links: config.links,
+      ads: config.ads
     };
     res.locals.assets = assets;
+    res.locals.staticDomain = config.static.domain;
 
     res.locals.isAuthenticated = req.isAuthenticated();
     if (req.isAuthenticated()) {

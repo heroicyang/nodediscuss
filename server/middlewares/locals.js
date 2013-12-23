@@ -47,7 +47,8 @@ module.exports = exports = function() {
       headers: config.headers,
       footerNavs: config.footerNavs,
       links: config.links,
-      ads: config.ads
+      ads: config.ads,
+      weiboAppKey: config.weiboAppKey
     };
     res.locals.assets = assets;
     res.locals.staticDomain = config.static.domain;

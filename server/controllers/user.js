@@ -322,6 +322,7 @@ exports.get = function(req, res, next) {
       return next(err);
     }
     res.render('user/homepage', _.extend(results, {
+      title: user.nickname,
       user: user
     }));
   });

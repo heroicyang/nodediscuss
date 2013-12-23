@@ -18,6 +18,7 @@ module.exports = exports = {
     ['/about', '关于'],
     ['https://github.com/heroicyang/nodediscuss', 'GitHub', '_blank']
   ],
+  weiboAppKey: '',    // 新浪微博 appkey
 
   adminEmails: [],   //  管理员用户们的 email 列表
 

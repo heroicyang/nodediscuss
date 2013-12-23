@@ -128,7 +128,9 @@ exports.get = function(req, res, next) {
     req.breadcrumbs(page.title);
     res.render('page/show', {
       page: page,
-      isWiki: isWiki
+      isWiki: isWiki,
+      title: page.title,
+      description: page.title
     });
   });
 };

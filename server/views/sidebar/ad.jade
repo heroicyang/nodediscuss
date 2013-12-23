@@ -6,7 +6,7 @@ if site.ads && site.ads.length
       ul.list-unstyled
         each ad in site.ads
           li
-            a(href="#{ad.url}", target="_blank")
+            a(href="#{ad.url}", title="#{ad.text}", target="_blank")
               if ad.image
                 img(src!="#{ad.image}").img-responsive
               else

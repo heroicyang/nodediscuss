@@ -23,7 +23,7 @@ html(lang="zh-CN")
               sapn.icon-bar
             a(href="/").navbar-brand.logo
               if site.logo
-                img(src="/img/logo.png", title="#{site.title}").img-responsive
+                img(src!="#{site.logo}", title="#{site.title}").img-responsive
               else
                 h1 #{site.name}
           div.navbar-collapse.collapse

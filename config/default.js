@@ -14,9 +14,9 @@ module.exports = exports = {
   ],
   // 自定义页面底部导航
   footerNavs: [
-    // [href, title, [target]]
+    // [url, text, [target]]
     ['/about', '关于'],
-    ['https://github.com/heroicyang/cnodeclub', 'GitHub', '_blank']
+    ['https://github.com/heroicyang/nodediscuss', 'GitHub', '_blank']
   ],
 
   adminEmails: [],   //  管理员用户们的 email 列表
@@ -57,7 +57,7 @@ module.exports = exports = {
 
   // 分页配置
   pagination: {
-    pageSize: 20,     // 每页显示的记录数量
+    pageSize: 20     // 每页显示的记录数量
   },
 
   // Gravatar 头像服务配置
@@ -113,11 +113,11 @@ module.exports = exports = {
 
   // 相关站点信息配置
   links: [
-    // { url: '', description: '' }
+    // { url: '', text: '' }
   ],
 
   // 广告位信息配置
   ads: [
-    // { url: '', description: '' [, image: ''] }
+    // { url: '', text: '' [, image: ''] }
   ]
 };

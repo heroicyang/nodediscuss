@@ -4,11 +4,13 @@ html(lang="zh-CN")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
     meta(name="description", content="#{site.name}: #{site.description}")
+    each header in site.headers
+      meta(name=header[0], content=header[1])
     link(type="image/x-icon", rel="icon", href="/img/favicon32.ico")
     title= site.title
     //- 根据 grunt build 之后的结果引入 css 文件
     each file in assets.css
-      link(href="/css/#{file}", rel="stylesheet")
+      link(href="#{staticDomain}/css/#{file}", rel="stylesheet")
   body#app
     div#container-wrap
       div(role="navigation").navbar.navbar-default.navbar-static-top
@@ -20,7 +22,10 @@ html(lang="zh-CN")
               span.icon-bar
               sapn.icon-bar
             a(href="/").navbar-brand.logo
-              img(src="/img/logo.png", title="#{site.title}").img-responsive
+              if site.logo
+                img(src="/img/logo.png", title="#{site.title}").img-responsive
+              else
+                h1 #{site.name}
           div.navbar-collapse.collapse
             ul.nav.navbar-nav.navbar-right
               li(class=(path === '/' || path === '/topics') ? "active" : "")
@@ -51,32 +56,30 @@ html(lang="zh-CN")
         block container
     footer
       div.container
-        div.media
-          div.pull-left
-            img(src="/img/logo-light.png").media-object.img-responsive.logo
-          div.media-body.content
-            nav
-              ul.list-inline
-                li: a(href="https://github.com/heroicyang/cnodeclub/blob/master/README.md") 关于
+        div.content
+          nav
+            ul.list-inline
+              li: a(href="#") RSS
+              each nav in site.footerNavs
                 li.delimiter &#32;&#8226;&#32;
-                li: a(href="#") FAQ
-                li.delimiter &#32;&#8226;&#32;
-                li: a(href="#") RSS
-                li.delimiter &#32;&#8226;&#32;
-                li: a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") Github
-            div.copyright
-              p &copy; 2012 - 2013
-              p 由开源社区系统
-                a(href="https://github.com/heroicyang/cnodeclub", terget="_blank") CNodeClub
-                | 强力驱动，版本: #{version}，欢迎贡献代码。
-              p Powered by 
-                a(href="http://expressjs.com/", target="_blank") Express
-                | &amp;
-                a(href="http://mongoosejs.com/", target="_blank") Mongoose
+                li
+                  if nav[2]
+                    a(href=nav[0], target="#{nav[2]}") #{nav[1]}
+                  else  
+                    a(href=nav[0]) #{nav[1]}
+          div.copyright
+            p &copy; 2012 - 2013
+            p 基于开源社区系统
+              a(href="#{pkg.homepage}", terget="_blank") #{pkg.title}
+              | 搭建，版本: #{pkg.version}
+            p Powered by 
+              a(href="http://expressjs.com/", target="_blank") Express
+              | &amp;
+              a(href="http://mongoosejs.com/", target="_blank") Mongoose
     
     //- 根据 grunt build 之后的结果引入 js 文件
     each file in assets.js
-      script(src="/js/#{file}")
+      script(src="#{staticDomain}/js/#{file}")
     //- 设置 ajax 模式下的 csrf
     script(type="text/javascript").
       $.ajaxSetup({

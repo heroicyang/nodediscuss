@@ -63,6 +63,10 @@ NC.Module = Backbone.View.extend({
     if (options.id) {
       this.id = options.id;
     }
+    if (options.options) {
+      this.options = this.options || {};
+      _.extend(this.options, options.options);
+    }
     if (options.data) {
       this.data = options.data;
     }
@@ -82,7 +86,7 @@ NC.Module = Backbone.View.extend({
         NC.loadModule(_.defaults({
           el: $el,
           parent: self
-        }, child), function(module) {
+        }, child), function() {
           childCount -= 1;
           if (childCount === 0) {
             self.onReady();

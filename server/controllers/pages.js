@@ -126,11 +126,12 @@ exports.get = function(req, res, next) {
       req.breadcrumbs('Wiki', '/wiki');
     }
     req.breadcrumbs(page.title);
+    res.locals.site = res.locals.site || {};
+    res.locals.site.title = page.title + ' - ' + config.name;
+    res.locals.site.description = page.title;
     res.render('page/show', {
       page: page,
-      isWiki: isWiki,
-      title: page.title,
-      description: page.title
+      isWiki: isWiki
     });
   });
 };

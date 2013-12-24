@@ -397,9 +397,11 @@ exports.show = function(req, res, next) {
     }
     req.breadcrumbs(req.topic.tag.name, '/tag/' + req.topic.tag.slug);
     req.breadcrumbs('话题详情');
+
+    res.locals.site = res.locals.site || {};
+    res.locals.site.title = results.topic.title + ' - ' + config.name;
+    res.locals.site.description = results.topic.title;
     res.render('topic/show', _.extend(results, {
-      title: results.topic.title,
-      description: results.topic.title,
       pagination: pagination,
       err: _.extend(req.flash('err'), { global: true })
     }));

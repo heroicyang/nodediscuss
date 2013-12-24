@@ -26,13 +26,13 @@ block content
         div.row.content !{topic.contentHtml}
     div.panel-footer
       div.pull-left.share
-        a(href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f='http://v.t.sina.com.cn/share/share.php?appkey=#{site.weiboAppKey}',u=z||d.location,p=['&url=',e(u),'&title=',e(t||d.title),'&source=',e(r),'&sourceUrl=',e(l),'&content=',c||'utf-8','&pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width-440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','','分享来自 #{site.name} 的话题：#{topic.title}','','utf-8'));", title="分享到新浪微博")
+        a(href="#", title="分享到新浪微博").weibo
           i.fa.fa-weibo
-        a(href="#", title="分享到Twitter")
+        a(href="#", title="分享到Twitter").twitter
           i.fa.fa-twitter
-        a(href="#", title="分享到Facebook")
+        a(href="#", title="分享到Facebook").facebook
           i.fa.fa-facebook
-        a(href="#", title="分享到Google+")
+        a(href="#", title="分享到Google+").google-plus
           i.fa.fa-google-plus
       if isAuthenticated
         div.pull-right
@@ -124,7 +124,28 @@ block script
         data: {
           id: '#{topic._id}',
           isFavorited: #{isFavorited}
-        }
+        },
+        children: [
+          {
+            name: 'WeiboShareButton',
+            el: '.weibo',
+            options: {
+              appkey: '#{site.weiboAppKey}'
+            }
+          },
+          {
+            name: 'TwitterShareButton',
+            el: '.twitter'
+          },
+          {
+            name: 'FacebookShareButton',
+            el: '.facebook'
+          },
+          {
+            name: 'GPlusShareButton',
+            el: '.google-plus'
+          }
+        ]
       },
       {
         name: 'CommentList',

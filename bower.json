@@ -1,0 +1,31 @@
+{
+  "name": "nodediscuss",
+  "version": "0.1.4",
+  "homepage": "https://github.com/heroicyang/nodediscuss",
+  "authors": [
+    "HeroicYang <me@heroicyang.com>"
+  ],
+  "description": "基于 Node.js 的社区系统",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "json2": "*",
+    "jquery": "~1.8.3",
+    "lodash": "~2.4.1",
+    "backbone": "~1.1.0",
+    "bootstrap": "~3.0.3",
+    "jquery-file-upload": "~9.5.2",
+    "marked": "~0.3.0",
+    "highlightjs": "~7.5.0",
+    "requirejs": "~2.1.9"
+  },
+  "resolutions": {
+    "jquery": "~1.8.3"
+  }
+}

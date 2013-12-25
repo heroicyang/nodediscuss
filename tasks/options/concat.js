@@ -6,30 +6,37 @@
  * @author heroic
  */
 
-var libs = [
-  'client/js/vendor/jquery.js',
-  'client/js/vendor/json2.js',
-  'client/js/vendor/lodash.underscore.js',
-  'client/js/vendor/backbone.js',
-  'client/js/vendor/bootstrap.js',
-  'client/js/vendor/marked.js',
-  'client/js/vendor/highlight.js',
-  'client/js/vendor/jquery.ui.widget.js',
-  'client/js/vendor/jquery.iframe-transport.js',
-  'client/js/vendor/jquery.fileupload.js',
-  'client/js/vendor/require.js'
+var vendors = [
+  'bower_components/jquery/jquery.js',
+  'bower_components/json2/json2.js',
+  'bower_components/lodash/dist/lodash.underscore.js',
+  'bower_components/backbone/backbone.js',
+  'bower_components/bootstrap/js/alert.js',
+  'bower_components/bootstrap/js/button.js',
+  'bower_components/bootstrap/js/dropdown.js',
+  'bower_components/bootstrap/js/modal.js',
+  'bower_components/bootstrap/js/tooltip.js',
+  'bower_components/bootstrap/js/tab.js',
+  'bower_components/bootstrap/js/collapse.js',
+  'bower_components/bootstrap/js/transition.js',
+  'bower_components/marked/lib/marked.js',
+  'bower_components/highlightjs/highlight.pack.js',
+  'bower_components/jquery-file-upload/js/vendor/jquery.ui.widget.js',
+  'bower_components/jquery-file-upload/js/jquery.iframe-transport.js',
+  'bower_components/jquery-file-upload/js/jquery.fileupload.js',
+  'bower_components/requirejs/require.js'
 ];
 
 module.exports = exports = {
   vendor: {
     files: [{
-      src: libs,
+      src: vendors,
       dest: '<%= dest %>/js/vendor.js'
     }]
   },
   app: {
     files: [{
-      src: libs.concat([
+      src: vendors.concat([
         'client/js/app.js',
         'client/js/app/common/*.js',
         'client/js/app/*.js'

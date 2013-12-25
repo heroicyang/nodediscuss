@@ -6,8 +6,8 @@
 /**
  * Module dependencies
  */
-var ObjectId = require('mongoose').Types.ObjectId,
-  _ = require('lodash');
+var _ = require('lodash');
+var validate = require('../validate');
 
 module.exports = exports = function(schema) {
   // 验证话题标题的有效性
@@ -21,12 +21,7 @@ module.exports = exports = function(schema) {
   schema.path('tag.id')
     .required(true, '必须选择话题所属的节点!')
     .validate(function(tagId) {
-      try {
-        tagId = new ObjectId(tagId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(tagId).isObjectId();
     }, 'Invalid tag id.')    // 外键检查，不会直接显示给用户
     .validate(function(tagId, done) {
       var Tag = this.model('Tag'),
@@ -51,12 +46,7 @@ module.exports = exports = function(schema) {
   schema.path('author.id')
     .required(true)
     .validate(function(authorId) {
-      try {
-        authorId = new ObjectId(authorId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(authorId).isObjectId();
     }, 'Invalid user id.')
     .validate(function(authorId, done) {
       var User = this.model('User'),

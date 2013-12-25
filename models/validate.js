@@ -3,8 +3,19 @@
  * @author heroic
  */
 
-var Validator = require('validator').Validator,
-  validator = new Validator();
+var Validator = require('validator').Validator;
+
+/**
+ * 检查字符串是否是有效的 ObjectId 值
+ */
+Validator.prototype.isObjectId = function() {
+  if (!this.str.match(/^[0-9a-fA-F]{24}$/)) {
+    return this.error();
+  }
+  return this;
+};
+
+var validator = new Validator();
 
 /**
  * Custom error handler

@@ -6,20 +6,15 @@
 /**
  * Module dependencies
  */
-var ObjectId = require('mongoose').Types.ObjectId,
-  _ = require('lodash');
+var _ = require('lodash');
+var validate = require('../validate');
 
 module.exports = exports = function(schema) {
   // 对关联的话题或页面 id 进行约束性检查
   schema.path('refId')
     .required(true)
     .validate(function(refId) {
-      try {
-        refId = new ObjectId(refId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(refId).isObjectId();
     }, 'Invalid ref id.');
 
   // 验证评论内容的有效性
@@ -46,12 +41,7 @@ module.exports = exports = function(schema) {
   schema.path('author.id')
     .required(true)
     .validate(function(authorId) {
-      try {
-        authorId = new ObjectId(authorId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(authorId).isObjectId();
     }, 'Invalid author id.')
     .validate(function(authorId, done) {
       var User = this.model('User'),

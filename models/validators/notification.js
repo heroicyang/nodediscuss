@@ -6,31 +6,21 @@
 /**
  * Module dependencies
  */
-var ObjectId = require('mongoose').Types.ObjectId,
-  _ = require('lodash'),
+var _ = require('lodash');
+var validate = require('../validate'),
   constants = require('../constants');
 
 module.exports = exports = function(schema) {
   schema.path('masterId')
     .required(true)
     .validate(function(masterId) {
-      try {
-        masterId = new ObjectId(masterId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(masterId).isObjectId();
     }, 'Invalid master user id.');
 
   schema.path('userId')
     .required(true)
     .validate(function(userId) {
-      try {
-        userId = new ObjectId(userId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(userId).isObjectId();
     }, 'Invalid user id.');
   
   schema.path('type')
@@ -39,31 +29,16 @@ module.exports = exports = function(schema) {
   
   schema.path('topicId')
     .validate(function(topicId) {
-      try {
-        topicId = new ObjectId(topicId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(topicId).isObjectId();
     }, 'Invalid topic id.');
   
   schema.path('masterCommentId')
     .validate(function(masterCommentId) {
-      try {
-        masterCommentId = new ObjectId(masterCommentId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(masterCommentId).isObjectId();
     }, 'Invalid master comment id.');
   
   schema.path('commentId')
     .validate(function(commentId) {
-      try {
-        commentId = new ObjectId(commentId);
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return !!validate(commentId).isObjectId();
     }, 'Invalid comment id.');
 };

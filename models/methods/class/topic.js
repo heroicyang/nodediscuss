@@ -94,7 +94,9 @@ exports.edit = function(topicData, callback) {
       }
       topicData.contentHtml = results.contentHtml;
       _.extend(topic, topicData);
-      topic.save(callback);
+      topic.save(function(err, topic) {
+        next(err, topic);
+      });
     }]
   }, callback);
 };

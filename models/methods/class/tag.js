@@ -61,7 +61,9 @@ exports.edit = function(tagData, callback) {
     }
 
     _.extend(tag, tagData);
-    tag.save(callback);
+    tag.save(function(err, tag) {
+      callback(err, tag);
+    });
   });
 };
 

@@ -69,7 +69,9 @@ exports.edit = function(userData, callback) {
     }
 
     _.extend(user, userData);
-    user.save(callback);
+    user.save(function(err, user) {
+      callback(err, user);
+    });
   });
 };
 

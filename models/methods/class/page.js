@@ -86,7 +86,9 @@ exports.edit = function(pageData, callback) {
       if (!_.contains(page.contributors, editorId)) {
         page.contributors.push(editorId);
       }
-      page.save(callback);
+      page.save(function(err, page) {
+        callback(err, page);
+      });
     }]
   }, callback);
 };

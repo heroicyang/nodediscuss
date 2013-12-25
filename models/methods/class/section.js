@@ -61,7 +61,9 @@ exports.edit = function(sectionData, callback) {
     }
 
     _.extend(section, sectionData);
-    section.save(callback);
+    section.save(function(err, section) {
+      callback(err, section);
+    });
   });
 };
 

@@ -6,13 +6,13 @@
 /**
  * Module dependencies
  */
-var sanitize = require('../sanitize');
+var xss = require('../xss');
 
 module.exports = exports = function(schema) {
   // 执行数据验证之前
   schema
     .pre('validate', function(next) {
-      sanitize(this, ['title', 'content']);
+      xss(this, ['title', 'contentHtml']);
       next();
     });
 

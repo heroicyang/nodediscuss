@@ -7,14 +7,14 @@
  * Module dependencies
  */
 var async = require('async');
-var sanitize = require('../sanitize'),
+var xss = require('../xss'),
   constants = require('../constants');
 
 module.exports = exports = function(schema) {
   // 执行数据验证之前
   schema
     .pre('validate', function(next) {
-      sanitize(this, 'content');
+      xss(this, 'contentHtml');
       next();
     });
 

@@ -7,13 +7,13 @@
  * Module dependencies
  */
 var async = require('async');
-var sanitize = require('../sanitize');
+var xss = require('../xss');
 
 module.exports = exports = function(schema) {
   // 执行数据验证之前
   schema
     .pre('validate', function(next) {
-      sanitize(this, ['slug', 'name', 'describe']);
+      xss(this, ['name', 'describe']);
 
       // 如果没有提供节点地址，则使用节点名，但要做过滤操作
       if (!this.slug) {

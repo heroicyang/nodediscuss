@@ -6,17 +6,16 @@
 /**
  * Module dependencies
  */
-var sanitize = require('../sanitize');
+var xss = require('../xss');
 
 module.exports = exports = function(schema) {
   // 执行数据验证之前的中间件
   schema
     .pre('validate', function(next) {
       // 对用户输入的字段进行 xss 过滤
-      sanitize(this, [
-        'email', 'username', 'nickname',
-        'tagline', 'bio', 'location',
-        'website', 'weibo', 'twitter', 'github'
+      xss(this, [
+        'nickname', 'tagline', 'bio', 'location',
+        'weibo', 'twitter', 'github'
       ]);
 
       if (!this.nickname) {

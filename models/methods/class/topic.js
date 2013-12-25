@@ -109,7 +109,10 @@ exports.edit = function(topicData, callback) {
  *  - topic
  */
 exports.get = function(conditions, callback) {
-  this.findOne(conditions, null, { createdAt: -1 }, callback);
+  this.findOne({
+    $query: conditions,
+    $orderby: { createdAt: -1 }
+  }, callback);
 };
 
 /**

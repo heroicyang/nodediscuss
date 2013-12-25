@@ -3,7 +3,7 @@
  * @author heroic
  */
 
-NC.Loader.define('Form', ['Validator'], function(Validator) {
+ND.Loader.define('Form', ['Validator'], function(Validator) {
   /**
    * Form constructor
    * @param {jQuery Element} form    表单

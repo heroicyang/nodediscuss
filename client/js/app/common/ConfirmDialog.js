@@ -1,5 +1,5 @@
-NC.Module.define('ConfirmDialog', [], function() {
-  return NC.Module.extend({
+ND.Module.define('ConfirmDialog', [], function() {
+  return ND.Module.extend({
     el: $('#confirm-dialog-tmpl').html(),
     events: {
       'click #confirm-btn': 'onConfirmClick'

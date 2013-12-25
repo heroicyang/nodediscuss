@@ -1,5 +1,5 @@
-NC.Module.define('TopicsPage', [], function() {
-  return NC.Module.extend({
+ND.Module.define('TopicsPage', [], function() {
+  return ND.Module.extend({
     events: {
       'click .excellent-btn': 'onExcellentClick',
       'click .remove-btn': 'onRemoveClick'

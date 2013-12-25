@@ -91,25 +91,25 @@ html(lang="zh-CN")
     //- 如果用户已登录，则设置前端的用户对象
     if isAuthenticated
       script(type="text/javascript").
-        NC.currentUser.set(!{currentUserJson});
+        ND.currentUser.set(!{currentUserJson});
     //- 继承 layout 模板的其它页面可以通过这个块来插入 js 代码
     block script
     //- 初始化前端模块
     script(type="text/javascript").
       ;(function() {
-        if (NC.currentUser.isAuthenticated()) {
-          NC.moduleTree.push({
+        if (ND.currentUser.isAuthenticated()) {
+          ND.moduleTree.push({
             name: 'LogoutButton',
             el: '#logout'
           });
         }
 
-        NC.loadModule({
+        ND.loadModule({
           name: 'App',
           el: '#app',
-          children: NC.moduleTree.get()
+          children: ND.moduleTree.get()
         }, function(module) {
-          NC.app = module;
+          ND.app = module;
         });
       }());
     //- 编辑器模板

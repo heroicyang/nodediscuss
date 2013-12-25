@@ -3,6 +3,6 @@
  * ...在每个页面上都只会实例化它，以保证一致性和通用性
  * @author heroic
  */
-NC.Module.define('App', [], function() {
-  return NC.Module.extend({});
+ND.Module.define('App', [], function() {
+  return ND.Module.extend({});
 });

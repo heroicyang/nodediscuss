@@ -1,5 +1,5 @@
-NC.Module.define('UsersPage', [], function() {
-  return NC.Module.extend({
+ND.Module.define('UsersPage', [], function() {
+  return ND.Module.extend({
     events: {
       'click .verify-btn': 'onVerifyClick',
       'click .block-btn': 'onBlockClick'

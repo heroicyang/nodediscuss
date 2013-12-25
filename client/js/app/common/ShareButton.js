@@ -3,8 +3,8 @@
  * 相应类型的分享按钮应实现 `getWindowUrl` 方法
  * @author heroic
  */
-NC.Module.define('ShareButton', [], function() {
-  return NC.Module.extend({
+ND.Module.define('ShareButton', [], function() {
+  return ND.Module.extend({
     events: {
       'click': 'onShareButtonClick'
     },
@@ -14,7 +14,7 @@ NC.Module.define('ShareButton', [], function() {
         options = this.getWindowOptions();
       window.open(url, null, options);
     },
-    getWindowUrl: NC.NOOP,
+    getWindowUrl: ND.NOOP,
     getWindowOptions: function() {
       var width = 550,
         height = 420,

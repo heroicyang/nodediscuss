@@ -1,4 +1,4 @@
-NC.Module.define('FollowButton',
+ND.Module.define('FollowButton',
   ['ButtonBase'],
   function(ButtonBase) {
     return ButtonBase.extend({

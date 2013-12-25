@@ -1,5 +1,5 @@
-NC.Module.define('UserRepoList', [], function() {
-  return NC.Module.extend({
+ND.Module.define('UserRepoList', [], function() {
+  return ND.Module.extend({
     template: _.template($('#repo-list-tmpl').html()),
     onReady: function() {
       this.render();

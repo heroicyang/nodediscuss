@@ -4,7 +4,7 @@
  */
 
 var _ = window._;
-var NC = window.NC = {
+var ND = window.ND = {
   NOOP: function() {},
   /** 非 Backbone.View 模块的定义，请使用 Loader.define */
   Loader: {
@@ -19,8 +19,8 @@ var NC = window.NC = {
    */
   loadModule: function(options, callback) {
     var moduleName = options.name;
-    callback = callback || NC.NOOP;
-    NC.Loader.require([moduleName], function(Module) {
+    callback = callback || ND.NOOP;
+    ND.Loader.require([moduleName], function(Module) {
       callback(new Module(options));
     });
   },
@@ -29,26 +29,26 @@ var NC = window.NC = {
    *
    * Examples:
    *
-   *    this.listenTo(NC.pubsub, 'channel:topic', this.onMessageReceived);
-   *    this.listenTo(NC.pubsub, 'channel', this.onMessageReceived);   // all channel
-   *    NC.pubsub.trigger('channel:topic', 'this is a test message');
+   *    this.listenTo(ND.pubsub, 'channel:topic', this.onMessageReceived);
+   *    this.listenTo(ND.pubsub, 'channel', this.onMessageReceived);   // all channel
+   *    ND.pubsub.trigger('channel:topic', 'this is a test message');
    */
   pubsub: {}
 };
 
 /** 增强 pubsub，使其具备事件监听和触发能力  */
-_.extend(NC.pubsub, Backbone.Events);
+_.extend(ND.pubsub, Backbone.Events);
 
 /** 将 Backbone View 抽象为模块 */
-NC.Module = Backbone.View.extend({
+ND.Module = Backbone.View.extend({
   constructor: function(options) {
     Backbone.View.apply(this, arguments);
     this.children = [];
     this._childrenIdMap = {};
     this._build(options);
   },
-  initialize: NC.NOOP,
-  onReady: NC.NOOP,
+  initialize: ND.NOOP,
+  onReady: ND.NOOP,
   /**
    * 依次去构建该模块下面的子模块，模块结构的最终形态和 DOM 树结构类似
    * @param  {Object} options 模块配置项
@@ -83,7 +83,7 @@ NC.Module = Backbone.View.extend({
     } else {
       _.each(children, function(child) {
         var $el = $(child.el, self.$el);
-        NC.loadModule(_.defaults({
+        ND.loadModule(_.defaults({
           el: $el,
           parent: self
         }, child), function() {
@@ -125,7 +125,7 @@ NC.Module = Backbone.View.extend({
   },
   /**
    * 将子模块对象添加到父模块对象中，方便管理
-   * @param {NC.Module} module   模块对象
+   * @param {ND.Module} module   模块对象
    * @param {Number} index  添加的位置
    * @api pravite
    */
@@ -165,7 +165,7 @@ NC.Module = Backbone.View.extend({
   },
   /**
    * 从父模块对象中移出子模块对象
-   * @param  {NC.Module} child   子模块对象
+   * @param  {ND.Module} child   子模块对象
    * @api pravite
    */
   removeChild: function(child) {
@@ -192,11 +192,11 @@ NC.Module = Backbone.View.extend({
   }
 });
 
-/** 扩展 NC.Module，包装一个专门用于 Backbone.View 模块定义的方法 */
-_.extend(NC.Module, {
+/** 扩展 ND.Module，包装一个专门用于 Backbone.View 模块定义的方法 */
+_.extend(ND.Module, {
   define: function(name, deps, callback) {
     var self = this;
-    return NC.Loader.define(name, deps, function() {
+    return ND.Loader.define(name, deps, function() {
       var module = callback.apply(self, arguments);
       module.prototype.moduleName = module.moduleName = name;
       return module;
@@ -205,17 +205,17 @@ _.extend(NC.Module, {
 });
 
 /** 暂时使用 UserModel 来保存登录后的用户信息 */
-NC.User = Backbone.Model.extend({
+ND.User = Backbone.Model.extend({
   isAuthenticated: function() {
     return !!this.get('_id');
   }
 });
 
 /** 当前访问的用户对象 */
-NC.currentUser = new NC.User();
+ND.currentUser = new ND.User();
 
 /** 模块树管理对象 */
-NC.moduleTree = (function() {
+ND.moduleTree = (function() {
   var tree = [];
   return {
     push: function(module) {

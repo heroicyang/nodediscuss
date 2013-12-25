@@ -1,7 +1,7 @@
-NC.Module.define('WikiEditForm',
+ND.Module.define('WikiEditForm',
   ['Form', 'Validator', 'Editor'],
   function(Form, Validator, Editor) {
-    return NC.Module.extend({
+    return ND.Module.extend({
       initialize: function() {
         this.setupForm();
         this.listenTo(this.form, 'invalidated', this.onFormInvalidated);

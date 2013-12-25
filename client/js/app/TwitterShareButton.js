@@ -2,7 +2,7 @@
  * 分享到 Twitter 的按钮
  * @author heroic
  */
-NC.Module.define('TwitterShareButton',
+ND.Module.define('TwitterShareButton',
   ['ShareButton'],
   function(ShareButton) {
     return ShareButton.extend({

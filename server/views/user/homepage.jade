@@ -101,7 +101,7 @@ block sidebar
 block script
   if isAuthenticated && user.id !== currentUser.id
     script(type="text/javascript").
-      NC.moduleTree.push({
+      ND.moduleTree.push({
         name: 'FollowButton',
         el: '#follow-btn',
         data: {
@@ -112,7 +112,7 @@ block script
       });
   if user.github
     script(type="text/javascript").
-      NC.moduleTree.push({
+      ND.moduleTree.push({
         name: 'UserRepoList',
         el: '.repo-list',
         data: {

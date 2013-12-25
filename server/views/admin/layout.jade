@@ -53,12 +53,12 @@ html(lang="zh-CN")
     //- 初始化前端模块
     script(type="text/javascript").
       ;(function() {
-        NC.loadModule({
+        ND.loadModule({
           name: 'App',
           el: '#app',
-          children: NC.moduleTree.get()
+          children: ND.moduleTree.get()
         }, function(module) {
-          NC.app = module;
+          ND.app = module;
         });
       }());
     //- 编辑器模板

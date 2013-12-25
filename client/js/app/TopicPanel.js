@@ -1,5 +1,5 @@
-NC.Module.define('TopicPanel', [], function() {
-  return NC.Module.extend({
+ND.Module.define('TopicPanel', [], function() {
+  return ND.Module.extend({
     events: {
       'click .favorite-btn': 'onFavoriteClick'
     },

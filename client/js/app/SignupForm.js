@@ -2,10 +2,10 @@
  * 注册表单模块
  * @author heroic
  */
-NC.Module.define('SignupForm',
+ND.Module.define('SignupForm',
   ['Form', 'Validator'],
   function(Form, Validator) {
-    return NC.Module.extend({
+    return ND.Module.extend({
       initialize: function() {
         this.setupForm();
         this.listenTo(this.form, 'validated', this.onFormValidated);

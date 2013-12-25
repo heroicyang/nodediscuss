@@ -1,5 +1,5 @@
-NC.Module.define('FavoriteTagButton', [], function() {
-  return NC.Module.extend({
+ND.Module.define('FavoriteTagButton', [], function() {
+  return ND.Module.extend({
     events: {
       'click': 'onFavoriteTagClick'
     },

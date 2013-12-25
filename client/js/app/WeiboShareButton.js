@@ -2,7 +2,7 @@
  * 分享到新浪微博的按钮
  * @author heroic
  */
-NC.Module.define('WeiboShareButton',
+ND.Module.define('WeiboShareButton',
   ['ShareButton'],
   function(ShareButton) {
     return ShareButton.extend({

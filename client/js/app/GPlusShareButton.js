@@ -2,7 +2,7 @@
  * 分享到 Google+ 的按钮
  * @author heroic
  */
-NC.Module.define('GPlusShareButton',
+ND.Module.define('GPlusShareButton',
   ['ShareButton'],
   function(ShareButton) {
     return ShareButton.extend({

@@ -2,8 +2,8 @@
  * 编辑器模块
  * @author heroic
  */
-NC.Module.define('Editor', ['Marked'], function(Marked) {
-  return NC.Module.extend({
+ND.Module.define('Editor', ['Marked'], function(Marked) {
+  return ND.Module.extend({
     events: {
       'show.bs.tab .nav-tabs a[data-toggle="tab"]': 'onTabShow',
       'click .fullscreen': 'onZenButtonClick',

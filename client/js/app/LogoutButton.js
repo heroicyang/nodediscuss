@@ -1,5 +1,5 @@
-NC.Module.define('LogoutButton', [], function() {
-  return NC.Module.extend({
+ND.Module.define('LogoutButton', [], function() {
+  return ND.Module.extend({
     events: {
       'click': 'onLogoutButtonClick'
     },

@@ -1,7 +1,7 @@
-NC.Module.define('CommentForm',
+ND.Module.define('CommentForm',
   ['Form', 'Validator', 'Editor'],
   function(Form, Validator, Editor) {
-    return NC.Module.extend({
+    return ND.Module.extend({
       initialize: function() {
         _.bindAll(this);
         this.setupForm();
@@ -10,8 +10,8 @@ NC.Module.define('CommentForm',
         this.commentIds = [];
       },
       onReady: function() {
-        this.listenTo(NC.pubsub, 'editor:insert', this.insertTextToEditor);
-        this.listenTo(NC.pubsub, 'comment:reply', this.replyComment);
+        this.listenTo(ND.pubsub, 'editor:insert', this.insertTextToEditor);
+        this.listenTo(ND.pubsub, 'comment:reply', this.replyComment);
       },
       setupForm: function() {
         this.$form = this.$el;

@@ -1,5 +1,5 @@
-NC.Module.define('CommentList', [], function() {
-  return NC.Module.extend({
+ND.Module.define('CommentList', [], function() {
+  return ND.Module.extend({
     events: {
       'click .reply-comment-btn': 'onReplyCommentClick',
       'click .del-comment-btn': 'onDeleteCommentClick'
@@ -12,13 +12,13 @@ NC.Module.define('CommentList', [], function() {
           username: $el.data('username')
         });
 
-      NC.pubsub.trigger('editor:insert', text);
-      NC.pubsub.trigger('comment:reply', commentId);
+      ND.pubsub.trigger('editor:insert', text);
+      ND.pubsub.trigger('comment:reply', commentId);
     },
     onDeleteCommentClick: function(e) {
       e.preventDefault();
       var self = this;
-      NC.loadModule({
+      ND.loadModule({
         name: 'ConfirmDialog',
         content: '确认要删除该条评论？'
       }, function(confirmDialog) {

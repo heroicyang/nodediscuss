@@ -2,7 +2,7 @@
  * 分享到 Facebook 的按钮
  * @author heroic
  */
-NC.Module.define('FacebookShareButton',
+ND.Module.define('FacebookShareButton',
   ['ShareButton'],
   function(ShareButton) {
     return ShareButton.extend({

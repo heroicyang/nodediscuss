@@ -2,7 +2,7 @@
  * 初始化 `marked` 的配置，并将其导出为公用模块
  * @author heroic
  */
-NC.Loader.define('Marked', [], function() {
+ND.Loader.define('Marked', [], function() {
   var options = {
     gfm: true,
     tables: true,

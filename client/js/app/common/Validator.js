@@ -3,7 +3,7 @@
  * @author heroic
  */
 
-NC.Loader.define('Validator', [], function() {
+ND.Loader.define('Validator', [], function() {
   /**
    * Validator constructor
    * @param {jQuery} el         需要验证的表单项元素

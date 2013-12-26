@@ -1,6 +1,6 @@
 ul.breadcrumb
   each breadcrumb in breadcrumbs
     if breadcrumb.url
-      li: a(href="#{breadcrumb.url}") #{breadcrumb.title}
+      li: a(href="#{breadcrumb.url}") #{breadcrumb.name}
     else
-      li.active #{breadcrumb.title}
+      li.active #{breadcrumb.name}

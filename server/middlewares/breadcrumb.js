@@ -1,87 +1,82 @@
 /**
  * 面包屑导航中间件
  * @author heroic
- */
 
 /**
- * Breadcrumbs singleton constructor
+ * Module dependencies
  */
-var Breadcrumbs = (function() {
-  var bds = [];
-  function BreadcrumbsCtor() {}
+var _ = require('lodash');
 
-  /**
-   * 添加面包屑导航数据
-   * @param {String|Object|Array} title  面包屑标题
-   *  - String: 即为普通的 title
-   *  - Object: 含有 title、url 键值对的对象
-   *  - Array: 含有 title、url 键值对对象组成的数组
-   * @param {String} url   面包屑链接
-   *  - 如果没有 url 参数时，则代表是当前所在节点
-   *  - 当第一个参数为 Object 和 Array 时，此参数无意义
-   */
-  BreadcrumbsCtor.prototype.add = function(title, url) {
-    var type = Object.prototype.toString.call(title);
+var homeAdded = false;
 
-    if (type === '[object Object]') {
-      bds.push(title);
-    } else if (type === '[object Array]') {
-      bds = bds.concat(title);
+/**
+ * 初始化面包屑导航
+ * 每次请求时会为 `req` 对象附加 `breadcrumbs` 方法
+ */
+exports.init = function() {
+  var breadcrumbs = [];
+
+  function exists(breadcrumb) {
+    return _.findIndex(breadcrumbs, breadcrumb) !== -1;
+  }
+
+  function addBreadcrumbs(name, url) {
+    if (arguments.length === 1) {
+      if (_.isArray(name)) {
+        _.each(name, function(breadcrumb) {
+          if (!exists(breadcrumb)) {
+            breadcrumbs.push(breadcrumb);
+          }
+        });
+      } else if (_.isObject(name)) {
+        if (!exists(name)) {
+          breadcrumbs.push(name);
+        }
+      } else {
+        if (!exists(name)) {
+          breadcrumbs.push({ name: name });
+        }
+      }
+    } else if (arguments.length === 2) {
+      if (!exists(name)) {
+        breadcrumbs.push({
+          name: name,
+          url: url
+        });
+      }
     } else {
-      bds.push({
-        title: title,
-        url: url
-      });
+      return breadcrumbs;
     }
-  };
+  }
 
-  /**
-   * 返回所有的面包屑导航数据
-   * @return {Array} title、url 键值对对象所组成的数组
-   */
-  BreadcrumbsCtor.prototype.get = function() {
-    return bds;
-  };
-
-  /**
-   * 清空当前面包屑数据
-   */
-  BreadcrumbsCtor.prototype.clear = function() {
-    bds = [];
-  };
-
-  //  返回单例对象
-  return function() {
-    if (!BreadcrumbsCtor.instance) {
-      BreadcrumbsCtor.instance = new BreadcrumbsCtor();
-    }
-    return BreadcrumbsCtor.instance;
-  };
-}());
-
-/**
- * 初始化面包屑导航中间件
- * @param  {Object} opts 初始化参数
- *  - homeTitle   面包屑上的主页标题 ['Home']
- *  - homeUrl     面包屑上的主页链接 ['/']
- * @return {Function}    Express 中间件
- */
-exports.init = function(opts) {
-  opts = opts || {};
-
-  var homeTitle = opts.homeTitle || 'Home',
-    homeUrl = opts.homeUrl || '/',
-    breadcrumbs = new Breadcrumbs();
+  function cleanBreadcrumbs() {
+    breadcrumbs = [];
+  }
 
   return function(req, res, next) {
-    breadcrumbs.clear();
-    breadcrumbs.add(homeTitle, homeUrl);
-    req.breadcrumbs = function(title, url) {
-      if (arguments.length === 0) {
-        return breadcrumbs.get();
-      }
-      breadcrumbs.add(title, url);
-    };
+    homeAdded = false;
+    cleanBreadcrumbs();
+    req.breadcrumbs = addBreadcrumbs;
+    next();
+  };
+};
+
+/**
+ * 设置面包屑导航的主页信息
+ * @param {Object} options
+ *  - name    主页名称
+ *  - url     主页地址
+ */
+exports.setHome = function(options) {
+  options = options || {};
+  var homeName = options.name || 'Home',
+    homeUrl = options.url || '/';
+
+  return function(req, res, next) {
+    if (!homeAdded) {
+      req.breadcrumbs(homeName, homeUrl);
+      homeAdded = true;
+    }
     next();
   };
 };

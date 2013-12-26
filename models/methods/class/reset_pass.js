@@ -37,10 +37,15 @@ exports.add = function(userData, callback) {
  *  - resetPass
  */
 exports.get = function(conditions, callback) {
-  this.findOne({
-    $query: conditions,
-    $orderby: { createdAt: -1 }
-  }, callback);
+  this.find(conditions)
+    .sort({ createdAt: -1 })
+    .limit(1)
+    .exec(function(err, resetPasses) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, _.first(resetPasses));
+    });
 };
 
 /**

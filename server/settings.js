@@ -66,12 +66,12 @@ module.exports = exports = function(app) {
 
     // 初始化面包屑导航中间件
     app.use(breadcrumb.init());
+    app.use(breadcrumb.setHome({
+      name: '主页'
+    }));
     app.use('/admin', breadcrumb.setHome({
       name: 'DashBoard',
       url: '/admin'
-    }));
-    app.use(breadcrumb.setHome({
-      name: '主页'
     }));
 
     // 引入本地变量中间件

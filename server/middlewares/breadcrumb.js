@@ -1,13 +1,12 @@
 /**
- * 面包屑导航中间件
+ * 适用于 Express 的通用面包屑导航中间件
  * @author heroic
+ * /
 
 /**
  * Module dependencies
  */
 var _ = require('lodash');
-
-var homeAdded = false;
 
 /**
  * 初始化面包屑导航
@@ -54,7 +53,6 @@ exports.init = function() {
   }
 
   return function(req, res, next) {
-    homeAdded = false;
     cleanBreadcrumbs();
     req.breadcrumbs = addBreadcrumbs;
     next();
@@ -73,10 +71,23 @@ exports.setHome = function(options) {
     homeUrl = options.url || '/';
 
   return function(req, res, next) {
-    if (!homeAdded) {
-      req.breadcrumbs(homeName, homeUrl);
-      homeAdded = true;
+    var homeBreadcrumb = _.find(req.breadcrumbs(), function(breadcrumb) {
+      return breadcrumb._home;
+    });
+
+    if (!homeBreadcrumb) {
+      req.breadcrumbs({
+        name: homeName,
+        url: homeUrl,
+        _home: true
+      });
+    } else {
+      _.extend(homeBreadcrumb, {
+        name: homeName,
+        url: homeUrl
+      });
     }
+
     next();
   };
 };

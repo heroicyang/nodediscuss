@@ -1,4 +1,4 @@
-![NodeDiscuss](http://nodediscuss.u.qiniudn.com/assets/img/logo.png)
+![NodeDiscuss](http://nodediscuss.u.qiniudn.com/assets/img/logo.png) [![Dependency Status](https://gemnasium.com/heroicyang/nodediscuss.png)](https://gemnasium.com/heroicyang/nodediscuss)
 
 ### NodeDiscuss: 基于 Node.js 的社区系统。
 

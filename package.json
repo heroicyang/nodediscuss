@@ -5,8 +5,8 @@
   "main": "server/server.js",
   "scripts": {
     "test": "grunt test",
-    "blanket": {
-      "pattern": "test"
+    "travis-cov": {
+      "threshold": 85
     }
   },
   "title": "NodeDiscuss",
@@ -41,6 +41,7 @@
     "should": "2.0.2",
     "grunt": "~0.4.0",
     "blanket": "~1.1.5",
+    "travis-cov": "~0.2.4",
     "load-grunt-tasks": "~0.1.0",
     "grunt-mocha-test": "~0.8.1",
     "grunt-contrib-stylus": "~0.9.0",

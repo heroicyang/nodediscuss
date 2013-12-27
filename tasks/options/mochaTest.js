@@ -4,18 +4,24 @@ module.exports = exports = {
       ui: 'bdd',
       require: [
         'should',
-        'blanket'
+        'test/blanket'
       ],
       reporter: 'spec'
     },
     src: ['test/models/*.test.js']
   },
-  coverage: {
+  'html-cov': {
     options: {
       reporter: 'html-cov',
       quiet: true,
       captureFile: 'coverage.html'
     },
-    src: ['test/models/*.js']
+    src: ['test/models/*.test.js']
+  },
+  'travis-cov': {
+    options: {
+      reporter: 'travis-cov'
+    },
+    src: ['test/models/*.test.js']
   }
 };

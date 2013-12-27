@@ -10,10 +10,10 @@ var path = require('path'),
   express = require('express'),
   MongoStore = require('connect-mongo')(express),
   mutilpart = require('connect-multiparty'),
+  breadcrumbs = require('express-breadcrumbs'),
   mongodb = require('./mongodb'),
   config = require('../config'),
   passport = require('./middlewares/passport'),
-  breadcrumb = require('./middlewares/breadcrumb'),
   locals = require('./middlewares/locals'),
   flash = require('./middlewares/flash'),
   errorHandling = require('./middlewares/error_handling'),
@@ -65,11 +65,11 @@ module.exports = exports = function(app) {
     app.use(flash());
 
     // 初始化面包屑导航中间件
-    app.use(breadcrumb.init());
-    app.use(breadcrumb.setHome({
+    app.use(breadcrumbs.init());
+    app.use(breadcrumbs.setHome({
       name: '主页'
     }));
-    app.use('/admin', breadcrumb.setHome({
+    app.use('/admin', breadcrumbs.setHome({
       name: 'DashBoard',
       url: '/admin'
     }));

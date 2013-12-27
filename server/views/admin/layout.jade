@@ -7,7 +7,7 @@ html(lang="zh-CN")
     title= site.name + '后台管理'
     //- 根据 grunt build 之后的结果引入 css 文件
     each file in assets.css
-      link(href="/css/#{file}", rel="stylesheet")
+      link(href="#{staticDomain}/css/#{file}", rel="stylesheet")
   body#app
     div(role="navigation").navbar.navbar-default.navbar-static-top
       div.container
@@ -17,8 +17,11 @@ html(lang="zh-CN")
             span.icon-bar
             span.icon-bar
             sapn.icon-bar
-          a(href="/").navbar-brand.logo
-            img(src="/img/logo.png", title="#{site.title}").img-responsive
+          a(href="/admin").navbar-brand.logo
+            if site.logo
+              img(src!="#{site.logo}", title="#{site.title}").img-responsive
+            else
+              h1 #{site.name}
         div.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
             li(class=(path === '/admin') ? "active" : "")
@@ -40,7 +43,7 @@ html(lang="zh-CN")
 
     //- 根据 grunt build 之后的结果引入 js 文件
     each file in (assets.adminjs || assets.js)
-      script(src="/js/#{file}")
+      script(src="#{staticDomain}/js/#{file}")
     //- 设置 ajax 模式下的 csrf
     script(type="text/javascript").
       $.ajaxSetup({

@@ -1,10 +1,15 @@
+/**
+ * `grunt-mocha-test` 插件的配置
+ * @author heroic
+ */
+
 module.exports = exports = {
   test: {
     options: {
       ui: 'bdd',
       require: [
         'should',
-        'test/blanket'
+        'test/instrument'
       ],
       reporter: 'spec'
     },
@@ -21,6 +26,16 @@ module.exports = exports = {
   'travis-cov': {
     options: {
       reporter: 'travis-cov'
+    },
+    src: ['test/models/*.test.js']
+  },
+  coveralls: {
+    options: {
+      require: [
+        'should',
+        'test/instrument'
+      ],
+      reporter: 'mocha-lcov-reporter'
     },
     src: ['test/models/*.test.js']
   }

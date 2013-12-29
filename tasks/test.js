@@ -5,16 +5,20 @@
 
 module.exports = exports = function(grunt) {
   grunt.registerTask('test', function() {
-    var target = grunt.option('target');
-    switch(target) {
-    case 'model':
-      grunt.task.run('simplemocha:model');
-      break;
-    case 'controller':
-      grunt.log.writeln('Running controller tests...');
-      break;
-    default:
-      grunt.task.run('mochaTest');
-    }
+    grunt.task.run([
+      'mochaTest:test',
+      'mochaTest:travis-cov'
+    ]);
+  });
+
+  grunt.registerTask('testCovHtml', function() {
+    grunt.task.run([
+      'mochaTest:test',
+      'mochaTest:html-cov'
+    ]);
+  });
+
+  grunt.registerTask('testCoveralls', function() {
+    grunt.task.run('mochaTest:coveralls');
   });
 };

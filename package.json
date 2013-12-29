@@ -5,6 +5,14 @@
   "main": "server/server.js",
   "scripts": {
     "test": "grunt test",
+    "coveralls": "grunt testCoveralls  | egrep '(SF.*)|(DA:.*)|end_of_record' | node_modules/.bin/coveralls"
+  },
+  "config": {
+    "blanket": {
+      "pattern": [
+        "nodediscuss/models"
+      ]
+    },
     "travis-cov": {
       "threshold": 85
     }
@@ -37,11 +45,13 @@
     "express-breadcrumbs": "~0.0.2"
   },
   "devDependencies": {
-    "mocha": "1.13.0",
+    "mocha": "~1.16.2",
     "should": "2.0.2",
     "grunt": "~0.4.0",
-    "blanket": "~1.1.5",
+    "blanket": "~1.1.6",
     "travis-cov": "~0.2.4",
+    "mocha-lcov-reporter": "~0.0.1",
+    "coveralls": "~2.6.1",
     "load-grunt-tasks": "~0.1.0",
     "grunt-mocha-test": "~0.8.1",
     "grunt-contrib-stylus": "~0.9.0",

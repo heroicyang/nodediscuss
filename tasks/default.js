@@ -29,16 +29,15 @@ module.exports = exports = function(grunt) {
     grunt.log.writetableln(
       [36, 50],
       [
-        indent('grunt test [options]', 2),
-        'run unit tests [all]'
+        indent('grunt test', 2),
+        'run tests'
       ]
     );
-    grunt.log.writeln(indent('Options:', 4));
     grunt.log.writetableln(
       [36, 50],
       [
-        indent('--target=<target>', 6),
-        'only run tests matching <target> (model|api|controller)'
+        indent('grunt testCovHtml', 2),
+        'run tests and produce coverage report'
       ]
     );
     grunt.log.writeln();

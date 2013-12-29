@@ -1,0 +1,57 @@
+{
+  "users": [
+    {
+      "username": "heroic",
+      "email": "me@heroicyang.com",
+      "password": "111111"
+    },
+    {
+      "username": "heroicyang",
+      "email": "heroicyang@gmail.com",
+      "password": "111111"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Node.js"
+    },
+    {
+      "name": "前端"
+    },
+    {
+      "name": "分享"
+    }
+  ],
+  "tags": [
+    {
+      "slug": "node",
+      "name": "Node.js"
+    },
+    {
+      "slug": "javascript",
+      "name": "JavaScript"
+    },
+    {
+      "slug": "bullshit",
+      "name": "瞎扯淡"
+    }
+  ],
+  "topics": [
+    {
+      "title": "this is a test topic",
+      "content": "This is a test topic.\\n[This is my blog.](http://heroicyang.com)"
+    },
+    {
+      "title": "this is another test topic",
+      "content": "This is another test topic.\\n<a href=\"javascript:alert(123);\">click me</a>"
+    }
+  ],
+  "comments": [
+    {
+      "content": "This is a test comment."
+    },
+    {
+      "content": "This is another test comment."
+    }
+  ]
+}

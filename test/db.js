@@ -37,4 +37,5 @@ if (mongoose.connection.readyState !== 1) {
   });
 }
 
+module.exports = exports = mongoose;
 exports.models = require('../models');

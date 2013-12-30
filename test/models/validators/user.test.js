@@ -120,7 +120,7 @@ describe('models/validators/user.js', function() {
     });
   });
 
-  it('when provide a invalid website should throw ValidationError', function(done) {
+  it('if provide the website it should be valid', function(done) {
     async.parallel([
       function(next) {
         var user = new User({

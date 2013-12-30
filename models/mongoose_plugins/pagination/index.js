@@ -10,6 +10,7 @@
  * @return {Function}
  */
 module.exports = exports = function(options) {
+  options = options || {};
   var defaultSort = options.defaultSort;
 
   /**

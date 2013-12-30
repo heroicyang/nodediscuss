@@ -49,5 +49,7 @@ describe('models/mongoose_plugins/timestamp', function() {
 
     should.exist(PostSchema.virtualpath('createdAt'));
     should.exist(PostSchema.virtualpath('createdAt').applyGetters('', new Post()));
+
+    db.models.Post = null;
   });
 });

@@ -1,5 +1,5 @@
 /**
- * test/models/validators/tag.js
+ * test/models/validators/tag.test.js
  * @author heroic
  */
 
@@ -14,7 +14,7 @@ var Section = models.Section,
 var data = require('../../fixtures/data.json');
 
 describe('models/validators/tag.js', function() {
-  before(function(done) {
+  before(function createSections(done) {
     var self = this;
     Section.create(data.sections, function(err, section) {
       if (err) {
@@ -25,7 +25,7 @@ describe('models/validators/tag.js', function() {
     });
   });
 
-  before(function(done) {
+  before(function createTags(done) {
     var self = this;
     var tags = _.map(data.tags, function(tag) {
       tag.section = {
@@ -60,6 +60,7 @@ describe('models/validators/tag.js', function() {
     });
     tag.validate(function(err) {
       should.exist(err);
+      err.name.should.eql('ValidationError');
       done();
     });
   });
@@ -74,6 +75,7 @@ describe('models/validators/tag.js', function() {
     });
     tag.validate(function(err) {
       should.exist(err);
+      err.name.should.eql('ValidationError');
       done();
     });
   });
@@ -88,6 +90,7 @@ describe('models/validators/tag.js', function() {
     });
     tag.validate(function(err) {
       should.exist(err);
+      err.name.should.eql('ValidationError');
       done();
     });
   });

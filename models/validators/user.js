@@ -61,22 +61,11 @@ module.exports = exports = function(schema) {
   
   // 验证用户密码
   schema.path('passwordHashed')
+    .required(true, '密码不能为空!')
     .validate(function() {
-      if (this.isNew) {
-        return !!this.password;
-      }
-      return true;
-    }, '密码不能为空!')
-    .validate(function() {
-      if (!this.password) {
-        return true;
-      }
       return this.password.length >= 6;
     }, '密码至少为6位。')
     .validate(function() {
-      if (!this.password) {
-        return true;
-      }
       return this.password.length <= 31;
     }, '密码最多为31位');
   

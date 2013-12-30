@@ -3,12 +3,14 @@
     {
       "username": "heroic",
       "email": "me@heroicyang.com",
-      "password": "111111"
+      "password": "111111",
+      "website": "heroicyang.com"
     },
     {
       "username": "heroicyang",
       "email": "heroicyang@gmail.com",
-      "password": "111111"
+      "password": "111111",
+      "website": "http://heroicyang.com"
     }
   ],
   "sections": [

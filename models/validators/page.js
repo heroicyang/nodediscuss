@@ -18,7 +18,7 @@ module.exports = exports = function(schema) {
           return done(false);
         }
         if (page) {
-          return done(page.slug === self.slug);
+          return done(page.id === self.id);
         }
         done(true);
       });

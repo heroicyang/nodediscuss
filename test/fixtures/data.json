@@ -49,6 +49,18 @@
       "content": "This is another test topic.\\n<a href=\"javascript:alert(123);\">click me</a>"
     }
   ],
+  "pages": [
+    {
+      "slug": "about",
+      "title": "About",
+      "content": "This is about page."
+    },
+    {
+      "slug": "faq",
+      "title": "FAQ",
+      "content": "This is FAQ page."
+    }
+  ],
   "comments": [
     {
       "content": "This is a test comment."

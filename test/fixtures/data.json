@@ -13,7 +13,8 @@
   ],
   "sections": [
     {
-      "name": "Node.js"
+      "name": "Node.js",
+      "sort": 1
     },
     {
       "name": "前端"

@@ -8,8 +8,7 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash'),
-  should = require('should');
+  _ = require('lodash');
 var models = require('../../db').models;
 var User = models.User,
   Section = models.Section,

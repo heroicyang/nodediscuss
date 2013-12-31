@@ -5,6 +5,7 @@
 
 module.exports = exports = function(grunt) {
   grunt.registerTask('test', function() {
+    process.env.NODE_ENV = 'test';
     grunt.task.run([
       'mochaTest:test',
       'mochaTest:travis-cov'
@@ -12,6 +13,7 @@ module.exports = exports = function(grunt) {
   });
 
   grunt.registerTask('testCovHtml', function() {
+    process.env.NODE_ENV = 'test';
     grunt.task.run([
       'mochaTest:test',
       'mochaTest:html-cov'
@@ -19,6 +21,7 @@ module.exports = exports = function(grunt) {
   });
 
   grunt.registerTask('testCoveralls', function() {
+    process.env.NODE_ENV = 'test';
     grunt.task.run('mochaTest:coveralls');
   });
 };

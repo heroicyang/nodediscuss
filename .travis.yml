@@ -3,12 +3,17 @@ language: node_js
 node_js:
   - "0.10"
 
+services:
+  - mongodb
+
 branches:
   only:
     - master
 
 before_script:
+  - mongo nodediscuss --eval 'db.addUser("travis", "test");'
   - npm install -g grunt-cli
+  - grunt createConfig --env=test
 
 script: npm run coveralls
 

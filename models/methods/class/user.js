@@ -57,7 +57,7 @@ exports.add = function(userData, callback) {
  */
 exports.edit = function(userData, callback) {
   var id = userData.id || userData._id;
-  userData = _.omit(userData, ['_id, id']);
+  userData = _.omit(userData, ['_id', 'id']);
 
   this.findById(id, function(err, user) {
     if (err) {
@@ -104,7 +104,7 @@ exports.getCount = function(conditions, callback) {
  *  - err
  *  - exist
  */
-exports.isUserExist = function(conditions, callback) {
+exports.isExist = function(conditions, callback) {
   this.get(conditions, function(err, user) {
     if (err) {
       return callback(err);

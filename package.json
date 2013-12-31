@@ -14,7 +14,7 @@
       ]
     },
     "travis-cov": {
-      "threshold": 85
+      "threshold": 80
     }
   },
   "title": "NodeDiscuss",

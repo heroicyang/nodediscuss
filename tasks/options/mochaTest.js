@@ -13,7 +13,7 @@ module.exports = exports = {
       ],
       reporter: 'spec'
     },
-    src: ['test/models/*.test.js']
+    src: ['test/**/*.test.js']
   },
   'html-cov': {
     options: {
@@ -21,13 +21,13 @@ module.exports = exports = {
       quiet: true,
       captureFile: 'coverage.html'
     },
-    src: ['test/models/*.test.js']
+    src: ['test/**/*.test.js']
   },
   'travis-cov': {
     options: {
       reporter: 'travis-cov'
     },
-    src: ['test/models/*.test.js']
+    src: ['test/**/*.test.js']
   },
   coveralls: {
     options: {
@@ -37,6 +37,6 @@ module.exports = exports = {
       ],
       reporter: 'mocha-lcov-reporter'
     },
-    src: ['test/models/*.test.js']
+    src: ['test/**/*.test.js']
   }
 };

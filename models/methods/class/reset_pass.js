@@ -24,7 +24,7 @@ exports.add = function(userData, callback) {
       return callback(err);
     }
     mailers.sendResetPassMail(resetPass, function(err) {
-      callback(err);
+      callback(err, resetPass);
     });
   });
 };

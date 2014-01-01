@@ -14,7 +14,7 @@ var User = models.User,
   Relation = models.Relation;
 var data = require('../../../fixtures/data.json');
 
-describe('models/methods/class/reset_pass.js', function() {
+describe('models/methods/class/relation.js', function() {
   before(function createUsers(done) {
     var self = this;
     User.create(data.users, function(err, user, user1) {

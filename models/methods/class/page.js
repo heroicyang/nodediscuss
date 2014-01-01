@@ -78,7 +78,7 @@ exports.edit = function(pageData, callback) {
     updatedPage: ['contentHtml', 'page', function(next, results) {
       var page = results.page;
       if (!page) {
-        return next(null, page);
+        return next(null, null);
       }
 
       pageData.contentHtml = results.contentHtml;
@@ -90,7 +90,12 @@ exports.edit = function(pageData, callback) {
         callback(err, page);
       });
     }]
-  }, callback);
+  }, function(err, results) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, results.updatedPage);
+  });
 };
 
 /**

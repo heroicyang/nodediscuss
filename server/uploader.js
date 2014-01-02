@@ -15,7 +15,8 @@ var Uploader = require('../libs/uploader'),
   QiniuStrategy = require('../plugins/qiniu_uploader');
 
 var uploader = new Uploader();
-var strategy = nconf.get('uploader:strategy');
+var strategy = nconf.get('uploader:strategy'),
+  options = nconf.get('uploader:options');
 
 /** 加载 LocalStrategy 插件 */
 if (strategy === 'local') {
@@ -27,7 +28,9 @@ if (strategy === 'local') {
 
 /** 加载 QiniuStrategy 插件 */
 if (strategy === 'qiniu') {
-  uploader.use(new QiniuStrategy(nconf.get('uploader:options')));
+  uploader.use(new QiniuStrategy(_.extend({
+    uploadPath: path.join(nconf.get('media:cwd'), nconf.get('media:uploadPath'))
+  }, options)));
 }
 
 /** 暴露上传文件的方法 */

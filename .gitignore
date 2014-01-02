@@ -24,4 +24,5 @@ coverage.html
 config/*
 !config/default.json
 !config/index.js
+!config/README.md
 assets.json

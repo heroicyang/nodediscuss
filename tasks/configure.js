@@ -3,23 +3,14 @@
  * @author heroic
  */
 
-/**
- * Module dependencies
- */
-var path = require('path');
-
 module.exports = exports = function(grunt) {
-  var configPath = path.join(__dirname, '../config'),
-    defaultConf = path.join(configPath, 'default.js');
-
   grunt.registerTask('createConfig', function() {
     var env = grunt.option('env') || process.env.NODE_ENV || 'development';
+    var defaultConf = JSON.parse(grunt.file.read('config/default.json'));
+    defaultConf.session.secret = createRandomString();
 
-    var config = grunt.file.read(defaultConf, { encoding: 'utf8' });
-    config = config.replace(/secret: '(.*)'/, function(group, p1) {
-      return 'secret: \'' + createRandomString() + '\'';
-    });
-    grunt.file.write(path.join(configPath, env + '.js'), config, { encoding: 'utf8' });
+    grunt.file.write('config/' + env + '.json',
+        JSON.stringify(defaultConf, null, 2));
     grunt.log.ok(env + ' config is successfully created.');
   });
 };

@@ -1,24 +1,17 @@
 /**
- * Exports config
+ * config/index.js
+ * 配置 `nconf`
  * @author heroic
  */
-module.exports = exports = readConfig();
 
 /**
- * Reads the config according to the NODE_ENV
- * @return {Object} config
+ * Module dependencies
  */
-function readConfig() {
-  var env = process.env.NODE_ENV || 'development',
-    defaultConf = require('./default'),
-    config = {};
+var nconf = require('nconf');
 
-  try {
-    config = require('./' + env);
-  } catch(e) {
-    throw new Error('invalid configuration environment "' + env + '"');
-  }
-
-  config.__proto__ = defaultConf;
-  return config;
-}
+exports.configure = function() {
+  nconf.argv().env();
+  var env = nconf.get('NODE_ENV') || 'development';
+  nconf.file(env, 'config/' + env + '.json');
+  nconf.file('default', 'config/default.json');
+};

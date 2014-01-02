@@ -1,0 +1,63 @@
+{
+  "debug": false,
+  "proxy": false,
+  "host": "localhost:8080",
+  "port": "8080",
+  "site": {
+    "logo": "",
+    "name": "NodeDiscuss",
+    "title": "NodeDiscuss: Node.js 中文交流社区",
+    "description": "Node.js 中文交流社区",
+    "headers": [
+      ["author", "me@heroicyang.com"]
+    ],
+    "footerNavs": [
+      [
+        "https://github.com/heroicyang/nodediscuss",
+        "GitHub",
+        "_blank"
+      ]
+    ]
+  },
+  "weiboAppKey": "",
+  "adminEmails": [],
+  "session": {
+    "secret": "nodediscuss",
+    "maxAge": 604800000
+  },
+  "mongo": {
+    "db": "nodediscuss",
+    "servers": [
+      "127.0.0.1:27017"
+    ]
+  },
+  "static": {
+    "domain": "",
+    "cwd": "/assets"
+  },
+  "media": {
+    "domain": "",
+    "cwd": "/assets",
+    "uploadPath": "/uploads"
+  },
+  "pagination": {
+    "pageSize": 20
+  },
+  "avatarProvider": {
+    "protocol": "http",
+    "host": "gravatar.com",
+    "pathname": "/avatar/%s",
+    "search": "s=%d",
+    "size": 80
+  },
+  "mailer": {
+    "strategy": "log",
+    "sender": "no-reply@nodediscuss.com",
+    "senderName": "NodeDiscuss",
+    "options": {}
+  },
+  "uploader": {
+    "strategy": "local",
+    "options": {}
+  }
+}

@@ -9,9 +9,9 @@
 var _ = require('lodash'),
   async = require('async'),
   moment = require('moment'),
+  nconf = require('nconf'),
   request = require('request');
-var config = require('../../config'),
-  api = require('../api'),
+var api = require('../api'),
   constants = api.constants;
 var md5 = require('../utils/md5');
 var error = require('../utils/error'),
@@ -285,7 +285,7 @@ exports.get = function(req, res, next) {
         conditions: {
           'author.id': user._id
         },
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, topics) {
         next(err, topics);
       });
@@ -296,7 +296,7 @@ exports.get = function(req, res, next) {
           'author.id': user._id,
           deleted: false
         },
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, comments) {
         if (err) {
           return next(err);

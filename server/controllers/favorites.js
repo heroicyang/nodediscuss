@@ -7,16 +7,16 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash');
-var config = require('../../config'),
-  api = require('../api');
+  _ = require('lodash'),
+  nconf = require('nconf');
+var api = require('../api');
 
 /** 话题收藏列表 */
 exports.topics = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   api.Topic.query({
@@ -24,7 +24,7 @@ exports.topics = function(req, res, next) {
       favoriteUsers: req.currentUser.id
     },
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   }, function(err, count, topics) {
     if (err) {
       return next(err);
@@ -44,7 +44,7 @@ exports.tags = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   async.waterfall([
@@ -65,7 +65,7 @@ exports.tags = function(req, res, next) {
           }
         },
         pageIndex: pageIndex,
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, topics) {
         if (err) {
           return next(err);

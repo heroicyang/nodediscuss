@@ -8,16 +8,17 @@
  */
 var url = require('url'),
   mongoose = require('mongoose'),
-  config = require('../config');
+  nconf = require('nconf');
+require('../config').configure();
 
 if (mongoose.connection.readyState !== 1) {
-  var mongoServers = config.mongo.servers,
+  var mongoServers = nconf.get('mongo:servers'),
     uris = [];
 
   uris.push(url.format({
     protocol: 'mongodb',
     host: '//' + mongoServers.shift(),
-    pathname: '/' + config.mongo.db
+    pathname: '/' + nconf.get('mongo:db')
   }));
 
   if (mongoServers.length > 0) {

@@ -7,9 +7,9 @@
  * Module dependencies
  */
 var _ = require('lodash'),
-  moment = require('moment');
-var api = require('../api'),
-  config = require('../../config');
+  moment = require('moment'),
+  nconf = require('nconf');
+var api = require('../api');
 var error = require('../utils/error'),
   CentralizedError = error.CentralizedError,
   NotAllowedError = error.NotAllowedError;
@@ -59,7 +59,7 @@ exports.commentAuthorRequired = function(req, res, next) {
 /** 需要 Wiki 创建、编辑权限 */
 exports.wikiEditorRequired = function(req, res, next) {
   if (req.currentUser.verified ||
-        _.contains(config.adminEmails, req.currentUser.email)) {
+        _.contains(nconf.get('adminEmails'), req.currentUser.email)) {
     return next();
   }
 
@@ -69,7 +69,7 @@ exports.wikiEditorRequired = function(req, res, next) {
 
 /** 管理员权限 */
 exports.adminRequired = function(req, res, next) {
-  if (_.contains(config.adminEmails, req.currentUser.email)) {
+  if (_.contains(nconf.get('adminEmails'), req.currentUser.email)) {
     return next();
   }
 
@@ -99,7 +99,7 @@ exports.topicThrottling = function(req, res, next) {
 
     // 如果是普通用户，则必须间隔 10 分钟才能继续发布
     if (!req.currentUser.verified &&
-          !_.contains(config.adminEmails, req.currentUser.email)) {
+          !_.contains(nconf.get('adminEmails'), req.currentUser.email)) {
       if (moment().add('minutes', -10).toDate() < topic.createdAt) {
         return next(new CentralizedError('发布话题过于频繁，请稍后再试'));
       }

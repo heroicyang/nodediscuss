@@ -7,16 +7,16 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash');
-var config = require('../../config'),
-  api = require('../api');
+  _ = require('lodash'),
+  nconf = require('nconf');
+var api = require('../api');
 
 /** 通知中心提醒列表 */
 exports.index = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   async.waterfall([
@@ -26,7 +26,7 @@ exports.index = function(req, res, next) {
           masterId: req.currentUser.id
         },
         pageIndex: pageIndex,
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, notifications) {
         if (err) {
           return next(err);

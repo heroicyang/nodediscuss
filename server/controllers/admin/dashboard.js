@@ -6,15 +6,15 @@
 /**
  * Module dependencies
  */
-var async = require('async');
-var config = require('../../../config'),
-  api = require('../../api');
+var async = require('async'),
+  nconf = require('nconf');
+var api = require('../../api');
 
 exports.index = function(req, res, next) {
   async.parallel({
     recentTopics: function(next) {
       api.Topic.query({
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, topics) {
         if (err) {
           return next(err);

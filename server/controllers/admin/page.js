@@ -7,9 +7,9 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash');
-var config = require('../../../config'),
-  api = require('../../api'),
+  _ = require('lodash'),
+  nconf = require('nconf');
+var api = require('../../api'),
   NotFoundError = require('../../utils/error').NotFoundError;
 
 /** 页面列表界面 */
@@ -17,12 +17,12 @@ exports.index = function(req, res, next) {
   var pageIndex = req.query.pageIndex;
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   api.Page.query({
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   }, function(err, count, pages) {
     if (err) {
       return next(err);

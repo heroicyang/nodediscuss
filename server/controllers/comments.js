@@ -6,9 +6,9 @@
 /**
  * Module dependencies
  */
-var async = require('async');
-var api = require('../api'),
-  config = require('../../config');
+var async = require('async'),
+  nconf = require('nconf');
+var api = require('../api');
 var NotFoundError = require('../utils/error').NotFoundError;
 
 /** 用户发表的评论列表 */
@@ -16,7 +16,7 @@ exports.createdByUser = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   api.Comment.query({
@@ -25,7 +25,7 @@ exports.createdByUser = function(req, res, next) {
       deleted: false
     },
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   }, function(err, count, comments) {
     if (err) {
       return next(err);

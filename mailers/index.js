@@ -7,11 +7,11 @@
  * Module dependencies
  */
 var util = require('util');
-var async = require('async');
+var async = require('async'),
+  nconf = require('nconf');
 var Mailer = require('../libs/mailer'),
   mailer = new Mailer(),
   NodeMailerStrategy = require('../plugins/nodemailer'),
-  config = require('../config'),
   renderer = require('./renderer');
 
 // 如果是生成环境，则禁用掉打印邮件内容的插件
@@ -20,8 +20,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // 加载 `NodeMailerStrategy` 插件
-if (config.mailer.strategy === 'nodemailer') {
-  mailer.use(new NodeMailerStrategy(config.mailer.options));
+if (nconf.get('mailer:strategy') === 'nodemailer') {
+  mailer.use(new NodeMailerStrategy(nconf.get('mailer:options')));
 }
 
 /**
@@ -39,12 +39,12 @@ exports.sendActivationMail = function(user, callback) {
     },
     function sendMail(html, next) {
       var mailOptions = {
-        from: util.format('%s <%s>', config.mailer.senderName, config.mailer.sender),
+        from: util.format('%s <%s>', nconf.get('mailer:senderName'), nconf.get('mailer:sender')),
         to: user.email,
-        subject: config.name + '帐号激活',
+        subject: nconf.get('site:name') + '帐号激活',
         html: html
       };
-      mailer.send(config.mailer.strategy, mailOptions, next);
+      mailer.send(nconf.get('mailer:strategy'), mailOptions, next);
     }
   ], callback);
 };
@@ -64,12 +64,12 @@ exports.sendResetPassMail = function(resetPass, callback) {
     },
     function sendMail(html, next) {
       var mailOptions = {
-        from: util.format('%s <%s>', config.mailer.senderName, config.mailer.sender),
+        from: util.format('%s <%s>', nconf.get('mailer:senderName'), nconf.get('mailer:sender')),
         to: resetPass.email,
-        subject: config.name + '密码重置',
+        subject: nconf.get('site:name') + '密码重置',
         html: html
       };
-      mailer.send(config.mailer.strategy, mailOptions, next);
+      mailer.send(nconf.get('mailer:strategy'), mailOptions, next);
     }
   ], callback);
 };

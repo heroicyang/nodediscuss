@@ -1,9 +1,9 @@
 /**
  * Module dependencies
  */
-var url = require('url'),
-  mongoose = require('mongoose'),
-  config = require('../config');
+var url = require('url');
+var mongoose = require('mongoose'),
+  nconf = require('nconf');
 
 /**
  * Connect to MongoDB
@@ -28,13 +28,13 @@ exports.connectionString = loadConnectionString();
  * @return {String} connection_string
  */
 function loadConnectionString() {
-  var mongoServers = config.mongo.servers,
+  var mongoServers = nconf.get('mongo:servers'),
     uris = [];
 
   uris.push(url.format({
     protocol: 'mongodb',
     host: '//' + mongoServers.shift(),
-    pathname: '/' + config.mongo.db
+    pathname: '/' + nconf.get('mongo:db')
   }));
 
   if (mongoServers.length > 0) {

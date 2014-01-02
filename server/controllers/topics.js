@@ -7,9 +7,9 @@
  * Module dependencies
  */
 var async = require('async'),
-  _ = require('lodash');
-var config = require('../../config'),
-  api = require('../api');
+  _ = require('lodash'),
+  nconf = require('nconf');
+var api = require('../api');
 var error = require('../utils/error'),
   NotFoundError = error.NotFoundError;
 
@@ -23,7 +23,7 @@ exports.home = function(req, res, next) {
   });
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   var conditions = {},
@@ -52,7 +52,7 @@ exports.home = function(req, res, next) {
         conditions: conditions,
         sort: sort,
         pageIndex: pageIndex,
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, topics) {
         if (err) {
           return next(err);
@@ -96,7 +96,7 @@ exports.belongsTag = function(req, res, next) {
 
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   var sort,
@@ -136,7 +136,7 @@ exports.belongsTag = function(req, res, next) {
         conditions: conditions,
         sort: sort,
         pageIndex: pageIndex,
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, topics) {
         if (err) {
           return next(err);
@@ -177,7 +177,7 @@ exports.createdByUser = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   api.Topic.query({
@@ -185,7 +185,7 @@ exports.createdByUser = function(req, res, next) {
       'author.id': req.user.id
     },
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   }, function(err, count, topics) {
     if (err) {
       return next(err);
@@ -208,7 +208,7 @@ exports.createdByFriends = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   async.waterfall([
@@ -230,7 +230,7 @@ exports.createdByFriends = function(req, res, next) {
           }
         },
         pageIndex: pageIndex,
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, topics) {
         if (err) {
           return next(err);
@@ -357,7 +357,7 @@ exports.show = function(req, res, next) {
   var pageIndex = parseInt(req.query.pageIndex, 10);
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   async.parallel({
@@ -382,7 +382,7 @@ exports.show = function(req, res, next) {
           refId: req.topic.id
         },
         pageIndex: pageIndex,
-        pageSize: config.pagination.pageSize
+        pageSize: nconf.get('pagination:pageSize')
       }, function(err, count, comments) {
         if (err) {
           return next(err);
@@ -399,7 +399,7 @@ exports.show = function(req, res, next) {
     req.breadcrumbs('话题详情');
 
     res.locals.site = res.locals.site || {};
-    res.locals.site.title = results.topic.title + ' - ' + config.name;
+    res.locals.site.title = results.topic.title + ' - ' + nconf.get('site:name');
     res.locals.site.description = results.topic.title;
     res.render('topic/show', _.extend(results, {
       pagination: pagination,

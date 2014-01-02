@@ -1,9 +1,12 @@
 /**
  * Module dependencies
  */
-var http = require('http'),
-  express = require('express'),
-  config = require('../config');
+var http = require('http');
+var express = require('express'),
+  nconf = require('nconf');
+
+// Configure
+require('../config').configure();
 
 // Connect to mongodb
 require('./mongodb').connect();
@@ -24,4 +27,4 @@ require('./routes')(app);
 
 // Start server
 http.createServer(app)
-  .listen(process.env.PORT || config.port || 8080);
+  .listen(process.env.PORT || nconf.get('port') || 8080);

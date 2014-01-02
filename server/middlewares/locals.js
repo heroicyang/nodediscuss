@@ -9,9 +9,9 @@
 var url = require('url'),
   util = require('util');
 var _ = require('lodash'),
-  moment = require('moment');
-var config = require('../../config'),
-  constants = require('../api').constants,
+  moment = require('moment'),
+  nconf = require('nconf');
+var constants = require('../api').constants,
   assets = require('../../assets.json'),
   pkg = require('../../package.json');
 
@@ -22,8 +22,8 @@ module.exports = exports = function() {
     res.locals._ = _;
     res.locals.moment = moment;
     res.locals.gravatar = function(emailHash) {
-      var provider = url.format(config.avatarProvider),
-        avatarSize = config.avatarProvider.size;
+      var provider = url.format(nconf.get('avatarProvider')),
+        avatarSize = nconf.get('avatarProvider:size');
       return util.format(provider, emailHash, avatarSize);
     };
 
@@ -38,24 +38,16 @@ module.exports = exports = function() {
       homepage: pkg.homepage,
       version: pkg.version
     };
-    res.locals.site = {
-      domain: 'http://' + config.host,
-      logo: config.logo,
-      name: config.name,
-      title: config.title,
-      description: config.description,
-      headers: config.headers,
-      footerNavs: config.footerNavs,
-      links: config.links,
-      ads: config.ads,
-      weiboAppKey: config.weiboAppKey
-    };
+    res.locals.site = _.extend({
+      domain: 'http://' + nconf.get('host'),
+      weiboAppKey: nconf.get('weiboAppKey')
+    }, nconf.get('site'));
     res.locals.assets = assets;
-    res.locals.staticDomain = config.static.domain;
+    res.locals.staticDomain = nconf.get('static:domain');
 
     res.locals.isAuthenticated = req.isAuthenticated();
     if (req.isAuthenticated()) {
-      if (_.contains(config.adminEmails, req.currentUser.email)) {
+      if (_.contains(nconf.get('adminEmails'), req.currentUser.email)) {
         req.currentUser.isAdmin = true;
       }
       res.locals.currentUser = req.currentUser;

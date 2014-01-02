@@ -6,9 +6,9 @@
 /**
  * Module dependencies
  */
-var _ = require('lodash');
-var config = require('../../config'),
-  api = require('../api');
+var _ = require('lodash'),
+  nconf = require('nconf');
+var api = require('../api');
 var error = require('../utils/error'),
   NotFoundError = error.NotFoundError;
 
@@ -17,7 +17,7 @@ exports.wikis = function(req, res, next) {
   var pageIndex = req.query.pageIndex;
   var pagination = {
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   };
 
   api.Page.query({
@@ -28,7 +28,7 @@ exports.wikis = function(req, res, next) {
       }
     },
     pageIndex: pageIndex,
-    pageSize: config.pagination.pageSize
+    pageSize: nconf.get('pagination:pageSize')
   }, function(err, count, pages) {
     if (err) {
       return next(err);
@@ -127,7 +127,7 @@ exports.get = function(req, res, next) {
     }
     req.breadcrumbs(page.title);
     res.locals.site = res.locals.site || {};
-    res.locals.site.title = page.title + ' - ' + config.name;
+    res.locals.site.title = page.title + ' - ' + nconf.get('site:name');
     res.locals.site.description = page.title;
     res.render('page/show', {
       page: page,

@@ -39,11 +39,11 @@
     "nodemailer": "~0.5.5",
     "marked": "~0.3.0",
     "highlight.js": "~7.5.0",
-    "node-uuid": "~1.4.1",
     "connect-multiparty": "~1.0.1",
-    "qn": "~0.2.0",
     "request": "~2.30.0",
-    "express-breadcrumbs": "~0.0.2"
+    "express-breadcrumbs": "~0.0.2",
+    "express-fileuploader": "~0.0.5",
+    "express-fileuploader-qiniu": "~0.0.2"
   },
   "devDependencies": {
     "mocha": "~1.16.2",

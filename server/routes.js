@@ -29,7 +29,7 @@ var admin = {
 module.exports = exports = function(app) {
   // 文件上传
   app.all('/upload/:type', auth.loginRequired);
-  app.post('/upload/image', uploader.uploadImageHandler());
+  app.post('/upload/image', uploader.uploadImageHandler);
 
   // 用户
   app.all('/signup', auth.loginNotAllowed, user.signup);

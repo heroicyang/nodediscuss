@@ -1,14 +1,6 @@
 # 放置实现各种 `Strategy` 的插件
 
-目前包括了 `local_uploader`、`qiniu_uploader` 和 `nodemailer` 插件。
-
-## local_uploader
-
-`libs/uploader` 的实现，提供将文件上传到本地目录的功能。
-
-## qiniu_uploader
-
-`libs/uploader` 的实现，提供将文件上传到七牛云存储的功能。
+目前包括了 `nodemailer` 插件。
 
 ## nodemailer
 

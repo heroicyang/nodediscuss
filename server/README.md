@@ -64,4 +64,4 @@ Express 的相关配置。
 
 ## uploader.js
 
-配置 `libs/uploader` 插件，提供上传图片的请求处理。
+配置 `express-fileuploader` 插件，提供上传图片的请求处理。

@@ -37,10 +37,11 @@
   - **search**: 查询字符串
   - **size**: 头像大小
 - **mailer**: 邮件发送服务配置
-  - **strategy**: 邮件发送策略
   - **sender**: 发件人地址
   - **senderName**: 发件人名称
-  - **options**: 相应的发送策略所需要的配置信息
+  - **options**: `nodemailer` SMTP 配置信息，详细请参见[这里](https://github.com/andris9/Nodemailer#setting-up-smtp)
+    - **service**
+    - **auth**
 - **uploader**: 文件上传服务配置
   - **strategy**: 文件上传策略
   - **options**: 相应的上传策略所需要的配置信息

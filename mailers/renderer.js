@@ -10,14 +10,14 @@ var crypto = require('crypto'),
   url = require('url');
 var _ = require('lodash'),
   jade = require('jade');
-var config = require('../config');
+var nconf = require('nconf');
 
 var urlObj = {
   protocol: 'http',
-  host: config.host
+  host: nconf.get('host')
 },
 site = {
-  name: config.name,
+  name: nconf.get('name'),
   url: url.format(urlObj)
 };
 

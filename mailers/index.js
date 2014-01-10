@@ -9,20 +9,8 @@
 var util = require('util');
 var async = require('async'),
   nconf = require('nconf');
-var Mailer = require('../libs/mailer'),
-  mailer = new Mailer(),
-  NodeMailerStrategy = require('../plugins/nodemailer'),
+var sender = require('./sender'),
   renderer = require('./renderer');
-
-// 如果是生成环境，则禁用掉打印邮件内容的插件
-if (process.env.NODE_ENV === 'production') {
-  mailer.unuse('log');
-}
-
-// 加载 `NodeMailerStrategy` 插件
-if (nconf.get('mailer:strategy') === 'nodemailer') {
-  mailer.use(new NodeMailerStrategy(nconf.get('mailer:options')));
-}
 
 /**
  * 发送帐号激活邮件
@@ -44,7 +32,7 @@ exports.sendActivationMail = function(user, callback) {
         subject: nconf.get('site:name') + '帐号激活',
         html: html
       };
-      mailer.send(nconf.get('mailer:strategy'), mailOptions, next);
+      sender.send(mailOptions, next);
     }
   ], callback);
 };
@@ -69,7 +57,7 @@ exports.sendResetPassMail = function(resetPass, callback) {
         subject: nconf.get('site:name') + '密码重置',
         html: html
       };
-      mailer.send(nconf.get('mailer:strategy'), mailOptions, next);
+      sender.send(mailOptions, next);
     }
   ], callback);
 };

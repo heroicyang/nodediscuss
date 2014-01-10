@@ -51,7 +51,6 @@
     "size": 80
   },
   "mailer": {
-    "strategy": "log",
     "sender": "no-reply@nodediscuss.com",
     "senderName": "NodeDiscuss",
     "options": {}

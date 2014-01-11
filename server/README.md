@@ -12,11 +12,7 @@ Express 的相关配置，路由、控制逻辑、视图等。
 
 ### auth.js
 
-定义了进行权限拦截的路由中间件。
-
-### breadcrumb.js
-
-实现面包屑导航的 Express 中间件。
+权限拦截的路由中间件。
 
 ### error_handling.js
 
@@ -24,31 +20,31 @@ Express 的相关配置，路由、控制逻辑、视图等。
 
 ### flash.js
 
-在请求直接传递消息的中间件。
+请求间传递消息的中间件。
 
 ### locals.js
 
-定义了所有模板渲染需要用到的公用变量。
+模板渲染需要用到的公用变量。
 
 ### passport.js
 
-利用 `passport` 库来管理各种登录策略，其中主要是对 `passport` 的配置。
+利用 `passport` 库来管理登录策略，对 `passport` 进行配置。
 
 ## utils
 
-放置 `server` 层会用到的工具类等。
+放置 `server` 层会用到的工具方法。
 
 ## views
 
-放置各种视图模板。
+视图模板。
 
 ## api.js
 
-引用了 `models` 层提供的 `api` 对象，方便在 `server` 层使用。同时定义了 `requestHandler` 方法，用于将 `api` 直接包装后来响应请求。
+引用了 `models` 层提供的 `api` 对象，方便在 `server` 层使用。同时定义了 `requestHandler` 方法，提供一个 `api` 门面方法来响应请求。
 
 ## mongodb.js
 
-其中定义了 `mongodb` 的连接逻辑。
+定义了 `mongodb` 数据库连接逻辑。
 
 ## routes.js
 

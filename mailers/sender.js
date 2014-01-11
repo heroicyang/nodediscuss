@@ -15,6 +15,10 @@ var nodemailer = require('nodemailer');
  * @param  {Function} callback
  */
 exports.send = function(mailOptions, callback) {
+  if (nconf.get('NODE_ENV') === 'test') {
+    return callback(null);
+  }
+
   if (nconf.get('NODE_ENV') === 'development' ||
       nconf.get('debug') === true) {
     setImmediate(function() {

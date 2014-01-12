@@ -73,7 +73,7 @@ module.exports = exports = function(schema) {
   schema.path('website')
     .validate(function(website) {
       if (website) {
-        return validator.isUrl(website);
+        return validator.isURL(website);
       }
       return true;
     }, '不像是有效的网站地址。');

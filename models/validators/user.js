@@ -7,7 +7,7 @@
  * Module dependencies
  */
 var _ = require('lodash');
-var validate = require('../validate'),
+var validator = require('../validator'),
   constants = require('../constants');
 
 module.exports = exports = function(schema) {
@@ -15,7 +15,7 @@ module.exports = exports = function(schema) {
   schema.path('email')
     .required('true', '电子邮件地址必填!')
     .validate(function(email) {
-      return !!validate(email).isEmail();
+      return validator.isEmail(email);
     }, '不像是有效的电子邮件地址。')
     .validate(function(email, done) {
       var self = this,
@@ -73,7 +73,7 @@ module.exports = exports = function(schema) {
   schema.path('website')
     .validate(function(website) {
       if (website) {
-        return !!validate(website).isUrl();
+        return validator.isUrl(website);
       }
       return true;
     }, '不像是有效的网站地址。');

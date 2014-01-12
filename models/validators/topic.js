@@ -7,7 +7,7 @@
  * Module dependencies
  */
 var _ = require('lodash');
-var validate = require('../validate');
+var validator = require('../validator');
 
 module.exports = exports = function(schema) {
   // 验证话题标题的有效性
@@ -21,7 +21,7 @@ module.exports = exports = function(schema) {
   schema.path('tag.id')
     .required(true, '必须选择话题所属的节点!')
     .validate(function(tagId) {
-      return !!validate(tagId).isObjectId();
+      return validator.isObjectId(tagId);
     }, 'Invalid tag id.')    // 外键检查，不会直接显示给用户
     .validate(function(tagId, done) {
       var Tag = this.model('Tag'),
@@ -46,7 +46,7 @@ module.exports = exports = function(schema) {
   schema.path('author.id')
     .required(true)
     .validate(function(authorId) {
-      return !!validate(authorId).isObjectId();
+      return validator.isObjectId(authorId);
     }, 'Invalid user id.')
     .validate(function(authorId, done) {
       var User = this.model('User'),

@@ -1,4 +1,6 @@
-![NodeDiscuss](http://nodediscuss.u.qiniudn.com/assets/img/logo.png) [![Build Status](https://travis-ci.org/heroicyang/nodediscuss.png)](https://travis-ci.org/heroicyang/nodediscuss]) [![Coverage Status](https://coveralls.io/repos/heroicyang/nodediscuss/badge.png)](https://coveralls.io/r/heroicyang/nodediscuss)  [![Dependency Status](https://gemnasium.com/heroicyang/nodediscuss.png)](https://gemnasium.com/heroicyang/nodediscuss)
+![NodeDiscuss](http://nodediscuss.u.qiniudn.com/assets/img/logo.png)
+
+[![Build Status](https://travis-ci.org/heroicyang/nodediscuss.png)](https://travis-ci.org/heroicyang/nodediscuss]) [![Coverage Status](https://coveralls.io/repos/heroicyang/nodediscuss/badge.png)](https://coveralls.io/r/heroicyang/nodediscuss)  [![Dependency Status](https://david-dm.org/heroicyang/nodediscuss.png)](https://david-dm.org/heroicyang/nodediscuss) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 ### NodeDiscuss: 基于 Node.js 的社区系统。
 

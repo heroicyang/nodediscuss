@@ -7,14 +7,14 @@
  * Module dependencies
  */
 var _ = require('lodash');
-var validate = require('../validate');
+var validator = require('../validator');
 
 module.exports = exports = function(schema) {
   // 对关联的话题或页面 id 进行约束性检查
   schema.path('refId')
     .required(true)
     .validate(function(refId) {
-      return !!validate(refId).isObjectId();
+      return validator.isObjectId(refId);
     }, 'Invalid ref id.');
 
   // 验证评论内容的有效性
@@ -41,7 +41,7 @@ module.exports = exports = function(schema) {
   schema.path('author.id')
     .required(true)
     .validate(function(authorId) {
-      return !!validate(authorId).isObjectId();
+      return validator.isObjectId(authorId);
     }, 'Invalid author id.')
     .validate(function(authorId, done) {
       var User = this.model('User'),

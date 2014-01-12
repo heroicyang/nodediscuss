@@ -7,7 +7,7 @@
   * Module dependencies
   */
 var _ = require('lodash');
-var validate = require('../validate');
+var validator = require('../validator');
 
 module.exports = exports = function(schema) {
   // 验证节点地址的有效性
@@ -38,7 +38,7 @@ module.exports = exports = function(schema) {
   schema.path('section.id')
     .required(true, '必须选择所属节点组!')
     .validate(function(sectionId) {
-      return !!validate(sectionId).isObjectId();
+      return validator.isObjectId(sectionId);
     }, 'Invalid section id.')    // 外键检查，不会直接显示给用户
     .validate(function(sectionId, done) {
       var Section = this.model('Section'),

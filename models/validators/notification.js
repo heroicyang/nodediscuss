@@ -7,20 +7,20 @@
  * Module dependencies
  */
 var _ = require('lodash');
-var validate = require('../validate'),
+var validator = require('../validator'),
   constants = require('../constants');
 
 module.exports = exports = function(schema) {
   schema.path('masterId')
     .required(true)
     .validate(function(masterId) {
-      return !!validate(masterId).isObjectId();
+      return validator.isObjectId(masterId);
     }, 'Invalid master user id.');
 
   schema.path('userId')
     .required(true)
     .validate(function(userId) {
-      return !!validate(userId).isObjectId();
+      return validator.isObjectId(userId);
     }, 'Invalid user id.');
   
   schema.path('type')
@@ -29,16 +29,16 @@ module.exports = exports = function(schema) {
   
   schema.path('topicId')
     .validate(function(topicId) {
-      return !!validate(topicId).isObjectId();
+      return validator.isObjectId(topicId);
     }, 'Invalid topic id.');
   
   schema.path('masterCommentId')
     .validate(function(masterCommentId) {
-      return !!validate(masterCommentId).isObjectId();
+      return validator.isObjectId(masterCommentId);
     }, 'Invalid master comment id.');
   
   schema.path('commentId')
     .validate(function(commentId) {
-      return !!validate(commentId).isObjectId();
+      return validator.isObjectId(commentId);
     }, 'Invalid comment id.');
 };

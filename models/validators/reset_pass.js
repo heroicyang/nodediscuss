@@ -6,14 +6,14 @@
 /**
  * Module dependencies
  */
-var moment = require('moment'),
-  validate = require('../validate');
+var moment = require('moment');
+var validator = require('../validator');
 
 module.exports = exports = function(schema) {
   schema.path('email')
     .required(true, '电子邮件地址必填!')
     .validate(function(email) {
-      return !!validate(email).isEmail();
+      return validator.isEmail(email);
     }, '不像是有效的电子邮件地址。')
     .validate(function(email, done) {
       var User = this.model('User'),

@@ -7,7 +7,7 @@ block content
       include ../shared/error_alert
       - var url = '/topic/create'
       if topic
-        url = '/topic/' + topic._id + '/edit'
+        - url = '/topic/' + topic._id + '/edit'
       form(role="form", method="POST", action="#{url}")#topic-edit-form.form-horizontal
         div.form-group
           div.col-xs-12.col-sm-3

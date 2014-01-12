@@ -98,7 +98,12 @@ exports.edit = function(topicData, callback) {
         next(err, topic);
       });
     }]
-  }, callback);
+  }, function(err, results) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, results.updatedTopic);
+  });
 };
 
 /**

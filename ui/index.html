@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NodeDiscuss: Node.js 中文交流社区</title>
+    <link rel="stylesheet" href="css/pure-min.css">
+    <link rel="stylesheet" href="css/responsive-nav.css">
+    <link rel="stylesheet" href="css/global.css">
+    <script src="js/responsive-nav.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="pure-menu pure-menu-open pure-menu-fixed pure-menu-horizontal">
+          <a href="#" class="pure-menu-heading"><h1>NodeDiscuss</h1></a>
+          <ul class="nav">
+            <li class="pure-menu-selected">
+              <a href="#">社区</a>
+            </li>
+            <li>
+              <a href="#">节点</a>
+            </li>
+            <li>
+              <a href="#">Wiki</a>
+            </li>
+          </ul>
+          <button type="button" class="nav-toggle">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="profile unlogin">
+            <a href="#">登录</a>
+            &#32;|&#32;
+            <a href="#">注册</a>
+          </div>
+          <div class="nav-collapse">
+            <ul>
+              <li>
+                <a href="#">社区</a>
+              </li>
+              <li>
+                <a href="#">节点</a>
+              </li>
+              <li>
+                <a href="#">Wiki</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="panel">
+          <div class="header">
+            <ul class="filter-nav">
+              <li>
+                <a href="#">默认</a>
+                <span class="divide">|</span>
+              </li>
+              <li>
+                <a href="#">优质话题</a>
+                <span class="divide">|</span>
+              </li>
+              <li>
+                <a href="#">无人回复</a>
+                <span class="divide">|</span>
+              </li>
+              <li>
+                <a href="#">最新创建</a>
+              </li>
+              <li>
+                <span class="divide">|</span>
+                <a class="pure-button pure-button-primary" href="#">发布话题</a>
+              </li>
+            </ul>
+          </div>
+          <ul class="topic-list">
+            <li class="item pure-g">
+              <div class="pure-u">
+                <a href="#" class="gravatar">
+                  <img src="http://nd-avatar.u.qiniudn.com/avatar/4c77045546adffe6729534ef301f9adf?s=80">
+                </a>
+              </div>
+              <div class="wrapper pure-u-3-4">
+                <h4>
+                  <a href="/topic/123">
+                    怎么通过mongodb查找然后赋值给变量?
+                  </a>
+                </h4>
+                <small class="meta">
+                  <a href="/user/heroic">Heroic Yang</a>
+                  &#32;@ 2天前 /&#32;
+                  <a href="/tag/bullshit">瞎扯淡</a>
+                  &#32;/&#32;
+                  <a href="/topic/123#comment">评论 (1)</a>
+                </small>
+              </div>
+            </li>
+            <li class="item pure-g">
+              <div class="pure-u">
+                <a href="#" class="gravatar">
+                  <img src="http://nd-avatar.u.qiniudn.com/avatar/4c77045546adffe6729534ef301f9adf?s=80">
+                </a>
+              </div>
+              <div class="wrapper pure-u-3-4">
+                <h4>
+                  <a href="/topic/234">
+                    测试发贴, Markdown 编辑?
+                  </a>
+                </h4>
+                <small class="meta">
+                  <a href="/user/heroic">Heroic Yang</a>
+                  &#32;@ 2天前 /&#32;
+                  <a href="/tag/bullshit">瞎扯淡</a>
+                  &#32;/&#32;
+                  <a href="/topic/234#comment">评论 (1)</a>
+                </small>
+              </div>
+            </li>
+          </ul>
+          <div class="footer">
+            <ul class="pure-paginator">
+              <li><a class="pure-button pure-button-xsmall prev" href="#">&#171;</a></li>
+              <li><a class="pure-button pure-button-xsmall" href="#">1</a></li>
+              <li><a class="pure-button pure-button-xsmall pure-button-active" href="#">2</a></li>
+              <li><a class="pure-button pure-button-xsmall" href="#">3</a></li>
+              <li><a class="pure-button pure-button-xsmall" href="#">4</a></li>
+              <li><a class="pure-button pure-button-xsmall" href="#">5</a></li>
+              <li><a class="pure-button pure-button-xsmall next" href="#">&#187;</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <ul class="nav">
+        <li>
+          <a href="#">关于</a>
+          <span class="divide">|</span>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <span class="divide">|</span>
+        </li>
+        <li>
+          <a href="#">RSS</a>
+          <span class="divide">|</span>
+        </li>
+        <li>
+          <a href="#">GitHub</a>
+        </li>
+      </ul>
+      <div class="copyright">
+        <p>&copy; Copyright 2013 - 2014，由开源社区系统 <a href="" target="_blank">nodediscuss</a> 搭建，版本: 0.2.0</p>
+        <p>Powered by <a href="http://expressjs.com/" target="_blank">express</a> &amp; <a href="http://mongoosejs.com/" target="_blank">mongoosejs</a></p>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var nav = responsiveNav('.nav-collapse', {
+        customToggle: '.nav-toggle'
+      });
+    </script>
+  </body>
+</html>

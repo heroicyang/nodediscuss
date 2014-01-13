@@ -1,0 +1,62 @@
+article.panel .header {
+  padding: 1em 2em;
+}
+
+article .entry {
+  background: #fff;
+  color: #555;
+  padding: 1em 2em;
+}
+
+.entry .meta {
+  margin: 16px 0;
+  color: #888;
+  line-height: 1em;
+  font-size: 0.8em;
+}
+
+.entry .meta .gravatar {
+  width: 32px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.entry .meta .gravatar>img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50px;
+  vertical-align: middle;
+}
+
+.entry #comment {
+  margin: 16px 0;
+}
+
+.entry #comment textarea {
+  width: 60%;
+  font-size: 0.9em;
+  line-height: 1.7em;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.entry .comment-list {
+  margin: 2em -2em 0.6em;
+}
+
+.entry .comment-list .item {
+  padding: 1em 2em;
+}
+
+.entry .comment-list .item.odd {
+  background: #f2f2f2;
+}
+
+.entry .comment-list .item .meta {
+  margin: 0;
+}
+
+.entry .comment-list .item .content {
+  margin-top: 10px;
+  font-size: 0.9em;
+}

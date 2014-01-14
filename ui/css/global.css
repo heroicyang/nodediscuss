@@ -10,8 +10,13 @@ html, body {
 
 body {
   margin: 0 auto;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.7em;
+}
+
+body,
+.pure-g [class *= "pure-u"],
+.pure-g-r [class *= "pure-u"] {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 a {

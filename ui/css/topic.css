@@ -1,5 +1,10 @@
-article.panel .header {
+article.panel>.header {
   padding: 1em 2em;
+}
+
+article.panel>.header h2 {
+  font-size: 1.2em;
+  font-weight: 500;
 }
 
 article .entry {

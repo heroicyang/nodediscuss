@@ -1,8 +1,4 @@
-.panel .header {
-  padding: 1em 2em;
-}
-
-.panel .content {
+.panel>.content {
   background: #fff;
   padding: 2em;
 }

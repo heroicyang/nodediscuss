@@ -1,0 +1,47 @@
+.panel>.header {
+  overflow: hidden;
+}
+
+.panel>.header .tag-favorite {
+  font-size: 0.7em;
+}
+
+.panel>.header .tag-favorite>a {
+  margin-left: 10px;
+}
+
+.panel>.header .tag-favorite>a:hover,
+.panel>.header .tag-favorite>a:focus {
+  text-decoration: none;
+  color: rgb(243, 123, 29);
+}
+
+.panel>.header .tag-favorite>cite {
+  color: #aaa;
+  font-weight: normal;
+}
+
+.panel>.header .action {
+  float: right;
+  margin-left: 2em;
+}
+
+.panel>.header .filter-nav {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 0.8em;
+}
+
+.panel>.header .filter-nav>li {
+  display: inline-block;
+}
+
+.panel>.header .filter-nav>li .divide {
+  color: #aaa;
+  margin: 0 5px;
+  font-size: 0.7em;
+}
+
+.panel>.header .add-button {
+  float: none;
+}

@@ -4,14 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NodeDiscuss: Node.js 中文交流社区</title>
+    <link rel="stylesheet" href="http://heroic-resume.qiniudn.com/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/pure-min.css">
     <link rel="stylesheet" href="css/responsive-nav.css">
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
     <script src="js/responsive-nav.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
+    <div id="container">
+      <div id="header">
         <div class="pure-menu pure-menu-open pure-menu-fixed pure-menu-horizontal">
           <a href="#" class="pure-menu-heading"><h1>NodeDiscuss</h1></a>
           <ul class="nav">
@@ -50,76 +52,75 @@
           </div>
         </div>
       </div>
-      <div class="main">
+      <div id="main">
         <div class="panel">
           <div class="header">
-            <ul class="filter-nav">
-              <li>
-                <a href="#">默认</a>
-                <span class="divide">|</span>
-              </li>
-              <li>
-                <a href="#">优质话题</a>
-                <span class="divide">|</span>
-              </li>
-              <li>
-                <a href="#">无人回复</a>
-                <span class="divide">|</span>
-              </li>
-              <li>
-                <a href="#">最新创建</a>
-              </li>
-              <li>
-                <span class="divide">|</span>
-                <a class="pure-button pure-button-primary" href="#">发布话题</a>
-              </li>
-            </ul>
+            <div class="action">
+              <ul class="filter-nav">
+                <li>
+                  <a href="#">默认</a>
+                  <span class="divide">|</span>
+                </li>
+                <li>
+                  <a href="#">优质话题</a>
+                  <span class="divide">|</span>
+                </li>
+                <li>
+                  <a href="#">无人回复</a>
+                  <span class="divide">|</span>
+                </li>
+                <li>
+                  <a href="#">最新创建</a>
+                </li>
+              </ul>
+              <a class="pure-button pure-button-primary add-button" href="#">发布话题</a>
+            </div>
+            <h3>
+              <i class="fa fa-tag"></i>
+              瞎扯淡
+              <small class="tag-favorite">
+                <a href="javascript:;" title="收藏该节点">收藏</a>
+                <cite class="tag-favorite-count">(10)</cite>
+              </small>
+            </h3>
           </div>
           <ul class="topic-list">
-            <li class="item pure-g">
-              <div class="pure-u">
-                <a href="#" class="gravatar">
-                  <img src="http://nd-avatar.u.qiniudn.com/avatar/4c77045546adffe6729534ef301f9adf?s=80">
-                </a>
-              </div>
-              <div class="pure-u-4-5">
-                <div class="wrapper">
-                  <h4>
-                    <a href="topic.html">
-                      怎么通过mongodb查找然后赋值给变量?
-                    </a>
-                  </h4>
-                  <small class="meta">
-                    <a href="/user/heroic">Heroic Yang</a>
-                    &#32;@ 2天前 /&#32;
-                    <a href="/tag/bullshit">瞎扯淡</a>
-                    &#32;/&#32;
-                    <a href="/topic/123#comment">评论 (1)</a>
-                  </small>
-                </div>
+            <li class="item">
+              <a href="#" class="gravatar">
+                <img src="http://nd-avatar.u.qiniudn.com/avatar/4c77045546adffe6729534ef301f9adf?s=80">
+              </a>
+              <div class="title">
+                <h4>
+                  <a href="topic.html">
+                    怎么通过mongodb查找然后赋值给变量?
+                  </a>
+                </h4>
+                <small class="meta">
+                  <a href="/user/heroic">Heroic Yang</a>
+                  &#32;@ 2天前 /&#32;
+                  <a href="/tag/bullshit">瞎扯淡</a>
+                  &#32;/&#32;
+                  <a href="/topic/123#comment">评论 (1)</a>
+                </small>
               </div>
             </li>
-            <li class="item pure-g">
-              <div class="pure-u">
-                <a href="#" class="gravatar">
-                  <img src="http://nd-avatar.u.qiniudn.com/avatar/4c77045546adffe6729534ef301f9adf?s=80">
-                </a>
-              </div>
-              <div class="pure-u-4-5">
-                <div class="wrapper">
-                  <h4>
-                    <a href="/topic/234">
-                      测试发贴, Markdown 编辑?
-                    </a>
-                  </h4>
-                  <small class="meta">
-                    <a href="/user/heroic">Heroic Yang</a>
-                    &#32;@ 2天前 /&#32;
-                    <a href="/tag/bullshit">瞎扯淡</a>
-                    &#32;/&#32;
-                    <a href="/topic/234#comment">评论 (1)</a>
-                  </small>
-                </div>
+            <li class="item">
+              <a href="#" class="gravatar">
+                <img src="http://nd-avatar.u.qiniudn.com/avatar/4c77045546adffe6729534ef301f9adf?s=80">
+              </a>
+              <div class="title">
+                <h4>
+                  <a href="/topic/234">
+                    测试发贴, Markdown 编辑?
+                  </a>
+                </h4>
+                <small class="meta">
+                  <a href="/user/heroic">Heroic Yang</a>
+                  &#32;@ 2天前 /&#32;
+                  <a href="/tag/bullshit">瞎扯淡</a>
+                  &#32;/&#32;
+                  <a href="/topic/234#comment">评论 (1)</a>
+                </small>
               </div>
             </li>
           </ul>

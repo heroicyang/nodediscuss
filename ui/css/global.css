@@ -203,8 +203,15 @@ a.pure-button-selected {
   padding: 1em;
 }
 
-.panel .header h2 {
+.panel .header h1,
+.panel .header h2,
+.panel .header h3,
+.panel .header h4,
+.panel .header h5 {
   margin: 0;
+}
+
+.panel .header h2 {
   font-size: 1.2em;
   font-weight: 500;
 }

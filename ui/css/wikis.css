@@ -1,0 +1,34 @@
+.panel>.header {
+  padding: 1em 2em;
+  overflow: hidden;
+}
+
+.panel>.header h4 {
+  display: inline-block;
+}
+
+.panel>.header .add-button {
+  float: right;
+  margin-top: 2px;
+  padding: 0.3em 1.2em;
+  font-size: 0.8em;
+  border-radius: 12px;
+}
+
+.panel>.header .add-button:hover {
+  text-decoration: none;
+}
+
+.panel>.content {
+  padding: 2em;
+  background: #fff;
+}
+
+.wiki-list {
+  list-style: initial;
+  margin-left: 1em;
+}
+
+.wiki-list li {
+  margin: 10px 0;
+}

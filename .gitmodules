@@ -1,0 +1,3 @@
+[submodule "client/styl/font-awesome-stylus"]
+	path = client/styl/font-awesome-stylus
+	url = https://github.com/heroicyang/Font-Awesome-Stylus.git

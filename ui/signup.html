@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/pure-min.css">
     <link rel="stylesheet" href="css/responsive-nav.css">
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/wikis.css">
+    <link rel="stylesheet" href="css/sign.css">
     <script src="js/responsive-nav.js"></script>
   </head>
   <body>
@@ -23,8 +23,8 @@
             <li>
               <a href="tags.html">节点</a>
             </li>
-            <li class="pure-menu-selected">
-              <a href="#">Wiki</a>
+            <li>
+              <a href="wikis.html">Wiki</a>
             </li>
           </ul>
           <button type="button" class="nav-toggle">
@@ -33,9 +33,9 @@
             <span class="icon-bar"></span>
           </button>
           <div class="profile unlogin">
-            <a href="signup.html">登录</a>
+            <a href="signin.html">登录</a>
             &#32;|&#32;
-            <a href="signin.html">注册</a>
+            <a href="#">注册</a>
           </div>
           <div class="nav-collapse">
             <ul>
@@ -46,7 +46,7 @@
                 <a href="tags.html">节点</a>
               </li>
               <li>
-                <a href="#">Wiki</a>
+                <a href="wikis.html">Wiki</a>
               </li>
             </ul>
           </div>
@@ -54,40 +54,30 @@
       </div>
       <div id="main">
         <div class="panel">
-          <div class="header">
-            <a class="pure-button pure-button-primary add-button" href="#">创建 Wiki</a>
-            <h4>
-              <i class="fa fa-book"></i>
-              NodeDiscuss 目前共有 64 条 Wiki
-            </h4>
-          </div>
-          <div class="content">
-            <ul class="wiki-list">
-              <li>
-                <a href="#">Wiki 列表。。。</a>
-              </li>
-              <li>
-                <a href="#">Wiki 列表。。。</a>
-              </li>
-              <li>
-                <a href="#">Wiki 列表。。。</a>
-              </li>
-              <li>
-                <a href="#">Wiki 列表。。。</a>
-              </li>
-            </ul>
-          </div>
-          <div class="footer">
-            <ul class="pure-paginator">
-              <li><a class="pure-button pure-button-xsmall prev" href="#">&#171;</a></li>
-              <li><a class="pure-button pure-button-xsmall" href="#">1</a></li>
-              <li><span class="pure-button pure-button-xsmall pure-button-active">2</span></li>
-              <li><a class="pure-button pure-button-xsmall" href="#">3</a></li>
-              <li><a class="pure-button pure-button-xsmall" href="#">4</a></li>
-              <li><a class="pure-button pure-button-xsmall" href="#">5</a></li>
-              <li><a class="pure-button pure-button-xsmall next" href="#">&#187;</a></li>
-            </ul>
-          </div>
+          <form class="pure-form pure-form-stacked">
+            <fieldset>
+              <legend>注册新用户</legend>
+              <div class="pure-control-group">
+                <label for="email">电子邮箱</label>
+                <input id="email" type="email" name="email" placeholder="电子邮箱地址">
+              </div>
+              <div class="pure-control-group">
+                <label for="name">用户名</label>
+                <input id="name" type="text" name="username" placeholder="用户名（6-16个字符，仅支持字母和数字）">
+              </div>
+              <div class="pure-control-group">
+                <label for="password">密码</label>
+                <input id="password" type="password" name="password" placeholder="密码">
+              </div>
+              <div class="pure-control-group">
+                <label for="repassword">确认密码</label>
+                <input id="repassword" type="password" name="repassword" placeholder="确认密码">
+              </div>
+              <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">注册</button>
+              </div>
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>

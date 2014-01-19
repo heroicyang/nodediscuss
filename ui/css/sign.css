@@ -1,0 +1,25 @@
+.panel {
+  background: #fff;
+  padding: 2em;
+}
+
+.panel>.pure-form .pure-control-group label{
+  display: none;
+}
+
+.panel>.pure-form input {
+  margin: 1em 0;
+  font-size: 0.9em;
+  line-height: 1.2em;
+  border-radius: 2px;
+  width: 340px;
+}
+
+.panel>.pure-form label input {
+  width: auto;
+  vertical-align: middle;
+}
+
+.panel>.pure-form .go-forgot {
+  margin-top: 10px;
+}

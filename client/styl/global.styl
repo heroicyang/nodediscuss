@@ -36,6 +36,10 @@ p, pre
 textarea
   resize vertical
 
+.img-responsive
+  max-width 100%
+  height auto
+
 // pure-css
 .pure-button-xsmall
   font-size 70%
@@ -76,7 +80,7 @@ a.pure-button-selected
     border-bottom 5px solid #458c6b
     box-shadow 0 2px 10px rgba(0, 0, 0, 0.25)
 
-    &>ul.nav
+    > ul.nav
       height 3em
 
   .pure-menu-heading
@@ -93,7 +97,7 @@ a.pure-button-selected
       @media (max-width: 40em)
         display none
 
-      &>li>a
+      > li > a
         line-height inherit
         border none
         padding 11px 20px
@@ -104,7 +108,7 @@ a.pure-button-selected
           color #458c6b
           text-decoration none
 
-      &>li.pure-menu-selected>a
+      > li.pure-menu-selected > a
         background-color #458c6b
         color #fff
 
@@ -134,13 +138,13 @@ a.pure-button-selected
     @media (min-width: 40em)
       display none
     
-    &>ul
+    > ul
       left 0
       top 0
       position relative
       visibility visible
 
-  #profile
+  .profile
     display inline-block
     float right
     overflow hidden
@@ -175,7 +179,7 @@ a.pure-button-selected
   .nav
     li
       display inline-block
-    li>.divide
+    li > .divide
       font-size 0.8em
       color #aaa
       margin 0 5px

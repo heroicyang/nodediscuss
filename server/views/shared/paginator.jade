@@ -1,0 +1,44 @@
+- var totalPage = Math.ceil(pagination.totalCount / pagination.pageSize)
+- var pagesInRange = 3
+- var pageset = [], i = l = 0, adjacentx2 = pagesInRange * 2
+- if (totalPage > 1)
+  - if (totalPage <= (1 + adjacentx2))
+    - for (i = 1, l = totalPage; i <= l; i++)
+      - pageset.push(i)
+  - else
+    - if (pagination.pageIndex <= (pagesInRange + 1))
+      - for (i = 1, l = 2 + adjacentx2; i < l; i++)
+        - pageset.push(i)
+    - else if (totalPage - pagesInRange > pagination.pageIndex && pagination.pageIndex > pagesInRange)
+      - for (i = pagination.pageIndex - pagesInRange; i < pagination.pageIndex + pagesInRange; i++)
+        - pageset.push(i)
+    - else
+      - for (i = totalPage - adjacentx2; i <= totalPage; i++)
+        - pageset.push(i)
+ul.pure-paginator
+  if totalPage > 1 && pagination.pageIndex > 1
+    li: a(href="#{path}?pageIndex=#{pagination.pageIndex - 1}").pure-button.pure-button-xsmall.prev
+      &laquo;
+
+  if totalPage === 1
+    li: span.pure-button.pure-button-xsmall.pure-button-active #{totalPage}
+
+  if _.first(pageset) > 1
+    li: a(href="#{path}?pageIndex=1").pure-button.pure-button-xsmall 1
+    if _.first(pageset) - 1 > 1
+      li: span.dashed ...
+
+  each page in pageset
+    if pagination.pageIndex === page
+      li: span.pure-button.pure-button-xsmall.pure-button-active #{page}
+    else
+      li: a(href="#{path}?pageIndex=#{page}").pure-button.pure-button-xsmall #{page}
+
+  if _.last(pageset) < totalPage
+    if totalPage - _.last(pageset) > 1
+      li: span.dashed ...
+    li: a(href="#{path}?pageIndex=#{totalPage}").pure-button.pure-button-xsmall #{totalPage}
+
+  if totalPage > 1 && pagination.pageIndex < totalPage
+    li: a(href="#{path}?pageIndex=#{pagination.pageIndex + 1}").pure-button.pure-button-xsmall.next
+      &raquo;

@@ -1,64 +1,49 @@
-extends ../container
-block content
-  div#community-topics.panel.panel-default
-    div.panel-heading
-      if tag
-        div.pull-right.tag-head
-          span 话题总数&#32;
-            strong #{tag.topicCount}
-          if isAuthenticated
-            | &#32;&#8226;&#32;
-            if isFavoritedTag
-              a(href="#", title="取消收藏#{tag.name}节点")#favorite-tag-btn 取消收藏
-            else
-              a(href="#", title="收藏#{tag.name}节点")#favorite-tag-btn 收藏该节点
-        include ../shared/breadcrumb
-        if isAuthenticated  
-          div.row.tag-content
-            div.col-xs-9.col-sm-10
-              p #{tag.describe}
-            div.col-xs-3.col-sm-2
-              a(href="/topic/create?tag=#{tag.slug}",
-                title="发布新话题").btn.btn-default.btn-xs.pull-right 发布话题
-        else
-          div.tag-content
-            p #{tag.describe}
-      else
+extends ../layout
+block main
+  div#topics.panel
+    div.heading
+      div.action
+        ul.filter-nav
+          li
+            a(href="#") 默认
+            span.divide |
+          li
+            a(href="#") 优质话题
+            span.divide |
+          li
+            a(href="#") 无人回复
+            span.divide |
+          li
+            a(href="#") 最新发布
         if isAuthenticated
-          a(href="/topic/create",
-            title="发布新话题").btn.btn-default.btn-xs.pull-right 发布话题
-        include ../shared/breadcrumb
-    div.panel-body
-      div.row.sorts
-        div.pull-right
-          span.fa.fa-filter
-          a(href="#{url}",
-            class=filterType ? "" : "active").filter: span 默认
-          a(href="#{url}/excellent",
-            class=(filterType === 'excellent') ? "active" : "").filter: span 优质话题
-          a(href="#{url}/no-comment",
-            class=(filterType === 'no-comment') ? "active" : "").filter: span 无人回复
-          a(href="#{url}/latest",
-            class=(filterType === 'latest') ? "active" : "").filter: span 最新创建
-        div.clearfix
-    ul.list-group.topic-list
-      if pagination.totalCount > 0
-        each topic in topics
-          li.list-group-item
-            include ../shared/topic_list_item
-        li.list-group-item
-          include ../shared/pagination
-      else
-        li.list-group-item
-          span 暂无相关话题。
-  include tag_nav
-block sidebar
-  if isAuthenticated
-    include ../sidebar/user_card
-  else
-    include ../sidebar/about
-  include ../sidebar/related_site
-  include ../sidebar/ad
+          a(href="/topics/create").pure-button.pure-button-primary.add-button 发布话题
+      if tag
+        h3
+          i.fa.fa-tag
+          | #{tag.name}
+          small.tag-favorite
+            if isFavoritedTag
+              a(href="javascript:;", title="取消收藏该节点") 取消收藏
+            else
+              a(href="javascript:;", title="收藏该节点") 收藏
+            cite.tag-favorite-count (#{tag.topicCount})
+    ul.topic-list
+      each topic in topics
+        li.item
+          a(href="/user/#{topic.author.username}").gravatar
+            img(src!=gravatar(topic.author.emailHash)).img-responsive
+          div.title
+            h4
+              a(href="/topics/#{topic._id}") #{topic.title}
+            small.meta
+              a(href="/user/#{topic.author.username}") #{topic.author.nickname}
+              | &#32;@ #{moment(topic.createdAt).fromNow()} /&#32;
+              a(href="/tags/#{topic.tag.slug}") #{topic.tag.name}
+              | &#32;/&#32;
+              a(href="/topics/#{topic._id}#comment") 评论 (#{topic.commentCount})
+    div.footer
+      include ../shared/paginator
+
 block script
   if tag
     script(type="text/javascript").

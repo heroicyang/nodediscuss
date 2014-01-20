@@ -4,5 +4,11 @@
  * @author heroic
  */
 ND.Module.define('App', [], function() {
-  return ND.Module.extend({});
+  return ND.Module.extend({
+    initialize: function() {
+      responsiveNav('.nav-collapse', {
+        customToggle: '.nav-toggle'
+      });
+    }
+  });
 });

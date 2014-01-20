@@ -23,6 +23,7 @@
     "jquery-file-upload": "~9.5.2",
     "marked": "~0.3.0",
     "highlightjs": "~7.5.0",
+    "responsive-nav": "~1.0.25",
     "requirejs": "~2.1.9"
   },
   "resolutions": {

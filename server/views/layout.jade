@@ -8,74 +8,66 @@ html(lang="zh-CN")
       meta(name=header[0], content=header[1])
     link(type="image/x-icon", rel="icon", href="/img/favicon32.ico")
     title= site.title
-    //- 根据 grunt build 之后的结果引入 css 文件
     each file in assets.css
       link(href="#{staticDomain}/css/#{file}", rel="stylesheet")
   body#app
-    div#container-wrap
-      div(role="navigation").navbar.navbar-default.navbar-static-top
-        div.container
-          div.navbar-header
-            button(type="button", data-toggle="collapse",
-                   data-target=".navbar-collapse").navbar-toggle
-              span.icon-bar
-              span.icon-bar
-              sapn.icon-bar
-            a(href="/").navbar-brand.logo
-              if site.logo
-                img(src!="#{site.logo}", title="#{site.title}").img-responsive
-              else
-                h1 #{site.name}
-          div.navbar-collapse.collapse
-            ul.nav.navbar-nav.navbar-right
-              li(class=(path === '/' || path === '/topics') ? "active" : "")
+    div#container
+      div(role="navigation")#header
+        div.pure-menu.pure-menu-open.pure-menu-fixed.pure-menu-horizontal
+          a(href="/").pure-menu-heading
+            if site.logo
+              img(src!="#{site.logo}", title="#{site.title}").img-responsive
+            else
+              h1 #{site.name}
+          ul.nav
+            li(class= path === '/' || path === '/topics' ? "pure-menu-selected" : "")
+              a(href="/") 社区
+            li(class= path === '/tags' ? "pure-menu-selected" : "")
+              a(href="/tags") 节点
+            li(class=(path.indexOf('/wiki') !== -1) ? "pure-menu-selected" : "")
+              a(href="/wiki") Wiki
+          button(type="button").nav-toggle
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          if isAuthenticated
+            div.profile.logged
+              a(href="/user/#{currentUser.username}") #{currentUser.nickname}
+          else
+            div.profile.unlogin
+              a(href="/signup") 注册
+              &#32;|&#32;
+              a(href="/signin") 登录
+          div.nav-collapse
+            ul
+              li
                 a(href="/") 社区
-              li(class=(path.indexOf('/wiki') !== -1) ? "active" : "")
+              li
+                a(href="/tags") 节点
+              li
                 a(href="/wiki") Wiki
-              if isAuthenticated
-                li(class=(path === '/user/#{currentUser.username}') ? "active" : "")
-                  a(href="/user/#{currentUser.username}") #{currentUser.nickname}
-                li(class=(path === '/settings') ? "active" : "")
-                  a(href="/settings") 设置
-                if currentUser.isAdmin
-                  li: a(href="/admin", target="_blank") 后台管理
-                li: a(href="#", rel="nofollow")#logout 退出
-              else
-                li(class=(path === '/signup') ? "active" : "")
-                  a(href="/signup") 注册
-                li(class=(path === '/signin') ? "active" : "")
-                  a(href="/signin") 登录
-            div.col-sm-4.col-md-4.col-lg-4.pull-left
-              form(role="search", method="GET", action="/search").navbar-form
-                div.input-group
-                  input(type="text", name="q", placeholder="搜索").form-control
-                  div.input-group-btn
-                    button(type="submit").btn.btn-default
-                      i.fa.fa-search
-      div.container
-        block container
-    footer
-      div.container
-        div.content
-          nav
-            ul.list-inline
-              li: a(href="#") RSS
-              each nav in site.footerNavs
-                li.delimiter &#32;&#8226;&#32;
-                li
-                  if nav[2]
-                    a(href=nav[0], target="#{nav[2]}") #{nav[1]}
-                  else  
-                    a(href=nav[0]) #{nav[1]}
-          div.copyright
-            p &copy; 2012 - 2013
-            p 基于开源社区系统
-              a(href="#{pkg.homepage}", terget="_blank") #{pkg.title}
-              | 搭建，版本: #{pkg.version}
-            p Powered by 
-              a(href="http://expressjs.com/", target="_blank") Express
-              | &amp;
-              a(href="http://mongoosejs.com/", target="_blank") Mongoose
+      div#main
+        block main
+    div#footer
+      ul.nav
+        each nav, idx in site.footerNavs
+          li
+            if nav[2]
+              a(href=nav[0], target="#{nav[2]}") #{nav[1]}
+            else  
+              a(href=nav[0]) #{nav[1]}
+            if idx < site.footerNavs.length - 1
+              span.divide |
+      div.copyright
+        p 
+          | &copy; Copyright 2013 - 2014, 由开源社区系统&#32;
+          a(href="#{pkg.homepage}", terget="_blank") #{pkg.title}
+          | &#32;搭建，版本: #{pkg.version}
+        p
+          | Powered by&#32;
+          a(href="http://expressjs.com/", target="_blank") express
+          | &#32;&amp;&#32;
+          a(href="http://mongoosejs.com/", target="_blank") mongoosejs
     
     //- 根据 grunt build 之后的结果引入 js 文件
     each file in assets.js

@@ -1,91 +1,184 @@
 /**
- * 全站基础样式
+ * 网站基础样式
  * @author heroic
  */
 
-// 覆盖 Bootstrap 默认的整体背景颜色等样式
-html,body
-  background #fefefe
+*
+  box-sizing border-box
+
+html, body
   height 100%
 
-// 覆盖 Bootstrap 默认的链接样式
+body
+  margin 0 auto
+  line-height 1.7em
+
+body,
+.pure-g [class *= "pure-u"],
+.pure-g-r [class *= "pure-u"]
+  font-family "Helvetica Neue", Helvetica, Arial, sans-serif
+
 a
   color #4183c4
+  text-decoration none
   &:hover
     color #2a6496
+    text-decoration underline
+
+ul
+  list-style none
+  margin 0
+  padding 0
+
+p, pre
+  margin 0.3em 0
 
 textarea
   resize vertical
 
-// 调整 Bootstrap 中面包屑导航在面板中的样式
-.panel
-  .breadcrumb
-    margin 0
-    padding 0
-    border-radius 0
+// pure-css
+.pure-button-xsmall
+  font-size 70%
 
-.pagination
-  margin 0
+.pure-button-small
+  font-size 85%
 
-// 为使 footer 一直居于底部
-#container-wrap
+.pure-button-large
+  font-size 110%
+
+.pure-button-xlarge
+  font-size 125%
+
+// override pure-css
+.pure-button-primary,
+.pure-button-selected,
+a.pure-button-primary,
+a.pure-button-selected 
+  background #458c6b
+  color #fff
+
+// container
+#container
+  background-color #eaeaea
   min-height 100%
   height auto
-  margin 0 auto -160px
-  padding 0 0 160px
+  margin 0 auto -120px
+  padding 0 0 120px
 
-// 网站顶部导航栏样式
-.navbar
-  border-color #ddd
-  box-shadow 0 1px 1px rgba(0, 0, 0, 0.05)
+// header
+#header
+  margin 0
+  color #333
 
-  .logo
-    padding 6px 20px
+  .pure-menu.pure-menu-open.pure-menu-fixed
+    padding 0
+    border 0
+    border-bottom 5px solid #458c6b
+    box-shadow 0 2px 10px rgba(0, 0, 0, 0.25)
 
-    img
-      max-height 36px
+    &>ul.nav
+      height 3em
+
+  .pure-menu-heading
+    color #458c6b
+    text-transform none
+    padding 11px 20px
 
     h1
       margin 0
-      font-size 32px
+      font-size 1.3em
 
-.global-alert
-  padding 8px 35px 8px 15px
+  .pure-menu
+    .nav
+      @media (max-width: 40em)
+        display none
 
-.avatar-32
-  width 32px
+      &>li>a
+        line-height inherit
+        border none
+        padding 11px 20px
 
-.avatar-48
-  width 48px
+        &:hover,
+        &:focus
+          background-color rgba(0, 0, 0, 0.05)
+          color #458c6b
+          text-decoration none
 
-.avatar-64
-  width 64px
+      &>li.pure-menu-selected>a
+        background-color #458c6b
+        color #fff
 
-.avatar-80
-  width 80px
+  .nav-toggle
+    position relative
+    float right
+    padding 6px
+    margin 8px 15px
+    margin-left 0
+    background-color #f8f8f8
+    border 1px solid #ddd
+    border-radius 4px
+    @media (min-width: 40em)
+      display none
 
-// 网站底部样式
-footer
-  background #fff
-  border-top 1px solid #e7e7e7
-  height 160px
+    .icon-bar
+      display block
+      width 22px
+      height 2px
+      border-radius 1px
+      background-color #ccc
 
-  .container
-    padding-top 15px
-    padding-bottom 15px
+      &+.icon-bar
+        margin-top 4px
 
-  .content
+  .nav-collapse
+    @media (min-width: 40em)
+      display none
+    
+    &>ul
+      left 0
+      top 0
+      position relative
+      visibility visible
+
+  #profile
+    display inline-block
+    float right
+    overflow hidden
+    height 3em
+    padding 10px 20px
+    font-size 14px
+    zoom 1
+    vertical-align middle
+
     a
-      font-weight bold
-      margin-right 5px
-      margin-left 5px
+      padding 0
+      display inline
 
-    nav
-      a:first-child
-        margin-left 0
+// main
+#main
+  margin 1.2em auto 0
+  padding 4em 6em
+  @media (max-width: 40em)
+    padding 1em
+    padding-top 4em
 
-      .delimiter
-        color #999
+// footer
+#footer
+  padding 0 6.7em
+  height 120px
+  font-size 0.9em
+  font-style italic
+  text-shadow 0 1px 1px #fff
+  @media (max-width: 40em)
+    padding 0em 1em
 
-    .copyright
-      font-size 13px
+  .nav
+    li
+      display inline-block
+    li>.divide
+      font-size 0.8em
+      color #aaa
+      margin 0 5px
+
+    p
+      margin 0

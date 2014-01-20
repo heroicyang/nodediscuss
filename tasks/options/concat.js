@@ -24,6 +24,7 @@ var vendors = [
   'bower_components/jquery-file-upload/js/vendor/jquery.ui.widget.js',
   'bower_components/jquery-file-upload/js/jquery.iframe-transport.js',
   'bower_components/jquery-file-upload/js/jquery.fileupload.js',
+  'bower_components/responsive-nav/responsive-nav.js',
   'bower_components/requirejs/require.js'
 ];
 

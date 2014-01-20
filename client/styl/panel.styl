@@ -1,0 +1,56 @@
+/**
+ * 主体内容区域的面板样式
+ * @author heroic
+ */
+
+.panel
+  background #f8f8f8
+  box-shadow 0 2px 2px #bbb
+
+  .header
+    border-bottom 1px solid #ddd
+    padding 1em 2em
+
+    h1, h2, h3, h4, h5
+      margin 0
+
+    .fa
+      color #458c6b
+      margin-right 5px
+
+    .add-button
+      float right
+      margin-top 2px
+      padding 0.3em 1.2em
+      font-size 0.8em
+      border-radius 12px
+
+      &:hover,
+      &:focus
+        text-decoration none
+
+  .footer
+    padding 1em
+    text-align center
+
+    .pure-paginator
+      li
+        margin 0 3px
+
+      .pure-button
+        background-color #ddd
+        height auto
+        padding 0.6em 1em
+
+        &:hover,
+        &:focus
+          text-decoration none
+
+      .prev,
+      .next
+        border-radius 0
+
+      .pure-button-active
+        cursor default
+        background #4183c4
+        color #fff

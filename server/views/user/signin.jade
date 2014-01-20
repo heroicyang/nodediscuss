@@ -1,41 +1,30 @@
-extends ../container
-block content
-    div.panel.panel-default
-      div.panel-heading
-        include ../shared/breadcrumb
-      div.panel-body
-        include ../shared/error_alert
-          if err && _.has(err.errors, 'activated')
-            p: a(href="#"): small 没有收到帐号激活邮件？
-        include ../shared/message_alert
-        form(role="form", method="POST", action="/signin")#signin-form.form-horizontal
-          div.form-group
-            label(for="email").col-sm-3.control-label Email
-            div.col-sm-6
-              input(type="email",
-                    name="email",
-                    value=user ? user.email : "",
-                    required)#email.form-control
-          div.form-group
-            label(for="password").col-sm-3.control-label 密码
-            div.col-sm-6
-              input(type="password", name="password", required)#password.form-control
-          div.form-group
-            div.col-sm-offset-3.col-sm-6
-              label
-                input(type="checkbox", name="remember", checked)
-                | &#32;记住登录状态
-          div.form-group
-            div.col-sm-offset-3.col-sm-6
-              input(type="hidden", name="_csrf", value="#{csrfToken}")
-              button(type="submit",
-                     data-loading-text="正在登录...")#signin-btn.btn.btn-primary 登录
-          div.form-group
-            div.col-sm-offset-3.col-sm-6
-              a(href="/forgot"): small 我忘记密码了？
-block sidebar
-  include ../sidebar/about
-  include ../sidebar/ad
+extends ../layout
+block main
+  div#sign.panel
+    form(role="form", method="POST", action="/signin")#signin-form.pure-form.pure-form-stacked
+      fieldset
+        legend 登录
+        div.pure-control-group
+          label(for="email") 电子邮箱
+          input(type="email",
+                name="email",
+                value= user ? user.email : "",
+                placeholder="电子邮箱地址",
+                required)#email
+        div.pure-control-group
+          label(for="password") 密码
+          input(type="password",
+                name="password",
+                placeholder="登录密码",
+                required)#password
+        div.pure-controls
+          label(for="remember").pure-checkbox
+            input(type="checkbox", name="remember", checked)#remember
+            | &#32;记住登录状态
+          input(type="hidden", name="_csrf", value="#{csrfToken}")
+          button(type="submit")#signin-button.pure-button.pure-button-primary 登录
+        div.pure-controls.go-forgot
+          a(href="/forgot"): small 我忘记密码了？
 block script
   script(type="text/javascript").
     ND.moduleTree.push({
@@ -44,7 +33,7 @@ block script
       children: [
         {
           name: 'ButtonBase',
-          el: '#signin-btn',
+          el: '#signin-button',
           id: 'signinButton'
         }
       ]

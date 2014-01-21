@@ -1,18 +1,20 @@
 extends ../layout
 block main
-  div#sign.panel
-    form(role="form", method="POST", action="/signin")#signin-form.pure-form.pure-form-stacked
+  div.panel
+    form(role="form",
+         method="POST",
+         action="/signin")#signin-form.pure-form.pure-form-stacked
       fieldset
         legend 登录
         div.pure-control-group
-          label(for="email") 电子邮箱
+          label(for="email").sr-only 电子邮箱
           input(type="email",
                 name="email",
                 value= user ? user.email : "",
                 placeholder="电子邮箱地址",
                 required)#email
         div.pure-control-group
-          label(for="password") 密码
+          label(for="password").sr-only 密码
           input(type="password",
                 name="password",
                 placeholder="登录密码",
@@ -23,8 +25,7 @@ block main
             | &#32;记住登录状态
           input(type="hidden", name="_csrf", value="#{csrfToken}")
           button(type="submit")#signin-button.pure-button.pure-button-primary 登录
-        div.pure-controls.go-forgot
-          a(href="/forgot"): small 我忘记密码了？
+          p: a(href="/forgot"): small 我忘记密码了？
 block script
   script(type="text/javascript").
     ND.moduleTree.push({

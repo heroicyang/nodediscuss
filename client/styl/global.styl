@@ -36,11 +36,22 @@ p, pre
 textarea
   resize vertical
 
+// helper-classes
 .img-responsive
   max-width 100%
   height auto
 
-// pure-css
+.sr-only
+  position absolute
+  width 1px
+  height 1px
+  padding 0
+  margin -1px
+  overflow hidden
+  clip rect(0,0,0,0)
+  border 0
+
+// pure-button-sizes
 .pure-button-xsmall
   font-size 70%
 
@@ -53,7 +64,7 @@ textarea
 .pure-button-xlarge
   font-size 125%
 
-// override pure-css
+// override pure-button style
 .pure-button-primary,
 .pure-button-selected,
 a.pure-button-primary,

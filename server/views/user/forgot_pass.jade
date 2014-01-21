@@ -1,28 +1,19 @@
-extends ../container
-block content
-    div.panel.panel-default
-      div.panel-heading
-        include ../shared/breadcrumb
-      div.panel-body
-        include ../shared/error_alert
-        include ../shared/message_alert
-        form(role="form", method="POST", action="/forgot")#forgot-pass-form.form-horizontal
-          div.form-group
-            label(for="email").col-sm-3.control-label Email
-            div.col-sm-6
-              input(type="email", name="email",
-                    value=user ? user.email : "", required)#email.form-control
-              span.help-block 请填写注册时使用的电子邮件地址
-          div.form-group
-            div.col-sm-offset-3.col-sm-6
-              input(type="hidden", name="_csrf", value="#{csrfToken}")
-              button(type="submit",
-                     data-loading-text="正在提交...")#submit-btn.btn.btn-primary 继续
-              span.help-block: small 24 小时内，至多可以重新设置密码 2 次。
-block sidebar
-  if isAuthenticated
-    include ../sidebar/user_card
-  else
-    include ../sidebar/about
-  include ../sidebar/ad
-block script
+extends ../layout
+block main
+  div.panel
+    form(role="form",
+         method="POST",
+         action="/forgot")#forgot-pass-form.pure-form.pure-form-stacked
+      fieldset
+        legend 重置密码
+        div.pure-control-group
+          label(for="email").sr-only 电子邮箱
+          input(type="email",
+                name="email",
+                value= user ? user.email : "",
+                placeholder="电子邮箱地址",
+                required)#email
+        div.pure-controls
+          input(type="hidden", name="_csrf", value="#{csrfToken}")
+          button(type="submit")#submit-button.pure-button.pure-button-primary 继续
+          p: small 24 小时内，至多可以重新设置密码 2 次。

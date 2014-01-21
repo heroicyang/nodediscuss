@@ -1,31 +1,33 @@
 extends ../layout
 block main
-  div#sign.panel
-    form(role="form", method="POST", action="/signup")#signup-form.pure-form.pure-form-stacked
+  div.panel
+    form(role="form",
+         method="POST",
+         action="/signup")#signup-form.pure-form.pure-form-stacked
       fieldset
         legend 注册新用户
         div.pure-control-group
-          label(for="email") 电子邮箱
+          label(for="email").sr-only 电子邮箱
           input(type="email",
                 name="email",
                 value= user ? user.email : "",
                 placeholder="电子邮箱地址",
                 required)#email
         div.pure-control-group
-          label(for="username") 用户名
+          label(for="username").sr-only 用户名
           input(type="text",
                 name="username",
                 value= user ? user.username : "",
                 placeholder="用户名（6-16个字符，仅支持字母和数字）",
                 required)#username
         div.pure-control-group
-          label(for="password") 密码
+          label(for="password").sr-only 密码
           input(type="password",
                 name="password",
                 placeholder="密码",
                 required)#password
         div.pure-control-group
-          label(for="repassword") 密码
+          label(for="repassword").sr-only 确认密码
           input(type="password",
                 name="repassword",
                 placeholder="再次输入密码",

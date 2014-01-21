@@ -15,7 +15,7 @@ var error = require('../utils/error'),
 
 /** 社区页面话题列表 */
 exports.home = function(req, res, next) {
-  var filter = req.params.type,
+  var filter = req.query.filter,
     pageIndex = parseInt(req.query.pageIndex, 10);
 
   var error = _.extend(req.flash('err'), {
@@ -91,7 +91,7 @@ exports.home = function(req, res, next) {
 /** 某个节点下面的话题列表 */
 exports.belongsTag = function(req, res, next) {
   var slug = req.params.slug,
-    filter = req.params.type,
+    filter = req.query.filter,
     pageIndex = parseInt(req.query.pageIndex, 10);
 
   var pagination = {

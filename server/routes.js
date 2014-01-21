@@ -64,33 +64,33 @@ module.exports = exports = function(app) {
 
   // 话题列表
   app.get('/', topics.home);
-  app.get('/topics/:type?', topics.home);
-  app.get('/tag/:slug', tags.load, topics.belongsTag);
-  app.get('/tag/:slug/topics/:type?', tags.load, topics.belongsTag);
+  app.get('/topics', topics.home);
+  app.get('/tags/:slug', tags.load, topics.belongsTag);
+  app.get('/tags/:slug/topics', tags.load, topics.belongsTag);
   app.get('/following/topics', auth.loginRequired, topics.createdByFriends);
 
   // 单个话题
-  app.all('/topic/create', auth.loginRequired);
-  app.get('/topic/create', topics.create);
-  app.post('/topic/create', auth.topicThrottling, topics.create);
-  app.get('/topic/:id', topics.load, topics.show);
-  app.all('/topic/:id/:op', auth.loginRequired, topics.load);
-  app.all('/topic/:id/edit', auth.topicAuthorRequired, topics.edit);
+  app.all('/topics/create', auth.loginRequired);
+  app.get('/topics/create', topics.create);
+  app.post('/topics/create', auth.topicThrottling, topics.create);
+  app.get('/topics/:id', topics.load, topics.show);
+  app.all('/topics/:id/:op', auth.loginRequired, topics.load);
+  app.all('/topics/:id/edit', auth.topicAuthorRequired, topics.edit);
 
   // 收藏相关操作直接调用 api
-  app.post('/topic/:id/favorite',
+  app.post('/topics/:id/favorite',
       api.requestHandler(api.User.favoriteTopic, true));
-  app.post('/topic/:id/unfavorite',
+  app.post('/topics/:id/unfavorite',
       api.requestHandler(api.User.unfavoriteTopic, true));
-  app.post('/tag/:slug/:op', auth.loginRequired, tags.load);
-  app.post('/tag/:slug/favorite',
+  app.post('/tags/:slug/:op', auth.loginRequired, tags.load);
+  app.post('/tags/:slug/favorite',
       api.requestHandler(api.User.favoriteTag, true));
-  app.post('/tag/:slug/unfavorite',
+  app.post('/tags/:slug/unfavorite',
       api.requestHandler(api.User.unfavoriteTag, true));
   // 收藏列表
-  app.get('/favorite/:type', auth.loginRequired);
-  app.get('/favorite/topics', favorites.topics);
-  app.get('/favorite/tags', favorites.tags);
+  app.get('/favorites/:type', auth.loginRequired);
+  app.get('/favorites/topic', favorites.topics);
+  app.get('/favorites/tag', favorites.tags);
 
   // 评论
   app.post('/comments/create', auth.loginRequired, comments.create);

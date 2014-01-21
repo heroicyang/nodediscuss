@@ -1,93 +1,74 @@
 /**
- * 话题相关样式
+ * 话题详细页面的样式
  * @author heroic
  */
 
-// 社区页面的话题列表
-#community-topics
-  .tag-head
-    font-size 12px
-    color #777
+#topic.panel
+  > .heading h2
+    font-size 1.2em
+    font-weight 500
 
-  .tag-content
-    font-size 13px
-    color #999
-    margin-top 6px
-
-    p
-      margin-bottom 0
-
-  .panel-body
-    padding-top 0
-    padding-bottom 0
-
-  .sorts
-    padding 8px 15px
-    background #fcfcfc
-    font-size 13px
-
-    .fa
-      color #999
-
-    .filter
-      margin-left 10px
-      color #999
-      &.active
-        color #555
-        font-weight bold
-
-// 社区页面的节点导航
-#tags-nav
-  .section
-    text-align right
-    color #999
-
-// 话题详细页面的评论列表
-.comment-list
-  .list-group-item
-    .deleted
-      margin-bottom 0
-      padding-left 58px
-      color #777
-
-      span
-        margin-left 20px
-        color #999
-
-    .action
-      a
-        color #777
+  .entry
+    background #fff
+    color #555
+    padding 1em 2em
 
     .meta
-      margin-bottom 5px
-      padding-right 50px
-      color #999
+      margin 16px 0
+      color #888
+      line-height 1em
+      font-size 0.8em
 
-      a
-        font-weight bold
-        color #777
+      .gravatar
+        width 32px
+        display inline-block
+        margin-right 10px
 
-      span
-        margin-left 10px
-
+        > img
+          max-width 100%
+          height auto
+          border-radius 50px
+          vertical-align middle
     .content
-      p:last-child
-        margin-bottom 0
+      font-size 0.875em
 
-// 话题详细页面的无评论时提示
-.no-comment
-  border-style dashed
-  text-align center
+      pre
+        padding 1.3em
 
-// 话题发布页面
-#topic-edit
-  .mobile-sep
-    margin 6px 0
+    .action
+      .pure-button
+        color #fff
+        margin-right 10px
+        border-radius 12px
 
-// 节点收藏页面
-#favorite-tags
-  .tags
-    margin-bottom 0
+      .edit-button
+        background #5cb85c
 
-    a:hover
-      text-decoration none
+      .delete-button
+        background #f0ad4e
+
+    #comment
+      margin 16px 0
+
+      textarea
+        width 60%
+        font-size 0.9em
+        line-height 1.7em
+        border-radius 2px
+        margin-bottom 10px
+
+    .comment-list
+      margin 2em -2em 0.6em
+
+      .item
+        padding 1em 2em
+
+        .meta
+          margin 0
+
+        .content
+          margin-top 10px
+          font-size 0.9em
+
+      .item.odd
+        background #f2f2f2

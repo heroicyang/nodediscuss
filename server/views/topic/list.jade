@@ -4,17 +4,17 @@ block main
     div.heading
       div.action
         ul.filter-nav
-          li
-            a(href="#") 默认
+          li(class= filterType ? null : "active")
+            a(href="#{path}") 默认
             span.divide |
-          li
-            a(href="#") 优质话题
+          li(class= filterType === 'excellent' ? "active" : null)
+            a(href="#{path}?filter=excellent") 优质话题
             span.divide |
-          li
-            a(href="#") 无人回复
+          li(class= filterType === 'no-comment' ? "active" : null)
+            a(href="#{path}?filter=no-comment") 无人回复
             span.divide |
-          li
-            a(href="#") 最新发布
+          li(class= filterType === 'latest' ? "active" : null)
+            a(href="#{path}?filter=latest") 最新发布
         if isAuthenticated
           a(href="/topics/create").pure-button.pure-button-primary.add-button 发布话题
       if tag
@@ -26,7 +26,7 @@ block main
               a(href="javascript:;", title="取消收藏该节点") 取消收藏
             else
               a(href="javascript:;", title="收藏该节点") 收藏
-            cite.tag-favorite-count (#{tag.topicCount})
+            cite.tag-favorite-count (#{tag.favoriteCount})
     ul.topic-list
       each topic in topics
         li.item
@@ -41,6 +41,11 @@ block main
               a(href="/tags/#{topic.tag.slug}") #{topic.tag.name}
               | &#32;/&#32;
               a(href="/topics/#{topic._id}#comment") 评论 (#{topic.commentCount})
+              if isAuthenticated && topic.author.id === currentUser.id
+                | &#32;/&#32;
+                a(href="/topics/#{topic._id}/edit").edit 编辑
+                | &#32;/&#32;
+                a(href="javascript:;").delete 删除
     div.footer
       include ../shared/paginator
 

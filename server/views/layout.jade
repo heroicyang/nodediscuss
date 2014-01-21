@@ -32,7 +32,8 @@ html(lang="zh-CN")
             span.icon-bar
           if isAuthenticated
             div.profile.logged
-              a(href="/user/#{currentUser.username}") #{currentUser.nickname}
+              a(href="/user/#{currentUser.username}").gravatar
+                img(src!=gravatar(currentUser.emailHash)).img-responsive
           else
             div.profile.unlogin
               a(href="/signup") 注册

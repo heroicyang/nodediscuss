@@ -186,23 +186,30 @@ a.pure-button-selected
   .profile
     display inline-block
     float right
-    overflow hidden
     height 3em
-    padding 10px 20px
     font-size 14px
     zoom 1
     vertical-align middle
 
     a
       padding 0
-      display inline
+      display inline-block
+      width 32px
+
+      img
+        border-radius 50px
+
+    &.unlogin
+      padding 10px 20px
+    &.logged
+      padding 5px 20px
 
 // main
 #main
   margin 1.2em auto 0
   padding 4em 6em
   @media (max-width: 40em)
-    padding 1em
+    padding .5em
     padding-top 4em
 
 // footer
@@ -213,7 +220,7 @@ a.pure-button-selected
   font-style italic
   text-shadow 0 1px 1px #fff
   @media (max-width: 40em)
-    padding 0em 1em
+    padding 0em .5em
 
   .nav
     li

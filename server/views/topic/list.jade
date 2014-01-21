@@ -2,21 +2,6 @@ extends ../layout
 block main
   div#topics.panel
     div.heading
-      div.action
-        ul.filter-nav
-          li(class= filterType ? null : "active")
-            a(href="#{path}") 默认
-            span.divide |
-          li(class= filterType === 'excellent' ? "active" : null)
-            a(href="#{path}?filter=excellent") 优质话题
-            span.divide |
-          li(class= filterType === 'no-comment' ? "active" : null)
-            a(href="#{path}?filter=no-comment") 无人回复
-            span.divide |
-          li(class= filterType === 'latest' ? "active" : null)
-            a(href="#{path}?filter=latest") 最新发布
-        if isAuthenticated
-          a(href="/topics/create").pure-button.pure-button-primary.add-button 发布话题
       if tag
         h3
           i.fa.fa-tag
@@ -27,6 +12,20 @@ block main
             else
               a(href="javascript:;", title="收藏该节点") 收藏
             cite.tag-favorite-count (#{tag.favoriteCount})
+      if isAuthenticated
+        a(href="/topics/create").pure-button.pure-button-primary.add-button 发布话题
+      ul.filter-nav
+        li(class= filterType ? null : "active")
+          a(href="#{path}") 默认
+          span.divide |
+        li(class= filterType === 'excellent' ? "active" : null)
+          a(href="#{path}?filter=excellent") 优质话题
+          span.divide |
+        li(class= filterType === 'no-comment' ? "active" : null)
+          a(href="#{path}?filter=no-comment") 无人回复
+          span.divide |
+        li(class= filterType === 'latest' ? "active" : null)
+          a(href="#{path}?filter=latest") 最新发布
     ul.topic-list
       each topic in topics
         li.item

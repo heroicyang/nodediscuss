@@ -26,6 +26,7 @@ DEMO 请戳这里：http://nodediscuss.com/
 $ git clone https://github.com/heroicyang/nodediscuss.git
 $ cd nodediscuss
 $ git submodule init
+$ git submodule update
 $ npm install & bower install
 # 创建 `development` 环境的配置
 $ grunt createConfig

@@ -174,6 +174,7 @@ a.pure-button-selected
 
   .nav-collapse
     clear both
+    font-size 0.875em
     @media (min-width: 40em)
       display none
     
@@ -183,26 +184,74 @@ a.pure-button-selected
       position relative
       visibility visible
 
+      li
+        a:hover,
+        a:focus
+          text-decoration none
+          color #458c6b
+      li.selected
+        a
+          color #fff
+          background-color #458c6b
+
   .profile
     display inline-block
     float right
-    height 3em
+    margin-right 20px
     font-size 14px
-    zoom 1
-    vertical-align middle
+    @media (max-width: 40em)
+      display none
 
-    a
+    > a
       padding 0
       display inline-block
       width 32px
-
-      img
-        border-radius 50px
+      vertical-align middle
 
     &.unlogin
-      padding 10px 20px
+      > a
+        padding 12px 0
+
     &.logged
-      padding 5px 20px
+      position relative
+      padding 7px
+
+      > a.gravatar
+        line-height 0
+        img
+          border-radius 50px
+
+      ul
+        display none
+        right 0
+        left auto
+        top 3.4em
+        visibility visible
+        z-index 1000
+        background #fff
+        border 1px solid #ccc
+        border-bottom-right-radius 3px
+        border-bottom-left-radius 3px
+        box-shadow 0 5px 10px rgba(0, 0, 0, 0.2)
+
+        li
+          display block
+
+          > a
+            display block
+            padding 6px 50px
+            color #999
+
+          > a:hover,
+          > a:focus
+            text-decoration none
+            color #458c6b
+            background-color #f5f5f5
+
+      &:hover
+        background-color #e7e7e7
+        ul
+          display block
 
 // main
 #main

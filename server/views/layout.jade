@@ -34,6 +34,9 @@ html(lang="zh-CN")
             div.profile.logged
               a(href="/user/#{currentUser.username}").gravatar
                 img(src!=gravatar(currentUser.emailHash)).img-responsive
+              ul
+                li: a(href="/settings") 设置
+                li: a(href="#", rel="nofollow")#logout 退出
           else
             div.profile.unlogin
               a(href="/signup") 注册
@@ -41,13 +44,29 @@ html(lang="zh-CN")
               a(href="/signin") 登录
           div.nav-collapse
             ul
-              li
+              li(class= path === '/' || path === '/topics' ? "selected" : "")
                 a(href="/") 社区
-              li
+              li(class= path === '/tags' ? "selected" : "")
                 a(href="/tags") 节点
-              li
+              li(class=(path.indexOf('/wiki') !== -1) ? "selected" : "")
                 a(href="/wiki") Wiki
+              if isAuthenticated
+                li(class=(path === '/user/#{currentUser.username}') ? "selected" : "")
+                  a(href="/user/#{currentUser.username}") #{currentUser.nickname}
+                li(class=(path === '/settings') ? "selected" : "")
+                  a(href="/settings") 设置
+                li: a(href="#", rel="nofollow")#logout 退出
+              else
+                li(class=(path === '/signup') ? "selected" : "")
+                  a(href="/signup") 注册
+                li(class=(path === '/signin') ? "selected" : "")
+                  a(href="/signin") 登录
       div#main
+        if err && err.global
+          div.alert-global
+            ul
+              each error in err.errors
+                li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
         block main
     div#footer
       ul.nav

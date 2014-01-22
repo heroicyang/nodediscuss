@@ -185,9 +185,15 @@ exports.resetPassword = function(req, res, next) {
   if ('get' === method) {
     var token = req.query.token,
       email = req.query.email;
+    
     if (!req.session.resetPass && (!token || !email)) {
       req.flash('redirectPath', '/');
       return next(new CentralizedError('信息有误，不能继续重设密码操作。'));
+    }
+
+    if (req.session.resetPass) {
+      email = req.session.resetPass.email;
+      token = req.session.resetPass.token;
     }
 
     api.ResetPass.get({
@@ -213,6 +219,7 @@ exports.resetPassword = function(req, res, next) {
       if (!req.session.resetPass) {
         req.session.resetPass = {
           token: token,
+          email: email,
           userId: resetPass.userId,
           id: resetPass.id
         };

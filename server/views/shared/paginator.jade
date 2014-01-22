@@ -17,8 +17,9 @@
         - pageset.push(i)
 ul.pure-paginator
   if totalPage > 1 && pagination.pageIndex > 1
-    li: a(href="#{path}?pageIndex=#{pagination.pageIndex - 1}").pure-button.pure-button-xsmall.prev
-      &laquo;
+    li
+      a(href="#{path}?pageIndex=#{pagination.pageIndex - 1}").pure-button.pure-button-xsmall.prev
+        | &laquo;
 
   if totalPage === 1
     li: span.pure-button.pure-button-xsmall.pure-button-active #{totalPage}
@@ -40,5 +41,6 @@ ul.pure-paginator
     li: a(href="#{path}?pageIndex=#{totalPage}").pure-button.pure-button-xsmall #{totalPage}
 
   if totalPage > 1 && pagination.pageIndex < totalPage
-    li: a(href="#{path}?pageIndex=#{pagination.pageIndex + 1}").pure-button.pure-button-xsmall.next
-      &raquo;
+    li
+      a(href="#{path}?pageIndex=#{pagination.pageIndex + 1}").pure-button.pure-button-xsmall.next
+        | &raquo;

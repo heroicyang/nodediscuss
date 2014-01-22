@@ -11,7 +11,7 @@ block main
               a(href="javascript:;", title="取消收藏该节点") 取消收藏
             else
               a(href="javascript:;", title="收藏该节点") 收藏
-            cite.tag-favorite-count (#{tag.favoriteCount})
+            cite.tag-favorite-count  (#{tag.favoriteCount})
       if isAuthenticated
         a(href="/topics/create").pure-button.pure-button-primary.add-button 发布话题
       ul.filter-nav

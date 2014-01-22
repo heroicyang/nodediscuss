@@ -32,15 +32,26 @@ html(lang="zh-CN")
             span.icon-bar
           if isAuthenticated
             div.profile.logged
-              a(href="/user/#{currentUser.username}").gravatar
-                img(src!=gravatar(currentUser.emailHash)).img-responsive
-              ul
-                li: a(href="/settings") 设置
-                li: a(href="#", rel="nofollow")#logout 退出
+              - var notificationsTip = '没有未读提醒'
+              if currentUser.unreadNotificationCount > 0
+                - notificationsTip = '你有' + currentUser.unreadNotificationCount + '条未读提醒'
+              a(href="/notifications", title="#{notificationsTip}").notification-indicator
+                span(class= currentUser.unreadNotificationCount > 0 ? "unread" : null)
+              span.info
+                a(href="/user/#{currentUser.username}").gravatar
+                  img(src!=gravatar(currentUser.emailHash)).img-responsive
+                a(href="/user/#{currentUser.username}").username: strong #{currentUser.nickname}
+                ul
+                  li: a(href="/settings")
+                    i.fa.fa-cog
+                    | 设置
+                  li: a(href="#", rel="nofollow").logout
+                    i.fa.fa-sign-out
+                    | 退出
           else
             div.profile.unlogin
               a(href="/signup") 注册
-              &#32;|&#32;
+              | &#32;|&#32;
               a(href="/signin") 登录
           div.nav-collapse
             ul
@@ -55,7 +66,7 @@ html(lang="zh-CN")
                   a(href="/user/#{currentUser.username}") #{currentUser.nickname}
                 li(class=(path === '/settings') ? "selected" : "")
                   a(href="/settings") 设置
-                li: a(href="#", rel="nofollow")#logout 退出
+                li: a(href="#", rel="nofollow").logout 退出
               else
                 li(class=(path === '/signup') ? "selected" : "")
                   a(href="/signup") 注册
@@ -112,7 +123,7 @@ html(lang="zh-CN")
         if (ND.currentUser.isAuthenticated()) {
           ND.moduleTree.push({
             name: 'LogoutButton',
-            el: '#logout'
+            el: '.logout'
           });
         }
 

@@ -40,7 +40,6 @@ exports.signup = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    req.breadcrumbs('注册');
     res.render('user/signup', {
       user: req.flash('body'),
       err: req.flash('err'),
@@ -62,7 +61,6 @@ exports.signin = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    req.breadcrumbs('登录');
     res.render('user/signin', {
       user: req.flash('body'),
       err: req.flash('err'),
@@ -157,7 +155,6 @@ exports.forgot = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    req.breadcrumbs('通过电子邮件重设密码');
     res.render('user/forgot_pass', {
       user: req.flash('body'),
       err: req.flash('err'),
@@ -224,7 +221,7 @@ exports.resetPassword = function(req, res, next) {
           id: resetPass.id
         };
       }
-      req.breadcrumbs('重设密码');
+
       res.render('user/reset_pass', {
         token: token,
         err: req.flash('err'),
@@ -367,7 +364,6 @@ exports.settings = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    req.breadcrumbs('设置');
     res.render('user/settings', {
       type: req.flash('settingType'),
       err: req.flash('err'),

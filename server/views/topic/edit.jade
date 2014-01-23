@@ -9,10 +9,9 @@ block main
          action="#{url}")#topic-edit-form.pure-form.pure-form-stacked
       legend 发布新话题
       if err && err.errors
-        div
-          ul
-            each error in err.errors
-              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+        ul
+          each error in err.errors
+            li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
       div.pure-control-group
         label(for="tag").sr-only 节点
         select(name="tag[id]", required)#tag

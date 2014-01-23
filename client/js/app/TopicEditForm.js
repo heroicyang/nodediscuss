@@ -36,7 +36,7 @@ ND.Module.define('TopicEditForm',
           errors = errors.concat(item.errors);
         });
 
-        this.$el.before(template({
+        this.$('legend').after(template({
           errors: errors
         }));
       },

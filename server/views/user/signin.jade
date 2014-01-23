@@ -7,13 +7,12 @@ block main
       fieldset
         legend 登录
         if err && err.errors
-          div
-            ul
-              each error in err.errors
-                li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
-            if err && _.has(err.errors, 'activated')
-              div.alert.alert-info
-                p: a(href="#"): small 没有收到帐号激活邮件？
+          ul
+            each error in err.errors
+              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+          if err && _.has(err.errors, 'activated')
+            div.alert.alert-info
+              p: a(href="#"): small 没有收到帐号激活邮件？
         if message
           div.alert.alert-success: p #{message}
         div.pure-control-group

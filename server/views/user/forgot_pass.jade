@@ -7,10 +7,9 @@ block main
       fieldset
         legend 重置密码
         if err && err.errors
-          div
-            ul
-              each error in err.errors
-                li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+          ul
+            each error in err.errors
+              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
         if message
           div.alert.alert-success: p #{message}
         div.pure-control-group

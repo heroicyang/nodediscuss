@@ -78,7 +78,6 @@ exports.home = function(req, res, next) {
       return next(err);
     }
 
-    req.breadcrumbs('社区');
     res.render('topic/list', _.extend(results, {
       pagination: pagination,
       url: '/topics',
@@ -162,11 +161,10 @@ exports.belongsTag = function(req, res, next) {
       return next(err);
     }
 
-    req.breadcrumbs(req.tag.name);
     res.render('topic/list', _.extend(results, {
       pagination: pagination,
       tag: req.tag,
-      url: '/tag/' + req.tag.slug + '/topics',
+      url: '/tags/' + req.tag.slug + '/topics',
       filterType: filter
     }));
   });
@@ -192,9 +190,6 @@ exports.createdByUser = function(req, res, next) {
     }
 
     pagination.totalCount = count;
-    
-    req.breadcrumbs(req.user.nickname, '/user/' + req.user.username);
-    req.breadcrumbs('全部话题');
     res.render('user/topics', _.extend({
       hiddenAvatar: true,
       topics: topics,
@@ -244,7 +239,6 @@ exports.createdByFriends = function(req, res, next) {
       return next(err);
     }
 
-    req.breadcrumbs('我关注的人发布的最新话题');
     res.render('user/topics', {
       topics: topics,
       pagination: pagination
@@ -299,7 +293,7 @@ exports.create = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      req.breadcrumbs('发布新话题');
+
       res.render('topic/edit', _.extend(results, {
         topic: req.flash('body'),
         err: req.flash('err')
@@ -334,8 +328,6 @@ exports.edit = function(req, res, next) {
         return tag.section.name;
       });
 
-      req.breadcrumbs('话题详情', '/topic/' + req.topic._id);
-      req.breadcrumbs('编辑话题');
       res.render('topic/edit', {
         tags: tags,
         topic: _.extend(req.topic, req.flash('body')),
@@ -347,7 +339,7 @@ exports.edit = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      res.redirect('/topic/' + topic.id);
+      res.redirect('/topics/' + topic.id);
     });
   }
 };
@@ -395,8 +387,6 @@ exports.show = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    req.breadcrumbs(req.topic.tag.name, '/tag/' + req.topic.tag.slug);
-    req.breadcrumbs('话题详情');
 
     res.locals.site = res.locals.site || {};
     res.locals.site.title = results.topic.title + ' - ' + nconf.get('site:name');

@@ -1,23 +1,6 @@
 .editor
-  border-radius 3px
+  border-radius 2px
   margin-bottom 0
-
-  .panel-body
-    padding-bottom 0
-
-  .nav-tabs
-    margin-left -15px
-    margin-right -15px
-
-    > li
-      &:first-child
-        margin-left 15px
-
-      a
-        padding 5px 15px
-
-  .tab-content
-    padding 15px 0
 
   .toolbar
     width 100%
@@ -25,12 +8,16 @@
     border-radius 0 0 4px 4px
     border 1px solid #cccccc
     border-top 1px dashed #cccccc
-    padding 5px 10px
+    padding 0 10px
     font-size 12px
+
+    > *
+      margin-right 10px
 
     #et-upload-pic
       position relative
       overflow hidden
+      color #4183c4
 
       input
         position absolute
@@ -47,9 +34,46 @@
       padding 1px 5px
       line-height 1.5
 
-    .lang-menu
-      border-bottom-left-radius 0
-      border-bottom-right-radius 0
+    #et-insert-code
+      display inline-block
+      position relative
+
+      .lang-menu
+        display none
+        position absolute
+        top auto
+        bottom 100%
+        margin-bottom 1px
+        left 0
+        z-index 1000
+        min-width 160px
+        padding 5px 0
+        margin 2px 0 0
+        font-size 13px
+        list-style none
+        background-color #fff
+        border 1px solid #ccc
+        border 1px solid rgba(0,0,0,0.15)
+        box-shadow 0 6px 12px rgba(0,0,0,0.175)
+        border-radius 4px
+        border-bottom-left-radius 0
+        border-bottom-right-radius 0
+
+        > li > a
+          display block
+          padding 3px 20px
+          clear both
+          font-weight normal
+          line-height 1.428571429
+          color #333
+          white-space nowrap
+          &:hover,
+          &:focus
+            background-color #f5f5f5
+            text-decoration none
+      &.open
+        .lang-menu
+          display block
 
     .error
       color #c7254e
@@ -61,18 +85,42 @@
   textarea
     border-radius 4px 4px 0 0
     border-bottom 0
+    line-height 1.7em
+    margin-bottom 0 !important
+    width 100% !important
 
     &:focus
       + .toolbar
-        border-color #66afe9
+        border-color #129fea
         border-top-color #cccccc
         outline 0
-        box-shadow inset 0 0px 1px rgba(0,0,0,.075), 0 1px 4px rgba(102, 175, 233, 0.6)
+        box-shadow inset 0 1px 3px #ddd
 
   #write
     position relative
 
   #preview
+    position relative
+    display none
+    font-size 0.875em
+    border 1px solid #ccc
+    border-radius 2px
+    box-shadow inset 0 1px 3px #ddd
+
+    .preview-button
+      position absolute
+      left auto
+      right 5px
+      font-size 16px
+
+    .content
+      padding .6em
+      padding-right 1.5em
+      min-height 30px
+
+    pre
+      padding 1em
+
     img
       max-width 100%
       padding 4px

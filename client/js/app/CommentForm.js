@@ -26,7 +26,7 @@ ND.Module.define('CommentForm',
       setupEditor: function() {
         var self = this;
         this.editor = new Editor({
-          el: '#comment-editor',
+          el: '.comment-editor textarea',
           beforeRender: function(val) {
             return val
               .replace(/#(\d+)楼\s?/g, function(group, p1) {

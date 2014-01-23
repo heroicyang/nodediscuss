@@ -22,10 +22,11 @@ block main
              action="/comments/create")#comment-form.pure-form.pure-form-stacked
           fieldset
             legend 发表评论
-            if isAuthenticated
-              textarea(rows="3", name="content")
-            else
-              textarea(rows="3", name="content", placeholder="请登录后再发表评论", disabled)
+            div.pure-control-group.comment-editor
+              if isAuthenticated
+                textarea(rows="3", name="content")
+              else
+                textarea(rows="3", name="content", placeholder="请登录后再发表评论", disabled)
             div.pure-control-group
               input(type="hidden", name="_csrf", value="#{csrfToken}")
               input(type="hidden", name="topicId", value="#{topic._id}")

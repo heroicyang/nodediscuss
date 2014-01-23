@@ -5,9 +5,8 @@
 ND.Module.define('Editor', ['Marked'], function(Marked) {
   return ND.Module.extend({
     events: {
-      'show.bs.tab .nav-tabs a[data-toggle="tab"]': 'onTabShow',
-      'click .fullscreen': 'onZenButtonClick',
-      'click #et-insert-code .lang': 'onCodeInsertClick'
+      'click .preview-button': 'onPreviewButtonClick',
+      'click #et-insert-code .lang': 'onCodeLangClick'
     },
     /**
      * 在 markdown 渲染内容之前调用，可以对内容进行自定义处理
@@ -42,21 +41,7 @@ ND.Module.define('Editor', ['Marked'], function(Marked) {
       
       _.bindAll(this);
       this.$textarea = this.$('textarea');
-      this.setupZenArea();
       this.setupFileupload();
-    },
-    setupZenArea: function() {
-      var $zenButton = $('<a>')
-        .addClass('widearea-icon fullscreen')
-        .attr('title', '禅模式')
-        .attr('href', '#')
-        .attr('draggable', false)
-        .css({
-          position: 'absolute',
-          top: '5px',
-          right: '5px'
-        });
-      this.$textarea.before($zenButton);
     },
     setupFileupload: function() {
       this.$('#et-upload-pic')
@@ -71,58 +56,25 @@ ND.Module.define('Editor', ['Marked'], function(Marked) {
         .bind('fileuploadfail', this.onImageUploadError)
         .bind('fileuploadalways', this.onImageUploadEnd);
     },
-    onTabShow: function(e) {
+    onPreviewButtonClick: function(e) {
+      e.preventDefault();
       var val = this.$textarea.val();
       if ($(e.target).attr('href') === '#preview') {
         val = this.beforeRender(val);
-        $('#preview').html(Marked.render(val));
+
+        var html = Marked.render(val);
+        $('#preview .content').html(html);
+        $('#write').hide();
+        $('#preview').show();
+      } else {
+        $('#preview').hide();
+        $('#write').show();
       }
-    },
-    onZenButtonClick: function(e) {
-      e.preventDefault();
-      var $zenAreaWrap = this.$zenAreaWrap || $($('#zenarea-tmpl').html()),
-        $zenArea = $('textarea', $zenAreaWrap),
-        self = this;
-
-      function disableFullScreen() {
-        self.$zenAreaWrap = $zenAreaWrap.detach();
-        $(window).off('keydown');
-        $('body').css('overflow', '');
-        self.$textarea.focus();
-        self.$textarea.val($zenArea.val());
-      }
-
-      $(window).on('keydown', function(e) {
-        if (e.keyCode === 27) {
-          disableFullScreen();
-        }
-      });
-
-      if (!this.$zenAreaWrap) {
-        $('.close', $zenAreaWrap).on('click', function(e) {
-          e.preventDefault();
-          disableFullScreen();
-        });
-        $('.changeTheme', $zenAreaWrap).on('click', function(e) {
-          e.preventDefault();
-          if ($zenAreaWrap.hasClass('light')) {
-            $zenAreaWrap.removeClass('light');
-            $zenAreaWrap.addClass('dark');
-          } else if ($zenAreaWrap.hasClass('dark')) {
-            $zenAreaWrap.removeClass('dark');
-            $zenAreaWrap.addClass('light');
-          }
-        });
-      }
-
-      $('body').append($zenAreaWrap);
-      $('body').css('overflow', 'hidden');
-      $zenArea.focus();
-      $zenArea.val(this.$textarea.val());
     },
     /** 生成一段预设的代码模板 */
-    onCodeInsertClick: function(e) {
+    onCodeLangClick: function(e) {
       e.preventDefault();
+
       var lang = $(e.currentTarget).data('lang'),
         codeWrap = '```' + lang + '\n\n' + '```',
         cursorMove = lang.length + 4;  // 4: 开头的 ``` 长度 + 第一行结束的换行符

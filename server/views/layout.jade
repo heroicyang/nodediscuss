@@ -36,7 +36,7 @@ html(lang="zh-CN")
               if currentUser.unreadNotificationCount > 0
                 - notificationsTip = '你有' + currentUser.unreadNotificationCount + '条未读提醒'
               a(href="/notifications", title="#{notificationsTip}").notification-indicator
-                span(class= currentUser.unreadNotificationCount > 0 ? "unread" : null)
+                span.badge #{currentUser.unreadNotificationCount}
               span.info
                 a(href="/user/#{currentUser.username}").gravatar
                   img(src!=gravatar(currentUser.emailHash)).img-responsive

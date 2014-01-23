@@ -1,32 +1,32 @@
 script(type="text/template", id="editor-wrap-tmpl")
-  div.panel.panel-default.editor
-    div.panel-body
-      ul.nav.nav-tabs
-        li.active: a(href="#write", data-toggle="tab") 编辑
-        li: a(href="#preview", data-toggle="tab") 预览
-      div.tab-content
-        div#write.tab-pane.fade.in.active
-          div.toolbar.form-control
-            span#et-upload-pic.btn.btn-link.btn-xs
-              i.fa.fa-picture-o
-              | &#32;上传图片
-              input(type="file", id="fileupload", name="images", multiple)
-            span.btn-group.uploading
-              i.fa.fa-spinner.fa-spin
-              | &#32;正在上传图片...
-            div#et-insert-code.btn-group.dropup
-              button(type="button",
-                     data-toggle="dropdown").btn.btn-link.btn-xs.dropdown-toogle
-                i.fa.fa-code
-                | &#32;插入代码
-              ul(role="menu").dropdown-menu.lang-menu
-                li: a(href="#", data-lang="javascript").lang JavaScript
-                li: a(href="#", data-lang="xml").lang HTML
-                li: a(href="#", data-lang="css").lang CSS
-                li: a(href="#", data-lang="bash").lang Shell/Bash
-            span.btn-group.error
-              i.fa.fa-exclamation-circle
-              | &#32;
-              a(href="#").failed-images
-              span 图片上传失败，请稍后再试!
-        div#preview.tab-pane.fade
+  div.editor
+    div#write
+      div.toolbar
+        span#et-upload-pic
+          i.fa.fa-picture-o
+          | &#32;上传图片
+          input(type="file", id="fileupload", name="images", multiple)
+        span.uploading
+          i.fa.fa-spinner.fa-spin
+          | &#32;正在上传图片...
+        div#et-insert-code.btn-group
+          a(href="#", data-toggle="dropdown")
+            i.fa.fa-code
+            | &#32;插入代码
+          ul(role="menu").lang-menu
+            li: a(href="#", data-lang="javascript").lang JavaScript
+            li: a(href="#", data-lang="xml").lang HTML
+            li: a(href="#", data-lang="css").lang CSS
+            li: a(href="#", data-lang="bash").lang Shell/Bash
+        a(href="#preview", title="预览").preview-button
+          i.fa.fa-eye
+          | &#32;预览
+        span.error
+          i.fa.fa-exclamation-circle
+          | &#32;
+          a(href="#").failed-images
+          span 图片上传失败，请稍后再试!
+    div#preview
+      a(href="#write", title="取消预览").preview-button
+        i.fa.fa-eye-slash
+      div.content

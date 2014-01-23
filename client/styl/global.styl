@@ -76,6 +76,20 @@ textarea
   clip rect(0,0,0,0)
   border 0
 
+.badge
+  display inline-block
+  min-width 10px
+  padding 3px 7px
+  font-size 12px
+  font-weight bold
+  line-height 1
+  color #fff
+  text-align center
+  white-space nowrap
+  vertical-align baseline
+  background-color #999
+  border-radius 10px
+
 // pure-button-sizes
 .pure-button-xsmall
   font-size 70%
@@ -213,33 +227,10 @@ a.pure-button-selected
       .notification-indicator
         display inline-block
         position relative
-        padding 13px 18px
-        border-right 1px solid #e7e7e7
-        border-left 1px solid #e7e7e7
-
-        span
-          display inline-block
-          width 8px
-          height 8px
-          border-radius 50px
-          background-color #ccc
-          background-image linear-gradient(#aaa, #ccc)
-          background-repeat repeat-x
-          box-shadow inset 0 1px 0 rgba(0,0,0,0.1),0 1px 0 #fff
-
-        span.unread
-          background-color #3269a0
-          background-image linear-gradient(#4183c4, #3269a0)
-
-      .notification-indicator:hover,
-      .notification-indicator.focus
-        span
-          background-color #bbb
-          background-image linear-gradient(#999, #bbb)
-
-        span.unread
-          background-color #2c5d8d
-          background-image linear-gradient(#3876b4, #2c5d8d)
+        padding 0
+        margin-right 10px
+        @media (max-width: 40em)
+          padding 10px 0
 
       .info
         display inline-block
@@ -272,6 +263,7 @@ a.pure-button-selected
           right 0
           left auto
           top 3.4em
+          width 120%
           visibility visible
           z-index 1000
           background #fff

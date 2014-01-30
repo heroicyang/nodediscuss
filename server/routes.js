@@ -69,6 +69,9 @@ module.exports = exports = function(app) {
   app.get('/tags/:slug/topics', tags.load, topics.belongsTag);
   app.get('/following/topics', auth.loginRequired, topics.createdByFriends);
 
+  // 节点列表
+  app.get('/tags', tags.list);
+
   // 单个话题
   app.all('/topics/create', auth.loginRequired);
   app.get('/topics/create', topics.create);

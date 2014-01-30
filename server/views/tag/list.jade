@@ -1,0 +1,16 @@
+extends ../layout
+block main
+  div#tags.panel
+    div.heading
+      h4
+        i.fa.fa-magnet
+        | #{site.name} 目前共有 #{sectionCount} 个节点组，#{tagCount} 个节点
+    div.content
+      each tags,sectionName in sections
+        section
+          h4
+            i.fa.fa-tags
+            | &#32;#{sectionName}
+          ul
+            each tag in tags
+              li: a(href="/tags/#{tag.slug}") #{tag.name}

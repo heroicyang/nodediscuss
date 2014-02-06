@@ -1,8 +1,0 @@
-if site.links && site.links.length
-  div.panel.panel-default.hidden-xs
-    div.panel-heading
-      strong 相关站点
-    div.panel-body
-      ul.list-unstyled
-        each link in site.links
-          li: a(href="#{link.url}", target="_blank") #{link.text}

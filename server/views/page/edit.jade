@@ -1,0 +1,54 @@
+extends ../layout
+block main
+  div#wiki-form.panel
+    - var url = '/wikis/create'
+    if wiki
+      - url = '/wikis/' + wiki.slug + '/edit'
+    form(role="form",
+         method="POST",
+         action="#{url}")#wiki-edit-form.pure-form.pure-form-stacked
+      legend 创建 Wiki
+      if err && err.errors
+        ul
+          each error in err.errors
+            li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+      div.pure-control-group
+        label(for="slug").sr-only 地址
+        div.pure-controls
+          span #{site.domain}/wikis/
+          input(type="text",
+                name="slug",
+                placeholder="Wiki 页面地址", 
+                value=wiki ? wiki.slug : "",
+                required)#slug
+      div.pure-control-group
+        label(for="title").sr-only 标题
+        input(type="text",
+              name="title",
+              placeholder="Wiki 标题", 
+              value=wiki ? wiki.title : "",
+              required)#title
+      div.pure-control-group.content-editor
+        label(for="content").sr-only 内容
+        textarea(name="content",
+                 rows="16",
+                 placeholder="话题内容，可以为空")#content-editor
+          | !{wiki ? wiki.content : ''}
+      div.pure-controls
+        input(type="hidden", name="_csrf", value="#{csrfToken}")
+        if wiki
+          input(type="hidden", name="id", value="#{wiki._id}")
+        button(type="submit")#submit-button.pure-button.pure-button-primary 发布
+block script
+  script(type="text/javascript").
+    ND.moduleTree.push({
+      name: 'WikiEditForm',
+      el: '#wiki-edit-form',
+      children: [
+        {
+          name: 'ButtonBase',
+          el: '#submit-button',
+          id: 'submitButton'
+        }
+      ]
+    });

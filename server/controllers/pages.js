@@ -23,7 +23,7 @@ exports.wikis = function(req, res, next) {
   api.Page.query({
     conditions: {
       slug: {
-        $regex: 'wiki\/',
+        $regex: 'wikis\/',
         $options: 'i'
       }
     },
@@ -35,9 +35,9 @@ exports.wikis = function(req, res, next) {
     }
     
     pagination.totalCount = count;
-    req.breadcrumbs('Wiki');
     res.render('page/wikis', {
       wikis: pages,
+      wikiCount: count,
       pagination: pagination
     });
   });
@@ -48,21 +48,19 @@ exports.createWiki = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    req.breadcrumbs('Wiki', '/wiki');
-    req.breadcrumbs('创建 Wiki');
-    res.render('page/edit_wiki', {
+    res.render('page/edit', {
       wiki: req.flash('body'),
       err: req.flash('err')
     });
   } else if ('post' === method) {
     var data = _.clone(req.body);
-    data.slug = 'wiki/' + data.slug;
+    data.slug = 'wikis/' + data.slug;
     data.creatorId = req.currentUser.id;
     api.Page.add(data, function(err) {
       if (err) {
         return next(err);
       }
-      res.redirect('/wiki');
+      res.redirect('/wikis');
     });
   }
 };
@@ -72,7 +70,7 @@ exports.editWiki = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    var slug = 'wiki/' + req.params.slug;
+    var slug = 'wikis/' + req.params.slug;
     api.Page.get({
       slug: slug
     }, function(err, page) {
@@ -83,10 +81,8 @@ exports.editWiki = function(req, res, next) {
         return next(new NotFoundError('该页面不存在。'));
       }
 
-      page.slug = page.slug.replace('wiki/', '');
-      req.breadcrumbs(page.title, '/' + page.slug);
-      req.breadcrumbs('编辑 Wiki');
-      res.render('page/wiki_edit', {
+      page.slug = page.slug.replace('wikis/', '');
+      res.render('page/wikis', {
         wiki: _.extend(page, req.flash('body')),
         err: req.flash('err')
       });
@@ -94,7 +90,7 @@ exports.editWiki = function(req, res, next) {
   } else if ('post' === method) {
     var data = _.clone(req.body);
     data.editorId = req.currentUser.id;
-    data.slug = 'wiki/' + data.slug;
+    data.slug = 'wikis/' + data.slug;
     api.Page.edit(data, function(err) {
       if (err) {
         return next(err);
@@ -108,7 +104,7 @@ exports.editWiki = function(req, res, next) {
 exports.get = function(req, res, next) {
   var slug = req.params[0],
     isWiki = false;
-  if (slug.indexOf('wiki/') !== -1) {
+  if (slug.indexOf('wikis/') !== -1) {
     isWiki = true;
   }
 
@@ -122,9 +118,6 @@ exports.get = function(req, res, next) {
       return next(new NotFoundError('该页面不存在。'));
     }
 
-    if (isWiki) {
-      req.breadcrumbs('Wiki', '/wiki');
-    }
     req.breadcrumbs(page.title);
     res.locals.site = res.locals.site || {};
     res.locals.site.title = page.title + ' - ' + nconf.get('site:name');

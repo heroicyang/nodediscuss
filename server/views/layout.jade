@@ -25,7 +25,7 @@ html(lang="zh-CN")
             li(class= path === '/tags' ? "pure-menu-selected" : "")
               a(href="/tags") 节点
             li(class=(path.indexOf('/wiki') !== -1) ? "pure-menu-selected" : "")
-              a(href="/wiki") Wiki
+              a(href="/wikis") Wiki
           button(type="button").nav-toggle
             span.icon-bar
             span.icon-bar
@@ -60,7 +60,7 @@ html(lang="zh-CN")
               li(class= path === '/tags' ? "selected" : "")
                 a(href="/tags") 节点
               li(class=(path.indexOf('/wiki') !== -1) ? "selected" : "")
-                a(href="/wiki") Wiki
+                a(href="/wikis") Wiki
               if isAuthenticated
                 li(class=(path === '/user/#{currentUser.username}') ? "selected" : "")
                   a(href="/user/#{currentUser.username}") #{currentUser.nickname}

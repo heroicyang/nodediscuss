@@ -101,9 +101,9 @@ module.exports = exports = function(app) {
   app.post('/comments/:id/remove', auth.loginRequired, comments.load,
       auth.commentAuthorRequired, api.requestHandler(api.Comment.destroy));
 
-  app.get('/wiki', pages.wikis);
-  app.all('/wiki/create', auth.loginRequired, auth.wikiEditorRequired, pages.createWiki);
-  app.all('/wiki/:slug/edit', auth.loginRequired, auth.wikiEditorRequired, pages.editWiki);
+  app.get('/wikis', pages.wikis);
+  app.all('/wikis/create', auth.loginRequired, auth.wikiEditorRequired, pages.createWiki);
+  app.all('/wikis/:slug/edit', auth.loginRequired, auth.wikiEditorRequired, pages.editWiki);
 
   // 后台管理
   app.all('/admin/:cate?/*/:op?', auth.loginRequired, auth.adminRequired);

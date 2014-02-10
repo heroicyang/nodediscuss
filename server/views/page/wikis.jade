@@ -1,26 +1,15 @@
-extends ../container
-block content
-  div#wiki-list-panel.panel.panel-default
-    div.panel-heading
+extends ../layout
+block main
+  div#wikis.panel
+    div.heading
       if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
-        a(href="/wiki/create",
-          title="创建 Wiki").btn.btn-default.btn-xs.pull-right 创建 Wiki
-      include ../shared/breadcrumb
-    div.panel-body
-      if pagination.totalCount > 0
-        ul.wiki-list
-          each wiki in wikis
-            li
-              a(href="#{wiki.slug}").title #{wiki.title}
-      else
-        span 暂无 Wiki。
-    if pagination.totalCount > 0
-      div.panel-footer
-        include ../shared/pagination
-block sidebar
-  if isAuthenticated
-    include ../sidebar/user_card
-  else
-    include ../sidebar/about
-  include ../sidebar/related_site
-  include ../sidebar/ad
+        a(href="/wikis/create").pure-button.pure-button-primary.add-button 创建 Wiki
+      h4
+        i.fa.fa-book
+        | #{site.name} 目前共有 #{wikiCount} 条 Wiki
+    div.content
+      ul.wiki-list
+        each wiki in wikis
+          li: a(href="#{wiki.slug}") #{wiki.title}
+    div.footer
+      include ../paginator

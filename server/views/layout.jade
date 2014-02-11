@@ -24,7 +24,7 @@ html(lang="zh-CN")
               a(href="/") 社区
             li(class= path === '/tags' ? "pure-menu-selected" : "")
               a(href="/tags") 节点
-            li(class=(path.indexOf('/wiki') !== -1) ? "pure-menu-selected" : "")
+            li(class=path === '/wikis' ? "pure-menu-selected" : "")
               a(href="/wikis") Wiki
           button(type="button").nav-toggle
             span.icon-bar
@@ -59,7 +59,7 @@ html(lang="zh-CN")
                 a(href="/") 社区
               li(class= path === '/tags' ? "selected" : "")
                 a(href="/tags") 节点
-              li(class=(path.indexOf('/wiki') !== -1) ? "selected" : "")
+              li(class= path === '/wikis' ? "selected" : "")
                 a(href="/wikis") Wiki
               if isAuthenticated
                 li(class=(path === '/user/#{currentUser.username}') ? "selected" : "")

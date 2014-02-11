@@ -15,12 +15,12 @@ block main
       div.pure-control-group
         label(for="slug").sr-only 地址
         div.pure-controls
-          span #{site.domain}/wikis/
           input(type="text",
                 name="slug",
                 placeholder="Wiki 页面地址", 
                 value=wiki ? wiki.slug : "",
                 required)#slug
+          span.help-block #{site.domain}/wikis/页面地址
       div.pure-control-group
         label(for="title").sr-only 标题
         input(type="text",
@@ -28,11 +28,11 @@ block main
               placeholder="Wiki 标题", 
               value=wiki ? wiki.title : "",
               required)#title
-      div.pure-control-group.content-editor
+      div.pure-control-group
         label(for="content").sr-only 内容
         textarea(name="content",
                  rows="16",
-                 placeholder="话题内容，可以为空")#content-editor
+                 placeholder="Wiki 内容")#content-editor
           | !{wiki ? wiki.content : ''}
       div.pure-controls
         input(type="hidden", name="_csrf", value="#{csrfToken}")

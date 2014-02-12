@@ -22,12 +22,15 @@ block main
                 value= user ? user.email : "",
                 placeholder="电子邮箱地址",
                 required)#email
+          span.help-block.validator.required 电子邮件地址不能为空。
+          span.help-block.validator.email 不像是有效的电子邮件地址。
         div.pure-control-group
           label(for="password").sr-only 密码
           input(type="password",
                 name="password",
                 placeholder="登录密码",
                 required)#password
+          span.help-block.validator.required 密码不能为空。
         div.pure-controls
           label(for="remember").pure-checkbox
             input(type="checkbox", name="remember", checked)#remember

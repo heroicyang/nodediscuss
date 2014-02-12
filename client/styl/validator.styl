@@ -1,0 +1,30 @@
+/**
+ * 表单验证错误时的样式
+ * @author heroic
+ */
+
+.pure-form
+  .error
+    input,
+    textarea,
+    select
+      color #b94a48
+      border 1px solid #ee5f5b
+
+    .editor
+      textarea
+        border-bottom 0
+
+      .toolbar
+        border 1px solid #ee5f5b
+        border-top 1px dashed #cccccc
+
+    .help-block
+      display none
+      color #b94a48
+
+    &.required > .required,
+    &.email > .email,
+    &.alpha-numeric > .alpha-numeric,
+    &.length > .length
+        display block

@@ -25,6 +25,7 @@ block main
                   option(value="#{tag._id}", selected) #{tag.name}
                 else
                   option(value="#{tag._id}") #{tag.name}
+        span.help-block.validator.required 请选择话题节点！
       div.pure-control-group
         label(for="title").sr-only 标题
         input(type="text",
@@ -33,6 +34,8 @@ block main
               placeholder="话题标题，100 个字符以内", 
               value=topic ? topic.title : "",
               required)#title
+        span.help-block.validator.required 标题不能为空！
+        span.help-block.validator.length 标题字数只能在 100 个字符以内。
       div.pure-control-group.content-editor
         label(for="content").sr-only 内容
         textarea(name="content",

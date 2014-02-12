@@ -15,13 +15,8 @@ ND.Loader.define('Form', ['Validator'], function(Validator) {
    *    ]
    *  } 
    * @param {Object} options 配置项
-   *  - isErrMsgOnHelpBlock   将各表单项验证失败的错误信息增加到该项对应的 `help-block` 中
-   *                          默认为 `true`，设置为 `false` 就不增加
-   *  - isErrClassOnParent    将错误样式添加到表单项的父级元素，默认为 `true`
-   *                          `false` 则代表添加到当前元素
-   *  - errClassEl            如果既不想将错误样式添加到父级元素，也不想添加到当前元素
-   *                          可以自定义错误样式添加到的元素，将通过 `$el.closest(errClassEl)` 来查找
-   *                          并将错误样式添加到查找到的元素上
+   *  - klass            错误时的样式名称（默认是__error__）
+   *  - isKlassOnParent  错误时__klass__是添加到表单项还是其父元素（默认是当前表单项）
    */
   function Form(form, rules, options) {
     var self = this;
@@ -31,11 +26,9 @@ ND.Loader.define('Form', ['Validator'], function(Validator) {
     this.results = [];
 
     options = options || {};
-    if (typeof options.isErrMsgOnHelpBlock === 'undefined') {
-      options.isErrMsgOnHelpBlock = true;
-    }
-    if (typeof options.isErrClassOnParent === 'undefined') {
-      options.isErrClassOnParent = true;
+    options.klass = options.klass || 'error';
+    if (typeof options.isKlassOnParent === 'undefined') {
+      options.isKlassOnParent = false;
     }
     this.options = options;
 
@@ -48,20 +41,20 @@ ND.Loader.define('Form', ['Validator'], function(Validator) {
       var $el = form.find('[name="' + el + '"]'),
         validator = new Validator($el, validators);
       self.validators[el] = validator;
-      validator.on('validated', _.bind(validateCompleted, self));
+      validator.on('validated', validateCompleted);
+      validator.errorKlasses = [];
 
       $el.on('focus', function() {
-        if (self.options.isErrMsgOnHelpBlock){
-          $el.next('.help-block.error').remove();
-          $el.next('.help-block').show();
-        }
+        var klasses = validator.errorKlasses.join(' ');
+        var $parent = $el.data('parent') ?
+              $el.closest($el.data('parent')) :
+              $el.parent();
+        validator.errorKlasses = [];
 
-        if (self.options.errClassEl) {
-          $el.closest(self.options.errClassEl).removeClass('has-error');
-        } else if (self.options.isErrClassOnParent) {
-          $el.parent().removeClass('has-error');
+        if (self.options.isKlassOnParent) {
+          $parent.removeClass(klasses);
         } else {
-          $el.removeClass('has-error');
+          $el.removeClass(klasses);
         }
       });
     });
@@ -76,6 +69,34 @@ ND.Loader.define('Form', ['Validator'], function(Validator) {
       });
       return false;
     });
+
+    function validateCompleted(result) {
+      var $el = result.$el,
+        errors = result.errors,
+        klasses = this.errorKlasses.join(' ');
+      var $parent = $el.data('parent') ?
+            $el.closest($el.data('parent')) :
+            $el.parent();
+      this.errorKlasses = [];
+
+      if (errors[0]) {
+        this.errorKlasses.push(self.options.klass);
+        this.errorKlasses.push(errors[0].klass);
+        klasses = this.errorKlasses.join(' ');
+
+        if (self.options.isKlassOnParent) {
+          $parent.addClass(klasses);
+        } else {
+          $el.addClass(klasses);
+        }
+      } else {
+        if (self.options.isKlassOnParent) {
+          $parent.removeClass(klasses);
+        } else {
+          $el.removeClass(klasses);
+        }
+      }
+    }
   }
 
   _.extend(Form.prototype, Backbone.Events, {
@@ -101,40 +122,6 @@ ND.Loader.define('Form', ['Validator'], function(Validator) {
       return _.size(errorResult) > 0;
     }
   });
-
-  function validateCompleted(result) {
-    var $el = result.$el,
-      errors = result.errors;
-
-    if (errors[0]) {
-      if (this.options.isErrMsgOnHelpBlock) {
-        $el.next('.help-block.error').remove();
-        $el.next('.help-block').hide();
-        $el.after('<span class="help-block error">' + errors[0] + '</span>');
-      }
-      
-      if (this.options.errClassEl) {
-        $el.closest(this.options.errClassEl).addClass('has-error');
-      } else if (this.options.isErrClassOnParent) {
-        $el.parent().addClass('has-error');
-      } else {
-        $el.addClass('has-error');
-      }
-    } else {
-      if (this.options.isErrMsgOnHelpBlock) {
-        $el.next('.help-block.error').remove();
-        $el.next('.help-block').show();
-      }
-      
-      if (this.options.errClassEl) {
-        $el.closest(this.options.errClassEl).removeClass('has-error');
-      } else if (this.options.isErrClassOnParent) {
-        $el.parent().removeClass('has-error');
-      } else {
-        $el.removeClass('has-error');
-      }
-    }
-  }
 
   return Form;
 });

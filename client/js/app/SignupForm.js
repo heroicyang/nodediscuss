@@ -14,36 +14,33 @@ ND.Module.define('SignupForm',
         this.$form = this.$el;
         this.form = new Form(this.$form, {
           email: [
-            Validator.Required({ msg: '电子邮件地址必填!' }),
-            Validator.Email({ msg: '不像是有效的电子邮件地址。' })
+            Validator.Required(),
+            Validator.Email()
           ],
           username: [
-            Validator.Required({ msg: '用户名必填!' }),
-            Validator.AlphaNumeric({ msg: '用户名无效! 仅支持字母与数字。' }),
+            Validator.Required(),
+            Validator.AlphaNumeric(),
             Validator.Length({
               min: 6,
-              max: 16,
-              msg: '用户名长度为 %s - %s。'
+              max: 16
             })
           ],
           password: [
-            Validator.Required({ msg: '密码不能为空。' }),
+            Validator.Required(),
             Validator.Length({
               min: 6,
-              max: 31,
-              msg: '密码长度为 %s - %s。'
+              max: 31
             })
           ],
           repassword: [
-            Validator.Required({ msg: '请再次输入你的密码。' }),
+            Validator.Required(),
             Validator.Length({
               min: 6,
-              max: 31,
-              msg: '密码长度为 %s - %s。'
+              max: 31
             })
           ]
         }, {
-          errClassEl: '.form-group'
+          isKlassOnParent: true
         });
       },
       onFormValidated: function() {

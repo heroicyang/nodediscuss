@@ -19,6 +19,8 @@ block main
                 value= user ? user.email : "",
                 placeholder="电子邮箱地址",
                 required)#email
+          span.help-block.validator.required 电子邮件地址必填！
+          span.help-block.validator.email 不像是有效的电子邮件地址。
         div.pure-control-group
           label(for="username").sr-only 用户名
           input(type="text",
@@ -26,18 +28,25 @@ block main
                 value= user ? user.username : "",
                 placeholder="用户名（6-16个字符，仅支持字母和数字）",
                 required)#username
+          span.help-block.validator.required 用户名必填！
+          span.help-block.validator.alpha-numeric 用户名无效! 仅支持字母与数字。
+          span.help-block.validator.length 用户名长度为 6 - 16。
         div.pure-control-group
           label(for="password").sr-only 密码
           input(type="password",
                 name="password",
                 placeholder="密码",
                 required)#password
+          span.help-block.validator.required 密码不能为空。
+          span.help-block.validator.length 密码长度为 6 - 31。
         div.pure-control-group
           label(for="repassword").sr-only 确认密码
           input(type="password",
                 name="repassword",
                 placeholder="再次输入密码",
                 required)#repassword
+          span.help-block.validator.required 请再次输入你的密码。
+          span.help-block.validator.length 密码长度为 6 - 31。
         div.pure-controls
           input(type="hidden", name="_csrf", value="#{csrfToken}")
           button(type="submit")#signup-button.pure-button.pure-button-primary 注册

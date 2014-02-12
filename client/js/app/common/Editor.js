@@ -24,12 +24,17 @@ ND.Module.define('Editor', ['Marked'], function(Marked) {
       var el = $('#editor-wrap-tmpl').html(),
         $el = $(el),
         $textarea = $(_.result(this, 'el')),
+        $prevEl = $textarea.prev(),
         $parent = $textarea.parent();
 
       $textarea = $textarea.detach();
 
       $el.find('#write').prepend($textarea);
-      $parent.html($el);
+      if ($prevEl.length) {
+        $prevEl.after($el);
+      } else {
+        $parent.prepend($el);
+      }
       $textarea = null;
 
       this.setElement($el, false);

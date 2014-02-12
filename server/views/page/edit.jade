@@ -14,13 +14,14 @@ block main
             li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
       div.pure-control-group
         label(for="slug").sr-only 地址
-        div.pure-controls
-          input(type="text",
-                name="slug",
-                placeholder="Wiki 页面地址", 
-                value=wiki ? wiki.slug : "",
-                required)#slug
-          span.help-block #{site.domain}/wikis/页面地址
+        input(type="text",
+              name="slug",
+              placeholder="Wiki 页面地址", 
+              value=wiki ? wiki.slug : "",
+              required)#slug
+        span.help-block #{site.domain}/wikis/页面地址
+        span.help-block.validator.required 页面地址不能为空！
+        span.help-block.validator.alpha-numeric 页面地址只能为字母、数字、下划线和横线。
       div.pure-control-group
         label(for="title").sr-only 标题
         input(type="text",
@@ -28,12 +29,16 @@ block main
               placeholder="Wiki 标题", 
               value=wiki ? wiki.title : "",
               required)#title
+        span.help-block.validator.required 标题不能为空！
       div.pure-control-group
         label(for="content").sr-only 内容
         textarea(name="content",
                  rows="16",
-                 placeholder="Wiki 内容")#content-editor
+                 placeholder="Wiki 内容",
+                 data-parent=".pure-control-group",
+                 required)#content-editor
           | !{wiki ? wiki.content : ''}
+        span.help-block.validator.required 内容不能为空！
       div.pure-controls
         input(type="hidden", name="_csrf", value="#{csrfToken}")
         if wiki

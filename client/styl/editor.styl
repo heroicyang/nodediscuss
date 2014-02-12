@@ -32,7 +32,7 @@
         cursor pointer
 
     .uploading,
-    .error
+    .upload-error
       display none
       padding 1px 5px
       line-height 1.5
@@ -78,17 +78,13 @@
         .lang-menu
           display block
 
-    .error
+    .upload-error
       color #c7254e
 
-  .has-error > .toolbar
-    border-color #b94a48
-
-
   textarea
-    border-radius 4px 4px 0 0
+    border-radius 2px 2px 0 0 !important
     border-bottom 0
-    line-height 1.7em
+    line-height 1.5em !important
     margin-bottom 0 !important
     width 100% !important
 
@@ -98,6 +94,13 @@
         border-top-color #cccccc
         outline 0
         box-shadow inset 0 1px 3px #ddd
+
+    &:focus:invalid
+      border-bottom 0
+
+      + .toolbar
+        border-color #ee5f5b
+        border-top-color #cccccc
 
   #write
     position relative

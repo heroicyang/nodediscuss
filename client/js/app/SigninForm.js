@@ -14,14 +14,14 @@ ND.Module.define('SigninForm',
         this.$form = this.$el;
         this.form = new Form(this.$form, {
           email: [
-            Validator.Required({ msg: '电子邮件地址不能为空。' }),
-            Validator.Email({ msg: '不像是有效的电子邮件地址。' })
+            Validator.Required(),
+            Validator.Email()
           ],
           password: [
-            Validator.Required({ msg: '密码不能为空。' })
+            Validator.Required()
           ]
         }, {
-          errClassEl: '.form-group'
+          isKlassOnParent: true
         });
       },
       onFormValidated: function() {

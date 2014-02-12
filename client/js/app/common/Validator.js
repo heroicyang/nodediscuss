@@ -29,12 +29,14 @@ ND.Loader.define('Validator', [], function() {
         errors = [];
 
       _.each(this.validators, function(validator) {
-        validator(self.$el, function(result) {
+        validator(self.$el, function(error) {
           validatorCount -= 1;
-          errors = errors.concat(result.errors);
+          if (error) {
+            errors.push(error);
+          }
 
           if (validatorCount === 0) {
-            result = {
+            var result = {
               $el: self.$el,
               errors: errors
             };
@@ -49,54 +51,54 @@ ND.Loader.define('Validator', [], function() {
   /**
    * 必填验证器
    * @param {Object} options
-   *  - msg    验证失败时的错误提示信息
+   *  - klass    验证失败时的样式
    */
   Validator.Required = function(options) {
     options = options || {};
     return function(el, callback) {
       var val = el.val(),
-        errors = [],
-        msg = options.msg || '该项必填!';
+        klass = options.klass || 'required',
+        error;
 
       if (('checkbox' === el.attr('type') &&
             'checked' !== el.attr('checked')) || !val) {
-        errors.push(msg);
+        error = {
+          $el: el,
+          klass: klass
+        };
       }
 
-      callback && callback({
-        $el: el,
-        errors: errors
-      });
+      callback && callback(error);
     };
   };
 
   /**
    * 字母数字验证器
    * @param {Object} options
-   *  - msg    验证失败时的错误提示信息
+   *  - klass    验证失败时的样式
    */
   Validator.AlphaNumeric = function(options) {
     options = options || {};
     return function(el, callback) {
       var val = el.val(),
-        errors = [],
-        msg = options.msg || '该项仅支持字母与数字。';
+        klass = options.klass || 'alpha-numeric',
+        error;
 
       if (val && !val.match(/^[a-zA-Z0-9\-_]+$/)) {
-        errors.push(msg);
+        error = {
+          $el: el,
+          klass: klass
+        };
       }
 
-      callback && callback({
-        $el: el,
-        errors: errors
-      });
+      callback && callback(error);
     };
   };
 
   /**
    * 字符长度验证器
    * @param {Object} options
-   *  - msg    验证失败时的错误提示信息
+   *  - klass  验证失败时的样式
    *  - min    字符长度最小值
    *  - max    字符长度最大值
    */
@@ -105,59 +107,44 @@ ND.Loader.define('Validator', [], function() {
     return function(el, callback) {
       var val = el.val(),
         valLen = val.length,
-        errors = [],
         max = options.max || Infinity,
         min = options.min || 0,
-        msg = options.msg || '该项长度为 %s 至 %s 之间。';
+        klass = options.klass || 'length',
+        error;
 
       if (valLen < min || valLen > max) {
-        errors.push(format(msg, min, max));
+        error = {
+          $el: el,
+          klass: klass
+        };
       }
 
-      callback && callback({
-        $el: el,
-        errors: errors
-      });
+      callback && callback(error);
     };
   };
 
   /**
    * 电子邮件验证器
    * @param {Object} options
-   *  - msg    验证失败时的错误提示信息
+   *  - klass    验证失败时的样式
    */
   Validator.Email = function(options) {
     options = options || {};
     return function(el, callback) {
       var val = el.val(),
-        errors = [],
-        msg = options.msg || '不像是有效的电子邮件地址。';
+        klass = options.klass || 'email',
+        error;
 
       if (val && !val.match(/.+@.+\..+/gi)) {
-        errors.push(msg);
+        error = {
+          $el: el,
+          klass: klass
+        };
       }
 
-      callback && callback({
-        $el: el,
-        errors: errors
-      });
+      callback && callback(error);
     };
   };
-
-  /**
-   * 简单的字符串格式化函数
-   * Examples:
-   *    format('a is %s', 1);   // 'a is 1'
-   * 
-   * @param  {String} str 需要格式化的字符串
-   * @return {String}     格式化后的字符串
-   */
-  function format(str) {
-    var values = Array.prototype.slice.call(arguments, 1);
-    return str.replace(/%s/g, function() {
-      return values.shift();
-    });
-  }
 
   return Validator;
 });

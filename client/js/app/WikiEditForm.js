@@ -4,7 +4,7 @@ ND.Module.define('WikiEditForm',
     return ND.Module.extend({
       initialize: function() {
         this.setupForm();
-        this.listenTo(this.form, 'invalidated', this.onFormInvalidated);
+        //this.listenTo(this.form, 'invalidated', this.onFormInvalidated);
         this.listenTo(this.form, 'validated', this.onFormValidated);
         this.editor = new Editor({
           el: '#content-editor'
@@ -14,21 +14,20 @@ ND.Module.define('WikiEditForm',
         this.$form = this.$el;
         this.form = new Form(this.$form, {
           slug: [
-            Validator.Required({ msg: 'Wiki 地址不能为空!' }),
-            Validator.AlphaNumeric({ msg: 'Wiki 地址只能为字母、数字、下划线和横线。' })
+            Validator.Required(),
+            Validator.AlphaNumeric()
           ],
           title: [
-            Validator.Required({ msg: 'Wiki 标题不能为空!' }),
+            Validator.Required(),
             Validator.Length({
-              max: 100,
-              msg: '标题字数不能超过 100 个。'
+              max: 100
             })
           ],
           content: [
-            Validator.Required({ msg: 'Wiki 内容不能为空!' })
+            Validator.Required()
           ]
         }, {
-          isErrMsgOnHelpBlock: false
+          isKlassOnParent: true
         });
       },
       onFormInvalidated: function(data) {

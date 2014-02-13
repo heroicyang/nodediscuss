@@ -37,24 +37,24 @@ ND.Loader.define('Form', ['Validator'], function(Validator) {
       this.$el.attr('novalidate', 'true');
     }
 
-    _.each(rules, function(validators, el) {
-      var $el = form.find('[name="' + el + '"]'),
-        validator = new Validator($el, validators);
-      self.validators[el] = validator;
+    _.each(rules, function(validators, item) {
+      var $item = form.find('[name="' + item + '"]'),
+        validator = new Validator($item, validators);
+      self.validators[item] = validator;
       validator.on('validated', validateCompleted);
-      validator.errorKlasses = [];
-
-      $el.on('focus', function() {
-        var klasses = validator.errorKlasses.join(' ');
-        var $parent = $el.data('parent') ?
-              $el.closest($el.data('parent')) :
-              $el.parent();
-        validator.errorKlasses = [];
+      
+      $item.data('errorKlasses', []);
+      $item.on('focus', function() {
+        var klasses = $item.data('errorKlasses').join(' ');
+        var $parent = $item.data('parent') ?
+              $item.closest($item.data('parent')) :
+              $item.parent();
+        $item.data('errorKlasses', []);
 
         if (self.options.isKlassOnParent) {
           $parent.removeClass(klasses);
         } else {
-          $el.removeClass(klasses);
+          $item.removeClass(klasses);
         }
       });
     });
@@ -71,29 +71,33 @@ ND.Loader.define('Form', ['Validator'], function(Validator) {
     });
 
     function validateCompleted(result) {
-      var $el = result.$el,
+      var $item = result.$el,
         errors = result.errors,
-        klasses = this.errorKlasses.join(' ');
-      var $parent = $el.data('parent') ?
-            $el.closest($el.data('parent')) :
-            $el.parent();
-      this.errorKlasses = [];
+        klasses;
+      var $parent = $item.data('parent') ?
+            $item.closest($item.data('parent')) :
+            $item.parent();
 
       if (errors[0]) {
-        this.errorKlasses.push(self.options.klass);
-        this.errorKlasses.push(errors[0].klass);
-        klasses = this.errorKlasses.join(' ');
+        $item.data('errorKlasses', ($item.data('errorKlasses') || []).concat([
+          self.options.klass,
+          errors[0].klass
+        ]));
+        klasses = $item.data('errorKlasses').join(' ');
 
         if (self.options.isKlassOnParent) {
           $parent.addClass(klasses);
         } else {
-          $el.addClass(klasses);
+          $item.addClass(klasses);
         }
       } else {
+        klasses = $item.data('errorKlasses').join(' ');
+        $item.data('errorKlasses', []);
+
         if (self.options.isKlassOnParent) {
           $parent.removeClass(klasses);
         } else {
-          $el.removeClass(klasses);
+          $item.removeClass(klasses);
         }
       }
     }

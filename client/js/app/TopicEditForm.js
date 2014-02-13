@@ -4,7 +4,6 @@ ND.Module.define('TopicEditForm',
     return ND.Module.extend({
       initialize: function() {
         this.setupForm();
-        //this.listenTo(this.form, 'invalidated', this.onFormInvalidated);
         this.listenTo(this.form, 'validated', this.onFormValidated);
         this.editor = new Editor({
           el: '#content-editor'
@@ -26,18 +25,6 @@ ND.Module.define('TopicEditForm',
         }, {
           isKlassOnParent: true
         });
-      },
-      onFormInvalidated: function(data) {
-        var errors = [],
-          template = _.template($('#alert-danger-tmpl').html());
-
-        _.each(data, function(item) {
-          errors = errors.concat(item.errors);
-        });
-
-        this.$('legend').after(template({
-          errors: errors
-        }));
       },
       onFormValidated: function() {
         var submitTopicButton = this.getChildById('submitTopicButton');

@@ -53,9 +53,24 @@
 
       .comment-editor
         width 60%
+        position relative
         margin-bottom 10px
         @media (max-width: 40em)
           width 100%
+
+        textarea
+          width 100%
+
+        .backdrop
+          position absolute
+          width 100%
+          height 100%
+          z-index 999
+          cursor not-allowed
+
+          + .editor
+            .toolbar
+              background-color #eaeded
 
         .editor
           width 100%

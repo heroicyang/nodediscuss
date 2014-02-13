@@ -26,6 +26,7 @@ block main
               if isAuthenticated
                 textarea(rows="3", name="content")
               else
+                div.backdrop
                 textarea(rows="3", name="content", placeholder="请登录后再发表评论", disabled)
             div.pure-control-group
               input(type="hidden", name="_csrf", value="#{csrfToken}")
@@ -103,10 +104,8 @@ block script
         data: {
           id: '#{topic._id}'
         }
-      }
-    ]);
-    if (ND.currentUser.isAuthenticated()) {
-      ND.moduleTree.push({
+      },
+      {
         name: 'CommentForm',
         el: '#comment-form',
         data: {
@@ -119,5 +118,5 @@ block script
             id: 'commentButton'
           }
         ]
-      });
-    }
+      }
+    ]);

@@ -7,7 +7,7 @@ block main
     form(role="form",
          method="POST",
          action="#{url}")#topic-edit-form.pure-form.pure-form-stacked
-      legend 发布新话题
+      legend= topic ? '编辑话题' : '发布新话题'
       if err && err.errors
         ul
           each error in err.errors
@@ -46,6 +46,8 @@ block main
         input(type="hidden", name="_csrf", value="#{csrfToken}")
         if topic
           input(type="hidden", name="id", value="#{topic._id}")
+          a(href="/topics/#{topic._id}").pure-button 取消
+        | &#32;
         button(type="submit")#submit-button.pure-button.pure-button-primary 发布
 block script
   script(type="text/javascript").

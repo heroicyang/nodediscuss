@@ -52,9 +52,16 @@ block main
                 span &#32;##{comment.floor}楼 @ #{moment(comment.createdAt).fromNow()}&#32;
                 if isAuthenticated
                   if comment.author.id === currentUser.id
-                    a(href="javascript:;", title="删除").delete: i.fa.fa-trash-o
+                    a(href="#",
+                      title="删除",
+                      data-id="#{comment._id}",
+                      data-floor="#{comment.floor}").del-button: i.fa.fa-trash-o
                   else
-                    a(href="javascript:;", title="回复"): i.fa.fa-reply
+                    a(href="#",
+                      title="回复",
+                      data-id="#{comment._id}",
+                      data-floor="#{comment.floor}",
+                      data-username="#{comment.author.username}").reply-button: i.fa.fa-reply
               div.content !{comment.contentHtml}
       div.footer
         include ../paginator

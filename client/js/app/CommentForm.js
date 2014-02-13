@@ -30,7 +30,7 @@ ND.Module.define('CommentForm',
           beforeRender: function(val) {
             return val
               .replace(/#(\d+)楼\s?/g, function(group, p1) {
-                return _.template('[#<%= floor %>楼](/topic/<%= topicId %>#comment-<%= floor %>) ', {
+                return _.template('[#<%= floor %>楼](/topics/<%= topicId %>#comment-<%= floor %>) ', {
                   floor: p1,
                   topicId: self.data.id
                 });

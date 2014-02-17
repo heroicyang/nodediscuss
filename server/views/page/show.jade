@@ -1,70 +1,19 @@
-extends ../container
-block content
-  div#page-panel.panel.panel-default.page-show
-    div.panel-heading
-      include ../shared/breadcrumb
-    div.panel-body
-      div.header
-        div.media
-          div.media-body
-            div.media-heading.title
-              h3 #{page.title}
-            div.meta
-              div.pull-right
-                a(href="#") #{page.commentCount} 条评论
-                span ，版本 #{page.version}，最后更新于&#32;
-                span=moment(page.updatedAt).fromNow()
-              div
-                span 本页贡献者：&#32;
-                  - var contributors = _.map(page.contributors, function(contributor) {
-                  -    return '<a href="/user/"' + contributor.username + ' class="username">' + contributor.nickname + '</a>';
-                  -  }).join(', ')
-                  !{contributors}
-      div.row.content !{page.contentHtml}
-    if isWiki
-      div.panel-footer
-        div.pull-left.share
-          a(href="#", title="分享到新浪微博").weibo
-            i.fa.fa-weibo
-          a(href="#", title="分享到Twitter").twitter
-            i.fa.fa-twitter
-          a(href="#", title="分享到Facebook").facebook
-            i.fa.fa-facebook
-          a(href="#", title="分享到Google+").google-plus
-            i.fa.fa-google-plus
-        
-        if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
-          div.pull-right
-            a(href="/#{page.slug}/edit", title="编辑 Wiki")
-              i.fa.fa-pencil-square-o
-        div.clearfix
-block sidebar
-  if isAuthenticated
-    include ../sidebar/user_card
-  else
-    include ../sidebar/about
-  include ../sidebar/related_site
-  include ../sidebar/ad
-block script
-  script(type="text/javascript").
-    ND.moduleTree.push([
-      {
-        name: 'WeiboShareButton',
-        el: '.weibo',
-        options: {
-          appkey: '#{site.weiboAppKey}'
-        }
-      },
-      {
-        name: 'TwitterShareButton',
-        el: '.twitter'
-      },
-      {
-        name: 'FacebookShareButton',
-        el: '.facebook'
-      },
-      {
-        name: 'GPlusShareButton',
-        el: '.google-plus'
-      }
-    ]);
+extends ../layout
+block main
+  article#page.panel
+    div.heading
+      h2 #{page.title}
+    div.entry
+      div.content !{page.contentHtml}
+      div.meta
+        span 本页贡献者:&#32;
+          - var contributors = _.map(page.contributors, function(contributor) {
+          -    return '<a href="/user/' + contributor.username + '">' + contributor.nickname + '</a>';
+          -  }).join(', ')
+          | !{contributors}
+        | &#32;/ 最后更新于 #{moment(page.updatedAt).fromNow()}
+        | &#32;/ 版本 v#{page.version} /&#32;
+        a(href="#") #{page.commentCount} 条评论
+      if isAuthenticated && (currentUser.verified || currentUser.isAdmin)
+        div.action
+          a(href="/#{page.slug}/edit").edit-button.pure-button.pure-button-xsmall 编辑

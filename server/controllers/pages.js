@@ -6,7 +6,8 @@
 /**
  * Module dependencies
  */
-var _ = require('lodash'),
+var async = require('async'),
+  _ = require('lodash'),
   nconf = require('nconf');
 var api = require('../api');
 var error = require('../utils/error'),
@@ -82,7 +83,7 @@ exports.editWiki = function(req, res, next) {
       }
 
       page.slug = page.slug.replace('wikis/', '');
-      res.render('page/wikis', {
+      res.render('page/edit', {
         wiki: _.extend(page, req.flash('body')),
         err: req.flash('err')
       });
@@ -108,17 +109,39 @@ exports.get = function(req, res, next) {
     isWiki = true;
   }
 
-  api.Page.get({
-    slug: slug
-  }, function(err, page) {
+  async.waterfall([
+    function getPage(next) {
+      api.Page.get({
+        slug: slug
+      }, function(err, page) {
+        if (err) {
+          return next(err);
+        }
+        if (!page) {
+          return next(new NotFoundError('该页面不存在。'));
+        }
+
+        next(null, page);
+      });
+    },
+    function populateContributors(page, next) {
+      async.map(page.contributors, function(contributorId, next) {
+        api.User.get({
+          _id: contributorId
+        }, next);
+      }, function(err, contributors) {
+        if (err) {
+          return next(err);
+        }
+        page.contributors = contributors;
+        next(null, page);
+      });
+    }
+  ], function(err, page) {
     if (err) {
       return next(err);
     }
-    if (!page) {
-      return next(new NotFoundError('该页面不存在。'));
-    }
 
-    req.breadcrumbs(page.title);
     res.locals.site = res.locals.site || {};
     res.locals.site.title = page.title + ' - ' + nconf.get('site:name');
     res.locals.site.description = page.title;

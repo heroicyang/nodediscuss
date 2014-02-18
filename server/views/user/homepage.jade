@@ -1,123 +1,62 @@
-extends ../container
-block content
-  div#profile-panel.panel.panel-default
-    div.panel-body
-      div.media
-        div.pull-left.avatar-80
-          a(href="/user/#{user.username}")
-            img(src!=gravatar(user.emailHash),
-                alt="#{user.nickname}").media-object.img-rounded.img-responsive
-        div.media-body
-          if isAuthenticated && user.id !== currentUser.id
-            if isFollowed
-              button(type="button",
-                     data-loading-text="取消关注...")#follow-btn.btn.btn-default.btn-sm.pull-right 取消关注
-            else
-              button(type="button",
-                     data-loading-text="加入关注...")#follow-btn.btn.btn-default.btn-sm.pull-right 加入关注
-          div.media-heading
-            h3.nickname #{user.nickname}
-            if user.tagline
-              p #{user.tagline}
-          div.extra-info
-            p
-              i.fa.fa-clock-o
-              | &#32;于&#32;
-              span= moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')
-              | &#32;加入#{site.name}
-            ul.list-inline
-              li 关注 #{user.followingCount}
-              li 粉丝 #{user.followerCount}
-              li 积分 #{user.score || 0}
-    
-    ul.list-group
-      if user.website || user.location || user.twitter || user.github
-        li.list-group-item
-          ul.list-unstyled.link
-            if user.website
-              li
-                i.fa.fa-home
-                a(href="#{user.website}", title="个人博客", target="_blank") #{user.website}
-            if user.location
-              li
-                i.fa.fa-map-marker
-                span #{user.location}
-      if user.bio
-        li.list-group-item #{user.bio}
-        
-  div.panel.panel-default
-    div.panel-heading
-      span #{user.nickname} 最近创建的话题
-    ul.list-group.topic-list
-      if user.topicCount > 0
-        - var hiddenAvatar = true
-        each topic in recentTopics
-          li.list-group-item
-            include ../shared/topic_list_item
-      else
-        li.list-group-item: span 暂无话题。
-    if user.topicCount > 0
-      div.panel-footer
-        a(href="/user/#{user.username}/topics")
-          i.fa.fa-angle-double-right
-          | &#32;查看更多#{user.nickname}创建的话题
-  div.panel.panel-default
-    div.panel-heading
-      span #{user.nickname} 最近评论的话题
-    if recentComments.length > 0
-      ul.list-group.user-comment-list
-        each comment in recentComments
-          li.list-group-item
-            div.describe.row
-              div.comment-date.pull-right
-                span= moment(comment.createdAt).fromNow()
-              div.title
-                if comment.topic.deleted
-                  span 评论的该条话题已被删除。
-                else
-                  span 评论了 #{comment.topic.author.nickname} 创建的话题&#32;
-                  i.fa.fa-angle-right
-                  a(href="/topic/#{comment.topic._id}") &#32;#{comment.topic.title}
-            div.content !{comment.contentHtml}
-    else
-      div.panel-body: span 暂无评论。
-    if recentComments.length > 0
-      div.panel-footer
-        a(href="/user/#{user.username}/comments")
-          i.fa.fa-angle-double-right
-          | &#32;查看更多#{user.nickname}评论的话题
-block sidebar
-  div.panel.panel-default.hidden-xs
-    div.panel-heading
-      span #{user.nickname} 在 GitHub 上的代码仓库
-    ul.list-group.repo-list
-      if user.github
-        li.list-group-item
-          span
-            i.fa.fa-spinner.fa-spin
-            | &#32;正在获取代码仓库数据...
-      else
-        li.list-group-item: span 暂无代码仓库数据。
+extends ../layout
+block main
+  div#profile.panel
+    div.pure-g-r
+      div.gravatar.pure-u
+        img(src!=gravatar(user.emailHash),
+            alt="#{user.nickname}").img-responsive
+      div.info.pure-u-3-4
+        h3.nickname #{user.nickname}
+        div
+          a(href="/user/#{user.username}") @#{user.username}
+          if user.tagline
+            p #{user.tagline}
+          p.joined-at
+            i.fa.fa-clock-o
+            |&#32;于 #{moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')} 加入#{site.name}
+      div.action.pure-u
+        if isAuthenticated && user.id !== currentUser.id
+          if isFollowed
+            button(type="button",
+                   data-loading-text="取消关注...")#follow-button.pure-button.pure-button-primary 取消关注
+          else
+            button(type="button",
+                   data-loading-text="关注...")#follow-button.pure-button.pure-button-primary 关注
+    if user.bio
+      p.bio #{user.bio}
+    div.extra-info
+      ul
+        if user.twitter
+          li
+            i.fa.fa-twitter
+            a(href="https://twitter.com/#{user.twitter}",
+              title="Twitter",
+              target="_blank") #{user.twitter}
+        if user.github
+          li
+            i.fa.fa-github
+            a(href="https://github.com/#{user.github}",
+              title="GitHub",
+              target="_blank") #{user.github}
+        if user.location
+          li
+            i.fa.fa-map-marker
+            span #{user.location}
+        if user.website
+          li
+            i.fa.fa-home
+            a(href="#{user.website}",
+              title="个人网站",
+              target="_blank") #{user.website}
 block script
   if isAuthenticated && user.id !== currentUser.id
     script(type="text/javascript").
       ND.moduleTree.push({
         name: 'FollowButton',
-        el: '#follow-btn',
+        el: '#follow-button',
         data: {
           id: '#{user._id}',
           username: '#{user.username}',
           followed: #{isFollowed}
         }
       });
-  if user.github
-    script(type="text/javascript").
-      ND.moduleTree.push({
-        name: 'UserRepoList',
-        el: '.repo-list',
-        data: {
-          username: '#{user.username}'
-        }
-      });
-  
-  include ../tmpl/user_repo_list

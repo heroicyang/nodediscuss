@@ -1,0 +1,38 @@
+/**
+ * 用户个人首页的样式
+ * @author heroic
+ */
+
+#profile.panel
+  background #fff
+  padding 1em 2em
+  @media (max-width: 40em)
+    padding 1em .5em
+
+  .gravatar
+    width 80px
+    display inline-block
+    margin-right 10px
+    @media (max-width: 40em)
+      text-align center
+
+    > img
+      border-radius 50px
+      vertical-align middle
+
+  .info
+    > h3.nickname
+      margin 0
+
+    p
+      margin 0
+
+    .joined-at
+      font-size 0.875em
+      color #777
+
+  .action
+    > button
+      padding 0.3em 1.2em
+      font-size 0.8em
+      border-radius 12px

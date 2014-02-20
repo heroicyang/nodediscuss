@@ -63,10 +63,16 @@ module.exports = exports = function(schema) {
   schema.path('passwordHashed')
     .required(true, '密码不能为空!')
     .validate(function() {
-      return this.password.length >= 6;
+      if (this.password) {
+        return this.password.length >= 6;
+      }
+      return true;
     }, '密码至少为6位。')
     .validate(function() {
-      return this.password.length <= 31;
+      if (this.password) {
+        return this.password.length <= 31;
+      }
+      return true;
     }, '密码最多为31位');
   
   // 如果有填写用户的个人主页，则验证是否是有效的网址

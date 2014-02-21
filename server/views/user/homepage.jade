@@ -1,53 +1,64 @@
 extends ../layout
 block main
   div#profile.panel
-    div.pure-g-r
-      div.gravatar.pure-u
+    if isAuthenticated && user.id !== currentUser.id
+      if isFollowed
+        button(type="button",
+               data-loading-text="取消关注...")#follow-button.pure-button.pure-button-primary 取消关注
+      else
+        button(type="button",
+               data-loading-text="关注...")#follow-button.pure-button.pure-button-primary 关注
+    div.intro
+      div.gravatar
         img(src!=gravatar(user.emailHash),
             alt="#{user.nickname}").img-responsive
-      div.info.pure-u-3-4
-        h3.nickname #{user.nickname}
-        div
+      div.info
+        h4.nickname #{user.nickname}
+          | (
           a(href="/user/#{user.username}") @#{user.username}
-          if user.tagline
-            p #{user.tagline}
-          p.joined-at
+          | )
+        if user.bio
+          p.bio #{user.bio}
+      div.extra-info
+        ul
+          li
             i.fa.fa-clock-o
-            |&#32;于 #{moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')} 加入#{site.name}
-      div.action.pure-u
-        if isAuthenticated && user.id !== currentUser.id
-          if isFollowed
-            button(type="button",
-                   data-loading-text="取消关注...")#follow-button.pure-button.pure-button-primary 取消关注
-          else
-            button(type="button",
-                   data-loading-text="关注...")#follow-button.pure-button.pure-button-primary 关注
-    if user.bio
-      p.bio #{user.bio}
-    div.extra-info
-      ul
-        if user.twitter
-          li
-            i.fa.fa-twitter
-            a(href="https://twitter.com/#{user.twitter}",
-              title="Twitter",
-              target="_blank") #{user.twitter}
-        if user.github
-          li
-            i.fa.fa-github
-            a(href="https://github.com/#{user.github}",
-              title="GitHub",
-              target="_blank") #{user.github}
-        if user.location
-          li
-            i.fa.fa-map-marker
-            span #{user.location}
-        if user.website
-          li
-            i.fa.fa-home
-            a(href="#{user.website}",
-              title="个人网站",
-              target="_blank") #{user.website}
+            span 于 #{moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')} 加入
+          if user.twitter
+            li
+              i.fa.fa-twitter
+              a(href="https://twitter.com/#{user.twitter}",
+                title="Twitter",
+                target="_blank") #{user.twitter}
+          if user.github
+            li
+              i.fa.fa-github
+              a(href="https://github.com/#{user.github}",
+                title="GitHub",
+                target="_blank") #{user.github}
+          if user.location
+            li
+              i.fa.fa-map-marker
+              span #{user.location}
+          if user.website
+            li
+              i.fa.fa-home
+              a(href="#{user.website}",
+                title="个人网站",
+                target="_blank") #{user.website}
+    div.latest-topics
+      h4 最近发布的话题
+      ul.topic-list
+        each topic in recentTopics
+          li.item
+            div.title
+              h4
+                a(href="/topics/#{topic._id}") #{topic.title}
+              small.meta
+                a(href="/user/#{topic.author.username}") #{topic.author.nickname}
+                | &#32;/&#32;
+                a(href="/tags/#{topic.tag.slug}") #{topic.tag.name}
+                | &#32;@ #{moment(topic.createdAt).fromNow()}
 block script
   if isAuthenticated && user.id !== currentUser.id
     script(type="text/javascript").

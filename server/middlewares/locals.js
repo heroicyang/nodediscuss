@@ -34,6 +34,7 @@ module.exports = exports = function() {
     res.locals.constants = constants;
 
     res.locals.pkg = {
+      name: pkg.name,
       title: pkg.title,
       homepage: pkg.homepage,
       version: pkg.version

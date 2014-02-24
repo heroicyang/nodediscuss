@@ -1,43 +1,41 @@
-extends container
-block content
-  div#notification-list.panel.panel-default
-    div.panel-heading
+extends ../layout
+block main
+  div#notifications.panel
+    div.heading
       if currentUser.unreadNotificationCount > 0
         form(action="/notifications/read", method="POST")
           input(type="hidden", name="_csrf", value="#{csrfToken}")
-          button(type="submit").btn.btn-default.btn-xs.pull-right 全部标记为已读
-      include ./shared/breadcrumb
-    ul.list-group
-      if pagination.totalCount > 0
+          button(type="submit").pure-button.pure-button-primary.add-button 全部标记为已读
+      h4
+        i.fa.fa-bullhorn
+        | 通知中心
+    div.content
+      ul.notification-list
         each notification in notifications
-          li(class=notification.read ? null : "unread").list-group-item.item
-            div.media
-              div.pull-left.avatar-48
-                a(href="/user/#{notification.user.username}")
-                  img(src!=gravatar(notification.user.emailHash),
-                      alt="#{notification.user.nickname}").media-object.img-rounded.img-responsive
-              div.media-body
-                div.pull-right
-                  span= moment(notification.createdAt).fromNow()
-                div.media-heading
-                  a(href="/user/#{notification.user.username}") #{notification.user.nickname}
-                  case notification.type
-                    when constants.NOTIFICATION_TYPE.COMMENT
-                      | &#32;评论了你创建的话题&#32;
-                    when constants.NOTIFICATION_TYPE.REPLY_COMMENT
-                      | &#32;回复了你的评论&#32;
-                    when constants.NOTIFICATION_TYPE.FOLLOW
-                      | &#32;关注了你
-                    when constants.NOTIFICATION_TYPE.AT
-                      | &#32;提到了你&#32;
-                if notification.type !== constants.NOTIFICATION_TYPE.FOLLOW
-                  p
-                    a(href="/topic/#{notification.topic._id}#comment-#{notification.comment.floor}")
-                      | #{notification.topic.title}
-        li.list-group-item
-          include ./shared/pagination
-      else
-        li.list-group-item
-          span 暂无提醒。
-block sidebar
-  include ./sidebar/user_card
+          li(class=notification.read ? "readed" : null).item
+            span.gravatar
+              a(href="/user/#{notification.user.username}")
+                img(src!=gravatar(notification.user.emailHash),
+                    alt="#{notification.user.nickname}").img-responsive
+            span.info
+              a(href="/user/#{notification.user.username}") #{notification.user.nickname}
+              case notification.type
+                when constants.NOTIFICATION_TYPE.COMMENT
+                  | &#32;评论了你创建的话题:&#32;
+                  a(href="/topics/#{notification.topic._id}#comment-#{notification.comment.floor}")
+                    | #{notification.topic.title}
+                when constants.NOTIFICATION_TYPE.REPLY_COMMENT
+                  | &#32;回复了你在话题:&#32;
+                  a(href="/topics/#{notification.topic._id}#comment-#{notification.comment.floor}")
+                    | #{notification.topic.title}
+                  | &#32;中的评论&#32;
+                when constants.NOTIFICATION_TYPE.FOLLOW
+                  | &#32;关注了你
+                when constants.NOTIFICATION_TYPE.AT
+                  | &#32;在话题:&#32;
+                  a(href="/topics/#{notification.topic._id}#comment-#{notification.comment.floor}")
+                    | #{notification.topic.title}
+                    | &#32;中提到了你&#32;
+            span.time @ #{moment(notification.createdAt).fromNow()}
+    div.footer
+      include ../paginator

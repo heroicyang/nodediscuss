@@ -72,8 +72,8 @@ exports.index = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    req.breadcrumbs('通知中心');
-    res.render('notifications', {
+
+    res.render('user/notifications', {
       notifications: notifications,
       pagination: pagination
     });

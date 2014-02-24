@@ -1,0 +1,40 @@
+/**
+ * 通知中心页面的样式
+ * @author heroic
+ */
+
+#notifications.panel
+  > .content
+    padding 2em
+    background #fff
+    @media (max-width: 40em)
+      padding 1em 0.5em
+
+    .notification-list
+      .item
+        padding 10px 0
+        border-bottom 1px dotted #ccc
+        font-size 0.875em
+
+        .gravatar
+          width 32px
+          display inline-block
+
+          img
+            max-width 100%
+            height auto
+            border-radius 50px
+            vertical-align middle
+
+        .info
+          margin-left 10px
+
+        .time
+          margin-left 10px
+          color #999
+
+      .item.readed
+        color #999
+
+        a
+          color #9fbcd9

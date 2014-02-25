@@ -40,11 +40,6 @@ block main
               a(href="/tags/#{topic.tag.slug}") #{topic.tag.name}
               | &#32;/&#32;
               a(href="/topics/#{topic._id}#comment") 评论 (#{topic.commentCount})
-              if isAuthenticated && topic.author.id === currentUser.id
-                | &#32;/&#32;
-                a(href="/topics/#{topic._id}/edit").edit 编辑
-                | &#32;/&#32;
-                a(href="javascript:;").delete 删除
     div.footer
       include ../paginator
 

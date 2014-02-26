@@ -4,14 +4,14 @@ block main
     form(role="form",
          method="POST",
          action="/signup")#signup-form.pure-form.pure-form-stacked
+      if err && err.errors
+        ul
+          each error in err.errors
+            li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+      if message
+        div.alert.alert-success: p #{message}
       fieldset
         legend 注册新用户
-        if err && err.errors
-          ul
-            each error in err.errors
-              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
-        if message
-          div.alert.alert-success: p #{message}
         div.pure-control-group
           label(for="email").sr-only 电子邮箱
           input(type="email",

@@ -4,14 +4,14 @@ block main
     form(role="form",
          method="POST",
          action="/reset")#reset-pass-form.pure-form.pure-form-stacked
+      if err && err.errors
+        ul
+          each error in err.errors
+            li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+      if message
+        div.alert.alert-success: p #{message}
       fieldset
         legend 设置新密码
-        if err && err.errors
-          ul
-            each error in err.errors
-              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
-        if message
-          div.alert.alert-success: p #{message}
       div.pure-control-group
         label(for="new-password").sr-only 密码
         input(type="password",

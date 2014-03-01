@@ -1,10 +1,10 @@
-# 数据层
+# models
 
-使用 `Mongoose` 来操作数据库，这里主要包括数据模型、数据校验、数据逻辑等。
+Mongoose Schema 定义，验证规则、中间件、类方法和实例方法的定义，以及 Mongoose 插件。
 
 ## schemas
 
-定义 `Mongoose` 的 `Schema`，不过只做简单的模式定义。模型的字段中可以包括 `index`、`getter`、`setter`、`built-in setter`，可以定义 `virtual path`、`plugin`，然后将对应的 `schema` 和 `modelName` 暴露出去。而验证、中间件、方法等放到相应的目录中去，尽量保持模型的简洁。
+定义 `Mongoose` 的 `Schema`，模型的字段中可以包括 `index`、`getter`、`setter`、`built-in setter`，可以定义 `virtual path`、`plugin`，然后将对应的 `schema` 和 `modelName` 暴露出去。而验证、中间件、方法等放到相应的目录中去，尽量保持模型的简洁。
 
 ## validators
 

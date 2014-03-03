@@ -29,8 +29,6 @@ module.exports = exports = function() {
 
     res.locals.path = req.path;
     res.locals.csrfToken = req.csrfToken && req.csrfToken();
-    // 设置 breadcrumbs 数据
-    res.locals.breadcrumbs = req.breadcrumbs();
     res.locals.constants = constants;
 
     res.locals.pkg = {

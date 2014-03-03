@@ -10,8 +10,7 @@ var path = require('path');
 var express = require('express'),
   nconf = require('nconf'),
   MongoStore = require('connect-mongo')(express),
-  mutilpart = require('connect-multiparty'),
-  breadcrumbs = require('express-breadcrumbs');
+  mutilpart = require('connect-multiparty');
 var mongodb = require('./mongodb'),
   passport = require('./middlewares/passport'),
   locals = require('./middlewares/locals'),
@@ -40,7 +39,7 @@ module.exports = exports = function(app) {
         url: mongodb.connectionString
       })
     }));
-    
+
     // 引入 csrf 中间件
     app.use(function(req, res, next) {
       // 当上传图片时，跳过此中间件
@@ -64,16 +63,6 @@ module.exports = exports = function(app) {
     }
 
     app.use(flash());
-
-    // 初始化面包屑导航中间件
-    app.use(breadcrumbs.init());
-    app.use(breadcrumbs.setHome({
-      name: '主页'
-    }));
-    app.use('/admin', breadcrumbs.setHome({
-      name: 'DashBoard',
-      url: '/admin'
-    }));
 
     // 引入本地变量中间件
     app.use(locals());

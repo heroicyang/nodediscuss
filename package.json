@@ -41,7 +41,6 @@
     "highlight.js": "~8.0.0",
     "connect-multiparty": "~1.0.1",
     "request": "~2.31.0",
-    "express-breadcrumbs": "~0.0.2",
     "express-fileuploader": "~0.0.5",
     "express-fileuploader-qiniu": "~0.0.2"
   },

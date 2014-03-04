@@ -27,9 +27,8 @@ exports.index = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    
+
     pagination.totalCount = count;
-    req.breadcrumbs('节点列表');
     res.render('admin/tag/index', {
       tags: tags,
       pagination: pagination
@@ -49,8 +48,6 @@ exports.create = function(req, res, next) {
         return next(err);
       }
 
-      req.breadcrumbs('节点列表', '/admin/tags');
-      req.breadcrumbs('创建节点');
       res.render('admin/tag/edit', {
         sections: sections,
         tag: req.flash('body'),
@@ -96,8 +93,6 @@ exports.edit = function(req, res, next) {
         return next(err);
       }
 
-      req.breadcrumbs('节点列表', '/admin/tags');
-      req.breadcrumbs('编辑节点');
       res.render('admin/tag/edit', {
         tag: _.extend(results.tag, req.flash('body')),
         sections: results.sections,

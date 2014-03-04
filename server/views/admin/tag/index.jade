@@ -1,40 +1,38 @@
 extends ../layout
-block container
-  div#tags-page.panel.panel-default
-    div.panel-heading
-      div.pull-right
-        a(href="/admin/tags/create").btn.btn-default.btn-xs 创建节点
-      include ../../shared/breadcrumb
-    table.table.table-bordered
-      thead
-        tr
-          th 节点链接
-          th 节点名称
-          th 节点描述
-          th 所属节点组
-          th 话题数量
-          th 被收藏次数
-          th(width="115")
-      tbody
-        each tag in tags
+block main
+  div#tags-page.admin.panel
+    div.heading
+      a(href="/admin/tags/create").pure-button.pure-button-primary.add-button 创建节点
+    div.content
+      table.pure-table.pure-table-striped
+        thead
           tr
-            td #{tag.slug}
-            td #{tag.name}
-            td #{tag.describe}
-            td #{tag.section.name}
-            td #{tag.topicCount}
-            td #{tag.favoriteCount}
-            td
-              div.btn-group
-                a(href="/admin/tags/#{tag.slug}/edit").btn.btn-default.btn-xs
+            th slug
+            th 名称
+            th 描述
+            th(width="105") 所属节点组
+            th(width="105") 话题数量
+            th(width="105") 被收藏次数
+            th(width="125")
+        tbody
+          each tag in tags
+            tr
+              td #{tag.slug}
+              td #{tag.name}
+              td #{tag.describe.substr(0, 50) + '...'}
+              td #{tag.section.name}
+              td #{tag.topicCount}
+              td #{tag.favoriteCount}
+              td
+                a(href="/admin/tags/#{tag.slug}/edit")
                   i.fa.fa-pencil
-                  | &#32;编辑
-                button(type="button",
-                       data-id="#{tag._id}").remove-btn.btn.btn-danger.btn-xs
+                  small &#32;编辑
+                | &#32;|&#32;
+                a(href="javascript:;", data-id="#{tag._id}").remove-btn
                   i.fa.fa-trash-o
-                  | &#32;删除
-    div.panel-footer
-      include ../../shared/pagination
+                  small &#32;删除
+    div.footer
+      include ../../paginator
 block script
   script(type="text/javascript").
     ND.moduleTree.push({

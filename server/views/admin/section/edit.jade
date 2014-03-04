@@ -1,31 +1,31 @@
 extends ../layout
-block container
-  div.panel.panel-default
-    div.panel-heading
-      include ../../shared/breadcrumb
-    div.panel-body
+block main
+  div.admin.panel
+    div.content
       - var url = '/admin/sections/create'
       if section
         - url = '/admin/sections/' + section._id + '/edit'
       form(role="form",
            method="POST",
-           action=url).form-horizontal
-        div.form-group
-          label(for="name").control-label.col-sm-2 节点组名称
-          div.col-sm-6
-            input(type="text",
-                  name="name",
-                  value=section ? section.name : "",
-                  required)#name.form-control
-        div.form-group
-          label(for="sort").control-label.col-sm-2 节点排序
-          div.col-sm-6
-            input(type="number",
-                  name="sort",
-                  value=section ? section.sort : "0")#sort.form-control
-        div.form-group
-          div.col-sm-offset-2.col-sm-6
-            input(type="hidden", name="_csrf", value="#{csrfToken}")
-            if section
-              input(type="hidden", name="id", value="#{section._id}")
-            button(type="submit").btn.btn-primary=section ? '保存' : '创建'
+           action=url).pure-form.pure-form-aligned
+        legend= section ? '编辑节点组' : '创建节点组'
+        if err && err.errors
+          ul
+            each error in err.errors
+              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+        div.pure-control-group
+          label(for="name") 节点组名称
+          input(type="text",
+                name="name",
+                value=section ? section.name : "",
+                required)#name.pure-input-1-2
+        div.pure-control-group
+          label(for="sort") 节点排序
+          input(type="number",
+                name="sort",
+                value=section ? section.sort : "0")#sort.pure-input-1-2
+        div.pure-controls
+          input(type="hidden", name="_csrf", value="#{csrfToken}")
+          if section
+            input(type="hidden", name="id", value="#{section._id}")
+          button(type="submit").pure-button.pure-button-primary #{section ? '保存' : '创建'}

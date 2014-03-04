@@ -1,34 +1,32 @@
 extends ../layout
-block container
-  div#sections-page.panel.panel-default
-    div.panel-heading
-      div.pull-right
-        a(href="/admin/sections/create").btn.btn-default.btn-xs 创建节点组
-      include ../../shared/breadcrumb
-    table.table.table-bordered
-      thead
-        tr
-          th 节点组名称
-          th 节点组排序
-          th 节点数量
-          th
-      tbody
-        each section in sections
+block main
+  div#sections-page.admin.panel
+    div.heading
+      a(href="/admin/sections/create").pure-button.pure-button-primary.add-button 创建节点组
+    div.content
+      table.pure-table.pure-table-striped
+        thead
           tr
-            td #{section.name}
-            td #{section.sort}
-            td #{section.tagCount}
-            td
-              div.btn-group
-                a(href="/admin/sections/#{section._id}/edit").btn.btn-default.btn-xs
+            th 节点组名称
+            th 节点组排序
+            th 节点数量
+            th
+        tbody
+          each section in sections
+            tr
+              td #{section.name}
+              td #{section.sort}
+              td #{section.tagCount}
+              td
+                a(href="/admin/sections/#{section._id}/edit")
                   i.fa.fa-pencil
-                  | &#32;编辑
-                button(type="button",
-                       data-id="#{section._id}").remove-btn.btn.btn-danger.btn-xs
+                  small &#32;编辑
+                | &#32;|&#32;
+                a(href="javascript:;", data-id="#{section._id}")
                   i.fa.fa-trash-o
-                  | &#32;删除
-    div.panel-footer
-      include ../../shared/pagination
+                  small &#32;删除
+    div.footer
+      include ../../paginator
 block script
   script(type="text/javascript").
     ND.moduleTree.push({

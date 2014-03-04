@@ -9,37 +9,66 @@ html(lang="zh-CN")
     each file in assets.css
       link(href="#{staticDomain}/css/#{file}", rel="stylesheet")
   body#app
-    div(role="navigation").navbar.navbar-default.navbar-static-top
-      div.container
-        div.navbar-header
-          button(type="button", data-toggle="collapse",
-                 data-target=".navbar-collapse").navbar-toggle
-            span.icon-bar
-            span.icon-bar
-            sapn.icon-bar
-          a(href="/admin").navbar-brand.logo
+    div#container
+      div(role="navigation")#header
+        div.pure-menu.pure-menu-open.pure-menu-fixed.pure-menu-horizontal
+          a(href="/admin").pure-menu-heading
             if site.logo
               img(src!="#{site.logo}", title="#{site.title}").img-responsive
             else
               h1 #{site.name}
-        div.navbar-collapse.collapse
-          ul.nav.navbar-nav.navbar-right
-            li(class=(path === '/admin') ? "active" : "")
-              a(href="/admin") DashBoard
-            li(class=(path === '/admin/sections') ? "active" : "")
+          ul.nav
+            li(class=(path === '/admin') ? "pure-menu-selected" : "")
+              a(href="/admin") DashBorad
+            li(class=(path === '/admin/sections') ? "pure-menu-selected" : "")
               a(href="/admin/sections") 节点组管理
-            li(class=(path === '/admin/tags') ? "active" : "")
+            li(class=(path === '/admin/tags') ? "pure-menu-selected" : "")
               a(href="/admin/tags") 节点管理
-            li(class=(path === '/admin/users') ? "active" : "")
+            li(class=(path === '/admin/users') ? "pure-menu-selected" : "")
               a(href="/admin/users") 用户管理
-            li(class=(path === '/admin/topics') ? "active" : "")
+            li(class=(path === '/admin/topics') ? "pure-menu-selected" : "")
               a(href="/admin/topics") 话题管理
-            li(class=(path === '/admin/pages') ? "active" : "")
+            li(class=(path === '/admin/pages') ? "pure-menu-selected" : "")
               a(href="/admin/pages") 页面管理
-            li: a(href="/user/#{currentUser.username}",
-                  target="_blank") #{currentUser.username}
-    div.container
-      block container
+          button(type="button").nav-toggle
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          if isAuthenticated
+            div.profile.logged
+              span.info
+                a(href="/user/#{currentUser.username}").gravatar
+                  img(src!=gravatar(currentUser.emailHash)).img-responsive
+                a(href="/user/#{currentUser.username}").username: strong #{currentUser.nickname}
+                ul
+                  li: a(href="#", rel="nofollow").logout
+                    i.fa.fa-sign-out
+                    | 退出
+          div.nav-collapse
+            ul
+              li(class=(path === '/admin') ? "selected" : "")
+                  a(href="/admin") DashBorad
+                li(class=(path === '/admin/sections') ? "selected" : "")
+                  a(href="/admin/sections") 节点组管理
+                li(class=(path === '/admin/tags') ? "selected" : "")
+                  a(href="/admin/tags") 节点管理
+                li(class=(path === '/admin/users') ? "selected" : "")
+                  a(href="/admin/users") 用户管理
+                li(class=(path === '/admin/topics') ? "selected" : "")
+                  a(href="/admin/topics") 话题管理
+                li(class=(path === '/admin/pages') ? "selected" : "")
+                  a(href="/admin/pages") 页面管理
+              if isAuthenticated
+                li(class=(path === '/user/#{currentUser.username}') ? "selected" : "")
+                  a(href="/user/#{currentUser.username}") #{currentUser.nickname}
+                li: a(href="#", rel="nofollow").logout 退出
+      div#main
+        if err && err.global
+          div.alert-global
+            ul
+              each error in err.errors
+                li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+        block main
 
     //- 根据 grunt build 之后的结果引入 js 文件
     each file in (assets.adminjs || assets.js)

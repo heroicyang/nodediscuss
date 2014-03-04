@@ -47,7 +47,6 @@ exports.index = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      req.breadcrumbs('节点组列表');
       res.render('admin/section/index', {
         sections: sections,
         pagination: pagination
@@ -61,8 +60,6 @@ exports.create = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    req.breadcrumbs('节点组列表', '/admin/sections');
-    req.breadcrumbs('创建节点组');
     res.render('admin/section/edit', {
       section: req.flash('body'),
       err: req.flash('err')
@@ -93,8 +90,6 @@ exports.edit = function(req, res, next) {
         return next(new NotFoundError('该节点组不存在!'));
       }
 
-      req.breadcrumbs('节点组列表', '/admin/sections');
-      req.breadcrumbs('编辑节点组');
       res.render('admin/section/edit', {
         err: req.flash('err'),
         section: _.extend(section, req.flash('body'))

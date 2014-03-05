@@ -46,7 +46,6 @@ exports.index = function(req, res, next) {
         return next(err);
       }
 
-      req.breadcrumbs('页面列表');
       res.render('admin/page/index', {
         pages: pages,
         pagination: pagination
@@ -60,8 +59,6 @@ exports.create = function(req, res, next) {
   var method = req.method.toLowerCase();
 
   if ('get' === method) {
-    req.breadcrumbs('页面列表', '/admin/pages');
-    req.breadcrumbs('创建页面');
     res.render('admin/page/edit', _.extend({
       page: req.flash('body'),
       err: req.flash('err')
@@ -93,8 +90,6 @@ exports.edit = function(req, res, next) {
         return next(new NotFoundError('该页面不存在!'));
       }
 
-      req.breadcrumbs('页面列表', '/admin/pages');
-      req.breadcrumbs('编辑页面');
       res.render('admin/page/edit', {
         page: _.extend(page, req.flash('body')),
         err: req.flash('err')

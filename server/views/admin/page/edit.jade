@@ -1,38 +1,37 @@
 extends ../layout
-block container
-  div.panel.panel-default
-    div.panel-heading
-      include ../../shared/breadcrumb
-    div.panel-body
-      include ../../shared/error_alert
+block main
+  div.admin.panel
+    div.content
       - var url = '/admin/pages/create'
       if page && page._id
         - url = '/admin/pages/' + page._id + '/edit'
-      form(role="form", method="POST", action="#{url}")#page-edit-form.form-horizontal
-        div.form-group
-          label(for="slug").col-sm-1.control-label 地址
-          div.col-sm-11.input-group
-            span.input-group-addon #{site.domain}/
-            input(type="text",
-                  name="slug",
-                  value=page ? page.slug : '')#slug.form-control
-        div.form-group
-          label(for="title").col-sm-1.control-label 标题
-          div.col-sm-11
-            input(type="text",
-                  name="title",
-                  value=page ? page.title : '')#title.form-control
-        div.form-group
-          label(for="content-editor").col-sm-1.control-label 内容
-          div.col-sm-11
-            textarea(name="content", rows="16")#content-editor.form-control
-              | !{page ? page.content : ''}
-        div.form-group
-          div.col-sm-offset-1.col-sm-11
-            input(type="hidden", name="_csrf", value="#{csrfToken}")
-            if page
-              input(type="hidden", name="id", value="#{page._id}")
-            button(type="submit", data-loading-text="正在发布...")#submit-btn.btn.btn-primary 发布
+      form(role="form", method="POST", action="#{url}")#page-edit-form.pure-form.pure-form-stacked
+        legend= page ? '编辑页面' : '新建页面'
+        if err && err.errors
+          ul
+            each error in err.errors
+              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+        div.pure-control-group
+          label(for="slug") slug
+          input(type="text",
+                name="slug",
+                placeholder="请填写页面 slug",
+                value=page ? page.slug : '')#slug.pure-input-1-2
+          p: small #{site.domain}/页面slug
+        div.pure-control-group
+          label(for="title") 标题
+          input(type="text",
+                name="title",
+                value=page ? page.title : '')#title.pure-input-1-2
+        div.pure-control-group
+          label(for="content-editor") 内容
+          textarea(name="content", rows="13")#content-editor !{page ? page.content : ''}
+        p
+        div.pure-controls
+          input(type="hidden", name="_csrf", value="#{csrfToken}")
+          if page
+            input(type="hidden", name="id", value="#{page._id}")
+          button(type="submit", data-loading-text="正在发布...")#submit-btn.pure-button.pure-button-primary 发布
 block script
   script(type="text/javascript").
     ND.moduleTree.push({

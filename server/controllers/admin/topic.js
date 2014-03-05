@@ -29,7 +29,6 @@ exports.index = function(req, res, next) {
     }
 
     pagination.totalCount = count;
-    req.breadcrumbs('话题列表');
     res.render('admin/topic/index', {
       topics: topics,
       pagination: pagination
@@ -71,8 +70,7 @@ exports.edit = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      req.breadcrumbs('话题列表', '/admin/topics');
-      req.breadcrumbs('编辑话题');
+      
       res.render('admin/topic/edit', {
         topic: _.extend(results.topic, req.flash('body')),
         tags: results.tags,

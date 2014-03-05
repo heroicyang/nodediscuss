@@ -24,7 +24,6 @@ exports.index = function(req, res, next) {
       return next(err);
     }
 
-    req.breadcrumbs('用户列表');
     pagination.totalCount = count;
     res.render('admin/user/index', {
       users: users,

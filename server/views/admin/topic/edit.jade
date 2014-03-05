@@ -1,43 +1,44 @@
 extends ../layout
-block container
-  div.panel.panel-default
-    div.panel-heading
-      include ../../shared/breadcrumb
-    div.panel-body
-      include ../../shared/error_alert
+block main
+  div.admin.panel
+    div.content
       form(role="form",
            method="POST",
-           action="/admin/topics/" + topic._id + '/edit')#topic-edit-form.form-horizontal
-        div.form-group
-          div.col-xs-12.col-sm-3
-            select(name="tag[id]").form-control
-              option(value="") 请选择节点
-              each tagList, sectionName in tags
-                optgroup(label="#{sectionName}")
-                  each tag in tagList
-                    if currentTag && currentTag._id.toString() == tag._id.toString()
-                      option(value="#{tag._id}", selected) #{tag.name}
-                    else if topic && topic.tag.id === tag._id.toString()
-                      option(value="#{tag._id}", selected) #{tag.name}
-                    else
-                      option(value="#{tag._id}") #{tag.name}
-          div.col-xs-12.visible-xs.mobile-sep &#32;
-          div.col-xs-12.col-sm-9
-            input(type="text", name="title", 
-              maxlength="100", placeholder="请输入标题，字数在10到100个之间", 
-              value=topic ? topic.title : '',
-              required)#title.form-control
-        div.form-group
-          div.col-sm-12
-            textarea(name="content", rows="16")#content-editor.form-control
-              !{topic ? topic.content : ''}
-        div.form-group
-          div.col-sm-12
-            input(type="hidden", name="_csrf", value="#{csrfToken}")
-            if topic
-              input(type="hidden", name="id", value="#{topic._id}")
-            button(type="submit",
-                   data-loading-text="正在发布...")#submit-topic-btn.btn.btn-primary 发布
+           action="/admin/topics/" + topic._id + '/edit')#topic-edit-form.pure-form.pure-form-stacked
+        legend= topic ? '编辑话题' : '发布新话题'
+        if err && err.errors
+          ul
+            each error in err.errors
+              li(class=['alert', 'alert-' + (err.level || 'danger')]) #{error.message}
+        div.pure-control-group
+          label(for="tag") 节点
+          select(name="tag[id]")#tag.pure-input-1-2
+            option(value="") 请选择节点
+            each tagList, sectionName in tags
+              optgroup(label="#{sectionName}")
+                each tag in tagList
+                  if currentTag && currentTag._id.toString() == tag._id.toString()
+                    option(value="#{tag._id}", selected) #{tag.name}
+                  else if topic && topic.tag.id === tag._id.toString()
+                    option(value="#{tag._id}", selected) #{tag.name}
+                  else
+                    option(value="#{tag._id}") #{tag.name}
+        div.pure-control-group
+          label(for="title") 标题
+          input(type="text", name="title",
+            maxlength="100", placeholder="请输入标题，字数在10到100个之间",
+            value=topic ? topic.title : '',
+            required)#title.pure-input-1-2
+        div.pure-control-group
+          label(for="content-editor") 内容
+          textarea(name="content", rows="16")#content-editor !{topic ? topic.content : ''}
+        p
+        div.pure-controls
+          input(type="hidden", name="_csrf", value="#{csrfToken}")
+          if topic
+            input(type="hidden", name="id", value="#{topic._id}")
+          button(type="submit",
+                 data-loading-text="正在发布...")#submit-topic-btn.pure-button.pure-button-primary 发布
 block script
   script(type="text/javascript").
     ND.moduleTree.push({

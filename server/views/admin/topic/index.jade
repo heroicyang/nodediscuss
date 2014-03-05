@@ -1,45 +1,46 @@
 extends ../layout
-block container
-  div#topics-page.panel.panel-default
-    div.panel-heading
-      include ../../shared/breadcrumb
-    table.table.table-bordered.table-striped
-      thead
-        tr
-          th 标题
-          th 所在节点
-          th 作者
-          th 评论数量
-          th 优质话题
-          th 发布时间
-          th
-      tbody
-        each topic in topics
+block main
+  div#topics-page.admin.panel
+    div.heading
+      h3 话题管理
+    div.content
+      table.pure-table.pure-table-striped
+        thead
           tr
-            td #{topic.title}
-            td #{topic.tag.name}
-            td #{topic.author.username}
-            td #{topic.commentCount}
-            td=topic.excellent ? "是" : "否"
-            td=moment(topic.createdAt).format('YYYY-MM-DD HH:mm')
-            td
-              div.btn-group
-                a(href="/admin/topics/#{topic._id}/edit").btn.btn-default.btn-xs
+            th 标题
+            th 所在节点
+            th 作者
+            th 评论数量
+            th 优质话题
+            th 发布时间
+            th
+        tbody
+          each topic in topics
+            tr
+              td #{topic.title}
+              td #{topic.tag.name}
+              td #{topic.author.username}
+              td #{topic.commentCount}
+              td=topic.excellent ? "是" : "否"
+              td=moment(topic.createdAt).format('YYYY-MM-DD HH:mm')
+              td
+                a(href="/admin/topics/#{topic._id}/edit")
                   i.fa.fa-pencil
-                  | &#32;编辑
-                button(type="button",
-                       title=topic.excellent ? "取消优质话题" : "设置为优质话题",
-                       data-id="#{topic._id}",
-                       data-excellent="#{topic.excellent}").excellent-btn.btn.btn-default.btn-xs
+                  small &#32;编辑
+                | &#32;|&#32;
+                a(href="javascript:;",
+                  title=topic.excellent ? "取消优质话题" : "设置为优质话题",
+                  data-id="#{topic._id}",
+                  data-excellent="#{topic.excellent}").excellent-btn
                   i(class=topic.excellent ? "fa-star" : "fa-star-o").fa
                   | &#32;
-                  =topic.excellent ? "取消优质" : "设为优质"
-                button(type="button",
-                       data-id="#{topic._id}").remove-btn.btn.btn-danger.btn-xs
+                  small=topic.excellent ? "取消优质" : "设为优质"
+                | &#32;|&#32;
+                a(href="javascript:;", data-id="#{topic._id}").remove-btn
                   i.fa.fa-trash-o
-                  | &#32;删除
-    div.panel-footer
-      include ../../shared/pagination
+                  small &#32;删除
+    div.footer
+      include ../../paginator
 block script
   script(type="text/javascript").
     ND.moduleTree.push({

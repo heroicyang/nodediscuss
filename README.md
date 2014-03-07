@@ -4,13 +4,13 @@
 
 > NodeDiscuss: 基于 Node.js 的社区系统。
 
-##介绍
+## 介绍
 
 NodeDiscuss 起初是计划基于 Node.js 中文技术社区系统 [NodeClub] 的一个重写版本。  
 
-但由于 NodeClub 所使用依赖库的版本都比较滞后，且在信息结构上也不是很完善，干脆就丢掉历史包袱来从零开始构建全新的项目，因此可能与 NodeClub 有着很大的出入。界面以及数据模型上来说还是参照 NodeClub，确切的说是 V2EX、Ruby-China 等社区的。
+不过 NodeClub 所依赖库的版本都比较滞后，貌似在信息结构上也不是很完善，于是就从头开始构建这个全新的项目，因此可能与 NodeClub 有着很大的出入。界面以及数据模型上来说还是参照 NodeClub，确切的说是 V2EX、Ruby-China 等社区的。
 
-当时折腾这个项目的初衷主要是实践下自己思考的一个项目结构（基于 [Express] + [Mongoose] ），但既然坑已经挖了那就得继续维护完善好这个项目，希望能成为好用的、基于 node 的社区系统之一！
+折腾这个项目的初衷主要是实践下自己思考的一个项目结构（基于 [Express] + [Mongoose] ），但既然坑已经挖了那还是得填的！
 
 目前已经发布了一个最小可用版本，欢迎试用或提出建议，我会不断的完善改进！同时也欢迎贡献代码！
 
@@ -18,7 +18,7 @@ DEMO 请戳这里：http://nodediscuss.com/
 
 关于项目结构的简要介绍请戳这里：https://github.com/heroicyang/nodediscuss/wiki
 
-##在开发环境中安装
+## 在开发环境中安装
 
 ```bash
 # install node npm mongodb grunt-cli bower, and run mongod
@@ -39,7 +39,11 @@ $ grunt build
 $ node server/server.js
 ```
 
-##License
+## 后台管理系统
+
+注册用户之后，将管理员的 `email` 配置到相应的配置文件中，然后即可访问`http://host:port/admin`进入后台管理。
+
+## License
 
 The MIT License (MIT)
 

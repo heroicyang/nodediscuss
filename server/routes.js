@@ -49,7 +49,6 @@ module.exports = exports = function(app) {
       api.requestHandler(api.Relation.add, true));
   app.post('/user/:username/unfollow',
       api.requestHandler(api.Relation.destroy, true));
-  app.get('/user/:username/repos', user.repos);
 
   // 用户设置
   app.all('/settings/:op?', auth.loginRequired);

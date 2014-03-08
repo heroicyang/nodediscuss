@@ -9,8 +9,7 @@
 var _ = require('lodash'),
   async = require('async'),
   moment = require('moment'),
-  nconf = require('nconf'),
-  request = require('request');
+  nconf = require('nconf');
 var api = require('../api'),
   constants = api.constants;
 var md5 = require('../utils/md5');
@@ -182,7 +181,7 @@ exports.resetPassword = function(req, res, next) {
   if ('get' === method) {
     var token = req.query.token,
       email = req.query.email;
-    
+
     if (!req.session.resetPass && (!token || !email)) {
       req.flash('redirectPath', '/');
       return next(new CentralizedError('信息有误，不能继续重设密码操作。'));
@@ -263,7 +262,7 @@ exports.resetPassword = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      
+
       delete req.session.resetPass;
       req.flash('message', '密码重置成功，请使用新密码重新登录。');
       res.redirect('/signin');
@@ -329,33 +328,6 @@ exports.get = function(req, res, next) {
       title: user.nickname,
       user: user
     }));
-  });
-};
-
-/** 获取用户的 GitHub repos */
-exports.repos = function(req, res, next) {
-  if (!req.user.github) {
-    return res.send({
-      success: true,
-      response: null
-    });
-  }
-
-  var opts = {
-    url: 'https://api.github.com/users/' + req.user.github + '/repos?type=owner',
-    headers: {
-      'User-Agent': req.user.github
-    }
-  };
-  request(opts, function(err, rep, body) {
-    if (err || rep.statusCode !== 200) {
-      return next(err || new Error('Ops!'));
-    }
-
-    var repos = _.sortBy(JSON.parse(body), function(repo) {
-      return -repo.stargazers_count;
-    });
-    res.send(repos);
   });
 };
 

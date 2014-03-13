@@ -26,7 +26,7 @@ if (strategy === 'local') {
   });
   uploader.use(new LocalStrategy({
     uploadPath: uploadPath,
-    baseUrl: url.resolve(domain, '/uploads/')
+    baseUrl: url.resolve(domain, nconf.get('media:uploadPath'))
   }));
 }
 

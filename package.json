@@ -40,7 +40,7 @@
     "marked": "~0.3.0",
     "highlight.js": "~8.0.0",
     "connect-multiparty": "~1.0.1",
-    "express-fileuploader": "~0.0.5",
+    "express-fileuploader": "~0.0.6",
     "express-fileuploader-qiniu": "~0.0.2"
   },
   "devDependencies": {

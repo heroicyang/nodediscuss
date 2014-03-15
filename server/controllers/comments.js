@@ -67,10 +67,10 @@ exports.create = function(req, res, next) {
 
   api.Comment.add(data, function(err) {
     if (err) {
-      req.flash('redirectPath', '/topic/' + data.topicId);
+      req.flash('redirectPath', '/topics/' + data.topicId);
       return next(err);
     }
-    res.redirect('/topic/' + data.topicId);
+    res.redirect('/topics/' + data.topicId);
   });
 };
 

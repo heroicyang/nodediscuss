@@ -1,6 +1,6 @@
 {
   "name": "nodediscuss",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "基于 Node.js 的开源社区系统",
   "main": "server/server.js",
   "scripts": {

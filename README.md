@@ -39,6 +39,29 @@ $ grunt build
 $ node server/server.js
 ```
 
+## 在开发环境中安装
+
+```bash
+# install node npm mongodb grunt-cli bower, and run mongod
+
+$ git clone https://github.com/heroicyang/nodediscuss.git
+$ cd nodediscuss
+$ git submodule init
+$ git submodule update
+$ npm install & bower install
+
+# 创建 `production` 环境的配置
+$ grunt createConfig --env=production
+# 然后在 config 目录下找到刚刚创建的配置文件，修改相应配置
+
+# 构建前端
+$ grunt build --target=production
+
+$ NODE_ENV=production node server/server.js
+# 或者使用 pm2, supervisor 等来管理
+$ NODE_ENV=production pm2 start server/server.js
+```
+
 ## 后台管理系统
 
 注册用户之后，将管理员的 `email` 配置到相应的配置文件中，然后即可访问`http://host:port/admin`进入后台管理。

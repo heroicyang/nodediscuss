@@ -39,7 +39,7 @@ $ grunt build
 $ node server/server.js
 ```
 
-## 在开发环境中安装
+## 在生产环境中安装
 
 ```bash
 # install node npm mongodb grunt-cli bower, and run mongod
